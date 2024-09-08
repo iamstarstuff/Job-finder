@@ -282,7 +282,7 @@ def send_email(subject, body, to_email, from_email, smtp_server, smtp_port, smtp
         print(f"Failed to send email. Error: {str(e)}")
 
 def main():
-    json_file = "jobs.json"
+    json_file = "/Users/pratik/Github/Job-finder/jobs.json"
     current_jobs = get_all_job_postings()
     previous_jobs = load_previous_jobs(json_file)
     new_jobs = find_new_jobs(previous_jobs, current_jobs)
