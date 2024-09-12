@@ -299,7 +299,7 @@ def main():
         send_email(
             subject="New Job Postings Alert",
             body=email_body,
-            to_email=["vaidehipatil2011@gmail.com","barvepratik96@gmail.com"], 
+            to_email=["vaidehipatil2011@gmail.com"], 
             from_email="barvepratik96@gmail.com", 
             smtp_server="smtp.gmail.com", 
             smtp_port=465, 
