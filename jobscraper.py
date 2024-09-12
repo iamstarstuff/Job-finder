@@ -6,6 +6,16 @@ from datetime import datetime
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import logging
+
+logging.basicConfig(
+    level = logging.INFO,
+    format = '%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("jobscraper.log"),
+        logging.StreamHandler()
+    ]
+)
 
 company_urls = {
     "APC": "https://approcess.com/careers",
@@ -21,6 +31,7 @@ company_urls = {
 }
 
 def APC():
+    logging.info("Fetching job details for APC.")
     try:
         response = requests.get(company_urls["APC"])
         response.raise_for_status()
@@ -39,12 +50,14 @@ def APC():
                 'closing_date':closing_date,
                 'job portal link':company_urls['APC']
             })
+        logging.info(f"Fetched {len(job_details)} jobs for APC.")
         return job_details
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching job details: {e}")
+        logging.error(f"Error fetching job details for APC: {e}")
         return []
 
 def Abbvie():
+    logging.info("Fetching job details for Abbvie.")
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -63,12 +76,14 @@ def Abbvie():
                 'application link': 'https://careers.abbvie.com'+job_url,
                 'job portal link':company_urls['Abbvie']
                 })
+        logging.info(f"Fetched {len(jobs)} jobs for Abbvie.")
         return jobs
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching job details: {e}")
+        logging.error(f"Error fetching job details for Abbvie: {e}")
         return []
 
 def Astrazeneca():
+    logging.info("Fetching job details for Astrazeneca.")
     try:   
         base_url = company_urls['Astrazeneca']
         jobs = []
@@ -93,12 +108,14 @@ def Astrazeneca():
                     'job portal link': company_urls['Astrazeneca']
                 })
             page+=1
+        logging.info(f"Fetched {len(jobs)} jobs for Astrazeneca.")
         return jobs
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching job details: {e}")
+        logging.error(f"Error fetching job details for Astrazeneca: {e}")
         return []
 
 def Takeda():
+    logging.info("Fetching job details for Takeda.")
     try:
         response = requests.get(company_urls['Takeda'])
         response.raise_for_status()
@@ -117,12 +134,14 @@ def Takeda():
                 'application url':'https://jobs.takeda.com/'+job_url,
                 'job portal link':company_urls['Takeda']
             })
+        logging.info(f"Fetched {len(jobs)} jobs for Takeda.")
         return jobs
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching job details: {e}")
+        logging.error(f"Error fetching job details for Takeda: {e}")
         return []
 
 def Amgen():
+    logging.info("Fetching job details for Amgen.")
     try:
         response = requests.get(company_urls['Amgen'])
         response.raise_for_status()
@@ -138,12 +157,14 @@ def Amgen():
                 'application url':job_url,
                 'job portal link':company_urls['Amgen']
             })
+        logging.info(f"Fetched {len(jobs)} jobs for Amgen.")
         return jobs
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching job details: {e}")
+        logging.error(f"Error fetching job details for Amgen: {e}")
         return []
 
 def Vle():
+    logging.info("Fetching job details for Vle.")
     try:
         response = requests.get(company_urls['Vle therapeutics'])
         response.raise_for_status()
@@ -161,12 +182,14 @@ def Vle():
                 'application url': job_url,
                 'job portal link': company_urls['Vle therapeutics']
             })
+        logging.info(f"Fetched {len(jobs)} jobs for Vle.")
         return jobs
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching job details: {e}")
+        logging.error(f"Error fetching job details for Vle: {e}")
         return []
 
 def Astellas():    
+    logging.info("Fetching job details for Astellas.")
     try:
         base_url = company_urls['Astellas']
         jobs = []
@@ -191,12 +214,14 @@ def Astellas():
                     'job portal link':url
                 })
             page+=10
+        logging.info(f"Fetched {len(jobs)} jobs for Astellas.")
         return jobs
     except requests.exceptions.RequestException as e:
-            print(f"Error fetching job details: {e}")
-            return []
+        logging.error(f"Error fetching job details for Astellas: {e}")
+        return []
 
 def get_all_job_postings():
+    logging.info("Starting to fetch all job postings.")
     all_jobs = {}
 
     
@@ -208,7 +233,7 @@ def get_all_job_postings():
     all_jobs["Takeda"] = Takeda()
     all_jobs['Vle therapeutics'] = Vle()
     
-
+    logging.info("Completed fetching all job postings.")
     return all_jobs
 
 def load_previous_jobs(filename):
@@ -288,7 +313,7 @@ def main():
     new_jobs = find_new_jobs(previous_jobs, current_jobs)
     # If new jobs are found, send an email notification
     if new_jobs:
-        print("New job postings found:")
+        logging.info(f"New job postings found: {len(new_jobs)} companies with new jobs.")
         email_body = "New job postings found:\n\n"
         for company, jobs in new_jobs.items():
             email_body += f"{company}:\n"
@@ -306,17 +331,19 @@ def main():
             smtp_username="barvepratik96@gmail.com", 
             smtp_password="qkgb oxdd etzu zqyj" 
         )
-        
+        logging.info("Email sent successfully.")
         # Print new jobs 
         for company, jobs in new_jobs.items():
-            print(f"\n{company}:")
+            logging.info(f"{company}:") 
             for job in jobs:
-                print(job)
+                logging.info(json.dumps(job, indent=4))
+
     else:
-        print("No new job postings found.")
+        logging.info("No new job postings found.")
     
     # Update the JSON file with the current job postings
     update_json_file(json_file, current_jobs)
+    logging.info("Job data updated successfully.")
 
 
 if __name__ == "__main__":
