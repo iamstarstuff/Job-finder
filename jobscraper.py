@@ -13,7 +13,7 @@ logging.basicConfig(
     format = '%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler("jobscraper.log"),
-        logging.StreamHandler()
+        # logging.StreamHandler()
     ]
 )
 
