@@ -302,9 +302,10 @@ def send_email(subject, body, to_email, from_email, smtp_server, smtp_port, smtp
         # Disconnect from the server
         server.quit()
         
-        print("Email sent successfully!")
+        logging.info("Email sent successfully.")
     except Exception as e:
         print(f"Failed to send email. Error: {str(e)}")
+        logging.error(f"Failed to send email. Error: {str(e)}")
 
 def main():
     json_file = "/Users/pratik/Github/Job-finder/jobs.json"
@@ -331,7 +332,7 @@ def main():
             smtp_username="barvepratik96@gmail.com", 
             smtp_password="qkgb oxdd etzu zqyj" 
         )
-        logging.info("Email sent successfully.")
+        
         # Print new jobs 
         for company, jobs in new_jobs.items():
             logging.info(f"{company}:") 
