@@ -293,20 +293,6 @@ def update_json_file(filename, current_jobs):
         json.dump(current_jobs, f, indent=4)
 
 
-# def main():
-#     json_file = "jobs.json"
-#     current_jobs = get_all_job_postings()
-#     previous_jobs = load_previous_jobs(json_file)
-#     new_jobs = find_new_jobs(previous_jobs, current_jobs)
-#     if new_jobs:
-#         print("New job postings found:")
-#         for company, jobs in new_jobs.items():
-#             print(f"\n{company}:")
-#             for job in jobs:
-#                 print(job)
-#     else:
-#         print("No new job postings found.")
-#     update_json_file(json_file, current_jobs)
 
 
 def format_json_pretty(data):
