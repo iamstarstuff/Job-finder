@@ -293,8 +293,6 @@ def update_json_file(filename, current_jobs):
         json.dump(current_jobs, f, indent=4)
 
 
-
-
 def format_json_pretty(data):
     # Convert the data to a pretty-printed JSON string
     return json.dumps(data, indent=4)
