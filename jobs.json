@@ -28,6 +28,12 @@
     "Amgen": [
         {
             "company": "Amgen",
+            "title": "Operations Integration Manager",
+            "application url": "https://www.amgen.jobs//d\u00fan-laoghaire-irl/operations-integration-manager/C1713F8C38B146A780ADDEC1CF3BC5F7/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
             "title": "Sr. Manager Manufacturing Support",
             "application url": "https://www.amgen.jobs//d\u00fan-laoghaire-irl/sr-manager-manufacturing-support/C9F6BBF6255343C9B0642EC9DD992D2F/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -114,12 +120,6 @@
             "company": "Amgen",
             "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
             "application url": "https://www.amgen.jobs//dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/933D369D2C044974AAB30347E912D5EE/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Validation Sr. Engineer - Aseptic Processing",
-            "application url": "https://www.amgen.jobs//d\u00fan-laoghaire-irl/validation-sr-engineer-aseptic-processing/CDF85F2CDCFA4144830EBA1F4D0CCDE8/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -357,12 +357,6 @@
             "company": "Astellas",
             "title": "QC Chemist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemist-11063/4738",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
-        },
-        {
-            "company": "Astellas",
-            "title": "Process Development Scientist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Development-Scientist-11160/4749",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
         }
     ],
