@@ -76,12 +76,6 @@
         },
         {
             "company": "Amgen",
-            "title": "Business Resilience Manager",
-            "application url": "https://www.amgen.jobs//d\u00fan-laoghaire-irl/business-resilience-manager/B4F5A791C4784F4E8080175F20067B02/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Aseptic Manufacturing Associate (24/7 shift) FTC",
             "application url": "https://www.amgen.jobs//dublin-irl/aseptic-manufacturing-associate-247-shift-ftc/68D5BEF1D74549C797643EDE4D2A4D2D/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -301,12 +295,6 @@
         },
         {
             "company": "Astellas",
-            "title": "Manager, External Product Quality Assurance",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manager-External-Product-Quality-Assurance/4620",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
-        },
-        {
-            "company": "Astellas",
             "title": "Global HR Project Delivery Lead",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Project-Delivery-Lead/4628",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
@@ -349,18 +337,30 @@
         },
         {
             "company": "Astellas",
-            "title": "Manager, Quality Assurance, Governance",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manager-Quality-Assurance-Governance-11031/4693",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
-        },
-        {
-            "company": "Astellas",
             "title": "QC Chemist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemist-11063/4738",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Associate Director, Regulatory Affairs, CMC",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-regulatory-affairs-cmc/43991/70083207584",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Alexion Global Productivity Initiatives Lead",
+            "application url": "https://careers.astrazeneca.com//job/dublin/alexion-global-productivity-initiatives-lead/43991/70068785472",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Global Supply Planning Graduate",
+            "application url": "https://careers.astrazeneca.com//job/dublin/global-supply-planning-graduate/43991/70062303568",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "Manager, Device Engineering",
@@ -423,18 +423,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Materials Management & Planning Specialist (12 month fixed term contract)",
-            "application url": "https://careers.astrazeneca.com//job/athlone/materials-management-and-planning-specialist-12-month-fixed-term-contract/43991/60817940480",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Production Planner",
-            "application url": "https://careers.astrazeneca.com//job/dublin/production-planner/43991/66823517056",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Director, Synthetic Drug Substance Manufacturing",
             "application url": "https://careers.astrazeneca.com//job/dublin/director-synthetic-drug-substance-manufacturing/43991/69320513616",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -461,18 +449,6 @@
             "company": "Astrazeneca",
             "title": "UK/Ireland Compliance Business Partner",
             "application url": "https://careers.astrazeneca.com//job/dublin/uk-ireland-compliance-business-partner/43991/62166157728",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior QC Manager",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-qc-manager/7684/68841674112",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QC API Technical  Lead",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-api-technical-lead/7684/68841671072",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
