@@ -328,9 +328,33 @@
             "title": "QC Chemist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemist-11063/4738",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Statistical Scientist",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/4755",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Associate Director, Quality Business Development Lead",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-quality-business-development-lead/43991/70191632768",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Manager, Quality Data Steward",
+            "application url": "https://careers.astrazeneca.com//job/dublin/manager-quality-data-steward/43991/70191632688",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Manager, Process Data Analytics Capabilities & Insight",
+            "application url": "https://careers.astrazeneca.com//job/dublin/manager-process-data-analytics-capabilities-and-insight/7684/70190404864",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "IT Business Systems Analyst (Global Supply Chain)",
@@ -447,6 +471,12 @@
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Grange Castle Finance Controller",
+            "application url": "https://jobs.takeda.com//job/dublin/grange-castle-finance-controller/1113/70191622960",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "Quality Compliance Manager",

@@ -298,6 +298,44 @@ def format_json_pretty(data):
     return json.dumps(data, indent=4)
 
 
+def jobs_to_html_table(new_jobs):
+    """Convert job data into an HTML table."""
+    html = """
+    <html>
+    <body>
+    <h2>New Job Postings</h2>
+    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+        <tr>
+            <th>Company</th>
+            <th>Job Title</th>
+            <th>Job Link</th>
+        </tr>
+    """
+
+    # Loop through new jobs and add rows to the table
+    for company, jobs in new_jobs.items():
+        for job in jobs:
+            title = job.get("title", "No Title")
+            link = job.get("application url", "#")
+            jobportal = job.get("job portal link", "#")
+            html += f"""
+            <tr>
+                <td><a href="{jobportal}">{company}</td>
+                <td>{title}</td>
+                <td><a href="{link}">Apply</a></td>
+            </tr>
+            """
+
+    # Close the table and HTML tags
+    html += """
+    </table>
+    </body>
+    </html>
+    """
+
+    return html
+
+
 def send_email(
     subject,
     body,
@@ -315,7 +353,7 @@ def send_email(
     msg["Subject"] = subject
 
     # Attach the body of the email
-    msg.attach(MIMEText(body, "plain"))
+    msg.attach(MIMEText(body, "html"))
 
     try:
         # Create server object with SSL option
@@ -344,12 +382,7 @@ def main():
         logging.info(
             f"New job postings found: {len(new_jobs)} companies with new jobs."
         )
-        email_body = "New job postings found:\n\n"
-        for company, jobs in new_jobs.items():
-            email_body += f"{company}:\n"
-            for job in jobs:
-                email_body += f"{format_json_pretty(job)}\n"
-            email_body += "\n"
+        email_body = jobs_to_html_table(new_jobs)
 
         send_email(
             subject="New Job Postings Alert",
