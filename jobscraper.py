@@ -163,7 +163,7 @@ def Amgen():
         jobs = []
         for job in job_links:
             job_title = job.text.strip()
-            job_url = "https://www.amgen.jobs/" + job.find("a")["href"]
+            job_url = "https://www.amgen.jobs" + job.find("a")["href"]
             jobs.append(
                 {
                     "company": "Amgen",
@@ -289,13 +289,13 @@ def find_new_jobs(previous_jobs, current_jobs):
 
 
 def update_json_file(filename, current_jobs):
-    with open(filename, "w") as f:
-        json.dump(current_jobs, f, indent=4)
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(current_jobs, f, ensure_ascii=False, indent=4)
 
 
 def format_json_pretty(data):
     # Convert the data to a pretty-printed JSON string
-    return json.dumps(data, indent=4)
+    return json.dumps(data, ensure_ascii=False, indent=4)
 
 
 def jobs_to_html_table(new_jobs):
@@ -399,7 +399,7 @@ def main():
         for company, jobs in new_jobs.items():
             logging.info(f"{company}:")
             for job in jobs:
-                logging.info(json.dumps(job, indent=4))
+                logging.info(json.dumps(job, ensure_ascii=False, indent=4))
 
     else:
         logging.info("No new job postings found.")

@@ -4030,3 +4030,95 @@
 2024-09-21 18:00:22,088 - INFO - Completed fetching all job postings.
 2024-09-21 18:00:22,097 - INFO - No new job postings found.
 2024-09-21 18:00:22,099 - INFO - Job data updated successfully.
+2024-09-21 19:00:02,860 - INFO - Starting to fetch all job postings.
+2024-09-21 19:00:02,860 - INFO - Fetching job details for Abbvie.
+2024-09-21 19:00:03,782 - INFO - Fetched 3 jobs for Abbvie.
+2024-09-21 19:00:03,784 - INFO - Fetching job details for Amgen.
+2024-09-21 19:00:06,099 - INFO - Fetched 18 jobs for Amgen.
+2024-09-21 19:00:06,101 - INFO - Fetching job details for APC.
+2024-09-21 19:00:06,417 - INFO - Fetched 5 jobs for APC.
+2024-09-21 19:00:06,419 - INFO - Fetching job details for Astellas.
+2024-09-21 19:00:11,353 - INFO - Fetched 30 jobs for Astellas.
+2024-09-21 19:00:11,354 - INFO - Fetching job details for Astrazeneca.
+2024-09-21 19:00:12,106 - INFO - Fetched 23 jobs for Astrazeneca.
+2024-09-21 19:00:12,108 - INFO - Fetching job details for Takeda.
+2024-09-21 19:00:13,170 - INFO - Fetched 5 jobs for Takeda.
+2024-09-21 19:00:13,172 - INFO - Fetching job details for Vle.
+2024-09-21 19:00:13,433 - INFO - Fetched 1 jobs for Vle.
+2024-09-21 19:00:13,435 - INFO - Completed fetching all job postings.
+2024-09-21 19:00:13,441 - INFO - New job postings found: 1 companies with new jobs.
+2024-09-21 19:00:14,772 - INFO - Email sent successfully.
+2024-09-21 19:00:14,772 - INFO - Amgen:
+2024-09-21 19:00:14,772 - INFO - {
+    "company": "Amgen",
+    "title": "Sr Associate Supply Chain",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-supply-chain/5A230C6E07174F99BEE98684A31E0EF0/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,772 - INFO - {
+    "company": "Amgen",
+    "title": "Operations Integration Manager",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/operations-integration-manager/C1713F8C38B146A780ADDEC1CF3BC5F7/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,772 - INFO - {
+    "company": "Amgen",
+    "title": "Sr. Manager Manufacturing Support",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-manufacturing-support/C9F6BBF6255343C9B0642EC9DD992D2F/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,772 - INFO - {
+    "company": "Amgen",
+    "title": "Sr. Engineer Drug Process Development",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-engineer-drug-process-development/0AA46EE5584B418BBD5481789F0059E9/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Project/Equipment Engineer",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/projectequipment-engineer/46BEE74788854839A748FA6FFD41ADB5/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Sr Validation Engineer",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer/7556E570B39248FB8122D1BC9E52E866/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Sr. Manager ACDM Specialist Team Lead",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-acdm-specialist-team-lead/78DBC1D0F3764F49848DC0B57D3E9E90/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Specialist IS Bus Sys Analyst (Data Analytics)",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/specialist-is-bus-sys-analyst-data-analytics/27430610D7584AA2BC0BF8487D8C3E31/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Contract Development & Manufacturing Manager",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-manufacturing-manager/334C17EE8FD54BFBBBF04E8DBF7FDC73/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "QA Sr. Manager - External Quality",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/qa-sr-manager-external-quality/01C878C90CE44C0C9CE0CDD044BCEB03/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Supply Chain Technician (12 months Fixed Term Contract Role) - Shift Role",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/supply-chain-technician-12-months-fixed-term-contract-role-shift-role/2CF8F1BFDFC949B8B2E3291E7713DFD0/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,773 - INFO - {
+    "company": "Amgen",
+    "title": "Senior Maintenance Technician - Full Time Role (Shift)",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-maintenance-technician-full-time-role-shift/DA6E91A1B126429BAFFBF268A5862E94/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-09-21 19:00:14,775 - INFO - Job data updated successfully.
