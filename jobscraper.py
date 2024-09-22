@@ -7,12 +7,18 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import logging
+from logging.handlers import TimedRotatingFileHandler
 
+# Set up logging configuration
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("jobscraper.log"),
+        # Set up a TimedRotatingFileHandler to rotate log files every week
+        TimedRotatingFileHandler(
+            "jobscraper.log", when="W0", interval=1, backupCount=4
+        ),
+        # You can uncomment this to also log to the console
         # logging.StreamHandler()
     ],
 )
