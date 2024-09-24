@@ -52,18 +52,6 @@
         },
         {
             "company": "Amgen",
-            "title": "Sr. Engineer Drug Process Development",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-engineer-drug-process-development/0AA46EE5584B418BBD5481789F0059E9/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Sr Validation Engineer",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer/7556E570B39248FB8122D1BC9E52E866/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Specialist IS Bus Sys Analyst (Data Analytics)",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/specialist-is-bus-sys-analyst-data-analytics/27430610D7584AA2BC0BF8487D8C3E31/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -82,12 +70,6 @@
         },
         {
             "company": "Amgen",
-            "title": "Contract Development & Manufacturing Manager",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-manufacturing-manager/334C17EE8FD54BFBBBF04E8DBF7FDC73/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "QA Sr. Manager - External Quality",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/qa-sr-manager-external-quality/01C878C90CE44C0C9CE0CDD044BCEB03/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -102,12 +84,6 @@
             "company": "Amgen",
             "title": "Market Access Manager",
             "application url": "https://www.amgen.jobs/dublin-irl/market-access-manager/65DB910E67224DE3ADBE4D0487554087/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
-            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/933D369D2C044974AAB30347E912D5EE/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -163,7 +139,7 @@
     "Astellas": [
         {
             "company": "Astellas",
-            "title": "Sr Manager, Biostatistics",
+            "title": "Statistical Scientist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/3713",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
@@ -187,32 +163,8 @@
         },
         {
             "company": "Astellas",
-            "title": "Senior QC Microbiology Scientist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-QC-Microbiology-Scientist-10183/4465",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Senior QC Biochemistry Scientist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-QC-Biochemistry-Scientist-10184/4466",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
             "title": "Project Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10221/4485",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Senior Manufacturing Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Manufacturing-Engineer-10223/4486",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Senior Process Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Process-Engineer-10224/4487",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
@@ -223,44 +175,32 @@
         },
         {
             "company": "Astellas",
-            "title": "Process Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer-10229/4490",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
             "title": "Statistical Scientist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/4491",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Platform Engineer, Success Factors Time Expert",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4499",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Platform Engineer, Success Factors Talent Acquisitions Consultant",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4500",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Platform Engineer, Success Factors Talent Management Consultant",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4501",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Manufacturing Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Engineer-10334/4505",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "Project Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445/4548",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
@@ -278,67 +218,55 @@
         {
             "company": "Astellas",
             "title": "Project Lead Pharma Manu Project Engineer TP",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Lead-Pharma-Manu-Project-Engineer-TP-10693/4600",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "Project Lead Pharma Manu Project Engineer TP",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Lead-Pharma-Manu-Project-Engineer-TP-10694/4601",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Global HR Project Delivery Lead",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Project-Delivery-Lead/4628",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Project Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10886/4665",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Senior Environmental Operator",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Environmental-Operator-10931/4675",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Process Operator Environmental",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-Environmental-10932/4676",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Process Operator P3",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-P3-10933/4677",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Senior Onsite Support Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer-10985/4681",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
-        },
-        {
-            "company": "Astellas",
-            "title": "QA Specialist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Specialist-11029/4692",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
-        },
-        {
-            "company": "Astellas",
-            "title": "QC Chemist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemist-11063/4738",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Statistical Scientist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/4755",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Lead, Therapeutic Area Oncology, Medical Affairs - Benelux & Ireland",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Lead-TA-Oncology-MA-Benelux-Ireland/4785",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
@@ -393,12 +321,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Global Supply Planning Graduate",
-            "application url": "https://careers.astrazeneca.com//job/dublin/global-supply-planning-graduate/43991/70062303568",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Manager, Device Engineering",
             "application url": "https://careers.astrazeneca.com//job/dublin/manager-device-engineering/43991/67633265616",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -413,12 +335,6 @@
             "company": "Astrazeneca",
             "title": "Associate Director, International Medical Information and Medical Review",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-international-medical-information-and-medical-review/43991/69859578624",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Technical Services Specialist - Downstream",
-            "application url": "https://careers.astrazeneca.com//job/dublin/technical-services-specialist-downstream/43991/69744712528",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -520,6 +436,13 @@
             "title": "Supply Chain logistics Apprenticeship",
             "closing_date": "Sep 2, 2024",
             "application url": "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ftalent.sage.hr%2Fjobs%2F609ecaec-f06e-4284-abe7-e20a18bf4e9f&data=05%7C02%7Criyazul.mohamed%40approcess.com%7C9e8b9639649d4603022608dcbc5f22a4%7C454b1ff5365240d490978f06553e105b%7C0%7C0%7C638592364022668850%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=L6PHnk8ECBp3fTaOiyW5Nt%2Fj68%2BqvQ1o2npM%2Bjwl6L0%3D&reserved=0",
+            "job portal link": "https://www.vletherapeutics.com/careers"
+        },
+        {
+            "company": "Vle therapeutics",
+            "title": "Bioprocess Operator",
+            "closing_date": "Oct 18, 2024",
+            "application url": "https://talent.sage.hr/jobs/4fc148f3-7669-4b70-bb9a-b6f2f4db12a9",
             "job portal link": "https://www.vletherapeutics.com/careers"
         }
     ]
