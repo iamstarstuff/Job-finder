@@ -76,12 +76,6 @@
         },
         {
             "company": "Amgen",
-            "title": "QA Sr. Manager - External Quality",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/qa-sr-manager-external-quality/01C878C90CE44C0C9CE0CDD044BCEB03/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Maintenance Team Lead (Waterford)",
             "application url": "https://www.amgen.jobs/waterford-irl/maintenance-team-lead-waterford/CB8F9C082177409C84337E1A01142F80/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -291,6 +285,36 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
+            "title": "Associate Director, Medical Writing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-medical-writing/43991/70440453696",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Lead – Environmental Compliance",
+            "application url": "https://careers.astrazeneca.com//job/athlone/lead-environmental-compliance/43991/70411832928",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Operations SAP / Systems Lead",
+            "application url": "https://careers.astrazeneca.com//job/dublin/operations-sap-systems-lead/43991/70433836272",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Senior Master Data Administrator & Steward( 18 month FTC )",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-senior-master-data-administrator-and-steward-18-month-ftc/7684/70412209008",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Senior Master Data Administrator & Steward",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-senior-master-data-administrator-and-steward/7684/70412209872",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Senior Regulatory Affairs Group Director (RAGD)  Regulatory Science & Execution  Global Regulatory Affairs",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-regulatory-affairs-group-director-ragd-regulatory-science-and-execution-global-regulatory-af/43991/68174520672",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -375,12 +399,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Director, Synthetic Drug Substance Manufacturing",
-            "application url": "https://careers.astrazeneca.com//job/dublin/director-synthetic-drug-substance-manufacturing/43991/69320513616",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Manager, Statistician - Alexion Technical Operations (ATO)",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-statistician-alexion-technical-operations-ato/43991/61078472736",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -389,12 +407,6 @@
             "company": "Astrazeneca",
             "title": "Production Planning Manager - API",
             "application url": "https://careers.astrazeneca.com//job/dublin/production-planning-manager-api/43991/69087524656",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "UK/Ireland Compliance Business Partner",
-            "application url": "https://careers.astrazeneca.com//job/dublin/uk-ireland-compliance-business-partner/43991/62166157728",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -433,12 +445,6 @@
             "company": "Takeda",
             "title": "Quality Regulatory Compliance Manager",
             "application url": "https://jobs.takeda.com//job/wicklow/quality-regulatory-compliance-manager/1113/66545117520",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "QC Laboratory Apprentice",
-            "application url": "https://jobs.takeda.com//job/wicklow/qc-laboratory-apprentice/1113/64565183136",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         }
     ],
