@@ -64,14 +64,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Aseptic Manufacturing Associate (24/7 shift) FTC",
-            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-associate-247-shift-ftc/68D5BEF1D74549C797643EDE4D2A4D2D/job/",
+            "title": "Sr. Associate Process Development",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-process-development/C50BC74E1BFB45D283EB1F827947C313/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
             "company": "Amgen",
-            "title": "Sr. Associate Process Development",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-process-development/C50BC74E1BFB45D283EB1F827947C313/job/",
+            "title": "Sr Associate, QC, Day role",
+            "application url": "https://www.amgen.jobs/dublin-irl/sr-associate-qc-day-role/BCC90FACD70E4D1BAE18CA04C926C0CE/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -84,6 +84,12 @@
             "company": "Amgen",
             "title": "Market Access Manager",
             "application url": "https://www.amgen.jobs/dublin-irl/market-access-manager/65DB910E67224DE3ADBE4D0487554087/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Validation Sr. Engineer - Aseptic Processing",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/validation-sr-engineer-aseptic-processing/CDF85F2CDCFA4144830EBA1F4D0CCDE8/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -259,6 +265,12 @@
         },
         {
             "company": "Astellas",
+            "title": "Operations Graduate",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Operations-Graduate-11101/4724",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
             "title": "Statistical Scientist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/4755",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
@@ -279,6 +291,12 @@
             "company": "Astellas",
             "title": "Process Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer/4813",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Business Systems Specialist",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Business-Systems-Specialist-11329/4814",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
