@@ -2,12 +2,6 @@
     "Abbvie": [
         {
             "company": "Abbvie",
-            "title": "Associate Director of Technical Operations",
-            "application link": "https://careers.abbvie.com/en/job/associate-director-of-technical-operations-in-dublin-county-dublin-jid-7601",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "HR Business Partner",
             "application link": "https://careers.abbvie.com/en/job/hr-business-partner-in-dublin-county-dublin-jid-4884",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -40,32 +34,8 @@
         },
         {
             "company": "Amgen",
-            "title": "Operations Integration Manager",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/operations-integration-manager/C1713F8C38B146A780ADDEC1CF3BC5F7/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Sr. Manager Manufacturing Support",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-manufacturing-support/C9F6BBF6255343C9B0642EC9DD992D2F/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Sr. Manager MES (Manufacturing Support)",
-            "application url": "https://www.amgen.jobs/dublin-irl/sr-manager-mes-manufacturing-support/604510086DFD4606B30F90C9954DAAE7/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Specialist IS Bus Sys Analyst (Data Analytics)",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/specialist-is-bus-sys-analyst-data-analytics/27430610D7584AA2BC0BF8487D8C3E31/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Business Resilience Manager",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/business-resilience-manager/B4F5A791C4784F4E8080175F20067B02/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -84,12 +54,6 @@
             "company": "Amgen",
             "title": "Contract Development & Manufacturing Manager",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-manufacturing-manager/334C17EE8FD54BFBBBF04E8DBF7FDC73/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Sr. Associate Process Development",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-process-development/C50BC74E1BFB45D283EB1F827947C313/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -405,18 +369,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Manager, Device Engineering",
-            "application url": "https://careers.astrazeneca.com//job/dublin/manager-device-engineering/43991/67633265616",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Regulatory Project Management (12 months FTC)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-regulatory-project-management-12-months-ftc/43991/67578160560",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Associate Director, International Medical Information and Medical Review",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-international-medical-information-and-medical-review/43991/69859578624",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -437,30 +389,6 @@
             "company": "Astrazeneca",
             "title": "Process Equipment Engineer",
             "application url": "https://careers.astrazeneca.com//job/dublin/process-equipment-engineer/43991/69625984928",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Statistician - Alexion Technical Operations (ATO)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-statistician-alexion-technical-operations-ato/43991/61078472736",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Production Planning Manager - API",
-            "application url": "https://careers.astrazeneca.com//job/dublin/production-planning-manager-api/43991/69087524656",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Global Medical, Legal, Regulatory Review",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-medical-legal-regulatory-review/43991/68770919184",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Supplier Quality",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-supplier-quality/43991/67416731072",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
