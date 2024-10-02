@@ -16,14 +16,20 @@
     "Amgen": [
         {
             "company": "Amgen",
-            "title": "Sr. Associate Tax",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-tax/CA02CACEBE8444138D2D5932DFE827CF/job/",
+            "title": "FUEL Rotational Graduate Program",
+            "application url": "https://www.amgen.jobs/dublin-irl/fuel-rotational-graduate-program/A3EDF77E6DF843458FEEC100CADFAF67/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
             "company": "Amgen",
-            "title": "Prinicpal Manufacturing Systems Engineer",
-            "application url": "https://www.amgen.jobs/dublin-irl/prinicpal-manufacturing-systems-engineer/C3911CE99C06488C943D4DC23534B0DD/job/",
+            "title": "Amgen Graduate Opportunities 2025",
+            "application url": "https://www.amgen.jobs/dublin-irl/amgen-graduate-opportunities-2025/8C1DF65EEC3C48B3950413E253E4A41F/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Sr. Associate Tax",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-tax/CA02CACEBE8444138D2D5932DFE827CF/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -48,12 +54,6 @@
             "company": "Amgen",
             "title": "Specialist Contract Development & Mfg",
             "application url": "https://www.amgen.jobs/dublin-irl/specialist-contract-development-mfg/D88B3705315D4DDCAD620BD26E35ACE2/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Contract Development & Manufacturing Manager",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-manufacturing-manager/334C17EE8FD54BFBBBF04E8DBF7FDC73/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -175,39 +175,21 @@
         },
         {
             "company": "Astellas",
-            "title": "Platform Engineer, Success Factors Time Expert",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4499",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Platform Engineer, Success Factors Talent Acquisitions Consultant",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4500",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Platform Engineer, Success Factors Talent Management Consultant",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4501",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
             "title": "Manufacturing Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Engineer-10334/4505",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Senior Systems Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Systems-Engineer-10454/4549",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Statistical Programming Lead",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Programming-Lead/4592",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
@@ -255,18 +237,36 @@
             "company": "Astellas",
             "title": "Operations Graduate",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Operations-Graduate-11101/4724",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "QC Chemist",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemist-11063/4738",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Statistical Scientist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/4755",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Head, Clinical Data Enablement, Data Reporting and Analytics",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-CDE-Data-Reporting-and-Analytics/4773",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
             "title": "Lead, Therapeutic Area Oncology, Medical Affairs - Benelux & Ireland",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Lead-TA-Oncology-MA-Benelux-Ireland/4785",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Head, Clinical Data Enablement, Data Aggregation",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-CDE-Data-Aggregation/4789",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
@@ -286,9 +286,45 @@
             "title": "Business Systems Specialist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Business-Systems-Specialist-11329/4814",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Head of CMC Product QA Operational Governance & Strategy",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-of-CMC-Product-QA-Operational-Governance-Strategy/4835",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, IT Digital Lab Lead",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-digital-lab-lead/43991/68239245072",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "API Technician (Shift based) - APICOM",
+            "application url": "https://careers.astrazeneca.com//job/dublin/api-technician-shift-based-apicom/7684/70605272880",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Manager, Device Quality",
+            "application url": "https://careers.astrazeneca.com//job/dublin/manager-device-quality/43991/70662818656",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "QC Analyst (12 month fixed term contract)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qc-analyst-12-month-fixed-term-contract/43991/64130689088",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "UK/Ireland Compliance Business Partner",
+            "application url": "https://careers.astrazeneca.com//job/dublin/uk-ireland-compliance-business-partner/43991/62166157728",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "Associate Director, Medical Writing",
@@ -371,12 +407,6 @@
             "company": "Astrazeneca",
             "title": "Associate Director, International Medical Information and Medical Review",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-international-medical-information-and-medical-review/43991/69859578624",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QA Specialist",
-            "application url": "https://careers.astrazeneca.com//job/athlone/qa-specialist/43991/69218254336",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
