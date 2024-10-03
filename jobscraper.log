@@ -1175,3 +1175,59 @@
 2024-10-03 10:00:14,764 - INFO - Completed fetching all job postings.
 2024-10-03 10:00:14,770 - INFO - No new job postings found.
 2024-10-03 10:00:14,773 - INFO - Job data updated successfully.
+2024-10-03 11:00:02,928 - INFO - Starting to fetch all job postings.
+2024-10-03 11:00:02,929 - INFO - Fetching job details for Abbvie.
+2024-10-03 11:00:03,917 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-03 11:00:03,919 - INFO - Fetching job details for Amgen.
+2024-10-03 11:00:05,806 - INFO - Fetched 13 jobs for Amgen.
+2024-10-03 11:00:05,808 - INFO - Fetching job details for APC.
+2024-10-03 11:00:06,035 - INFO - Fetched 5 jobs for APC.
+2024-10-03 11:00:06,037 - INFO - Fetching job details for Astellas.
+2024-10-03 11:00:12,499 - INFO - Fetched 27 jobs for Astellas.
+2024-10-03 11:00:12,511 - INFO - Fetching job details for Astrazeneca.
+2024-10-03 11:00:13,003 - INFO - Fetched 21 jobs for Astrazeneca.
+2024-10-03 11:00:13,004 - INFO - Fetching job details for Takeda.
+2024-10-03 11:00:14,123 - INFO - Fetched 4 jobs for Takeda.
+2024-10-03 11:00:14,126 - INFO - Fetching job details for Vle.
+2024-10-03 11:00:14,271 - INFO - Fetched 2 jobs for Vle.
+2024-10-03 11:00:14,273 - INFO - Completed fetching all job postings.
+2024-10-03 11:00:14,280 - INFO - No new job postings found.
+2024-10-03 11:00:14,282 - INFO - Job data updated successfully.
+2024-10-03 12:00:02,120 - INFO - Starting to fetch all job postings.
+2024-10-03 12:00:02,121 - INFO - Fetching job details for Abbvie.
+2024-10-03 12:00:02,948 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-03 12:00:02,950 - INFO - Fetching job details for Amgen.
+2024-10-03 12:00:03,966 - INFO - Fetched 13 jobs for Amgen.
+2024-10-03 12:00:03,968 - INFO - Fetching job details for APC.
+2024-10-03 12:00:04,181 - INFO - Fetched 5 jobs for APC.
+2024-10-03 12:00:04,182 - INFO - Fetching job details for Astellas.
+2024-10-03 12:00:10,421 - INFO - Fetched 30 jobs for Astellas.
+2024-10-03 12:00:10,423 - INFO - Fetching job details for Astrazeneca.
+2024-10-03 12:00:12,988 - INFO - Fetched 19 jobs for Astrazeneca.
+2024-10-03 12:00:12,991 - INFO - Fetching job details for Takeda.
+2024-10-03 12:00:13,337 - INFO - Fetched 4 jobs for Takeda.
+2024-10-03 12:00:13,339 - INFO - Fetching job details for Vle.
+2024-10-03 12:00:13,565 - INFO - Fetched 2 jobs for Vle.
+2024-10-03 12:00:13,567 - INFO - Completed fetching all job postings.
+2024-10-03 12:00:13,573 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-03 12:00:15,001 - INFO - Email sent successfully.
+2024-10-03 12:00:15,002 - INFO - Astellas:
+2024-10-03 12:00:15,002 - INFO - {
+    "company": "Astellas",
+    "title": "QC Microbiologist Co-Op - Student",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Microbiologist-Co-Op-Student/4821",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+}
+2024-10-03 12:00:15,002 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Control Laboratory Analyst - Co-Op Student",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Laboratory-Analyst-Co-Op-Student/4822",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+}
+2024-10-03 12:00:15,002 - INFO - {
+    "company": "Astellas",
+    "title": "QC Chemistry - Co-Op Student",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemistry-Co-Op-Student/4823",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+}
+2024-10-03 12:00:15,048 - INFO - Job data updated successfully.

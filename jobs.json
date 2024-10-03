@@ -289,18 +289,30 @@
         },
         {
             "company": "Astellas",
+            "title": "QC Microbiologist Co-Op - Student",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Microbiologist-Co-Op-Student/4821",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Quality Control Laboratory Analyst - Co-Op Student",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Laboratory-Analyst-Co-Op-Student/4822",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "QC Chemistry - Co-Op Student",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemistry-Co-Op-Student/4823",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
             "title": "Head of CMC Product QA Operational Governance & Strategy",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-of-CMC-Product-QA-Operational-Governance-Strategy/4835",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, IT Digital Lab Lead",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-digital-lab-lead/43991/68239245072",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
         {
             "company": "Astrazeneca",
             "title": "API Technician (Shift based) - APICOM",
@@ -413,12 +425,6 @@
             "company": "Astrazeneca",
             "title": "Clinical Product Quality Lead",
             "application url": "https://careers.astrazeneca.com//job/dublin/clinical-product-quality-lead/43991/69645392288",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Process Equipment Engineer",
-            "application url": "https://careers.astrazeneca.com//job/dublin/process-equipment-engineer/43991/69625984928",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
