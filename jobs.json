@@ -133,12 +133,6 @@
     "Astellas": [
         {
             "company": "Astellas",
-            "title": "Statistical Scientist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Statistical-Scientist/3713",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
             "title": "Process Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer-9991/4409",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
@@ -193,15 +187,9 @@
         },
         {
             "company": "Astellas",
-            "title": "Project Lead Pharma Manu Project Engineer TP",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Lead-Pharma-Manu-Project-Engineer-TP-10694/4601",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
             "title": "Global HR Project Delivery Lead",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Project-Delivery-Lead/4628",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
@@ -255,13 +243,13 @@
             "company": "Astellas",
             "title": "Head, Clinical Data Enablement, Data Reporting and Analytics",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-CDE-Data-Reporting-and-Analytics/4773",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Lead, Therapeutic Area Oncology, Medical Affairs - Benelux & Ireland",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Lead-TA-Oncology-MA-Benelux-Ireland/4785",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
@@ -429,6 +417,12 @@
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "QC Analyst, Small Molecules",
+            "application url": "https://jobs.takeda.com//job/dublin/qc-analyst-small-molecules/1113/70733625632",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "Grange Castle Finance Controller",
