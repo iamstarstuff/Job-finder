@@ -1419,3 +1419,349 @@
 2024-10-03 22:00:11,971 - INFO - Completed fetching all job postings.
 2024-10-03 22:00:11,977 - INFO - No new job postings found.
 2024-10-03 22:00:11,979 - INFO - Job data updated successfully.
+2024-10-03 23:00:03,253 - INFO - Starting to fetch all job postings.
+2024-10-03 23:00:03,254 - INFO - Fetching job details for Abbvie.
+2024-10-03 23:00:04,148 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-03 23:00:04,151 - INFO - Fetching job details for Amgen.
+2024-10-03 23:00:05,343 - INFO - Fetched 13 jobs for Amgen.
+2024-10-03 23:00:05,346 - INFO - Fetching job details for APC.
+2024-10-03 23:00:05,570 - INFO - Fetched 5 jobs for APC.
+2024-10-03 23:00:05,572 - INFO - Fetching job details for Astellas.
+2024-10-03 23:00:12,423 - INFO - Fetched 28 jobs for Astellas.
+2024-10-03 23:00:12,425 - INFO - Fetching job details for Astrazeneca.
+2024-10-03 23:00:14,711 - INFO - Fetched 19 jobs for Astrazeneca.
+2024-10-03 23:00:14,713 - INFO - Fetching job details for Takeda.
+2024-10-03 23:00:15,818 - INFO - Fetched 6 jobs for Takeda.
+2024-10-03 23:00:15,819 - INFO - Fetching job details for Vle.
+2024-10-03 23:00:16,092 - INFO - Fetched 2 jobs for Vle.
+2024-10-03 23:00:16,094 - INFO - Completed fetching all job postings.
+2024-10-03 23:00:16,095 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-03 23:00:17,234 - INFO - Email sent successfully.
+2024-10-03 23:00:17,234 - INFO - Takeda:
+2024-10-03 23:00:17,234 - INFO - {
+    "company": "Takeda",
+    "title": "Senior Auditor",
+    "application url": "https://jobs.takeda.com//job/dublin/senior-auditor/1113/70747746176",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-03 23:00:17,237 - INFO - Job data updated successfully.
+2024-10-04 00:00:02,986 - INFO - Starting to fetch all job postings.
+2024-10-04 00:00:02,986 - INFO - Fetching job details for Abbvie.
+2024-10-04 00:00:03,856 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 00:00:03,858 - INFO - Fetching job details for Amgen.
+2024-10-04 00:00:04,650 - INFO - Fetched 13 jobs for Amgen.
+2024-10-04 00:00:04,651 - INFO - Fetching job details for APC.
+2024-10-04 00:00:04,850 - INFO - Fetched 5 jobs for APC.
+2024-10-04 00:00:04,851 - INFO - Fetching job details for Astellas.
+2024-10-04 00:00:10,300 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 00:00:10,301 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 00:00:12,683 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 00:00:12,684 - INFO - Fetching job details for Takeda.
+2024-10-04 00:00:12,961 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 00:00:12,962 - INFO - Fetching job details for Vle.
+2024-10-04 00:00:13,223 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 00:00:13,225 - INFO - Completed fetching all job postings.
+2024-10-04 00:00:13,225 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-04 00:00:14,820 - INFO - Email sent successfully.
+2024-10-04 00:00:14,820 - INFO - Astrazeneca:
+2024-10-04 00:00:14,820 - INFO - {
+    "company": "Astrazeneca",
+    "title": "BDS Manufacturing Support Specialist (Part-time)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/bds-manufacturing-support-specialist-part-time/43991/58517786768",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2024-10-04 00:00:14,823 - INFO - Job data updated successfully.
+2024-10-04 01:00:02,857 - INFO - Starting to fetch all job postings.
+2024-10-04 01:00:02,858 - INFO - Fetching job details for Abbvie.
+2024-10-04 01:00:03,871 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 01:00:03,873 - INFO - Fetching job details for Amgen.
+2024-10-04 01:00:05,343 - INFO - Fetched 13 jobs for Amgen.
+2024-10-04 01:00:05,345 - INFO - Fetching job details for APC.
+2024-10-04 01:00:05,546 - INFO - Fetched 5 jobs for APC.
+2024-10-04 01:00:05,548 - INFO - Fetching job details for Astellas.
+2024-10-04 01:00:11,430 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 01:00:11,431 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 01:00:13,711 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 01:00:13,712 - INFO - Fetching job details for Takeda.
+2024-10-04 01:00:14,830 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 01:00:14,832 - INFO - Fetching job details for Vle.
+2024-10-04 01:00:15,079 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 01:00:15,081 - INFO - Completed fetching all job postings.
+2024-10-04 01:00:15,125 - INFO - No new job postings found.
+2024-10-04 01:00:15,208 - INFO - Job data updated successfully.
+2024-10-04 02:00:02,081 - INFO - Starting to fetch all job postings.
+2024-10-04 02:00:02,081 - INFO - Fetching job details for Abbvie.
+2024-10-04 02:00:03,243 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 02:00:03,245 - INFO - Fetching job details for Amgen.
+2024-10-04 02:00:04,327 - INFO - Fetched 13 jobs for Amgen.
+2024-10-04 02:00:04,328 - INFO - Fetching job details for APC.
+2024-10-04 02:00:04,521 - INFO - Fetched 5 jobs for APC.
+2024-10-04 02:00:04,522 - INFO - Fetching job details for Astellas.
+2024-10-04 02:00:10,070 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 02:00:10,072 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 02:00:12,347 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 02:00:12,348 - INFO - Fetching job details for Takeda.
+2024-10-04 02:00:12,622 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 02:00:12,623 - INFO - Fetching job details for Vle.
+2024-10-04 02:00:12,863 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 02:00:12,865 - INFO - Completed fetching all job postings.
+2024-10-04 02:00:12,865 - INFO - No new job postings found.
+2024-10-04 02:00:12,867 - INFO - Job data updated successfully.
+2024-10-04 03:00:02,599 - INFO - Starting to fetch all job postings.
+2024-10-04 03:00:02,599 - INFO - Fetching job details for Abbvie.
+2024-10-04 03:00:03,525 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 03:00:03,527 - INFO - Fetching job details for Amgen.
+2024-10-04 03:00:13,225 - INFO - Fetched 13 jobs for Amgen.
+2024-10-04 03:00:13,227 - INFO - Fetching job details for APC.
+2024-10-04 03:00:13,426 - INFO - Fetched 5 jobs for APC.
+2024-10-04 03:00:13,427 - INFO - Fetching job details for Astellas.
+2024-10-04 03:00:18,660 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 03:00:18,662 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 03:00:19,096 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 03:00:19,097 - INFO - Fetching job details for Takeda.
+2024-10-04 03:00:19,399 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 03:00:19,400 - INFO - Fetching job details for Vle.
+2024-10-04 03:00:19,631 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 03:00:19,633 - INFO - Completed fetching all job postings.
+2024-10-04 03:00:19,633 - INFO - No new job postings found.
+2024-10-04 03:00:19,643 - INFO - Job data updated successfully.
+2024-10-04 04:00:02,529 - INFO - Starting to fetch all job postings.
+2024-10-04 04:00:02,529 - INFO - Fetching job details for Abbvie.
+2024-10-04 04:00:03,536 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 04:00:03,537 - INFO - Fetching job details for Amgen.
+2024-10-04 04:00:04,269 - INFO - Fetched 13 jobs for Amgen.
+2024-10-04 04:00:04,270 - INFO - Fetching job details for APC.
+2024-10-04 04:00:04,464 - INFO - Fetched 5 jobs for APC.
+2024-10-04 04:00:04,465 - INFO - Fetching job details for Astellas.
+2024-10-04 04:00:09,755 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 04:00:09,756 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 04:00:10,182 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 04:00:10,184 - INFO - Fetching job details for Takeda.
+2024-10-04 04:00:10,440 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 04:00:10,441 - INFO - Fetching job details for Vle.
+2024-10-04 04:00:10,697 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 04:00:10,698 - INFO - Completed fetching all job postings.
+2024-10-04 04:00:10,699 - INFO - No new job postings found.
+2024-10-04 04:00:10,700 - INFO - Job data updated successfully.
+2024-10-04 05:00:02,685 - INFO - Starting to fetch all job postings.
+2024-10-04 05:00:02,685 - INFO - Fetching job details for Abbvie.
+2024-10-04 05:00:03,623 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 05:00:03,624 - INFO - Fetching job details for Amgen.
+2024-10-04 05:00:04,413 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 05:00:04,415 - INFO - Fetching job details for APC.
+2024-10-04 05:00:04,615 - INFO - Fetched 5 jobs for APC.
+2024-10-04 05:00:04,616 - INFO - Fetching job details for Astellas.
+2024-10-04 05:00:10,156 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 05:00:10,157 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 05:00:12,449 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 05:00:12,450 - INFO - Fetching job details for Takeda.
+2024-10-04 05:00:13,527 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 05:00:13,529 - INFO - Fetching job details for Vle.
+2024-10-04 05:00:13,784 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 05:00:13,785 - INFO - Completed fetching all job postings.
+2024-10-04 05:00:13,792 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-04 05:00:15,287 - INFO - Email sent successfully.
+2024-10-04 05:00:15,288 - INFO - Amgen:
+2024-10-04 05:00:15,288 - INFO - {
+    "company": "Amgen",
+    "title": "Supply Chain Manager - Product Planner - Fixed Term Contract",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/supply-chain-manager-product-planner-fixed-term-contract/E38AA5288D1C44D993D7944BA26ADEEB/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-10-04 05:00:15,288 - INFO - {
+    "company": "Amgen",
+    "title": "Sr. Associate Tech Engineering - Drug Process Development",
+    "application url": "https://www.amgen.jobs/dublin-irl/sr-associate-tech-engineering-drug-process-development/54D5C623E2D34A67844F30E4ABB0A4A8/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-10-04 05:00:15,288 - INFO - {
+    "company": "Amgen",
+    "title": "Sr. Engineer System Owner",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-engineer-system-owner/1E9B20B37827467F889CBA0BEEDDC05D/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-10-04 05:00:15,290 - INFO - Job data updated successfully.
+2024-10-04 06:00:02,138 - INFO - Starting to fetch all job postings.
+2024-10-04 06:00:02,138 - INFO - Fetching job details for Abbvie.
+2024-10-04 06:00:03,058 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 06:00:03,060 - INFO - Fetching job details for Amgen.
+2024-10-04 06:00:04,053 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 06:00:04,055 - INFO - Fetching job details for APC.
+2024-10-04 06:00:04,265 - INFO - Fetched 5 jobs for APC.
+2024-10-04 06:00:04,267 - INFO - Fetching job details for Astellas.
+2024-10-04 06:00:09,660 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 06:00:09,661 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 06:00:12,175 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 06:00:12,176 - INFO - Fetching job details for Takeda.
+2024-10-04 06:00:12,465 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 06:00:12,466 - INFO - Fetching job details for Vle.
+2024-10-04 06:00:12,741 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 06:00:12,742 - INFO - Completed fetching all job postings.
+2024-10-04 06:00:12,748 - INFO - No new job postings found.
+2024-10-04 06:00:12,750 - INFO - Job data updated successfully.
+2024-10-04 07:00:02,411 - INFO - Starting to fetch all job postings.
+2024-10-04 07:00:02,411 - INFO - Fetching job details for Abbvie.
+2024-10-04 07:00:03,429 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 07:00:03,431 - INFO - Fetching job details for Amgen.
+2024-10-04 07:00:05,655 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 07:00:05,656 - INFO - Fetching job details for APC.
+2024-10-04 07:00:05,879 - INFO - Fetched 5 jobs for APC.
+2024-10-04 07:00:05,880 - INFO - Fetching job details for Astellas.
+2024-10-04 07:00:11,192 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 07:00:11,194 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 07:00:12,753 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 07:00:12,755 - INFO - Fetching job details for Takeda.
+2024-10-04 07:00:13,868 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 07:00:13,869 - INFO - Fetching job details for Vle.
+2024-10-04 07:00:14,103 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 07:00:14,105 - INFO - Completed fetching all job postings.
+2024-10-04 07:00:14,112 - INFO - No new job postings found.
+2024-10-04 07:00:14,114 - INFO - Job data updated successfully.
+2024-10-04 08:00:01,999 - INFO - Starting to fetch all job postings.
+2024-10-04 08:00:01,999 - INFO - Fetching job details for Abbvie.
+2024-10-04 08:00:03,086 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 08:00:03,087 - INFO - Fetching job details for Amgen.
+2024-10-04 08:00:03,876 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 08:00:03,878 - INFO - Fetching job details for APC.
+2024-10-04 08:00:04,078 - INFO - Fetched 5 jobs for APC.
+2024-10-04 08:00:04,080 - INFO - Fetching job details for Astellas.
+2024-10-04 08:00:09,824 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 08:00:09,826 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 08:00:10,288 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 08:00:10,290 - INFO - Fetching job details for Takeda.
+2024-10-04 08:00:10,549 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 08:00:10,550 - INFO - Fetching job details for Vle.
+2024-10-04 08:00:10,788 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 08:00:10,790 - INFO - Completed fetching all job postings.
+2024-10-04 08:00:10,796 - INFO - No new job postings found.
+2024-10-04 08:00:10,798 - INFO - Job data updated successfully.
+2024-10-04 09:00:02,909 - INFO - Starting to fetch all job postings.
+2024-10-04 09:00:02,910 - INFO - Fetching job details for Abbvie.
+2024-10-04 09:00:03,835 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 09:00:03,836 - INFO - Fetching job details for Amgen.
+2024-10-04 09:00:04,727 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 09:00:04,728 - INFO - Fetching job details for APC.
+2024-10-04 09:00:04,946 - INFO - Fetched 5 jobs for APC.
+2024-10-04 09:00:04,947 - INFO - Fetching job details for Astellas.
+2024-10-04 09:00:10,677 - INFO - Fetched 28 jobs for Astellas.
+2024-10-04 09:00:10,679 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 09:00:13,158 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 09:00:13,160 - INFO - Fetching job details for Takeda.
+2024-10-04 09:00:13,451 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 09:00:13,453 - INFO - Fetching job details for Vle.
+2024-10-04 09:00:13,686 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 09:00:13,688 - INFO - Completed fetching all job postings.
+2024-10-04 09:00:13,689 - INFO - No new job postings found.
+2024-10-04 09:00:13,690 - INFO - Job data updated successfully.
+2024-10-04 10:00:02,865 - INFO - Starting to fetch all job postings.
+2024-10-04 10:00:02,866 - INFO - Fetching job details for Abbvie.
+2024-10-04 10:00:03,941 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 10:00:03,942 - INFO - Fetching job details for Amgen.
+2024-10-04 10:00:04,783 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 10:00:04,785 - INFO - Fetching job details for APC.
+2024-10-04 10:00:05,028 - INFO - Fetched 5 jobs for APC.
+2024-10-04 10:00:05,029 - INFO - Fetching job details for Astellas.
+2024-10-04 10:00:10,941 - INFO - Fetched 30 jobs for Astellas.
+2024-10-04 10:00:10,943 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 10:00:11,379 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 10:00:11,380 - INFO - Fetching job details for Takeda.
+2024-10-04 10:00:11,635 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 10:00:11,637 - INFO - Fetching job details for Vle.
+2024-10-04 10:00:11,791 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 10:00:11,792 - INFO - Completed fetching all job postings.
+2024-10-04 10:00:11,799 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-04 10:00:13,102 - INFO - Email sent successfully.
+2024-10-04 10:00:13,102 - INFO - Astellas:
+2024-10-04 10:00:13,103 - INFO - {
+    "company": "Astellas",
+    "title": "Global Marketing Lead, Established Brands",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Marketing-Lead-Established-Brands/4779",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2024-10-04 10:00:13,103 - INFO - {
+    "company": "Astellas",
+    "title": "Global Marketing Lead, Established Brands",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Marketing-Lead-Established-Brands/4780",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+}
+2024-10-04 10:00:13,105 - INFO - Job data updated successfully.
+2024-10-04 11:00:03,262 - INFO - Starting to fetch all job postings.
+2024-10-04 11:00:03,263 - INFO - Fetching job details for Abbvie.
+2024-10-04 11:00:04,220 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 11:00:04,222 - INFO - Fetching job details for Amgen.
+2024-10-04 11:00:05,211 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 11:00:05,213 - INFO - Fetching job details for APC.
+2024-10-04 11:00:05,470 - INFO - Fetched 5 jobs for APC.
+2024-10-04 11:00:05,472 - INFO - Fetching job details for Astellas.
+2024-10-04 11:00:12,185 - INFO - Fetched 30 jobs for Astellas.
+2024-10-04 11:00:12,187 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 11:00:12,927 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 11:00:12,929 - INFO - Fetching job details for Takeda.
+2024-10-04 11:00:14,016 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 11:00:14,018 - INFO - Fetching job details for Vle.
+2024-10-04 11:00:14,284 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 11:00:14,286 - INFO - Completed fetching all job postings.
+2024-10-04 11:00:14,287 - INFO - No new job postings found.
+2024-10-04 11:00:14,330 - INFO - Job data updated successfully.
+2024-10-04 12:00:02,386 - INFO - Starting to fetch all job postings.
+2024-10-04 12:00:02,387 - INFO - Fetching job details for Abbvie.
+2024-10-04 12:00:03,414 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 12:00:03,416 - INFO - Fetching job details for Amgen.
+2024-10-04 12:00:04,255 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 12:00:04,257 - INFO - Fetching job details for APC.
+2024-10-04 12:00:04,486 - INFO - Fetched 5 jobs for APC.
+2024-10-04 12:00:04,488 - INFO - Fetching job details for Astellas.
+2024-10-04 12:00:11,582 - INFO - Fetched 30 jobs for Astellas.
+2024-10-04 12:00:11,585 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 12:00:13,995 - INFO - Fetched 20 jobs for Astrazeneca.
+2024-10-04 12:00:13,997 - INFO - Fetching job details for Takeda.
+2024-10-04 12:00:14,336 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 12:00:14,339 - INFO - Fetching job details for Vle.
+2024-10-04 12:00:14,629 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 12:00:14,631 - INFO - Completed fetching all job postings.
+2024-10-04 12:00:14,632 - INFO - No new job postings found.
+2024-10-04 12:00:14,634 - INFO - Job data updated successfully.
+2024-10-04 13:00:02,753 - INFO - Starting to fetch all job postings.
+2024-10-04 13:00:02,753 - INFO - Fetching job details for Abbvie.
+2024-10-04 13:00:03,618 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 13:00:03,620 - INFO - Fetching job details for Amgen.
+2024-10-04 13:00:04,608 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 13:00:04,610 - INFO - Fetching job details for APC.
+2024-10-04 13:00:04,862 - INFO - Fetched 5 jobs for APC.
+2024-10-04 13:00:04,864 - INFO - Fetching job details for Astellas.
+2024-10-04 13:00:11,481 - INFO - Fetched 30 jobs for Astellas.
+2024-10-04 13:00:11,483 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 13:00:14,179 - INFO - Fetched 19 jobs for Astrazeneca.
+2024-10-04 13:00:14,181 - INFO - Fetching job details for Takeda.
+2024-10-04 13:00:14,587 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 13:00:14,590 - INFO - Fetching job details for Vle.
+2024-10-04 13:00:14,850 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 13:00:14,852 - INFO - Completed fetching all job postings.
+2024-10-04 13:00:14,853 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-04 13:00:16,090 - INFO - Email sent successfully.
+2024-10-04 13:00:16,090 - INFO - Astrazeneca:
+2024-10-04 13:00:16,090 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Director, Medical Device and Combination Products",
+    "application url": "https://careers.astrazeneca.com//job/dublin/director-medical-device-and-combination-products/43991/70769508704",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2024-10-04 13:00:16,092 - INFO - Job data updated successfully.
+2024-10-04 14:00:03,289 - INFO - Starting to fetch all job postings.
+2024-10-04 14:00:03,291 - INFO - Fetching job details for Abbvie.
+2024-10-04 14:00:04,410 - INFO - Fetched 2 jobs for Abbvie.
+2024-10-04 14:00:04,412 - INFO - Fetching job details for Amgen.
+2024-10-04 14:00:06,836 - INFO - Fetched 15 jobs for Amgen.
+2024-10-04 14:00:06,838 - INFO - Fetching job details for APC.
+2024-10-04 14:00:07,072 - INFO - Fetched 5 jobs for APC.
+2024-10-04 14:00:07,075 - INFO - Fetching job details for Astellas.
+2024-10-04 14:00:13,913 - INFO - Fetched 30 jobs for Astellas.
+2024-10-04 14:00:13,915 - INFO - Fetching job details for Astrazeneca.
+2024-10-04 14:00:16,204 - INFO - Fetched 19 jobs for Astrazeneca.
+2024-10-04 14:00:16,207 - INFO - Fetching job details for Takeda.
+2024-10-04 14:00:16,552 - INFO - Fetched 6 jobs for Takeda.
+2024-10-04 14:00:16,555 - INFO - Fetching job details for Vle.
+2024-10-04 14:00:16,795 - INFO - Fetched 2 jobs for Vle.
+2024-10-04 14:00:16,797 - INFO - Completed fetching all job postings.
+2024-10-04 14:00:16,798 - INFO - No new job postings found.
+2024-10-04 14:00:16,806 - INFO - Job data updated successfully.
