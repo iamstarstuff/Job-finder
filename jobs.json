@@ -16,6 +16,18 @@
     "Amgen": [
         {
             "company": "Amgen",
+            "title": "Warehouse Technician Role - Fixed Term Contract Role",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/warehouse-technician-role-fixed-term-contract-role/ADCA14584BB547CDBDEFBA0DFA67BE67/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Sr. Associate PQA (24/7 Shift Role)",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-pqa-247-shift-role/8250E6D5ED714A549CED69B10B961213/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
             "title": "Supply Chain Manager - Product Planner - Fixed Term Contract",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/supply-chain-manager-product-planner-fixed-term-contract/E38AA5288D1C44D993D7944BA26ADEEB/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -52,8 +64,8 @@
         },
         {
             "company": "Amgen",
-            "title": "Sr Associate Supply Chain",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-supply-chain/5A230C6E07174F99BEE98684A31E0EF0/job/",
+            "title": "Project/Equipment Engineer",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/projectequipment-engineer/46BEE74788854839A748FA6FFD41ADB5/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -70,38 +82,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Sr Associate, QC, Day role",
-            "application url": "https://www.amgen.jobs/dublin-irl/sr-associate-qc-day-role/BCC90FACD70E4D1BAE18CA04C926C0CE/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Maintenance Team Lead (Waterford)",
             "application url": "https://www.amgen.jobs/waterford-irl/maintenance-team-lead-waterford/CB8F9C082177409C84337E1A01142F80/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
             "company": "Amgen",
-            "title": "Market Access Manager",
-            "application url": "https://www.amgen.jobs/dublin-irl/market-access-manager/65DB910E67224DE3ADBE4D0487554087/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Validation Sr. Engineer - Aseptic Processing",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/validation-sr-engineer-aseptic-processing/CDF85F2CDCFA4144830EBA1F4D0CCDE8/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Senior Maintenance Technician - Full Time Role (Shift)",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-maintenance-technician-full-time-role-shift/DA6E91A1B126429BAFFBF268A5862E94/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Specialist Quality Assurance - IQA",
-            "application url": "https://www.amgen.jobs/dublin-irl/specialist-quality-assurance-iqa/6115989B38764A1085CC67D6AB624DCC/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         }
     ],
@@ -211,12 +199,6 @@
         },
         {
             "company": "Astellas",
-            "title": "Senior Environmental Operator",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Environmental-Operator-10931/4675",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
             "title": "Process Operator Environmental",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-Environmental-10932/4676",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
@@ -267,7 +249,7 @@
             "company": "Astellas",
             "title": "Global Marketing Lead, Established Brands",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Marketing-Lead-Established-Brands/4780",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
@@ -321,6 +303,12 @@
             "company": "Astellas",
             "title": "Head of CMC Product QA Operational Governance & Strategy",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-of-CMC-Product-QA-Operational-Governance-Strategy/4835",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Facilities Engineer",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Facilities-Engineer-11383/4842",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
@@ -389,12 +377,6 @@
             "company": "Astrazeneca",
             "title": "Senior Manager, Senior Master Data Administrator & Steward",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-senior-master-data-administrator-and-steward/7684/70412209872",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Regulatory Affairs Group Director (RAGD)  Regulatory Science & Execution  Global Regulatory Affairs",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-regulatory-affairs-group-director-ragd-regulatory-science-and-execution-global-regulatory-af/43991/68174520672",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
