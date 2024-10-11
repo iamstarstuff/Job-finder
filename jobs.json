@@ -488,7 +488,44 @@
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
-    "Takeda": [],
+    "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Process Development Engineer (Packaging)",
+            "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-packaging/1113/71109293728",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "Senior Auditor",
+            "application url": "https://jobs.takeda.com//job/dublin/senior-auditor/1113/70747746176",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "QC Analyst, Small Molecules",
+            "application url": "https://jobs.takeda.com//job/dublin/qc-analyst-small-molecules/1113/70733625632",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "Grange Castle Finance Controller",
+            "application url": "https://jobs.takeda.com//job/dublin/grange-castle-finance-controller/1113/70191622960",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "Quality Compliance Manager",
+            "application url": "https://jobs.takeda.com//job/wicklow/quality-compliance-manager/1113/69349110720",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "Quality Regulatory Compliance Manager",
+            "application url": "https://jobs.takeda.com//job/wicklow/quality-regulatory-compliance-manager/1113/66545117520",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        }
+    ],
     "Vle therapeutics": [
         {
             "company": "Vle therapeutics",

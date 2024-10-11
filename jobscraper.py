@@ -8,6 +8,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import logging
 from logging.handlers import TimedRotatingFileHandler
+import ssl
+import certifi
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 
 
 logging.basicConfig(
@@ -131,7 +136,7 @@ def Astrazeneca():
 def Takeda():
     logging.info("Fetching job details for Takeda.")
     try:
-        response = requests.get(company_urls["Takeda"],verify=False)
+        response = requests.get(company_urls["Takeda"])
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "lxml")
         job_links = soup.find_all("a", {"data-job-id": True})
@@ -186,7 +191,7 @@ def Amgen():
 def Vle():
     logging.info("Fetching job details for Vle.")
     try:
-        response = requests.get(company_urls["Vle therapeutics"],verify=False)
+        response = requests.get(company_urls["Vle therapeutics"])
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "lxml")
         job_links = soup.find_all("div", class_="table-content")
