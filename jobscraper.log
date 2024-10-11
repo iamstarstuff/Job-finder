@@ -1947,3 +1947,21 @@
     "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
 }
 2024-10-11 22:28:11,093 - INFO - Job data updated successfully.
+2024-10-11 22:38:13,384 - INFO - Starting to fetch all job postings.
+2024-10-11 22:38:13,384 - INFO - Fetching job details for Abbvie.
+2024-10-11 22:38:14,361 - INFO - Fetched 7 jobs for Abbvie.
+2024-10-11 22:38:14,362 - INFO - Fetching job details for Amgen.
+2024-10-11 22:38:15,259 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 22:38:15,259 - INFO - Fetching job details for APC.
+2024-10-11 22:38:15,478 - INFO - Fetched 5 jobs for APC.
+2024-10-11 22:38:15,479 - INFO - Fetching job details for Astellas.
+2024-10-11 22:38:21,596 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 22:38:21,596 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 22:38:23,861 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 22:38:23,861 - INFO - Fetching job details for Takeda.
+2024-10-11 22:38:24,224 - INFO - Fetched 6 jobs for Takeda.
+2024-10-11 22:38:24,227 - INFO - Fetching job details for Vle.
+2024-10-11 22:38:24,359 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 22:38:24,359 - INFO - Completed fetching all job postings.
+2024-10-11 22:38:24,360 - INFO - No new job postings found.
+2024-10-11 22:38:24,362 - INFO - Job data updated successfully.
