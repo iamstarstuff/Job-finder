@@ -2,14 +2,20 @@
     "Abbvie": [
         {
             "company": "Abbvie",
-            "title": "NPI Project Manager",
-            "application link": "https://careers.abbvie.com/en/job/npi-project-manager-in-dublin-county-dublin-jid-8754",
+            "title": "Brand Manager - Gastroenterology",
+            "application link": "https://careers.abbvie.com/en/job/brand-manager-gastroenterology-in-dublin-county-dublin-jid-8724",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
             "company": "Abbvie",
-            "title": "Brand Manager - Gastroenterology",
-            "application link": "https://careers.abbvie.com/en/job/brand-manager-gastroenterology-in-dublin-county-dublin-jid-8724",
+            "title": "QA Validation Specialist",
+            "application link": "https://careers.abbvie.com/en/job/qa-validation-specialist-in-dublin-county-dublin-jid-8836",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "NPI Project Manager",
+            "application link": "https://careers.abbvie.com/en/job/npi-project-manager-in-dublin-county-dublin-jid-8754",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -316,9 +322,27 @@
             "title": "Co-Op Student - Blister Packaging",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Co-Op-Student-Blister-Packaging-11421/4854",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Process Engineer",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer/4858",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Accountant",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant/43991/71060101680",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "VIP Support Engineer",
+            "application url": "https://careers.astrazeneca.com//job/dublin/vip-support-engineer/7684/71058609904",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "Director, Tax Technical Accounting and Reporting",
@@ -452,38 +476,7 @@
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
-    "Takeda": [
-        {
-            "company": "Takeda",
-            "title": "Senior Auditor",
-            "application url": "https://jobs.takeda.com//job/dublin/senior-auditor/1113/70747746176",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "QC Analyst, Small Molecules",
-            "application url": "https://jobs.takeda.com//job/dublin/qc-analyst-small-molecules/1113/70733625632",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Grange Castle Finance Controller",
-            "application url": "https://jobs.takeda.com//job/dublin/grange-castle-finance-controller/1113/70191622960",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Quality Compliance Manager",
-            "application url": "https://jobs.takeda.com//job/wicklow/quality-compliance-manager/1113/69349110720",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Quality Regulatory Compliance Manager",
-            "application url": "https://jobs.takeda.com//job/wicklow/quality-regulatory-compliance-manager/1113/66545117520",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        }
-    ],
+    "Takeda": [],
     "Vle therapeutics": [
         {
             "company": "Vle therapeutics",

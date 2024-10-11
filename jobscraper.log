@@ -827,3 +827,799 @@
 2024-10-09 17:00:17,548 - INFO - Completed fetching all job postings.
 2024-10-09 17:00:17,549 - INFO - No new job postings found.
 2024-10-09 17:00:17,557 - INFO - Job data updated successfully.
+2024-10-09 18:00:02,828 - INFO - Starting to fetch all job postings.
+2024-10-09 18:00:02,829 - INFO - Fetching job details for Abbvie.
+2024-10-09 18:00:03,755 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-09 18:00:03,758 - INFO - Fetching job details for Amgen.
+2024-10-09 18:00:06,292 - INFO - Fetched 14 jobs for Amgen.
+2024-10-09 18:00:06,294 - INFO - Fetching job details for APC.
+2024-10-09 18:00:06,528 - INFO - Fetched 5 jobs for APC.
+2024-10-09 18:00:06,530 - INFO - Fetching job details for Astellas.
+2024-10-09 18:00:14,905 - INFO - Fetched 28 jobs for Astellas.
+2024-10-09 18:00:14,907 - INFO - Fetching job details for Astrazeneca.
+2024-10-09 18:00:17,607 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-09 18:00:17,609 - INFO - Fetching job details for Takeda.
+2024-10-09 18:00:18,026 - INFO - Fetched 5 jobs for Takeda.
+2024-10-09 18:00:18,028 - INFO - Fetching job details for Vle.
+2024-10-09 18:00:18,269 - INFO - Fetched 2 jobs for Vle.
+2024-10-09 18:00:18,271 - INFO - Completed fetching all job postings.
+2024-10-09 18:00:18,278 - INFO - No new job postings found.
+2024-10-09 18:00:18,280 - INFO - Job data updated successfully.
+2024-10-09 19:00:38,533 - INFO - Starting to fetch all job postings.
+2024-10-09 19:00:38,574 - INFO - Fetching job details for Abbvie.
+2024-10-09 19:00:42,886 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-09 19:00:42,888 - INFO - Fetching job details for Amgen.
+2024-10-09 19:00:43,597 - INFO - Fetched 14 jobs for Amgen.
+2024-10-09 19:00:43,599 - INFO - Fetching job details for APC.
+2024-10-09 19:00:43,914 - INFO - Fetched 5 jobs for APC.
+2024-10-09 19:00:43,916 - INFO - Fetching job details for Astellas.
+2024-10-09 19:00:51,727 - INFO - Fetched 28 jobs for Astellas.
+2024-10-09 19:00:51,770 - INFO - Fetching job details for Astrazeneca.
+2024-10-09 19:00:52,316 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-09 19:00:52,319 - INFO - Fetching job details for Takeda.
+2024-10-09 19:00:52,475 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-09 19:00:52,476 - INFO - Fetching job details for Vle.
+2024-10-09 19:00:52,745 - INFO - Fetched 2 jobs for Vle.
+2024-10-09 19:00:52,748 - INFO - Completed fetching all job postings.
+2024-10-09 19:00:52,748 - INFO - No new job postings found.
+2024-10-09 19:00:52,874 - INFO - Job data updated successfully.
+2024-10-09 20:00:30,258 - INFO - Starting to fetch all job postings.
+2024-10-09 20:00:30,299 - INFO - Fetching job details for Abbvie.
+2024-10-09 20:00:31,470 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-09 20:00:31,472 - INFO - Fetching job details for Amgen.
+2024-10-09 20:00:34,910 - INFO - Fetched 14 jobs for Amgen.
+2024-10-09 20:00:34,912 - INFO - Fetching job details for APC.
+2024-10-09 20:00:35,146 - INFO - Fetched 5 jobs for APC.
+2024-10-09 20:00:35,149 - INFO - Fetching job details for Astellas.
+2024-10-09 20:00:42,908 - INFO - Fetched 28 jobs for Astellas.
+2024-10-09 20:00:42,909 - INFO - Fetching job details for Astrazeneca.
+2024-10-09 20:00:45,405 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-09 20:00:45,408 - INFO - Fetching job details for Takeda.
+2024-10-09 20:00:45,508 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-09 20:00:45,509 - INFO - Fetching job details for Vle.
+2024-10-09 20:00:45,772 - INFO - Fetched 2 jobs for Vle.
+2024-10-09 20:00:45,774 - INFO - Completed fetching all job postings.
+2024-10-09 20:00:45,816 - INFO - No new job postings found.
+2024-10-09 20:00:45,941 - INFO - Job data updated successfully.
+2024-10-09 21:00:03,286 - INFO - Starting to fetch all job postings.
+2024-10-09 21:00:03,286 - INFO - Fetching job details for Abbvie.
+2024-10-09 21:00:04,326 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-09 21:00:04,327 - INFO - Fetching job details for Amgen.
+2024-10-09 21:00:05,441 - INFO - Fetched 14 jobs for Amgen.
+2024-10-09 21:00:05,443 - INFO - Fetching job details for APC.
+2024-10-09 21:00:05,839 - INFO - Fetched 5 jobs for APC.
+2024-10-09 21:00:05,841 - INFO - Fetching job details for Astellas.
+2024-10-09 21:00:13,851 - INFO - Fetched 28 jobs for Astellas.
+2024-10-09 21:00:13,853 - INFO - Fetching job details for Astrazeneca.
+2024-10-09 21:00:16,343 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-09 21:00:16,345 - INFO - Fetching job details for Takeda.
+2024-10-09 21:00:16,453 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-09 21:00:16,455 - INFO - Fetching job details for Vle.
+2024-10-09 21:00:16,702 - INFO - Fetched 2 jobs for Vle.
+2024-10-09 21:00:16,704 - INFO - Completed fetching all job postings.
+2024-10-09 21:00:16,707 - INFO - No new job postings found.
+2024-10-09 21:00:16,709 - INFO - Job data updated successfully.
+2024-10-09 22:00:03,061 - INFO - Starting to fetch all job postings.
+2024-10-09 22:00:03,062 - INFO - Fetching job details for Abbvie.
+2024-10-09 22:00:04,093 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-09 22:00:04,095 - INFO - Fetching job details for Amgen.
+2024-10-09 22:00:06,408 - INFO - Fetched 14 jobs for Amgen.
+2024-10-09 22:00:06,409 - INFO - Fetching job details for APC.
+2024-10-09 22:00:06,627 - INFO - Fetched 5 jobs for APC.
+2024-10-09 22:00:06,629 - INFO - Fetching job details for Astellas.
+2024-10-09 22:00:13,278 - INFO - Fetched 28 jobs for Astellas.
+2024-10-09 22:00:13,279 - INFO - Fetching job details for Astrazeneca.
+2024-10-09 22:00:13,688 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-09 22:00:13,689 - INFO - Fetching job details for Takeda.
+2024-10-09 22:00:13,797 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-09 22:00:13,799 - INFO - Fetching job details for Vle.
+2024-10-09 22:00:14,057 - INFO - Fetched 2 jobs for Vle.
+2024-10-09 22:00:14,058 - INFO - Completed fetching all job postings.
+2024-10-09 22:00:14,060 - INFO - No new job postings found.
+2024-10-09 22:00:14,062 - INFO - Job data updated successfully.
+2024-10-09 23:00:02,907 - INFO - Starting to fetch all job postings.
+2024-10-09 23:00:02,908 - INFO - Fetching job details for Abbvie.
+2024-10-09 23:00:03,807 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-09 23:00:03,808 - INFO - Fetching job details for Amgen.
+2024-10-09 23:00:05,201 - INFO - Fetched 14 jobs for Amgen.
+2024-10-09 23:00:05,202 - INFO - Fetching job details for APC.
+2024-10-09 23:00:05,446 - INFO - Fetched 5 jobs for APC.
+2024-10-09 23:00:05,447 - INFO - Fetching job details for Astellas.
+2024-10-09 23:00:11,968 - INFO - Fetched 28 jobs for Astellas.
+2024-10-09 23:00:11,969 - INFO - Fetching job details for Astrazeneca.
+2024-10-09 23:00:12,385 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-09 23:00:12,387 - INFO - Fetching job details for Takeda.
+2024-10-09 23:00:12,508 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-09 23:00:12,510 - INFO - Fetching job details for Vle.
+2024-10-09 23:00:12,777 - INFO - Fetched 2 jobs for Vle.
+2024-10-09 23:00:12,778 - INFO - Completed fetching all job postings.
+2024-10-09 23:00:12,785 - INFO - No new job postings found.
+2024-10-09 23:00:12,787 - INFO - Job data updated successfully.
+2024-10-10 00:00:02,694 - INFO - Starting to fetch all job postings.
+2024-10-10 00:00:02,694 - INFO - Fetching job details for Abbvie.
+2024-10-10 00:00:03,580 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 00:00:03,582 - INFO - Fetching job details for Amgen.
+2024-10-10 00:00:04,574 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 00:00:04,575 - INFO - Fetching job details for APC.
+2024-10-10 00:00:04,811 - INFO - Fetched 5 jobs for APC.
+2024-10-10 00:00:04,812 - INFO - Fetching job details for Astellas.
+2024-10-10 00:00:11,123 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 00:00:11,124 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 00:00:13,314 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 00:00:13,316 - INFO - Fetching job details for Takeda.
+2024-10-10 00:00:13,437 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 00:00:13,439 - INFO - Fetching job details for Vle.
+2024-10-10 00:00:13,694 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 00:00:13,696 - INFO - Completed fetching all job postings.
+2024-10-10 00:00:13,703 - INFO - No new job postings found.
+2024-10-10 00:00:13,706 - INFO - Job data updated successfully.
+2024-10-10 01:00:02,533 - INFO - Starting to fetch all job postings.
+2024-10-10 01:00:02,533 - INFO - Fetching job details for Abbvie.
+2024-10-10 01:00:03,536 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 01:00:03,537 - INFO - Fetching job details for Amgen.
+2024-10-10 01:00:06,232 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 01:00:06,233 - INFO - Fetching job details for APC.
+2024-10-10 01:00:06,462 - INFO - Fetched 5 jobs for APC.
+2024-10-10 01:00:06,463 - INFO - Fetching job details for Astellas.
+2024-10-10 01:00:13,313 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 01:00:13,315 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 01:00:15,945 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 01:00:15,948 - INFO - Fetching job details for Takeda.
+2024-10-10 01:00:16,080 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 01:00:16,082 - INFO - Fetching job details for Vle.
+2024-10-10 01:00:16,376 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 01:00:16,378 - INFO - Completed fetching all job postings.
+2024-10-10 01:00:16,380 - INFO - No new job postings found.
+2024-10-10 01:00:16,384 - INFO - Job data updated successfully.
+2024-10-10 02:00:02,423 - INFO - Starting to fetch all job postings.
+2024-10-10 02:00:02,424 - INFO - Fetching job details for Abbvie.
+2024-10-10 02:00:03,403 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 02:00:03,404 - INFO - Fetching job details for Amgen.
+2024-10-10 02:00:05,166 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 02:00:05,168 - INFO - Fetching job details for APC.
+2024-10-10 02:00:05,382 - INFO - Fetched 5 jobs for APC.
+2024-10-10 02:00:05,383 - INFO - Fetching job details for Astellas.
+2024-10-10 02:00:11,482 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 02:00:11,483 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 02:00:14,065 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 02:00:14,066 - INFO - Fetching job details for Takeda.
+2024-10-10 02:00:14,227 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 02:00:14,229 - INFO - Fetching job details for Vle.
+2024-10-10 02:00:14,469 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 02:00:14,471 - INFO - Completed fetching all job postings.
+2024-10-10 02:00:14,472 - INFO - No new job postings found.
+2024-10-10 02:00:14,480 - INFO - Job data updated successfully.
+2024-10-10 03:00:02,104 - INFO - Starting to fetch all job postings.
+2024-10-10 03:00:02,105 - INFO - Fetching job details for Abbvie.
+2024-10-10 03:00:03,023 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 03:00:03,024 - INFO - Fetching job details for Amgen.
+2024-10-10 03:00:03,896 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 03:00:03,897 - INFO - Fetching job details for APC.
+2024-10-10 03:00:04,139 - INFO - Fetched 5 jobs for APC.
+2024-10-10 03:00:04,141 - INFO - Fetching job details for Astellas.
+2024-10-10 03:00:10,165 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 03:00:10,166 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 03:00:10,847 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 03:00:10,848 - INFO - Fetching job details for Takeda.
+2024-10-10 03:00:10,950 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 03:00:10,952 - INFO - Fetching job details for Vle.
+2024-10-10 03:00:11,211 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 03:00:11,213 - INFO - Completed fetching all job postings.
+2024-10-10 03:00:11,213 - INFO - No new job postings found.
+2024-10-10 03:00:11,222 - INFO - Job data updated successfully.
+2024-10-10 04:00:02,386 - INFO - Starting to fetch all job postings.
+2024-10-10 04:00:02,387 - INFO - Fetching job details for Abbvie.
+2024-10-10 04:00:03,270 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 04:00:03,272 - INFO - Fetching job details for Amgen.
+2024-10-10 04:00:04,903 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 04:00:04,905 - INFO - Fetching job details for APC.
+2024-10-10 04:00:05,111 - INFO - Fetched 5 jobs for APC.
+2024-10-10 04:00:05,113 - INFO - Fetching job details for Astellas.
+2024-10-10 04:00:11,097 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 04:00:11,098 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 04:00:11,743 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 04:00:11,744 - INFO - Fetching job details for Takeda.
+2024-10-10 04:00:11,888 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 04:00:11,889 - INFO - Fetching job details for Vle.
+2024-10-10 04:00:12,135 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 04:00:12,137 - INFO - Completed fetching all job postings.
+2024-10-10 04:00:12,137 - INFO - No new job postings found.
+2024-10-10 04:00:12,146 - INFO - Job data updated successfully.
+2024-10-10 05:00:02,342 - INFO - Starting to fetch all job postings.
+2024-10-10 05:00:02,344 - INFO - Fetching job details for Abbvie.
+2024-10-10 05:00:03,335 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 05:00:03,336 - INFO - Fetching job details for Amgen.
+2024-10-10 05:00:04,352 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 05:00:04,353 - INFO - Fetching job details for APC.
+2024-10-10 05:00:04,556 - INFO - Fetched 5 jobs for APC.
+2024-10-10 05:00:04,557 - INFO - Fetching job details for Astellas.
+2024-10-10 05:00:10,683 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 05:00:10,684 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 05:00:13,270 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 05:00:13,271 - INFO - Fetching job details for Takeda.
+2024-10-10 05:00:13,405 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 05:00:13,407 - INFO - Fetching job details for Vle.
+2024-10-10 05:00:13,691 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 05:00:13,693 - INFO - Completed fetching all job postings.
+2024-10-10 05:00:13,694 - INFO - No new job postings found.
+2024-10-10 05:00:13,703 - INFO - Job data updated successfully.
+2024-10-10 06:00:01,818 - INFO - Starting to fetch all job postings.
+2024-10-10 06:00:01,819 - INFO - Fetching job details for Abbvie.
+2024-10-10 06:00:02,759 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 06:00:02,760 - INFO - Fetching job details for Amgen.
+2024-10-10 06:00:04,130 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 06:00:04,132 - INFO - Fetching job details for APC.
+2024-10-10 06:00:04,356 - INFO - Fetched 5 jobs for APC.
+2024-10-10 06:00:04,357 - INFO - Fetching job details for Astellas.
+2024-10-10 06:00:10,619 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 06:00:10,620 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 06:00:13,002 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 06:00:13,003 - INFO - Fetching job details for Takeda.
+2024-10-10 06:00:13,150 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 06:00:13,152 - INFO - Fetching job details for Vle.
+2024-10-10 06:00:13,406 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 06:00:13,407 - INFO - Completed fetching all job postings.
+2024-10-10 06:00:13,408 - INFO - No new job postings found.
+2024-10-10 06:00:13,417 - INFO - Job data updated successfully.
+2024-10-10 07:00:01,762 - INFO - Starting to fetch all job postings.
+2024-10-10 07:00:01,763 - INFO - Fetching job details for Abbvie.
+2024-10-10 07:00:02,774 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 07:00:02,775 - INFO - Fetching job details for Amgen.
+2024-10-10 07:00:05,505 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 07:00:05,507 - INFO - Fetching job details for APC.
+2024-10-10 07:00:05,710 - INFO - Fetched 5 jobs for APC.
+2024-10-10 07:00:05,712 - INFO - Fetching job details for Astellas.
+2024-10-10 07:00:12,169 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 07:00:12,171 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 07:00:14,960 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 07:00:14,962 - INFO - Fetching job details for Takeda.
+2024-10-10 07:00:15,090 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 07:00:15,091 - INFO - Fetching job details for Vle.
+2024-10-10 07:00:15,345 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 07:00:15,346 - INFO - Completed fetching all job postings.
+2024-10-10 07:00:15,347 - INFO - No new job postings found.
+2024-10-10 07:00:15,355 - INFO - Job data updated successfully.
+2024-10-10 08:00:01,650 - INFO - Starting to fetch all job postings.
+2024-10-10 08:00:01,651 - INFO - Fetching job details for Abbvie.
+2024-10-10 08:00:02,819 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 08:00:02,821 - INFO - Fetching job details for Amgen.
+2024-10-10 08:00:03,529 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 08:00:03,531 - INFO - Fetching job details for APC.
+2024-10-10 08:00:03,752 - INFO - Fetched 5 jobs for APC.
+2024-10-10 08:00:03,754 - INFO - Fetching job details for Astellas.
+2024-10-10 08:00:10,271 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 08:00:10,272 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 08:00:10,689 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 08:00:10,691 - INFO - Fetching job details for Takeda.
+2024-10-10 08:00:10,793 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 08:00:10,795 - INFO - Fetching job details for Vle.
+2024-10-10 08:00:11,053 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 08:00:11,054 - INFO - Completed fetching all job postings.
+2024-10-10 08:00:11,055 - INFO - No new job postings found.
+2024-10-10 08:00:11,063 - INFO - Job data updated successfully.
+2024-10-10 09:00:02,293 - INFO - Starting to fetch all job postings.
+2024-10-10 09:00:02,293 - INFO - Fetching job details for Abbvie.
+2024-10-10 09:00:03,223 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 09:00:03,225 - INFO - Fetching job details for Amgen.
+2024-10-10 09:00:04,216 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 09:00:04,218 - INFO - Fetching job details for APC.
+2024-10-10 09:00:04,483 - INFO - Fetched 5 jobs for APC.
+2024-10-10 09:00:04,484 - INFO - Fetching job details for Astellas.
+2024-10-10 09:00:11,085 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 09:00:11,087 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 09:00:13,293 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 09:00:13,294 - INFO - Fetching job details for Takeda.
+2024-10-10 09:00:13,424 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 09:00:13,426 - INFO - Fetching job details for Vle.
+2024-10-10 09:00:13,663 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 09:00:13,664 - INFO - Completed fetching all job postings.
+2024-10-10 09:00:13,665 - INFO - No new job postings found.
+2024-10-10 09:00:13,675 - INFO - Job data updated successfully.
+2024-10-10 10:00:02,309 - INFO - Starting to fetch all job postings.
+2024-10-10 10:00:02,310 - INFO - Fetching job details for Abbvie.
+2024-10-10 10:00:03,268 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 10:00:03,269 - INFO - Fetching job details for Amgen.
+2024-10-10 10:00:04,260 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 10:00:04,261 - INFO - Fetching job details for APC.
+2024-10-10 10:00:04,472 - INFO - Fetched 5 jobs for APC.
+2024-10-10 10:00:04,474 - INFO - Fetching job details for Astellas.
+2024-10-10 10:00:11,334 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 10:00:11,335 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 10:00:11,783 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 10:00:11,784 - INFO - Fetching job details for Takeda.
+2024-10-10 10:00:11,908 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 10:00:11,910 - INFO - Fetching job details for Vle.
+2024-10-10 10:00:12,168 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 10:00:12,169 - INFO - Completed fetching all job postings.
+2024-10-10 10:00:12,170 - INFO - No new job postings found.
+2024-10-10 10:00:12,179 - INFO - Job data updated successfully.
+2024-10-10 11:00:03,315 - INFO - Starting to fetch all job postings.
+2024-10-10 11:00:03,316 - INFO - Fetching job details for Abbvie.
+2024-10-10 11:00:04,333 - INFO - Fetched 4 jobs for Abbvie.
+2024-10-10 11:00:04,334 - INFO - Fetching job details for Amgen.
+2024-10-10 11:00:05,220 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 11:00:05,221 - INFO - Fetching job details for APC.
+2024-10-10 11:00:05,447 - INFO - Fetched 5 jobs for APC.
+2024-10-10 11:00:05,448 - INFO - Fetching job details for Astellas.
+2024-10-10 11:00:12,186 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 11:00:12,188 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 11:00:14,773 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 11:00:14,775 - INFO - Fetching job details for Takeda.
+2024-10-10 11:00:14,911 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 11:00:14,913 - INFO - Fetching job details for Vle.
+2024-10-10 11:00:15,163 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 11:00:15,164 - INFO - Completed fetching all job postings.
+2024-10-10 11:00:15,172 - INFO - No new job postings found.
+2024-10-10 11:00:15,175 - INFO - Job data updated successfully.
+2024-10-10 12:00:02,015 - INFO - Starting to fetch all job postings.
+2024-10-10 12:00:02,015 - INFO - Fetching job details for Abbvie.
+2024-10-10 12:00:03,092 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 12:00:03,093 - INFO - Fetching job details for Amgen.
+2024-10-10 12:00:04,894 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 12:00:04,896 - INFO - Fetching job details for APC.
+2024-10-10 12:00:05,137 - INFO - Fetched 5 jobs for APC.
+2024-10-10 12:00:05,139 - INFO - Fetching job details for Astellas.
+2024-10-10 12:00:12,277 - INFO - Fetched 28 jobs for Astellas.
+2024-10-10 12:00:12,278 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 12:00:14,973 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 12:00:14,974 - INFO - Fetching job details for Takeda.
+2024-10-10 12:00:15,078 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 12:00:15,080 - INFO - Fetching job details for Vle.
+2024-10-10 12:00:15,326 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 12:00:15,328 - INFO - Completed fetching all job postings.
+2024-10-10 12:00:15,334 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-10 12:00:16,623 - INFO - Email sent successfully.
+2024-10-10 12:00:16,624 - INFO - Abbvie:
+2024-10-10 12:00:16,624 - INFO - {
+    "company": "Abbvie",
+    "title": "QA Validation Specialist",
+    "application link": "https://careers.abbvie.com/en/job/qa-validation-specialist-in-dublin-county-dublin-jid-8836",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2024-10-10 12:00:16,632 - INFO - Job data updated successfully.
+2024-10-10 13:00:02,237 - INFO - Starting to fetch all job postings.
+2024-10-10 13:00:02,238 - INFO - Fetching job details for Abbvie.
+2024-10-10 13:00:03,163 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 13:00:03,165 - INFO - Fetching job details for Amgen.
+2024-10-10 13:00:04,891 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 13:00:04,892 - INFO - Fetching job details for APC.
+2024-10-10 13:00:05,129 - INFO - Fetched 5 jobs for APC.
+2024-10-10 13:00:05,130 - INFO - Fetching job details for Astellas.
+2024-10-10 13:00:12,171 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 13:00:12,173 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 13:00:14,332 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 13:00:14,334 - INFO - Fetching job details for Takeda.
+2024-10-10 13:00:14,437 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 13:00:14,440 - INFO - Fetching job details for Vle.
+2024-10-10 13:00:14,578 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 13:00:14,580 - INFO - Completed fetching all job postings.
+2024-10-10 13:00:14,580 - INFO - No new job postings found.
+2024-10-10 13:00:14,589 - INFO - Job data updated successfully.
+2024-10-10 14:00:01,738 - INFO - Starting to fetch all job postings.
+2024-10-10 14:00:01,740 - INFO - Fetching job details for Abbvie.
+2024-10-10 14:00:02,967 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 14:00:02,968 - INFO - Fetching job details for Amgen.
+2024-10-10 14:00:03,716 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 14:00:03,717 - INFO - Fetching job details for APC.
+2024-10-10 14:00:03,960 - INFO - Fetched 5 jobs for APC.
+2024-10-10 14:00:03,962 - INFO - Fetching job details for Astellas.
+2024-10-10 14:00:10,723 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 14:00:10,724 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 14:00:13,511 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 14:00:13,513 - INFO - Fetching job details for Takeda.
+2024-10-10 14:00:13,616 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 14:00:13,618 - INFO - Fetching job details for Vle.
+2024-10-10 14:00:13,864 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 14:00:13,866 - INFO - Completed fetching all job postings.
+2024-10-10 14:00:13,867 - INFO - No new job postings found.
+2024-10-10 14:00:13,875 - INFO - Job data updated successfully.
+2024-10-10 15:00:02,427 - INFO - Starting to fetch all job postings.
+2024-10-10 15:00:02,427 - INFO - Fetching job details for Abbvie.
+2024-10-10 15:00:03,465 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 15:00:03,467 - INFO - Fetching job details for Amgen.
+2024-10-10 15:00:04,451 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 15:00:04,452 - INFO - Fetching job details for APC.
+2024-10-10 15:00:04,672 - INFO - Fetched 5 jobs for APC.
+2024-10-10 15:00:04,674 - INFO - Fetching job details for Astellas.
+2024-10-10 15:00:11,217 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 15:00:11,219 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 15:00:11,667 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 15:00:11,668 - INFO - Fetching job details for Takeda.
+2024-10-10 15:00:11,773 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 15:00:11,775 - INFO - Fetching job details for Vle.
+2024-10-10 15:00:12,015 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 15:00:12,017 - INFO - Completed fetching all job postings.
+2024-10-10 15:00:12,017 - INFO - No new job postings found.
+2024-10-10 15:00:12,026 - INFO - Job data updated successfully.
+2024-10-10 16:00:01,666 - INFO - Starting to fetch all job postings.
+2024-10-10 16:00:01,667 - INFO - Fetching job details for Abbvie.
+2024-10-10 16:00:02,921 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 16:00:02,923 - INFO - Fetching job details for Amgen.
+2024-10-10 16:00:05,449 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 16:00:05,450 - INFO - Fetching job details for APC.
+2024-10-10 16:00:05,697 - INFO - Fetched 5 jobs for APC.
+2024-10-10 16:00:05,699 - INFO - Fetching job details for Astellas.
+2024-10-10 16:00:12,524 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 16:00:12,525 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 16:00:12,898 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-10-10 16:00:12,899 - INFO - Fetching job details for Takeda.
+2024-10-10 16:00:13,001 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 16:00:13,002 - INFO - Fetching job details for Vle.
+2024-10-10 16:00:13,259 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 16:00:13,261 - INFO - Completed fetching all job postings.
+2024-10-10 16:00:13,262 - INFO - No new job postings found.
+2024-10-10 16:00:13,270 - INFO - Job data updated successfully.
+2024-10-10 17:00:01,746 - INFO - Starting to fetch all job postings.
+2024-10-10 17:00:01,747 - INFO - Fetching job details for Abbvie.
+2024-10-10 17:00:02,872 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 17:00:02,873 - INFO - Fetching job details for Amgen.
+2024-10-10 17:00:03,716 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 17:00:03,717 - INFO - Fetching job details for APC.
+2024-10-10 17:00:03,964 - INFO - Fetched 5 jobs for APC.
+2024-10-10 17:00:03,966 - INFO - Fetching job details for Astellas.
+2024-10-10 17:00:10,629 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 17:00:10,630 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 17:00:13,302 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 17:00:13,304 - INFO - Fetching job details for Takeda.
+2024-10-10 17:00:13,420 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 17:00:13,422 - INFO - Fetching job details for Vle.
+2024-10-10 17:00:13,647 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 17:00:13,648 - INFO - Completed fetching all job postings.
+2024-10-10 17:00:13,649 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-10 17:00:14,833 - INFO - Email sent successfully.
+2024-10-10 17:00:14,834 - INFO - Astrazeneca:
+2024-10-10 17:00:14,834 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Accountant",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant/43991/71060101680",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2024-10-10 17:00:14,834 - INFO - {
+    "company": "Astrazeneca",
+    "title": "VIP Support Engineer",
+    "application url": "https://careers.astrazeneca.com//job/dublin/vip-support-engineer/7684/71058609904",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2024-10-10 17:00:14,843 - INFO - Job data updated successfully.
+2024-10-10 18:00:01,972 - INFO - Starting to fetch all job postings.
+2024-10-10 18:00:01,973 - INFO - Fetching job details for Abbvie.
+2024-10-10 18:00:03,016 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 18:00:03,017 - INFO - Fetching job details for Amgen.
+2024-10-10 18:00:04,035 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 18:00:04,037 - INFO - Fetching job details for APC.
+2024-10-10 18:00:04,249 - INFO - Fetched 5 jobs for APC.
+2024-10-10 18:00:04,251 - INFO - Fetching job details for Astellas.
+2024-10-10 18:00:11,075 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 18:00:11,077 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 18:00:13,652 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 18:00:13,653 - INFO - Fetching job details for Takeda.
+2024-10-10 18:00:13,758 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 18:00:13,759 - INFO - Fetching job details for Vle.
+2024-10-10 18:00:13,988 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 18:00:13,990 - INFO - Completed fetching all job postings.
+2024-10-10 18:00:13,997 - INFO - No new job postings found.
+2024-10-10 18:00:14,000 - INFO - Job data updated successfully.
+2024-10-10 19:00:02,452 - INFO - Starting to fetch all job postings.
+2024-10-10 19:00:02,453 - INFO - Fetching job details for Abbvie.
+2024-10-10 19:00:03,330 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 19:00:03,332 - INFO - Fetching job details for Amgen.
+2024-10-10 19:00:04,729 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 19:00:04,730 - INFO - Fetching job details for APC.
+2024-10-10 19:00:04,939 - INFO - Fetched 5 jobs for APC.
+2024-10-10 19:00:04,940 - INFO - Fetching job details for Astellas.
+2024-10-10 19:00:11,801 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 19:00:11,803 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 19:00:12,366 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 19:00:12,367 - INFO - Fetching job details for Takeda.
+2024-10-10 19:00:12,480 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 19:00:12,481 - INFO - Fetching job details for Vle.
+2024-10-10 19:00:12,724 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 19:00:12,726 - INFO - Completed fetching all job postings.
+2024-10-10 19:00:12,726 - INFO - No new job postings found.
+2024-10-10 19:00:12,733 - INFO - Job data updated successfully.
+2024-10-10 20:00:01,908 - INFO - Starting to fetch all job postings.
+2024-10-10 20:00:01,910 - INFO - Fetching job details for Abbvie.
+2024-10-10 20:00:02,806 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 20:00:02,807 - INFO - Fetching job details for Amgen.
+2024-10-10 20:00:03,690 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 20:00:03,691 - INFO - Fetching job details for APC.
+2024-10-10 20:00:03,950 - INFO - Fetched 5 jobs for APC.
+2024-10-10 20:00:03,951 - INFO - Fetching job details for Astellas.
+2024-10-10 20:00:10,394 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 20:00:10,395 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 20:00:13,336 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 20:00:13,337 - INFO - Fetching job details for Takeda.
+2024-10-10 20:00:13,454 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 20:00:13,455 - INFO - Fetching job details for Vle.
+2024-10-10 20:00:13,702 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 20:00:13,703 - INFO - Completed fetching all job postings.
+2024-10-10 20:00:13,704 - INFO - No new job postings found.
+2024-10-10 20:00:13,713 - INFO - Job data updated successfully.
+2024-10-10 21:00:02,683 - INFO - Starting to fetch all job postings.
+2024-10-10 21:00:02,684 - INFO - Fetching job details for Abbvie.
+2024-10-10 21:00:03,673 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 21:00:03,675 - INFO - Fetching job details for Amgen.
+2024-10-10 21:00:04,822 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 21:00:04,824 - INFO - Fetching job details for APC.
+2024-10-10 21:00:05,149 - INFO - Fetched 5 jobs for APC.
+2024-10-10 21:00:05,150 - INFO - Fetching job details for Astellas.
+2024-10-10 21:00:12,961 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 21:00:12,963 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 21:00:13,570 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 21:00:13,572 - INFO - Fetching job details for Takeda.
+2024-10-10 21:00:13,678 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 21:00:13,680 - INFO - Fetching job details for Vle.
+2024-10-10 21:00:13,950 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 21:00:13,952 - INFO - Completed fetching all job postings.
+2024-10-10 21:00:13,958 - INFO - No new job postings found.
+2024-10-10 21:00:13,963 - INFO - Job data updated successfully.
+2024-10-10 22:00:03,721 - INFO - Starting to fetch all job postings.
+2024-10-10 22:00:03,722 - INFO - Fetching job details for Abbvie.
+2024-10-10 22:00:04,821 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 22:00:04,824 - INFO - Fetching job details for Amgen.
+2024-10-10 22:00:05,796 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 22:00:05,798 - INFO - Fetching job details for APC.
+2024-10-10 22:00:06,027 - INFO - Fetched 5 jobs for APC.
+2024-10-10 22:00:06,029 - INFO - Fetching job details for Astellas.
+2024-10-10 22:00:14,719 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 22:00:14,721 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 22:00:17,297 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 22:00:17,299 - INFO - Fetching job details for Takeda.
+2024-10-10 22:00:17,455 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 22:00:17,457 - INFO - Fetching job details for Vle.
+2024-10-10 22:00:17,719 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 22:00:17,721 - INFO - Completed fetching all job postings.
+2024-10-10 22:00:17,728 - INFO - No new job postings found.
+2024-10-10 22:00:17,731 - INFO - Job data updated successfully.
+2024-10-10 23:00:04,651 - INFO - Starting to fetch all job postings.
+2024-10-10 23:00:04,651 - INFO - Fetching job details for Abbvie.
+2024-10-10 23:00:05,617 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-10 23:00:05,618 - INFO - Fetching job details for Amgen.
+2024-10-10 23:00:08,442 - INFO - Fetched 14 jobs for Amgen.
+2024-10-10 23:00:08,443 - INFO - Fetching job details for APC.
+2024-10-10 23:00:08,646 - INFO - Fetched 5 jobs for APC.
+2024-10-10 23:00:08,647 - INFO - Fetching job details for Astellas.
+2024-10-10 23:00:15,313 - INFO - Fetched 29 jobs for Astellas.
+2024-10-10 23:00:15,315 - INFO - Fetching job details for Astrazeneca.
+2024-10-10 23:00:18,099 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-10 23:00:18,112 - INFO - Fetching job details for Takeda.
+2024-10-10 23:00:18,233 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-10 23:00:18,234 - INFO - Fetching job details for Vle.
+2024-10-10 23:00:18,466 - INFO - Fetched 2 jobs for Vle.
+2024-10-10 23:00:18,468 - INFO - Completed fetching all job postings.
+2024-10-10 23:00:18,486 - INFO - No new job postings found.
+2024-10-10 23:00:18,502 - INFO - Job data updated successfully.
+2024-10-11 00:00:02,092 - INFO - Starting to fetch all job postings.
+2024-10-11 00:00:02,092 - INFO - Fetching job details for Abbvie.
+2024-10-11 00:00:03,062 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 00:00:03,063 - INFO - Fetching job details for Amgen.
+2024-10-11 00:00:05,597 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 00:00:05,599 - INFO - Fetching job details for APC.
+2024-10-11 00:00:05,830 - INFO - Fetched 5 jobs for APC.
+2024-10-11 00:00:05,832 - INFO - Fetching job details for Astellas.
+2024-10-11 00:00:12,653 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 00:00:12,655 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 00:00:14,406 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 00:00:14,407 - INFO - Fetching job details for Takeda.
+2024-10-11 00:00:14,527 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 00:00:14,529 - INFO - Fetching job details for Vle.
+2024-10-11 00:00:14,786 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 00:00:14,787 - INFO - Completed fetching all job postings.
+2024-10-11 00:00:14,794 - INFO - No new job postings found.
+2024-10-11 00:00:14,797 - INFO - Job data updated successfully.
+2024-10-11 01:00:01,888 - INFO - Starting to fetch all job postings.
+2024-10-11 01:00:01,888 - INFO - Fetching job details for Abbvie.
+2024-10-11 01:00:02,936 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 01:00:02,937 - INFO - Fetching job details for Amgen.
+2024-10-11 01:00:05,370 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 01:00:05,371 - INFO - Fetching job details for APC.
+2024-10-11 01:00:05,601 - INFO - Fetched 5 jobs for APC.
+2024-10-11 01:00:05,602 - INFO - Fetching job details for Astellas.
+2024-10-11 01:00:12,436 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 01:00:12,437 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 01:00:14,802 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 01:00:14,803 - INFO - Fetching job details for Takeda.
+2024-10-11 01:00:14,912 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 01:00:14,914 - INFO - Fetching job details for Vle.
+2024-10-11 01:00:15,166 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 01:00:15,168 - INFO - Completed fetching all job postings.
+2024-10-11 01:00:15,174 - INFO - No new job postings found.
+2024-10-11 01:00:15,177 - INFO - Job data updated successfully.
+2024-10-11 02:00:01,799 - INFO - Starting to fetch all job postings.
+2024-10-11 02:00:01,800 - INFO - Fetching job details for Abbvie.
+2024-10-11 02:00:02,848 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 02:00:02,850 - INFO - Fetching job details for Amgen.
+2024-10-11 02:00:06,089 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 02:00:06,090 - INFO - Fetching job details for APC.
+2024-10-11 02:00:06,300 - INFO - Fetched 5 jobs for APC.
+2024-10-11 02:00:06,301 - INFO - Fetching job details for Astellas.
+2024-10-11 02:00:12,549 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 02:00:12,550 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 02:00:14,915 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 02:00:14,916 - INFO - Fetching job details for Takeda.
+2024-10-11 02:00:15,092 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 02:00:15,093 - INFO - Fetching job details for Vle.
+2024-10-11 02:00:15,340 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 02:00:15,341 - INFO - Completed fetching all job postings.
+2024-10-11 02:00:15,348 - INFO - No new job postings found.
+2024-10-11 02:00:15,351 - INFO - Job data updated successfully.
+2024-10-11 03:00:02,107 - INFO - Starting to fetch all job postings.
+2024-10-11 03:00:02,109 - INFO - Fetching job details for Abbvie.
+2024-10-11 03:00:03,073 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 03:00:03,074 - INFO - Fetching job details for Amgen.
+2024-10-11 03:00:03,954 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 03:00:03,955 - INFO - Fetching job details for APC.
+2024-10-11 03:00:04,159 - INFO - Fetched 5 jobs for APC.
+2024-10-11 03:00:04,160 - INFO - Fetching job details for Astellas.
+2024-10-11 03:00:10,621 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 03:00:10,622 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 03:00:11,059 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 03:00:11,061 - INFO - Fetching job details for Takeda.
+2024-10-11 03:00:11,176 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 03:00:11,178 - INFO - Fetching job details for Vle.
+2024-10-11 03:00:11,398 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 03:00:11,399 - INFO - Completed fetching all job postings.
+2024-10-11 03:00:11,406 - INFO - No new job postings found.
+2024-10-11 03:00:11,411 - INFO - Job data updated successfully.
+2024-10-11 04:00:02,131 - INFO - Starting to fetch all job postings.
+2024-10-11 04:00:02,133 - INFO - Fetching job details for Abbvie.
+2024-10-11 04:00:03,111 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 04:00:03,112 - INFO - Fetching job details for Amgen.
+2024-10-11 04:00:05,125 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 04:00:05,127 - INFO - Fetching job details for APC.
+2024-10-11 04:00:05,342 - INFO - Fetched 5 jobs for APC.
+2024-10-11 04:00:05,343 - INFO - Fetching job details for Astellas.
+2024-10-11 04:00:11,483 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 04:00:11,484 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 04:00:11,935 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 04:00:11,937 - INFO - Fetching job details for Takeda.
+2024-10-11 04:00:12,076 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 04:00:12,078 - INFO - Fetching job details for Vle.
+2024-10-11 04:00:12,330 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 04:00:12,332 - INFO - Completed fetching all job postings.
+2024-10-11 04:00:12,338 - INFO - No new job postings found.
+2024-10-11 04:00:12,343 - INFO - Job data updated successfully.
+2024-10-11 05:00:02,068 - INFO - Starting to fetch all job postings.
+2024-10-11 05:00:02,070 - INFO - Fetching job details for Abbvie.
+2024-10-11 05:00:03,115 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 05:00:03,116 - INFO - Fetching job details for Amgen.
+2024-10-11 05:00:05,001 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 05:00:05,002 - INFO - Fetching job details for APC.
+2024-10-11 05:00:05,199 - INFO - Fetched 5 jobs for APC.
+2024-10-11 05:00:05,201 - INFO - Fetching job details for Astellas.
+2024-10-11 05:00:11,689 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 05:00:11,690 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 05:00:14,316 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 05:00:14,318 - INFO - Fetching job details for Takeda.
+2024-10-11 05:00:14,443 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 05:00:14,445 - INFO - Fetching job details for Vle.
+2024-10-11 05:00:14,694 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 05:00:14,695 - INFO - Completed fetching all job postings.
+2024-10-11 05:00:14,702 - INFO - No new job postings found.
+2024-10-11 05:00:14,708 - INFO - Job data updated successfully.
+2024-10-11 06:00:02,340 - INFO - Starting to fetch all job postings.
+2024-10-11 06:00:02,341 - INFO - Fetching job details for Abbvie.
+2024-10-11 06:00:03,331 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 06:00:03,333 - INFO - Fetching job details for Amgen.
+2024-10-11 06:00:04,217 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 06:00:04,219 - INFO - Fetching job details for APC.
+2024-10-11 06:00:04,432 - INFO - Fetched 5 jobs for APC.
+2024-10-11 06:00:04,434 - INFO - Fetching job details for Astellas.
+2024-10-11 06:00:11,003 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 06:00:11,004 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 06:00:13,452 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 06:00:13,512 - INFO - Fetching job details for Takeda.
+2024-10-11 06:00:13,635 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 06:00:13,636 - INFO - Fetching job details for Vle.
+2024-10-11 06:00:13,884 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 06:00:13,885 - INFO - Completed fetching all job postings.
+2024-10-11 06:00:13,933 - INFO - No new job postings found.
+2024-10-11 06:00:14,175 - INFO - Job data updated successfully.
+2024-10-11 07:00:04,482 - INFO - Starting to fetch all job postings.
+2024-10-11 07:00:04,495 - INFO - Fetching job details for Abbvie.
+2024-10-11 07:00:05,524 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 07:00:05,526 - INFO - Fetching job details for Amgen.
+2024-10-11 07:00:06,419 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 07:00:06,421 - INFO - Fetching job details for APC.
+2024-10-11 07:00:06,629 - INFO - Fetched 5 jobs for APC.
+2024-10-11 07:00:06,630 - INFO - Fetching job details for Astellas.
+2024-10-11 07:00:12,876 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 07:00:12,877 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 07:00:15,242 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 07:00:15,243 - INFO - Fetching job details for Takeda.
+2024-10-11 07:00:15,352 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 07:00:15,353 - INFO - Fetching job details for Vle.
+2024-10-11 07:00:15,594 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 07:00:15,596 - INFO - Completed fetching all job postings.
+2024-10-11 07:00:15,610 - INFO - No new job postings found.
+2024-10-11 07:00:15,774 - INFO - Job data updated successfully.
+2024-10-11 08:00:02,450 - INFO - Starting to fetch all job postings.
+2024-10-11 08:00:02,451 - INFO - Fetching job details for Abbvie.
+2024-10-11 08:00:03,828 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 08:00:03,830 - INFO - Fetching job details for Amgen.
+2024-10-11 08:00:06,347 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 08:00:06,349 - INFO - Fetching job details for APC.
+2024-10-11 08:00:06,555 - INFO - Fetched 5 jobs for APC.
+2024-10-11 08:00:06,556 - INFO - Fetching job details for Astellas.
+2024-10-11 08:00:13,011 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 08:00:13,013 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 08:00:13,432 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 08:00:13,434 - INFO - Fetching job details for Takeda.
+2024-10-11 08:00:13,567 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 08:00:13,569 - INFO - Fetching job details for Vle.
+2024-10-11 08:00:13,824 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 08:00:13,826 - INFO - Completed fetching all job postings.
+2024-10-11 08:00:13,832 - INFO - No new job postings found.
+2024-10-11 08:00:13,837 - INFO - Job data updated successfully.
+2024-10-11 09:00:02,656 - INFO - Starting to fetch all job postings.
+2024-10-11 09:00:02,657 - INFO - Fetching job details for Abbvie.
+2024-10-11 09:00:03,667 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 09:00:03,669 - INFO - Fetching job details for Amgen.
+2024-10-11 09:00:04,427 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 09:00:04,428 - INFO - Fetching job details for APC.
+2024-10-11 09:00:04,702 - INFO - Fetched 5 jobs for APC.
+2024-10-11 09:00:04,703 - INFO - Fetching job details for Astellas.
+2024-10-11 09:00:11,411 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 09:00:11,412 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 09:00:13,778 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 09:00:13,779 - INFO - Fetching job details for Takeda.
+2024-10-11 09:00:13,887 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 09:00:13,889 - INFO - Fetching job details for Vle.
+2024-10-11 09:00:14,142 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 09:00:14,144 - INFO - Completed fetching all job postings.
+2024-10-11 09:00:14,151 - INFO - No new job postings found.
+2024-10-11 09:00:14,156 - INFO - Job data updated successfully.
+2024-10-11 10:00:02,176 - INFO - Starting to fetch all job postings.
+2024-10-11 10:00:02,177 - INFO - Fetching job details for Abbvie.
+2024-10-11 10:00:03,111 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 10:00:03,113 - INFO - Fetching job details for Amgen.
+2024-10-11 10:00:06,146 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 10:00:06,147 - INFO - Fetching job details for APC.
+2024-10-11 10:00:06,392 - INFO - Fetched 5 jobs for APC.
+2024-10-11 10:00:06,394 - INFO - Fetching job details for Astellas.
+2024-10-11 10:00:13,527 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 10:00:13,529 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 10:00:13,981 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 10:00:13,982 - INFO - Fetching job details for Takeda.
+2024-10-11 10:00:14,109 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 10:00:14,111 - INFO - Fetching job details for Vle.
+2024-10-11 10:00:14,366 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 10:00:14,368 - INFO - Completed fetching all job postings.
+2024-10-11 10:00:14,374 - INFO - No new job postings found.
+2024-10-11 10:00:14,379 - INFO - Job data updated successfully.
+2024-10-11 11:00:02,993 - INFO - Starting to fetch all job postings.
+2024-10-11 11:00:02,997 - INFO - Fetching job details for Abbvie.
+2024-10-11 11:00:04,010 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 11:00:04,011 - INFO - Fetching job details for Amgen.
+2024-10-11 11:00:04,739 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 11:00:04,740 - INFO - Fetching job details for APC.
+2024-10-11 11:00:04,988 - INFO - Fetched 5 jobs for APC.
+2024-10-11 11:00:04,989 - INFO - Fetching job details for Astellas.
+2024-10-11 11:00:11,610 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 11:00:11,611 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 11:00:12,032 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 11:00:12,034 - INFO - Fetching job details for Takeda.
+2024-10-11 11:00:12,145 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 11:00:12,147 - INFO - Fetching job details for Vle.
+2024-10-11 11:00:12,402 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 11:00:12,404 - INFO - Completed fetching all job postings.
+2024-10-11 11:00:12,411 - INFO - No new job postings found.
+2024-10-11 11:00:12,415 - INFO - Job data updated successfully.
+2024-10-11 12:00:02,495 - INFO - Starting to fetch all job postings.
+2024-10-11 12:00:02,497 - INFO - Fetching job details for Abbvie.
+2024-10-11 12:00:03,370 - INFO - Fetched 5 jobs for Abbvie.
+2024-10-11 12:00:03,371 - INFO - Fetching job details for Amgen.
+2024-10-11 12:00:04,450 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 12:00:04,452 - INFO - Fetching job details for APC.
+2024-10-11 12:00:04,688 - INFO - Fetched 5 jobs for APC.
+2024-10-11 12:00:04,689 - INFO - Fetching job details for Astellas.
+2024-10-11 12:00:11,526 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 12:00:11,533 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 12:00:13,480 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 12:00:13,481 - INFO - Fetching job details for Takeda.
+2024-10-11 12:00:13,594 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 12:00:13,595 - INFO - Fetching job details for Vle.
+2024-10-11 12:00:13,853 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 12:00:13,854 - INFO - Completed fetching all job postings.
+2024-10-11 12:00:13,861 - INFO - No new job postings found.
+2024-10-11 12:00:13,866 - INFO - Job data updated successfully.
