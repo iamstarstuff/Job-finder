@@ -131,7 +131,7 @@ def Astrazeneca():
 def Takeda():
     logging.info("Fetching job details for Takeda.")
     try:
-        response = requests.get(company_urls["Takeda"])
+        response = requests.get(company_urls["Takeda"],verify=False)
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "lxml")
         job_links = soup.find_all("a", {"data-job-id": True})
@@ -186,7 +186,7 @@ def Amgen():
 def Vle():
     logging.info("Fetching job details for Vle.")
     try:
-        response = requests.get(company_urls["Vle therapeutics"])
+        response = requests.get(company_urls["Vle therapeutics"],verify=False)
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "lxml")
         job_links = soup.find_all("div", class_="table-content")
