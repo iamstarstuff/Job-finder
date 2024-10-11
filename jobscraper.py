@@ -10,6 +10,8 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import ssl
 import certifi
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -136,7 +138,7 @@ def Astrazeneca():
 def Takeda():
     logging.info("Fetching job details for Takeda.")
     try:
-        response = requests.get(company_urls["Takeda"])
+        response = requests.get(company_urls["Takeda"],verify=False)
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "lxml")
         job_links = soup.find_all("a", {"data-job-id": True})

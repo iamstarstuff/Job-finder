@@ -1873,3 +1873,77 @@
 2024-10-11 22:00:16,482 - INFO - Completed fetching all job postings.
 2024-10-11 22:00:16,483 - INFO - No new job postings found.
 2024-10-11 22:00:16,485 - INFO - Job data updated successfully.
+2024-10-11 22:19:32,846 - INFO - Starting to fetch all job postings.
+2024-10-11 22:19:32,846 - INFO - Fetching job details for Abbvie.
+2024-10-11 22:19:33,752 - INFO - Fetched 7 jobs for Abbvie.
+2024-10-11 22:19:33,752 - INFO - Fetching job details for Amgen.
+2024-10-11 22:19:35,766 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 22:19:35,766 - INFO - Fetching job details for APC.
+2024-10-11 22:19:35,979 - INFO - Fetched 5 jobs for APC.
+2024-10-11 22:19:35,979 - INFO - Fetching job details for Astellas.
+2024-10-11 22:19:42,124 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 22:19:42,124 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 22:19:42,572 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 22:19:42,572 - INFO - Fetching job details for Takeda.
+2024-10-11 22:19:42,688 - ERROR - Error fetching job details for Takeda: HTTPSConnectionPool(host='jobs.takeda.com', port=443): Max retries exceeded with url: /search-jobs/Ireland/1113/2/2963597/53/-8/50/2 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))
+2024-10-11 22:19:42,688 - INFO - Fetching job details for Vle.
+2024-10-11 22:19:42,965 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 22:19:42,965 - INFO - Completed fetching all job postings.
+2024-10-11 22:19:42,966 - INFO - No new job postings found.
+2024-10-11 22:19:42,967 - INFO - Job data updated successfully.
+2024-10-11 22:28:00,692 - INFO - Starting to fetch all job postings.
+2024-10-11 22:28:00,692 - INFO - Fetching job details for Abbvie.
+2024-10-11 22:28:01,587 - INFO - Fetched 7 jobs for Abbvie.
+2024-10-11 22:28:01,587 - INFO - Fetching job details for Amgen.
+2024-10-11 22:28:02,212 - INFO - Fetched 14 jobs for Amgen.
+2024-10-11 22:28:02,212 - INFO - Fetching job details for APC.
+2024-10-11 22:28:02,439 - INFO - Fetched 5 jobs for APC.
+2024-10-11 22:28:02,440 - INFO - Fetching job details for Astellas.
+2024-10-11 22:28:08,620 - INFO - Fetched 29 jobs for Astellas.
+2024-10-11 22:28:08,621 - INFO - Fetching job details for Astrazeneca.
+2024-10-11 22:28:09,002 - INFO - Fetched 24 jobs for Astrazeneca.
+2024-10-11 22:28:09,003 - INFO - Fetching job details for Takeda.
+2024-10-11 22:28:09,250 - INFO - Fetched 6 jobs for Takeda.
+2024-10-11 22:28:09,253 - INFO - Fetching job details for Vle.
+2024-10-11 22:28:09,375 - INFO - Fetched 2 jobs for Vle.
+2024-10-11 22:28:09,376 - INFO - Completed fetching all job postings.
+2024-10-11 22:28:09,382 - INFO - New job postings found: 1 companies with new jobs.
+2024-10-11 22:28:11,083 - INFO - Email sent successfully.
+2024-10-11 22:28:11,084 - INFO - Takeda:
+2024-10-11 22:28:11,084 - INFO - {
+    "company": "Takeda",
+    "title": "Process Development Engineer (Packaging)",
+    "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-packaging/1113/71109293728",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-11 22:28:11,084 - INFO - {
+    "company": "Takeda",
+    "title": "Senior Auditor",
+    "application url": "https://jobs.takeda.com//job/dublin/senior-auditor/1113/70747746176",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-11 22:28:11,084 - INFO - {
+    "company": "Takeda",
+    "title": "QC Analyst, Small Molecules",
+    "application url": "https://jobs.takeda.com//job/dublin/qc-analyst-small-molecules/1113/70733625632",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-11 22:28:11,084 - INFO - {
+    "company": "Takeda",
+    "title": "Grange Castle Finance Controller",
+    "application url": "https://jobs.takeda.com//job/dublin/grange-castle-finance-controller/1113/70191622960",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-11 22:28:11,084 - INFO - {
+    "company": "Takeda",
+    "title": "Quality Compliance Manager",
+    "application url": "https://jobs.takeda.com//job/wicklow/quality-compliance-manager/1113/69349110720",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-11 22:28:11,084 - INFO - {
+    "company": "Takeda",
+    "title": "Quality Regulatory Compliance Manager",
+    "application url": "https://jobs.takeda.com//job/wicklow/quality-regulatory-compliance-manager/1113/66545117520",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2024-10-11 22:28:11,093 - INFO - Job data updated successfully.
