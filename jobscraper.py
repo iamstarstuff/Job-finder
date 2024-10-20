@@ -12,9 +12,9 @@ import ssl
 import certifi
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import urllib3
 
 ssl._create_default_https_context = ssl._create_unverified_context
-
 
 
 logging.basicConfig(
@@ -138,7 +138,8 @@ def Astrazeneca():
 def Takeda():
     logging.info("Fetching job details for Takeda.")
     try:
-        response = requests.get(company_urls["Takeda"],verify=False)
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        response = requests.get(company_urls["Takeda"], verify=False)
         response.raise_for_status()
         soup = BeautifulSoup(response.content, "lxml")
         job_links = soup.find_all("a", {"data-job-id": True})
@@ -260,17 +261,52 @@ def Astellas():
 def get_all_job_postings():
     logging.info("Starting to fetch all job postings.")
     all_jobs = {}
+    failed_companies = []  # List to store companies that failed
 
-    all_jobs["Abbvie"] = Abbvie()
-    all_jobs["Amgen"] = Amgen()
-    all_jobs["APC"] = APC()
-    all_jobs["Astellas"] = Astellas()
-    all_jobs["Astrazeneca"] = Astrazeneca()
-    all_jobs["Takeda"] = Takeda()
-    all_jobs["Vle therapeutics"] = Vle()
+    try:
+        all_jobs["Abbvie"] = Abbvie()
+    except Exception as e:
+        failed_companies.append(f"Abbvie: {str(e)}")
+        logging.error(f"Error fetching Abbvie jobs: {e}")
+
+    try:
+        all_jobs["Amgen"] = Amgen()
+    except Exception as e:
+        failed_companies.append(f"Amgen: {str(e)}")
+        logging.error(f"Error fetching Amgen jobs: {e}")
+
+    try:
+        all_jobs["APC"] = APC()
+    except Exception as e:
+        failed_companies.append(f"APC: {str(e)}")
+        logging.error(f"Error fetching APC jobs: {e}")
+
+    try:
+        all_jobs["Astellas"] = Astellas()
+    except Exception as e:
+        failed_companies.append(f"Astellas: {str(e)}")
+        logging.error(f"Error fetching Astellas jobs: {e}")
+
+    try:
+        all_jobs["Astrazeneca"] = Astrazeneca()
+    except Exception as e:
+        failed_companies.append(f"Astrazeneca: {str(e)}")
+        logging.error(f"Error fetching Astrazeneca jobs: {e}")
+
+    try:
+        all_jobs["Takeda"] = Takeda()
+    except Exception as e:
+        failed_companies.append(f"Takeda: {str(e)}")
+        logging.error(f"Error fetching Takeda jobs: {e}")
+
+    try:
+        all_jobs["Vle therapeutics"] = Vle()
+    except Exception as e:
+        failed_companies.append(f"Vle therapeutics: {str(e)}")
+        logging.error(f"Error fetching Vle Therapeutics jobs: {e}")
 
     logging.info("Completed fetching all job postings.")
-    return all_jobs
+    return all_jobs, failed_companies
 
 
 def load_previous_jobs(filename):
@@ -385,39 +421,67 @@ def send_email(
 
 def main():
     json_file = "/Users/pratik/Github/Job-finder/jobs.json"
-    current_jobs = get_all_job_postings()
-    previous_jobs = load_previous_jobs(json_file)
-    new_jobs = find_new_jobs(previous_jobs, current_jobs)
-    # If new jobs are found, send an email notification
-    if new_jobs:
-        logging.info(
-            f"New job postings found: {len(new_jobs)} companies with new jobs."
-        )
-        email_body = jobs_to_html_table(new_jobs)
+    try:
+        current_jobs, failed_companies = get_all_job_postings()
+        previous_jobs = load_previous_jobs(json_file)
+        new_jobs = find_new_jobs(previous_jobs, current_jobs)
 
+        # If new jobs are found, send an email notification
+        if new_jobs:
+            logging.info(
+                f"New job postings found: {len(new_jobs)} companies with new jobs."
+            )
+            email_body = jobs_to_html_table(new_jobs)
+
+            send_email(
+                subject="New Job Postings Alert",
+                body=email_body,
+                to_email=["vaidehipatil2011@gmail.com"],
+                from_email="barvepratik96@gmail.com",
+                smtp_server="smtp.gmail.com",
+                smtp_port=465,
+                smtp_username="barvepratik96@gmail.com",
+                smtp_password="qkgb oxdd etzu zqyj",
+            )
+
+        else:
+            logging.info("No new job postings found.")
+
+        # Update the JSON file with the current job postings
+        update_json_file(json_file, current_jobs)
+        logging.info("Job data updated successfully.")
+
+        # If any companies failed, send an email notification
+        if failed_companies:
+            error_message = "\n".join(failed_companies)
+            logging.error(
+                f"Job fetching failed for the following companies: {error_message}"
+            )
+            send_email(
+                subject="Job Scraper Error Notification",
+                body=f"Job fetching failed for the following companies:\n{error_message}",
+                to_email=["barvepratik96@gmail.com"],
+                from_email="barvepratik96@gmail.com",
+                smtp_server="smtp.gmail.com",
+                smtp_port=465,
+                smtp_username="barvepratik96@gmail.com",
+                smtp_password="qkgb oxdd etzu zqyj",
+            )
+
+    except Exception as e:
+        # Log the error
+        logging.error(f"Error occurred: {str(e)}")
+        # Send an error notification to yourself via email
         send_email(
-            subject="New Job Postings Alert",
-            body=email_body,
-            to_email=["vaidehipatil2011@gmail.com"],
+            subject="Job Scraper Error Notification",
+            body=f"An error occurred: {str(e)}",
+            to_email=["barvepratik96@gmail.com"],
             from_email="barvepratik96@gmail.com",
             smtp_server="smtp.gmail.com",
             smtp_port=465,
             smtp_username="barvepratik96@gmail.com",
             smtp_password="qkgb oxdd etzu zqyj",
         )
-
-        # Print new jobs
-        for company, jobs in new_jobs.items():
-            logging.info(f"{company}:")
-            for job in jobs:
-                logging.info(json.dumps(job, ensure_ascii=False, indent=4))
-
-    else:
-        logging.info("No new job postings found.")
-
-    # Update the JSON file with the current job postings
-    update_json_file(json_file, current_jobs)
-    logging.info("Job data updated successfully.")
 
 
 if __name__ == "__main__":
