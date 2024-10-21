@@ -2,8 +2,8 @@
     "Abbvie": [
         {
             "company": "Abbvie",
-            "title": "Senior Pharmacovigilance Specialist",
-            "application link": "https://careers.abbvie.com/en/job/senior-pharmacovigilance-specialist-in-dublin-county-dublin-jid-9124",
+            "title": "QA Validation Specialist",
+            "application link": "https://careers.abbvie.com/en/job/qa-validation-specialist-in-dublin-county-dublin-jid-8836",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -26,18 +26,6 @@
         },
         {
             "company": "Abbvie",
-            "title": "Brand Manager - Gastroenterology",
-            "application link": "https://careers.abbvie.com/en/job/brand-manager-gastroenterology-in-dublin-county-dublin-jid-8724",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "QA Validation Specialist",
-            "application link": "https://careers.abbvie.com/en/job/qa-validation-specialist-in-dublin-county-dublin-jid-8836",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "NPI Project Manager",
             "application link": "https://careers.abbvie.com/en/job/npi-project-manager-in-dublin-county-dublin-jid-8754",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -56,6 +44,12 @@
         }
     ],
     "Amgen": [
+        {
+            "company": "Amgen",
+            "title": "Sr. Validation Engineer - Aseptic Processing",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer-aseptic-processing/A2A58D922FB943E391F11BC7474C99FE/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
         {
             "company": "Amgen",
             "title": "Talent Acquisition Manager",
@@ -94,12 +88,6 @@
         },
         {
             "company": "Amgen",
-            "title": "Sr. Manager ACDM Specialist Team Lead",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-acdm-specialist-team-lead/78DBC1D0F3764F49848DC0B57D3E9E90/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Specialist IS Bus Sys Analyst (Data Analytics)",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/specialist-is-bus-sys-analyst-data-analytics/27430610D7584AA2BC0BF8487D8C3E31/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -108,12 +96,6 @@
             "company": "Amgen",
             "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
             "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/85A0EBEE451C4703B2F5E092D9AA0A38/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Specialist Contract Development & Mfg",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/specialist-contract-development-mfg/D88B3705315D4DDCAD620BD26E35ACE2/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -130,8 +112,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Validation Sr. Engineer - Aseptic Processing",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/validation-sr-engineer-aseptic-processing/CDF85F2CDCFA4144830EBA1F4D0CCDE8/job/",
+            "title": "Senior Manager Contract  Development and Manufacturing",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-manager-contract-development-and-manufacturing/A5BC63100E1C48A5A04E742C9CB53D10/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Supply Chain Technician (12 months Fixed Term Contract Role) - Shift Role",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/supply-chain-technician-12-months-fixed-term-contract-role-shift-role/2CF8F1BFDFC949B8B2E3291E7713DFD0/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -183,6 +171,12 @@
         },
         {
             "company": "Astellas",
+            "title": "Process Engineer",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer-10578/4598",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+        },
+        {
+            "company": "Astellas",
             "title": "Process Operator Environmental",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-Environmental-10932/4676",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
@@ -209,7 +203,7 @@
             "company": "Astellas",
             "title": "Global Marketing Lead, Established Brands",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Global-Marketing-Lead-Established-Brands/4779",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
@@ -269,7 +263,7 @@
             "company": "Astellas",
             "title": "Facilities Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Facilities-Engineer-11383/4842",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
@@ -287,8 +281,8 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Director Sourcing Global Operations",
-            "application url": "https://careers.astrazeneca.com//job/dublin/director-sourcing-global-operations/43991/71464935200",
+            "title": "Production Planning Manager - API",
+            "application url": "https://careers.astrazeneca.com//job/dublin/production-planning-manager-api/43991/69087524656",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -299,8 +293,8 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Production Planning Manager - API",
-            "application url": "https://careers.astrazeneca.com//job/dublin/production-planning-manager-api/43991/69087524656",
+            "title": "Director Sourcing Global Operations",
+            "application url": "https://careers.astrazeneca.com//job/dublin/director-sourcing-global-operations/43991/71464935200",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -361,12 +355,6 @@
             "company": "Astrazeneca",
             "title": "Director, Medical Device and Combination Products",
             "application url": "https://careers.astrazeneca.com//job/dublin/director-medical-device-and-combination-products/43991/70769508704",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "API Technician (Shift based) - APICOM",
-            "application url": "https://careers.astrazeneca.com//job/dublin/api-technician-shift-based-apicom/7684/70605272880",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
