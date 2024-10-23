@@ -443,6 +443,11 @@ def main():
                 smtp_username="barvepratik96@gmail.com",
                 smtp_password="qkgb oxdd etzu zqyj",
             )
+            # Print new jobs
+            for company, jobs in new_jobs.items():
+                logging.info(f"{company}:")
+                for job in jobs:
+                    logging.info(json.dumps(job, ensure_ascii=False, indent=4))
 
         else:
             logging.info("No new job postings found.")

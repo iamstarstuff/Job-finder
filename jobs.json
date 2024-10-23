@@ -2,6 +2,12 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Manager, QA (Injectable Products)",
+            "application link": "https://careers.abbvie.com/en/job/manager-qa-injectable-products-in-dublin-county-dublin-jid-9311",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "QA Validation Specialist",
             "application link": "https://careers.abbvie.com/en/job/qa-validation-specialist-in-dublin-county-dublin-jid-8836",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -281,6 +287,18 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
+            "title": "Senior Manager Global Regulatory Affairs, CMC",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-regulatory-affairs-cmc/43991/71720428448",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Real World Science",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-real-world-science/43991/71675525408",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Shift Production Leader, Technologist - APICOM",
             "application url": "https://careers.astrazeneca.com//job/dublin/shift-production-leader-technologist-apicom/7684/70958018272",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -397,6 +415,12 @@
     "Takeda": [
         {
             "company": "Takeda",
+            "title": "Quality Control Analyst",
+            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst/1113/71728746304",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
             "title": "CSV Engineer",
             "application url": "https://jobs.takeda.com//job/dublin/csv-engineer/1113/71464892192",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
@@ -477,12 +501,6 @@
             "company": "Takeda",
             "title": "Environmental Health & Safety Student",
             "application url": "https://jobs.takeda.com//job/wicklow/environmental-health-and-safety-student/1113/71253013024",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Process Development Engineer (Packaging)",
-            "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-packaging/1113/71109293728",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         }
     ],
