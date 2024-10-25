@@ -2,20 +2,14 @@
     "Abbvie": [
         {
             "company": "Abbvie",
-            "title": "Manager, QA (Injectable Products)",
-            "application link": "https://careers.abbvie.com/en/job/manager-qa-injectable-products-in-dublin-county-dublin-jid-9311",
+            "title": "In-Field Medical Advisor - Oncology",
+            "application link": "https://careers.abbvie.com/en/job/in-field-medical-advisor-oncology-in-dublin-county-dublin-jid-9384",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
             "company": "Abbvie",
             "title": "QA Validation Specialist",
             "application link": "https://careers.abbvie.com/en/job/qa-validation-specialist-in-dublin-county-dublin-jid-8836",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Global Labeling Operations Specialist",
-            "application link": "https://careers.abbvie.com/en/job/global-labeling-operations-specialist-in-dublin-county-dublin-jid-8898",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -32,20 +26,8 @@
         },
         {
             "company": "Abbvie",
-            "title": "NPI Project Manager",
-            "application link": "https://careers.abbvie.com/en/job/npi-project-manager-in-dublin-county-dublin-jid-8754",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "HR Business Partner",
             "application link": "https://careers.abbvie.com/en/job/hr-business-partner-in-dublin-county-dublin-jid-4884",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Finance Development Programme (2024 Intake)",
-            "application link": "https://careers.abbvie.com/en/job/finance-development-programme-2024-intake-in-dublin-county-dublin-jid-6868",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
@@ -60,12 +42,6 @@
             "company": "Amgen",
             "title": "Talent Acquisition Manager",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/talent-acquisition-manager/29DA53FD9ECC443DB078533F73EB8AB5/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Talent Acquisition Recruiter",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/talent-acquisition-recruiter/094E133EE25047539AF4F88C97EE1552/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -94,6 +70,18 @@
         },
         {
             "company": "Amgen",
+            "title": "Amgen Graduate Opportunities 2025",
+            "application url": "https://www.amgen.jobs/dublin-irl/amgen-graduate-opportunities-2025/8C1DF65EEC3C48B3950413E253E4A41F/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "FUEL Rotational Graduate Program 2025",
+            "application url": "https://www.amgen.jobs/dublin-irl/fuel-rotational-graduate-program-2025/A3EDF77E6DF843458FEEC100CADFAF67/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
             "title": "Specialist IS Bus Sys Analyst (Data Analytics)",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/specialist-is-bus-sys-analyst-data-analytics/27430610D7584AA2BC0BF8487D8C3E31/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -102,6 +90,12 @@
             "company": "Amgen",
             "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
             "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/85A0EBEE451C4703B2F5E092D9AA0A38/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Contract Development & Manufacturing Manager",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-manufacturing-manager/334C17EE8FD54BFBBBF04E8DBF7FDC73/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -165,14 +159,20 @@
         },
         {
             "company": "Astellas",
-            "title": "Project Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445/4548",
+            "title": "Platform Engineer, Success Factors Talent Acquisitions Consultant",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4500",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
-            "title": "Senior Systems Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Systems-Engineer-10454/4549",
+            "title": "Platform Engineer, Success Factors Talent Management Consultant",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Platform-Engineer-Enterprise-Platforms/4501",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+        },
+        {
+            "company": "Astellas",
+            "title": "Project Engineer",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445/4548",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
@@ -203,7 +203,7 @@
             "company": "Astellas",
             "title": "Head, Clinical Data Enablement, Data Reporting and Analytics",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-CDE-Data-Reporting-and-Analytics/4773",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
@@ -263,7 +263,7 @@
             "company": "Astellas",
             "title": "Head of CMC Product QA Operational Governance & Strategy",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-of-CMC-Product-QA-Operational-Governance-Strategy/4835",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
@@ -282,9 +282,57 @@
             "title": "Co-Op Student - Finance",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Co-Op-Student-Finance-11456/4872",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Co-Op Student - Engineering (Capsules)",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Co-Op-Student-Engineering-Capsules-11495/4898",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Engineering Production Technician",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Production-Technician-Capsules-11496/4899",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Business Development & Strategy Lead",
+            "application url": "https://careers.astrazeneca.com//job/dublin/business-development-and-strategy-lead/43991/71837905536",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Lead – Environmental Compliance",
+            "application url": "https://careers.astrazeneca.com//job/athlone/lead-environmental-compliance/43991/70411832928",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Associate Director, Quality Strategic Ventures",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-quality-strategic-ventures/43991/71837905472",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Qualified Person",
+            "application url": "https://careers.astrazeneca.com//job/athlone/qualified-person/43991/71828432480",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Administrative Assistant (12 MONTH FIXED TERM CONTRACT)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-administrative-assistant-12-month-fixed-term-contract/43991/71782281120",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Specialist, Statistician - Alexion Technical Operations (ATO)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-specialist-statistician-alexion-technical-operations-ato/43991/61078472736",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "Senior Manager Global Regulatory Affairs, CMC",
@@ -301,12 +349,6 @@
             "company": "Astrazeneca",
             "title": "Shift Production Leader, Technologist - APICOM",
             "application url": "https://careers.astrazeneca.com//job/dublin/shift-production-leader-technologist-apicom/7684/70958018272",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Director Sourcing Global Operations",
-            "application url": "https://careers.astrazeneca.com//job/dublin/director-sourcing-global-operations/43991/71464935200",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -365,18 +407,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Lead – Environmental Compliance",
-            "application url": "https://careers.astrazeneca.com//job/athlone/lead-environmental-compliance/43991/70411832928",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Senior Master Data Administrator & Steward( 18 month FTC )",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-senior-master-data-administrator-and-steward-18-month-ftc/7684/70412209008",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Manager, Senior Master Data Administrator & Steward",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-senior-master-data-administrator-and-steward/7684/70412209872",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -391,12 +421,6 @@
             "company": "Astrazeneca",
             "title": "IT Business Systems Analyst (Global Supply Chain)",
             "application url": "https://careers.astrazeneca.com//job/dublin/it-business-systems-analyst-global-supply-chain/43991/70150448864",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Director, Sourcing - Global Operations-12050",
-            "application url": "https://careers.astrazeneca.com//job/dublin/director-sourcing-global-operations-12050/43991/70143845536",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
