@@ -64,6 +64,18 @@
     "Amgen": [
         {
             "company": "Amgen",
+            "title": "Sr. Validation Engineer - NPI Lead",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer-npi-lead/1FBCCA25C94F41B496DE246A68B8CE04/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Senior Maintenance Technician - Full Time Role (Shift)",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-maintenance-technician-full-time-role-shift/19203231891343A2A142405D5DE51F3E/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
             "title": "Engineer - Process & Equipment",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/engineer-process-equipment/AEEB647D9F8649FC9E55654C8AFD85B6/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -126,6 +138,12 @@
             "company": "Amgen",
             "title": "Product Planner, Manager - Fixed Term Contract",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/product-planner-manager-fixed-term-contract/E38AA5288D1C44D993D7944BA26ADEEB/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Sr Validation Engineer",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer/7556E570B39248FB8122D1BC9E52E866/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -275,6 +293,24 @@
         },
         {
             "company": "Astrazeneca",
+            "title": "Healthcare Development Manager",
+            "application url": "https://careers.astrazeneca.com//job/dublin/healthcare-development-manager/7684/73002591376",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Warehouse Associate",
+            "application url": "https://careers.astrazeneca.com//job/athlone/warehouse-associate/43991/73214922096",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior SHE Specialist - APICOM",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-she-specialist-apicom/7684/73184989280",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Senior Manager Global Regulatory Affairs, CMC",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-regulatory-affairs-cmc/43991/66654422480",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -289,12 +325,6 @@
             "company": "Astrazeneca",
             "title": "Brand & Customer Manager – Oncology",
             "application url": "https://careers.astrazeneca.com//job/dublin/brand-and-customer-manager-oncology/7684/73022805200",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Healthcare Development Manager",
-            "application url": "https://careers.astrazeneca.com//job/dublin/healthcare-development-manager/7684/73002591376",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -349,12 +379,6 @@
             "company": "Astrazeneca",
             "title": "Senior Manager, Global Medical and Regulatory Review",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-medical-and-regulatory-review/43991/68770919184",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Technical Services Specialist - Downstream",
-            "application url": "https://careers.astrazeneca.com//job/dublin/technical-services-specialist-downstream/43991/69744712528",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -415,6 +439,12 @@
     "Takeda": [
         {
             "company": "Takeda",
+            "title": "Procurement Business Partner",
+            "application url": "https://jobs.takeda.com//job/wicklow/procurement-business-partner/1113/73238854576",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
             "title": "HR and Administrations Intern",
             "application url": "https://jobs.takeda.com//job/dublin/hr-and-administrations-intern/1113/72966789824",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
@@ -463,14 +493,14 @@
         },
         {
             "company": "Takeda",
-            "title": "Quality Control Team Leader (maternity cover)",
-            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-team-leader-maternity-cover/1113/72569722544",
+            "title": "Quality Control Team Leader (FTC 14 months)",
+            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-team-leader-ftc-14-months/1113/72569722544",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
             "company": "Takeda",
-            "title": "Quality Control Analyst , Fixed Term, 11 Months",
-            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-fixed-term-11-months/1113/72531833376",
+            "title": "Quality Control Analyst  (FTC 11 months)",
+            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-ftc-11-months/1113/72531833376",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
@@ -496,12 +526,6 @@
             "title": "Process Development Engineer (Packaging)",
             "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-packaging/1113/71109293728",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Senior Auditor",
-            "application url": "https://jobs.takeda.com//job/dublin/senior-auditor/1113/70747746176",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         }
     ],
     "Vle therapeutics": [
@@ -517,6 +541,13 @@
             "title": "Bioprocess Operator",
             "closing_date": "Oct 18, 2024",
             "application url": "https://talent.sage.hr/jobs/4fc148f3-7669-4b70-bb9a-b6f2f4db12a9",
+            "job portal link": "https://www.vletherapeutics.com/careers"
+        },
+        {
+            "company": "Vle therapeutics",
+            "title": "Maintenance Technician - VLE Therapeutics",
+            "closing_date": "Nov 30, 2024",
+            "application url": "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Flogin.hirelocker.com%2Fapc-ltd%2Fjobs%2F30637%2Fmaintenance-technician-vle-therapeutics-dublin&data=05%7C02%7Criyazul.mohamed%40approcess.com%7C7c4df558697b488cf80b08dd07eb50e3%7C454b1ff5365240d490978f06553e105b%7C0%7C0%7C638675429576104646%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=YxGZxgGoLvpaAN0sEAmF7XJ9dB50058ZFeXoZuEb2Bc%3D&reserved=0",
             "job portal link": "https://www.vletherapeutics.com/careers"
         }
     ]
