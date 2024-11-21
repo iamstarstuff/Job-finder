@@ -2,6 +2,12 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Communications Manager",
+            "application link": "https://careers.abbvie.com/en/job/communications-manager-in-dublin-county-dublin-jid-10220",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "AbbVie Finance Development Programme Ireland (September 2025 Intake)",
             "application link": "https://careers.abbvie.com/en/job/abbvie-finance-development-programme-ireland-september-2025-intake-in-dublin-county-dublin-jid-9854",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -32,12 +38,6 @@
         },
         {
             "company": "Abbvie",
-            "title": "Program Manager",
-            "application link": "https://careers.abbvie.com/en/job/program-manager-in-dublin-county-dublin-jid-7276",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "Regional QA Strategy Lead Europe",
             "application link": "https://careers.abbvie.com/en/job/regional-qa-strategy-lead-europe-in-dublin-county-dublin-jid-10062",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -62,6 +62,12 @@
         }
     ],
     "Amgen": [
+        {
+            "company": "Amgen",
+            "title": "Facility Utility Lead - Principal Engineer",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/facility-utility-lead-principal-engineer/EA31A513356D4C7995D0CC1A5ED7C605/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
         {
             "company": "Amgen",
             "title": "Sr. Validation Engineer - NPI Lead",
@@ -178,13 +184,13 @@
         {
             "company": "Astellas",
             "title": "Systems Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Systems-Engineer-10180/4463",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Systems-Engineer-10180-Transfered/4463",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Manufacturing Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Engineer-10222/4489",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Engineer-10222-Transfered/4489",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
@@ -202,31 +208,31 @@
         {
             "company": "Astellas",
             "title": "Project Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445/4548",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445-Transfered/4548",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Process Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer-10578/4598",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer-10578-Transfered/4598",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Process Operator Environmental",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-Environmental-10932/4676",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-Environmental-10932-Transfered/4676",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Process Operator P3",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-P3-10933/4677",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Operator-P3-10933-Transfered/4677",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
             "title": "Senior Onsite Support Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer-10985/4681",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer-10985-Transfered/4681",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
@@ -262,7 +268,7 @@
         {
             "company": "Astellas",
             "title": "Engineering Production Technician",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Production-Technician-Capsules-11496/4899",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Production-Technician-Capsules-11496-Transfered/4899",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
@@ -280,7 +286,7 @@
         {
             "company": "Astellas",
             "title": "Engineering Administrator",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Administrator-6075/4914",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Administrator-6075-Transfer/4914",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         }
     ],
@@ -289,6 +295,12 @@
             "company": "Astrazeneca",
             "title": "6 Month University Industrial Placement Student (UIPS): Market Access Intern",
             "application url": "https://careers.astrazeneca.com//job/dublin/6-month-university-industrial-placement-student-uips-market-access-intern/7684/73146948432",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Brand & Customer Manager – Oncology",
+            "application url": "https://careers.astrazeneca.com//job/dublin/brand-and-customer-manager-oncology/7684/73022805200",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -319,12 +331,6 @@
             "company": "Astrazeneca",
             "title": "Brand & Customer Manager – Biopharmaceuticals",
             "application url": "https://careers.astrazeneca.com//job/dublin/brand-and-customer-manager-biopharmaceuticals/7684/73022810624",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Brand & Customer Manager – Oncology",
-            "application url": "https://careers.astrazeneca.com//job/dublin/brand-and-customer-manager-oncology/7684/73022805200",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -361,12 +367,6 @@
             "company": "Astrazeneca",
             "title": "Senior Manager, Quality Operations",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-quality-operations/43991/72592514752",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QA Specialist, External Quality",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qa-specialist-external-quality/43991/72592514688",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
