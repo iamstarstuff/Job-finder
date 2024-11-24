@@ -2,8 +2,14 @@
     "Abbvie": [
         {
             "company": "Abbvie",
-            "title": "Communications Manager",
-            "application link": "https://careers.abbvie.com/en/job/communications-manager-in-dublin-county-dublin-jid-10220",
+            "title": "Communications Lead",
+            "application link": "https://careers.abbvie.com/en/job/communications-lead-in-dublin-county-dublin-jid-10220",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "Senior NPI Compliance Specialist",
+            "application link": "https://careers.abbvie.com/en/job/senior-npi-compliance-specialist-in-dublin-county-dublin-jid-10262",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -53,25 +59,25 @@
             "title": "Supply Chain Brand Manager",
             "application link": "https://careers.abbvie.com/en/job/supply-chain-brand-manager-in-dublin-county-dublin-jid-10059",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Senior Audit and Compliance Auditor (Quality)",
-            "application link": "https://careers.abbvie.com/en/job/senior-audit-and-compliance-auditor-quality-in-dublin-county-dublin-jid-9953",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
     "Amgen": [
         {
             "company": "Amgen",
-            "title": "Facility Utility Lead - Principal Engineer",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/facility-utility-lead-principal-engineer/EA31A513356D4C7995D0CC1A5ED7C605/job/",
+            "title": "Validation Engineer I",
+            "application url": "https://www.amgen.jobs/dublin-irl/validation-engineer-i/BDC5D1CBA4654B849E22B25B3A77BC6B/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
             "company": "Amgen",
-            "title": "Sr. Validation Engineer - NPI Lead",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer-npi-lead/1FBCCA25C94F41B496DE246A68B8CE04/job/",
+            "title": "Principal Engineer - Process Technical Lead",
+            "application url": "https://www.amgen.jobs/dublin-irl/principal-engineer-process-technical-lead/B29B549C30DF4F3FBBC045621E2F98A4/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
+            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/ED68ECB98503495587853D242882EC46/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -84,12 +90,6 @@
             "company": "Amgen",
             "title": "Engineer - Process & Equipment",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/engineer-process-equipment/AEEB647D9F8649FC9E55654C8AFD85B6/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Project Controls Director",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/project-controls-director/60B8CBE83C3B4A9A8DF9407241FD46A2/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -118,20 +118,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Sr. Equipment Engineer (I&P System Owner)",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-equipment-engineer-ip-system-owner/45E182DDFBF04F8087A5E4DB70953A21/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "EHS Sr. Manager - Construction Safety",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/ehs-sr-manager-construction-safety/5CAC7752CE0B44DE802C0DA4281E9C9F/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Amgen Apprenticeship Program 2024 - Electrical Instrumentation",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/amgen-apprenticeship-program-2024-electrical-instrumentation/EB17E0A5C2E545EB86D69BA94A397081/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Talent Acquisition Manager",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/talent-acquisition-manager/29DA53FD9ECC443DB078533F73EB8AB5/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -144,12 +138,6 @@
             "company": "Amgen",
             "title": "Sr Validation Engineer",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-validation-engineer/7556E570B39248FB8122D1BC9E52E866/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Contract Development & Manufacturing Manager",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-manufacturing-manager/334C17EE8FD54BFBBBF04E8DBF7FDC73/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -231,27 +219,9 @@
         },
         {
             "company": "Astellas",
-            "title": "QC Microbiologist Co-Op - Student",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Microbiologist-Co-Op-Student/4821",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Quality Control Laboratory Analyst - Co-Op Student",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Laboratory-Analyst-Co-Op-Student/4822",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "QC Chemistry - Co-Op Student",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemistry-Co-Op-Student/4823",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
             "title": "Facilities Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Facilities-Engineer-11383/4842",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
@@ -373,12 +343,6 @@
             "company": "Astrazeneca",
             "title": "Associate Director, Medical Writing",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-medical-writing/43991/70440453696",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Specialist, Quality Distribution",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-specialist-quality-distribution/43991/71866466608",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
