@@ -2,6 +2,24 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Director, Product Quality",
+            "application link": "https://careers.abbvie.com/en/job/director-product-quality-in-dublin-county-dublin-jid-10954",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "Medical Manager - Immunology",
+            "application link": "https://careers.abbvie.com/en/job/medical-manager-immunology-in-dublin-county-dublin-jid-8895",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "Senior NPI Quality Specialist",
+            "application link": "https://careers.abbvie.com/en/job/senior-npi-quality-specialist-in-dublin-county-dublin-jid-10262",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Regional Communications Associate Director",
             "application link": "https://careers.abbvie.com/en/job/regional-communications-associate-director-in-dublin-county-dublin-jid-10392",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -10,12 +28,6 @@
             "company": "Abbvie",
             "title": "Manager, Category Management",
             "application link": "https://careers.abbvie.com/en/job/manager-category-management-in-dublin-county-dublin-jid-10129",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Senior Program Manager, PDS&T CAD",
-            "application link": "https://careers.abbvie.com/en/job/senior-program-manager-pds-and-t-cad-in-dublin-county-dublin-jid-10579",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -44,28 +56,28 @@
         },
         {
             "company": "Abbvie",
-            "title": "Senior NPI Compliance Specialist",
-            "application link": "https://careers.abbvie.com/en/job/senior-npi-compliance-specialist-in-dublin-county-dublin-jid-10262",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "AbbVie Finance Development Programme Ireland (September 2025 Intake)",
             "application link": "https://careers.abbvie.com/en/job/abbvie-finance-development-programme-ireland-september-2025-intake-in-dublin-county-dublin-jid-9854",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Senior Scientist II Product Development Science and Technology (PDS&T) - Global Drug Product",
-            "application link": "https://careers.abbvie.com/en/job/senior-scientist-ii-product-development-science-and-technology-pds-and-t-global-drug-product-in-dublin-county-dublin-jid-8945",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
     "Amgen": [
         {
             "company": "Amgen",
-            "title": "Corporate Affairs, Senior Manager",
-            "application url": "https://www.amgen.jobs/dublin-irl/corporate-affairs-senior-manager/591A6985DA664FD4BFB4D567E26D1D21/job/",
+            "title": "Contract Development and Manufacturing Specialist Specialist",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-and-manufacturing-specialist-specialist/BE0669C389D34FB4AD53DD32FD616EF3/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Sr. Manager External Supply",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-external-supply/127688B35C944D2FA2E87CD23D18D348/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
+            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/16433429AA694D4E85D83CC184F05982/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -82,14 +94,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Front Line Manager (24/7 Shift) Aseptic Fill/Finish",
-            "application url": "https://www.amgen.jobs/dublin-irl/front-line-manager-247-shift-aseptic-fillfinish/ACD03D596E33491096C900C4C5EC447F/job/",
+            "title": "Principal Engineer - Process Technical Lead",
+            "application url": "https://www.amgen.jobs/dublin-irl/principal-engineer-process-technical-lead/B29B549C30DF4F3FBBC045621E2F98A4/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
             "company": "Amgen",
-            "title": "Principal Engineer - Process Technical Lead",
-            "application url": "https://www.amgen.jobs/dublin-irl/principal-engineer-process-technical-lead/B29B549C30DF4F3FBBC045621E2F98A4/job/",
+            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
+            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/ED68ECB98503495587853D242882EC46/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -106,8 +118,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Sr. Equipment Engineer (I&P System Owner)",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-equipment-engineer-ip-system-owner/45E182DDFBF04F8087A5E4DB70953A21/job/",
+            "title": "Senior Manager Contract  Development and Manufacturing",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-manager-contract-development-and-manufacturing/79D64B2F67804E23AD1C5C6B27D6AFBE/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Strategic Sourcing Sr. Manager",
+            "application url": "https://www.amgen.jobs/dublin-irl/strategic-sourcing-sr-manager/965B96D8950A47A09C0FF28CB3F04D8B/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -120,6 +138,12 @@
             "company": "Amgen",
             "title": "Amgen Graduate Opportunities 2025",
             "application url": "https://www.amgen.jobs/dublin-irl/amgen-graduate-opportunities-2025/8C1DF65EEC3C48B3950413E253E4A41F/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Sr. Associate Tax",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-associate-tax/CA02CACEBE8444138D2D5932DFE827CF/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -147,6 +171,12 @@
             "company": "Astellas",
             "title": "Facilities Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Facilities-Engineer-11383/4842",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+        },
+        {
+            "company": "Astellas",
+            "title": "Risk & Compliance Lead, Data",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Risk-Compliance-Lead-Data-Governance-and-Compliance/4904",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
@@ -181,28 +211,70 @@
         },
         {
             "company": "Astellas",
-            "title": "Workforce Services Team Lead",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Workforce-Services-Team-Lead/4985",
+            "title": "Quality Assurance Manager - Dublin",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Manager-Dublin/4999",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
-            "title": "Quality Assurance Manager - Dublin",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Manager-Dublin/4999",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+            "title": "Quality Assurance for Computer Systems Validation",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Quality-Assurance-CSV-Computer-Systems-Validation/5014",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Quality Control Microbiologist",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Microbiologist/5023",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Quality Control Biochemist",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Biochemist/5024",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Quality Assurance Validation",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Validation/5025",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Quality Assurance for Quality Control",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Quality-Control/5026",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Senior Manufacturing Engineer",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Manufacturing-Engineer/5031",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Senior Systems Engineer",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Systems-Engineer/5032",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         }
     ],
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Senior Accountant",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant/43991/71060101680",
+            "title": "Associate Director of Manufacturing Science & Commercial Supply",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-of-manufacturing-science-and-commercial-supply/7684/73770591024",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager Strategic Sourcing – External Manufacturing",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing-external-manufacturing/43991/70143845504",
+            "title": "Nominated Signatory",
+            "application url": "https://careers.astrazeneca.com//job/dublin/nominated-signatory/7684/73959173664",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Tax Process Architect",
+            "application url": "https://careers.astrazeneca.com//job/dublin/tax-process-architect/7684/73926266096",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -213,8 +285,62 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Associate Director of Manufacturing Science & Commercial Supply",
-            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-of-manufacturing-science-and-commercial-supply/7684/73770591024",
+            "title": "Market Access - Pricing Manager",
+            "application url": "https://careers.astrazeneca.com//job/dublin/market-access-pricing-manager/7684/74114751888",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Bio-Process Technician",
+            "application url": "https://careers.astrazeneca.com//job/athlone/bio-process-technician/43991/74713683872",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Packaging Maintenance Technician",
+            "application url": "https://careers.astrazeneca.com//job/dublin/packaging-maintenance-technician/43991/74833947488",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Global Supply Planning (18 months fixed term)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-supply-planning-18-months-fixed-term/43991/74781888832",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "QA Specialist (12 month fixed term contract)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qa-specialist-12-month-fixed-term-contract/43991/74770443824",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Process Engineer",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-process-engineer/43991/74770443808",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, IT Business Partner (Supply Chain)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-business-partner-supply-chain/43991/71349833792",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Accounting",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-accounting/43991/74732371136",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Technical Manager, External QC",
+            "application url": "https://careers.astrazeneca.com//job/dublin/technical-manager-external-qc/43991/74684243968",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager Strategic Sourcing – External Manufacturing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing-external-manufacturing/43991/70143845504",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -237,12 +363,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "QA Specialist (12 month fixed term contract)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qa-specialist-12-month-fixed-term-contract/43991/74320545312",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Process Equipment Engineer",
             "application url": "https://careers.astrazeneca.com//job/dublin/process-equipment-engineer/43991/74283629088",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -251,12 +371,6 @@
             "company": "Astrazeneca",
             "title": "Senior Specialist, Technology Transfer",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-specialist-technology-transfer/43991/74134114992",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Market Access - Pricing Manager",
-            "application url": "https://careers.astrazeneca.com//job/dublin/market-access-pricing-manager/7684/74114751888",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -273,42 +387,18 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager, Real World Science",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-real-world-science/43991/71675525408",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Finance Business Partner",
-            "application url": "https://careers.astrazeneca.com//job/dublin/finance-business-partner/43991/73952264544",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Tax Process Architect",
-            "application url": "https://careers.astrazeneca.com//job/dublin/tax-process-architect/7684/73926266096",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QC Senior Manager, Lab Support (12 month fixed term contract)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-senior-manager-lab-support-12-month-fixed-term-contract/43991/73661246576",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, IT Business Partner (Supply Chain)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-business-partner-supply-chain/43991/71349833792",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Manager, Global Medical and Regulatory Review",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-medical-and-regulatory-review/43991/68770919184",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Data Scientist",
+            "application url": "https://jobs.takeda.com//job/dublin/data-scientist/1113/74721340640",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "Automation Engineer",
@@ -355,12 +445,6 @@
             "company": "Takeda",
             "title": "Quality Control Analyst  (FTC 11 months)",
             "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-ftc-11-months/1113/72531833376",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Finance Manager",
-            "application url": "https://jobs.takeda.com//job/dublin/finance-manager/1113/72478046944",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
