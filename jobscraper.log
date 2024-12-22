@@ -2364,3 +2364,263 @@
 2024-12-21 22:00:13,189 - INFO - Completed fetching all job postings.
 2024-12-21 22:00:13,196 - INFO - No new job postings found.
 2024-12-21 22:00:13,199 - INFO - Job data updated successfully.
+2024-12-21 23:00:02,296 - INFO - Starting to fetch all job postings.
+2024-12-21 23:00:02,298 - INFO - Fetching job details for Abbvie.
+2024-12-21 23:00:03,224 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-21 23:00:03,224 - INFO - Fetching job details for Amgen.
+2024-12-21 23:00:04,177 - INFO - Fetched 15 jobs for Amgen.
+2024-12-21 23:00:04,178 - INFO - Fetching job details for APC.
+2024-12-21 23:00:04,320 - INFO - Fetched 0 jobs for APC.
+2024-12-21 23:00:04,320 - INFO - Fetching job details for Astellas.
+2024-12-21 23:00:08,275 - INFO - Fetched 17 jobs for Astellas.
+2024-12-21 23:00:08,275 - INFO - Fetching job details for Astrazeneca.
+2024-12-21 23:00:10,237 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-21 23:00:10,237 - INFO - Fetching job details for Takeda.
+2024-12-21 23:00:10,643 - INFO - Fetched 14 jobs for Takeda.
+2024-12-21 23:00:10,651 - INFO - Fetching job details for Vle.
+2024-12-21 23:00:10,911 - INFO - Fetched 3 jobs for Vle.
+2024-12-21 23:00:10,912 - INFO - Completed fetching all job postings.
+2024-12-21 23:00:10,919 - INFO - No new job postings found.
+2024-12-21 23:00:10,922 - INFO - Job data updated successfully.
+2024-12-22 00:00:03,411 - INFO - Starting to fetch all job postings.
+2024-12-22 00:00:03,412 - INFO - Fetching job details for Abbvie.
+2024-12-22 00:00:04,287 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 00:00:04,287 - INFO - Fetching job details for Amgen.
+2024-12-22 00:00:05,230 - INFO - Fetched 15 jobs for Amgen.
+2024-12-22 00:00:05,230 - INFO - Fetching job details for APC.
+2024-12-22 00:00:05,379 - INFO - Fetched 0 jobs for APC.
+2024-12-22 00:00:05,380 - INFO - Fetching job details for Astellas.
+2024-12-22 00:00:09,846 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 00:00:09,846 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 00:00:12,277 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 00:00:12,277 - INFO - Fetching job details for Takeda.
+2024-12-22 00:00:12,550 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 00:00:12,551 - INFO - Fetching job details for Vle.
+2024-12-22 00:00:12,818 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 00:00:12,818 - INFO - Completed fetching all job postings.
+2024-12-22 00:00:12,824 - INFO - No new job postings found.
+2024-12-22 00:00:12,826 - INFO - Job data updated successfully.
+2024-12-22 01:00:02,822 - INFO - Starting to fetch all job postings.
+2024-12-22 01:00:02,823 - INFO - Fetching job details for Abbvie.
+2024-12-22 01:00:03,658 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 01:00:03,658 - INFO - Fetching job details for Amgen.
+2024-12-22 01:00:04,472 - INFO - Fetched 15 jobs for Amgen.
+2024-12-22 01:00:04,472 - INFO - Fetching job details for APC.
+2024-12-22 01:00:04,627 - INFO - Fetched 0 jobs for APC.
+2024-12-22 01:00:04,627 - INFO - Fetching job details for Astellas.
+2024-12-22 01:00:08,756 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 01:00:08,758 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 01:00:11,245 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 01:00:11,246 - INFO - Fetching job details for Takeda.
+2024-12-22 01:00:11,576 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 01:00:11,577 - INFO - Fetching job details for Vle.
+2024-12-22 01:00:11,832 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 01:00:11,832 - INFO - Completed fetching all job postings.
+2024-12-22 01:00:11,838 - INFO - No new job postings found.
+2024-12-22 01:00:11,840 - INFO - Job data updated successfully.
+2024-12-22 02:00:02,761 - INFO - Starting to fetch all job postings.
+2024-12-22 02:00:02,761 - INFO - Fetching job details for Abbvie.
+2024-12-22 02:00:03,717 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 02:00:03,717 - INFO - Fetching job details for Amgen.
+2024-12-22 02:00:04,637 - INFO - Fetched 15 jobs for Amgen.
+2024-12-22 02:00:04,638 - INFO - Fetching job details for APC.
+2024-12-22 02:00:04,787 - INFO - Fetched 0 jobs for APC.
+2024-12-22 02:00:04,787 - INFO - Fetching job details for Astellas.
+2024-12-22 02:00:08,636 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 02:00:08,636 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 02:00:09,015 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 02:00:09,015 - INFO - Fetching job details for Takeda.
+2024-12-22 02:00:09,315 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 02:00:09,323 - INFO - Fetching job details for Vle.
+2024-12-22 02:00:09,566 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 02:00:09,566 - INFO - Completed fetching all job postings.
+2024-12-22 02:00:09,573 - INFO - No new job postings found.
+2024-12-22 02:00:09,575 - INFO - Job data updated successfully.
+2024-12-22 03:00:02,566 - INFO - Starting to fetch all job postings.
+2024-12-22 03:00:02,567 - INFO - Fetching job details for Abbvie.
+2024-12-22 03:00:03,560 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 03:00:03,560 - INFO - Fetching job details for Amgen.
+2024-12-22 03:00:05,938 - INFO - Fetched 15 jobs for Amgen.
+2024-12-22 03:00:05,938 - INFO - Fetching job details for APC.
+2024-12-22 03:00:06,086 - INFO - Fetched 0 jobs for APC.
+2024-12-22 03:00:06,086 - INFO - Fetching job details for Astellas.
+2024-12-22 03:00:10,240 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 03:00:10,241 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 03:00:10,984 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 03:00:10,984 - INFO - Fetching job details for Takeda.
+2024-12-22 03:00:11,267 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 03:00:11,268 - INFO - Fetching job details for Vle.
+2024-12-22 03:00:11,529 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 03:00:11,529 - INFO - Completed fetching all job postings.
+2024-12-22 03:00:11,535 - INFO - No new job postings found.
+2024-12-22 03:00:11,538 - INFO - Job data updated successfully.
+2024-12-22 04:00:02,484 - INFO - Starting to fetch all job postings.
+2024-12-22 04:00:02,484 - INFO - Fetching job details for Abbvie.
+2024-12-22 04:00:03,441 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 04:00:03,441 - INFO - Fetching job details for Amgen.
+2024-12-22 04:00:05,225 - INFO - Fetched 15 jobs for Amgen.
+2024-12-22 04:00:05,225 - INFO - Fetching job details for APC.
+2024-12-22 04:00:05,368 - INFO - Fetched 0 jobs for APC.
+2024-12-22 04:00:05,369 - INFO - Fetching job details for Astellas.
+2024-12-22 04:00:09,690 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 04:00:09,690 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 04:00:12,134 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 04:00:12,134 - INFO - Fetching job details for Takeda.
+2024-12-22 04:00:13,171 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 04:00:13,172 - INFO - Fetching job details for Vle.
+2024-12-22 04:00:13,435 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 04:00:13,436 - INFO - Completed fetching all job postings.
+2024-12-22 04:00:13,442 - INFO - No new job postings found.
+2024-12-22 04:00:13,443 - INFO - Job data updated successfully.
+2024-12-22 05:00:02,027 - INFO - Starting to fetch all job postings.
+2024-12-22 05:00:02,028 - INFO - Fetching job details for Abbvie.
+2024-12-22 05:00:03,016 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 05:00:03,016 - INFO - Fetching job details for Amgen.
+2024-12-22 05:00:04,100 - INFO - Fetched 22 jobs for Amgen.
+2024-12-22 05:00:04,101 - INFO - Fetching job details for APC.
+2024-12-22 05:00:04,248 - INFO - Fetched 0 jobs for APC.
+2024-12-22 05:00:04,248 - INFO - Fetching job details for Astellas.
+2024-12-22 05:00:08,097 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 05:00:08,097 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 05:00:10,309 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 05:00:10,309 - INFO - Fetching job details for Takeda.
+2024-12-22 05:00:10,675 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 05:00:10,676 - INFO - Fetching job details for Vle.
+2024-12-22 05:00:10,923 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 05:00:10,923 - INFO - Completed fetching all job postings.
+2024-12-22 05:00:10,930 - INFO - New job postings found: 1 companies with new jobs.
+2024-12-22 05:00:12,405 - INFO - Email sent successfully.
+2024-12-22 05:00:12,405 - INFO - Amgen:
+2024-12-22 05:00:12,405 - INFO - {
+    "company": "Amgen",
+    "title": "Amgen Apprenticeship Program 2025 - Electrical Instrumentation",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/amgen-apprenticeship-program-2025-electrical-instrumentation/C91D17B7CD7245369C717AFA5C6CEF62/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,405 - INFO - {
+    "company": "Amgen",
+    "title": "Supply Chain Manager Amgen External Planning",
+    "application url": "https://www.amgen.jobs/dublin-irl/supply-chain-manager-amgen-external-planning/0C005C849F44489A9D4BB63D4B68A2BC/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,405 - INFO - {
+    "company": "Amgen",
+    "title": "Commercial Attribute Sciences - Associate Scientist",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/commercial-attribute-sciences-associate-scientist/9F3F9A9DEA384035A1ADB83E0A934AB3/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,406 - INFO - {
+    "company": "Amgen",
+    "title": "Specialist Manufacturing",
+    "application url": "https://www.amgen.jobs/dublin-irl/specialist-manufacturing/799DF6B1DA084658ADE61F2310DCDE6E/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,406 - INFO - {
+    "company": "Amgen",
+    "title": "Corporate Affairs, Senior Manager",
+    "application url": "https://www.amgen.jobs/dublin-irl/corporate-affairs-senior-manager/591A6985DA664FD4BFB4D567E26D1D21/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,406 - INFO - {
+    "company": "Amgen",
+    "title": "Front Line Manager (24/7 Shift) Aseptic Fill/Finish",
+    "application url": "https://www.amgen.jobs/dublin-irl/front-line-manager-247-shift-aseptic-fillfinish/ACD03D596E33491096C900C4C5EC447F/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,406 - INFO - {
+    "company": "Amgen",
+    "title": "Sr. Equipment Engineer (I&P System Owner)",
+    "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-equipment-engineer-ip-system-owner/45E182DDFBF04F8087A5E4DB70953A21/job/",
+    "job portal link": "https://www.amgen.jobs/irl/jobs/"
+}
+2024-12-22 05:00:12,414 - INFO - Job data updated successfully.
+2024-12-22 06:00:01,765 - INFO - Starting to fetch all job postings.
+2024-12-22 06:00:01,765 - INFO - Fetching job details for Abbvie.
+2024-12-22 06:00:03,099 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 06:00:03,099 - INFO - Fetching job details for Amgen.
+2024-12-22 06:00:07,013 - INFO - Fetched 22 jobs for Amgen.
+2024-12-22 06:00:07,014 - INFO - Fetching job details for APC.
+2024-12-22 06:00:07,166 - INFO - Fetched 0 jobs for APC.
+2024-12-22 06:00:07,167 - INFO - Fetching job details for Astellas.
+2024-12-22 06:00:11,086 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 06:00:11,086 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 06:00:11,537 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 06:00:11,537 - INFO - Fetching job details for Takeda.
+2024-12-22 06:00:12,570 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 06:00:12,572 - INFO - Fetching job details for Vle.
+2024-12-22 06:00:12,835 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 06:00:12,835 - INFO - Completed fetching all job postings.
+2024-12-22 06:00:12,842 - INFO - No new job postings found.
+2024-12-22 06:00:12,844 - INFO - Job data updated successfully.
+2024-12-22 07:00:02,053 - INFO - Starting to fetch all job postings.
+2024-12-22 07:00:02,054 - INFO - Fetching job details for Abbvie.
+2024-12-22 07:00:02,918 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 07:00:02,919 - INFO - Fetching job details for Amgen.
+2024-12-22 07:00:04,209 - INFO - Fetched 22 jobs for Amgen.
+2024-12-22 07:00:04,209 - INFO - Fetching job details for APC.
+2024-12-22 07:00:04,373 - INFO - Fetched 0 jobs for APC.
+2024-12-22 07:00:04,374 - INFO - Fetching job details for Astellas.
+2024-12-22 07:00:08,618 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 07:00:08,624 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 07:00:09,038 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 07:00:09,039 - INFO - Fetching job details for Takeda.
+2024-12-22 07:00:09,333 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 07:00:09,335 - INFO - Fetching job details for Vle.
+2024-12-22 07:00:09,602 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 07:00:09,602 - INFO - Completed fetching all job postings.
+2024-12-22 07:00:09,610 - INFO - No new job postings found.
+2024-12-22 07:00:09,613 - INFO - Job data updated successfully.
+2024-12-22 08:00:02,558 - INFO - Starting to fetch all job postings.
+2024-12-22 08:00:02,558 - INFO - Fetching job details for Abbvie.
+2024-12-22 08:00:03,839 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 08:00:03,839 - INFO - Fetching job details for Amgen.
+2024-12-22 08:00:04,686 - INFO - Fetched 22 jobs for Amgen.
+2024-12-22 08:00:04,686 - INFO - Fetching job details for APC.
+2024-12-22 08:00:04,829 - INFO - Fetched 0 jobs for APC.
+2024-12-22 08:00:04,830 - INFO - Fetching job details for Astellas.
+2024-12-22 08:00:08,686 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 08:00:08,686 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 08:00:10,830 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 08:00:10,832 - INFO - Fetching job details for Takeda.
+2024-12-22 08:00:11,118 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 08:00:11,120 - INFO - Fetching job details for Vle.
+2024-12-22 08:00:11,377 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 08:00:11,377 - INFO - Completed fetching all job postings.
+2024-12-22 08:00:11,380 - INFO - No new job postings found.
+2024-12-22 08:00:11,382 - INFO - Job data updated successfully.
+2024-12-22 09:00:02,586 - INFO - Starting to fetch all job postings.
+2024-12-22 09:00:02,586 - INFO - Fetching job details for Abbvie.
+2024-12-22 09:00:03,439 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 09:00:03,440 - INFO - Fetching job details for Amgen.
+2024-12-22 09:00:04,471 - INFO - Fetched 22 jobs for Amgen.
+2024-12-22 09:00:04,472 - INFO - Fetching job details for APC.
+2024-12-22 09:00:04,631 - INFO - Fetched 0 jobs for APC.
+2024-12-22 09:00:04,631 - INFO - Fetching job details for Astellas.
+2024-12-22 09:00:08,760 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 09:00:08,760 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 09:00:09,461 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 09:00:09,461 - INFO - Fetching job details for Takeda.
+2024-12-22 09:00:09,775 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 09:00:09,776 - INFO - Fetching job details for Vle.
+2024-12-22 09:00:10,023 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 09:00:10,024 - INFO - Completed fetching all job postings.
+2024-12-22 09:00:10,025 - INFO - No new job postings found.
+2024-12-22 09:00:10,026 - INFO - Job data updated successfully.
+2024-12-22 10:00:02,247 - INFO - Starting to fetch all job postings.
+2024-12-22 10:00:02,248 - INFO - Fetching job details for Abbvie.
+2024-12-22 10:00:03,266 - INFO - Fetched 10 jobs for Abbvie.
+2024-12-22 10:00:03,266 - INFO - Fetching job details for Amgen.
+2024-12-22 10:00:04,245 - INFO - Fetched 22 jobs for Amgen.
+2024-12-22 10:00:04,246 - INFO - Fetching job details for APC.
+2024-12-22 10:00:04,401 - INFO - Fetched 0 jobs for APC.
+2024-12-22 10:00:04,402 - INFO - Fetching job details for Astellas.
+2024-12-22 10:00:08,349 - INFO - Fetched 17 jobs for Astellas.
+2024-12-22 10:00:08,349 - INFO - Fetching job details for Astrazeneca.
+2024-12-22 10:00:08,842 - INFO - Fetched 22 jobs for Astrazeneca.
+2024-12-22 10:00:08,842 - INFO - Fetching job details for Takeda.
+2024-12-22 10:00:10,165 - INFO - Fetched 14 jobs for Takeda.
+2024-12-22 10:00:10,166 - INFO - Fetching job details for Vle.
+2024-12-22 10:00:10,419 - INFO - Fetched 3 jobs for Vle.
+2024-12-22 10:00:10,419 - INFO - Completed fetching all job postings.
+2024-12-22 10:00:10,426 - INFO - No new job postings found.
+2024-12-22 10:00:10,428 - INFO - Job data updated successfully.
