@@ -106,20 +106,8 @@
         },
         {
             "company": "Amgen",
-            "title": "Product Planner, Specialist",
-            "application url": "https://www.amgen.jobs/dublin-irl/product-planner-specialist/599F9BFB42504E46B7A55B0F986B0DFB/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Corporate Affairs, Senior Manager",
             "application url": "https://www.amgen.jobs/dublin-irl/corporate-affairs-senior-manager/591A6985DA664FD4BFB4D567E26D1D21/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Master Production Planner",
-            "application url": "https://www.amgen.jobs/dublin-irl/master-production-planner/D7CD1C7D499641BD8F14E6381BC63EBF/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -156,12 +144,6 @@
             "company": "Amgen",
             "title": "Senior Manager Contract  Development and Manufacturing",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-manager-contract-development-and-manufacturing/79D64B2F67804E23AD1C5C6B27D6AFBE/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Strategic Sourcing Sr. Manager",
-            "application url": "https://www.amgen.jobs/dublin-irl/strategic-sourcing-sr-manager/965B96D8950A47A09C0FF28CB3F04D8B/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -303,8 +285,14 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Associate Director of Manufacturing Science & Commercial Supply",
-            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-of-manufacturing-science-and-commercial-supply/7684/73770591024",
+            "title": "Senior Accountant, Global Financial Services Controlling Ireland",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant-global-financial-services-controlling-ireland/43991/75194303568",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager - Strategic Sourcing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing/7684/74442576704",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -321,8 +309,20 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager - Strategic Sourcing",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing/7684/74442576704",
+            "title": "Senior Manager, Real World Science",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-real-world-science/43991/71675525408",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Bio-Process Technician (12 Month FTC)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/bio-process-technician-12-month-ftc/43991/75000073088",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Associate Director of Manufacturing Science & Commercial Supply",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-of-manufacturing-science-and-commercial-supply/7684/73770591024",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -395,12 +395,6 @@
             "company": "Astrazeneca",
             "title": "Materials Management Planner APICOM",
             "application url": "https://careers.astrazeneca.com//job/dublin/materials-management-planner-apicom/43991/74417708240",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QA Specialist (Extended Days)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qa-specialist-extended-days/43991/74417708112",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
