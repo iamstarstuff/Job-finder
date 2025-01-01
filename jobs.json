@@ -100,12 +100,6 @@
         },
         {
             "company": "Amgen",
-            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
-            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/16433429AA694D4E85D83CC184F05982/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
             "title": "Corporate Affairs, Senior Manager",
             "application url": "https://www.amgen.jobs/dublin-irl/corporate-affairs-senior-manager/591A6985DA664FD4BFB4D567E26D1D21/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -193,12 +187,6 @@
         },
         {
             "company": "Astellas",
-            "title": "Facilities Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Facilities-Engineer-11383/4842",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
             "title": "Risk & Compliance Lead, Data",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Risk-Compliance-Lead-Data-Governance-and-Compliance/4904",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
@@ -243,7 +231,7 @@
             "company": "Astellas",
             "title": "Quality Assurance for Computer Systems Validation",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Quality-Assurance-CSV-Computer-Systems-Validation/5014",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
@@ -285,14 +273,8 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Senior Accountant, Global Financial Services Controlling Ireland",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant-global-financial-services-controlling-ireland/43991/75194303568",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager - Strategic Sourcing",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing/7684/74442576704",
+            "title": "Bio-Process Technician III",
+            "application url": "https://careers.astrazeneca.com//job/dublin/bio-process-technician-iii/43991/75360337680",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -309,14 +291,8 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager, Real World Science",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-real-world-science/43991/71675525408",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Bio-Process Technician (12 Month FTC)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/bio-process-technician-12-month-ftc/43991/75000073088",
+            "title": "Senior Manager - Strategic Sourcing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing/7684/74442576704",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -329,6 +305,24 @@
             "company": "Astrazeneca",
             "title": "Market Access - Pricing Manager",
             "application url": "https://careers.astrazeneca.com//job/dublin/market-access-pricing-manager/7684/74114751888",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Accountant, Global Financial Services Controlling Ireland",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant-global-financial-services-controlling-ireland/43991/75194303568",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Real World Science",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-real-world-science/43991/71675525408",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Bio-Process Technician (12 Month FTC)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/bio-process-technician-12-month-ftc/43991/75000073088",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -419,12 +413,6 @@
             "company": "Astrazeneca",
             "title": "Associate Director, Medical Writing",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-medical-writing/43991/70440453696",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Global Medical and Regulatory Review",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-medical-and-regulatory-review/43991/68770919184",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
