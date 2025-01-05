@@ -32,12 +32,6 @@
         },
         {
             "company": "Abbvie",
-            "title": "Manufacturing Supervisor",
-            "application link": "https://careers.abbvie.com/en/job/manufacturing-supervisor-in-dublin-county-dublin-jid-10372",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "HR Business Partner",
             "application link": "https://careers.abbvie.com/en/job/hr-business-partner-in-dublin-county-dublin-jid-4884",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -58,6 +52,12 @@
             "company": "Abbvie",
             "title": "AbbVie Finance Development Programme Ireland (September 2025 Intake)",
             "application link": "https://careers.abbvie.com/en/job/abbvie-finance-development-programme-ireland-september-2025-intake-in-dublin-county-dublin-jid-9854",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "Senior Scientist II Product Development Science and Technology (PDS&T) - Global Drug Product",
+            "application link": "https://careers.abbvie.com/en/job/senior-scientist-ii-product-development-science-and-technology-pds-and-t-global-drug-product-in-dublin-county-dublin-jid-8945",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
@@ -94,6 +94,12 @@
         },
         {
             "company": "Amgen",
+            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
+            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/16433429AA694D4E85D83CC184F05982/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
             "title": "Corporate Affairs, Senior Manager",
             "application url": "https://www.amgen.jobs/dublin-irl/corporate-affairs-senior-manager/591A6985DA664FD4BFB4D567E26D1D21/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -106,26 +112,14 @@
         },
         {
             "company": "Amgen",
-            "title": "Principal Engineer - Process Technical Lead",
-            "application url": "https://www.amgen.jobs/dublin-irl/principal-engineer-process-technical-lead/B29B549C30DF4F3FBBC045621E2F98A4/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Facility Utility Lead - Principal Engineer",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/facility-utility-lead-principal-engineer/EA31A513356D4C7995D0CC1A5ED7C605/job/",
+            "title": "Aseptic Manufacturing Process Technician - 24 month Fixed Term Contract (Shift)",
+            "application url": "https://www.amgen.jobs/dublin-irl/aseptic-manufacturing-process-technician-24-month-fixed-term-contract-shift/ED68ECB98503495587853D242882EC46/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
             "company": "Amgen",
             "title": "Sr. Manager Engineering Projects",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-engineering-projects/F515528B3C864B6694CA5D82DD74F7A9/job/",
-            "job portal link": "https://www.amgen.jobs/irl/jobs/"
-        },
-        {
-            "company": "Amgen",
-            "title": "Senior Manager Contract  Development and Manufacturing",
-            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/senior-manager-contract-development-and-manufacturing/79D64B2F67804E23AD1C5C6B27D6AFBE/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -259,6 +253,12 @@
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Supply Account Management Partner Shared Markets",
+            "application url": "https://careers.astrazeneca.com//job/dublin/supply-account-management-partner-shared-markets/43991/75496972512",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "Bio-Process Technician III",
