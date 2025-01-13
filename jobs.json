@@ -64,6 +64,12 @@
     "Amgen": [
         {
             "company": "Amgen",
+            "title": "Operational Excellence Specialist",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/operational-excellence-specialist/1BDB3212F84748B8B89BA86EB493B97C/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
             "title": "Supply Chain Sr. Associate Production Planner",
             "application url": "https://www.amgen.jobs/dublin-irl/supply-chain-sr-associate-production-planner/CD35F8240769493B9582157190C5D722/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
@@ -165,7 +171,15 @@
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         }
     ],
-    "APC": [],
+    "APC": [
+        {
+            "company": "APC",
+            "title": "Senior Bioprocess Downstream Development Scientist",
+            "application link": "https://talent.sage.hr/jobs/2b97bea2-9dff-496c-aba3-d57ece6009c7",
+            "closing_date": "31st January 2025",
+            "job portal link": "https://approcess.com/careers"
+        }
+    ],
     "Astellas": [
         {
             "company": "Astellas",
@@ -261,8 +275,8 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager - Strategic Sourcing",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing/7684/74442576704",
+            "title": "Global Strategic Sourcing (Ops) Senior Manager Clinical External Manufacturing and Supply Category  - Cork or Dublin",
+            "application url": "https://careers.astrazeneca.com//job/dublin/global-strategic-sourcing-ops-senior-manager-clinical-external-manufacturing-and-supply-category-co/43991/75970448080",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -315,12 +329,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Bio-Process Technician (12 Month FTC)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/bio-process-technician-12-month-ftc/43991/75000073088",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Packaging Maintenance Technician",
             "application url": "https://careers.astrazeneca.com//job/dublin/packaging-maintenance-technician/43991/74833947488",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -333,12 +341,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager, IT Business Partner (Supply Chain)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-business-partner-supply-chain/43991/71349833792",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Manager, Accounting",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-accounting/43991/74732371136",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -347,12 +349,6 @@
             "company": "Astrazeneca",
             "title": "Senior Manager Strategic Sourcing – External Manufacturing",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-strategic-sourcing-external-manufacturing/43991/70143845504",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager Global Regulatory Affairs, CMC",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-global-regulatory-affairs-cmc/43991/71720428448",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
