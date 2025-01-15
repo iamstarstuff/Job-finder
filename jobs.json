@@ -2,6 +2,18 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Manufacturing Supervisor",
+            "application link": "https://careers.abbvie.com/en/job/manufacturing-supervisor-in-dublin-county-dublin-jid-10372",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "QC Metrology & Informatics Chemist",
+            "application link": "https://careers.abbvie.com/en/job/qc-metrology-and-informatics-chemist-in-dublin-county-dublin-jid-11433",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Senior Program Manager, Factory of the Future Transformation",
             "application link": "https://careers.abbvie.com/en/job/senior-program-manager-factory-of-the-future-transformation-in-dublin-county-dublin-jid-11316",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -14,12 +26,6 @@
         },
         {
             "company": "Abbvie",
-            "title": "Manager, Environmental Health & Safety",
-            "application link": "https://careers.abbvie.com/en/job/manager-environmental-health-and-safety-in-dublin-county-dublin-jid-10387",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "Medical Manager - Immunology",
             "application link": "https://careers.abbvie.com/en/job/medical-manager-immunology-in-dublin-county-dublin-jid-8895",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -28,12 +34,6 @@
             "company": "Abbvie",
             "title": "Senior NPI Quality Specialist",
             "application link": "https://careers.abbvie.com/en/job/senior-npi-quality-specialist-in-dublin-county-dublin-jid-10262",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Manager, Category Management",
-            "application link": "https://careers.abbvie.com/en/job/manager-category-management-in-dublin-county-dublin-jid-10129",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -114,6 +114,12 @@
             "company": "Amgen",
             "title": "Contract Development and Manufacturing Specialist Specialist",
             "application url": "https://www.amgen.jobs/dún-laoghaire-irl/contract-development-and-manufacturing-specialist-specialist/BE0669C389D34FB4AD53DD32FD616EF3/job/",
+            "job portal link": "https://www.amgen.jobs/irl/jobs/"
+        },
+        {
+            "company": "Amgen",
+            "title": "Sr. Manager External Supply",
+            "application url": "https://www.amgen.jobs/dún-laoghaire-irl/sr-manager-external-supply/127688B35C944D2FA2E87CD23D18D348/job/",
             "job portal link": "https://www.amgen.jobs/irl/jobs/"
         },
         {
@@ -275,14 +281,50 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Global Strategic Sourcing (Ops) Senior Manager Clinical External Manufacturing and Supply Category  - Cork or Dublin",
-            "application url": "https://careers.astrazeneca.com//job/dublin/global-strategic-sourcing-ops-senior-manager-clinical-external-manufacturing-and-supply-category-co/43991/75970448080",
+            "title": "Senior Real World Data Scientist",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-real-world-data-scientist/43991/71675525408",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
             "company": "Astrazeneca",
-            "title": "QC Microbiology Analyst",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-microbiology-analyst/43991/75741372720",
+            "title": "Associate Director, IT Business Partner Manufacturing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-it-business-partner-manufacturing/43991/71349833776",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "QC Biochemistry Specialist",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qc-biochemistry-specialist/43991/76042031024",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, IT Business Partner (Supply Chain)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-business-partner-supply-chain/43991/71349833792",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Head of Diagnostics Ireland",
+            "application url": "https://careers.astrazeneca.com//job/dublin/head-of-diagnostics-ireland/7684/76020918000",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Warehouse Supervisor",
+            "application url": "https://careers.astrazeneca.com//job/dublin/warehouse-supervisor/43991/76014117504",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Market Access - Pricing Manager",
+            "application url": "https://careers.astrazeneca.com//job/dublin/market-access-pricing-manager/7684/74114751888",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Global Strategic Sourcing (Ops) Senior Manager Clinical External Manufacturing and Supply Category  - Cork or Dublin",
+            "application url": "https://careers.astrazeneca.com//job/dublin/global-strategic-sourcing-ops-senior-manager-clinical-external-manufacturing-and-supply-category-co/43991/75970448080",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -319,12 +361,6 @@
             "company": "Astrazeneca",
             "title": "Senior Accountant, Global Financial Services Controlling Ireland",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-accountant-global-financial-services-controlling-ireland/43991/75194303568",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Real World Science",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-real-world-science/43991/71675525408",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
