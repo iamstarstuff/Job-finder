@@ -683,3 +683,29 @@
 2025-02-27 12:00:15,110 - INFO - Completed fetching all job postings.
 2025-02-27 12:00:15,111 - INFO - No new job postings found.
 2025-02-27 12:00:15,112 - INFO - Job data updated successfully.
+2025-02-27 13:00:01,433 - INFO - Starting to fetch all job postings.
+2025-02-27 13:00:01,433 - INFO - Fetching job details for Abbvie.
+2025-02-27 13:00:03,054 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 13:00:03,054 - INFO - Fetching job details for Amgen.
+2025-02-27 13:00:05,409 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 13:00:05,409 - INFO - Fetching job details for APC.
+2025-02-27 13:00:05,575 - INFO - Fetched 2 jobs for APC.
+2025-02-27 13:00:05,576 - INFO - Fetching job details for Astellas.
+2025-02-27 13:00:13,868 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 13:00:13,868 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 13:00:17,160 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 13:00:17,161 - INFO - Fetching job details for Takeda.
+2025-02-27 13:00:17,445 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 13:00:17,446 - INFO - Fetching job details for Vle.
+2025-02-27 13:00:17,726 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 13:00:17,727 - INFO - Completed fetching all job postings.
+2025-02-27 13:00:17,727 - INFO - New job postings found: 1 companies with new jobs.
+2025-02-27 13:00:19,003 - INFO - Email sent successfully.
+2025-02-27 13:00:19,003 - INFO - Astrazeneca:
+2025-02-27 13:00:19,003 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Manager, Statutory Reporting (15 months Fixed term)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/manager-statutory-reporting-15-months-fixed-term/43991/78009805728",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-02-27 13:00:19,011 - INFO - Job data updated successfully.
