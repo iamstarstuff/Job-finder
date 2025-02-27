@@ -402,3 +402,284 @@
 2025-02-25 22:00:12,682 - INFO - Completed fetching all job postings.
 2025-02-25 22:00:12,689 - INFO - No new job postings found.
 2025-02-25 22:00:12,691 - INFO - Job data updated successfully.
+2025-02-26 23:00:03,990 - INFO - Starting to fetch all job postings.
+2025-02-26 23:00:03,991 - INFO - Fetching job details for Abbvie.
+2025-02-26 23:00:04,798 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-26 23:00:04,798 - INFO - Fetching job details for Amgen.
+2025-02-26 23:00:07,220 - INFO - Fetched 0 jobs for Amgen.
+2025-02-26 23:00:07,221 - INFO - Fetching job details for APC.
+2025-02-26 23:00:07,424 - INFO - Fetched 2 jobs for APC.
+2025-02-26 23:00:07,424 - INFO - Fetching job details for Astellas.
+2025-02-26 23:00:14,371 - INFO - Fetched 34 jobs for Astellas.
+2025-02-26 23:00:14,372 - INFO - Fetching job details for Astrazeneca.
+2025-02-26 23:00:17,663 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-26 23:00:17,663 - INFO - Fetching job details for Takeda.
+2025-02-26 23:00:18,070 - INFO - Fetched 14 jobs for Takeda.
+2025-02-26 23:00:18,071 - INFO - Fetching job details for Vle.
+2025-02-26 23:00:18,331 - INFO - Fetched 3 jobs for Vle.
+2025-02-26 23:00:18,331 - INFO - Completed fetching all job postings.
+2025-02-26 23:00:18,332 - INFO - New job postings found: 2 companies with new jobs.
+2025-02-26 23:00:20,224 - INFO - Email sent successfully.
+2025-02-26 23:00:20,224 - INFO - Abbvie:
+2025-02-26 23:00:20,224 - INFO - {
+    "company": "Abbvie",
+    "title": "Quality Control Analyst",
+    "application link": "https://careers.abbvie.com/en/job/quality-control-analyst-in-dublin-county-dublin-jid-12369",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-02-26 23:00:20,224 - INFO - Astrazeneca:
+2025-02-26 23:00:20,224 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Accounting Manager",
+    "application url": "https://careers.astrazeneca.com//job/dublin/accounting-manager/43991/77963367152",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-02-26 23:00:20,225 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Clinical Product Quality Lead",
+    "application url": "https://careers.astrazeneca.com//job/dublin/clinical-product-quality-lead/43991/77963367136",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-02-26 23:00:20,233 - INFO - Job data updated successfully.
+2025-02-27 00:00:04,341 - INFO - Starting to fetch all job postings.
+2025-02-27 00:00:04,341 - INFO - Fetching job details for Abbvie.
+2025-02-27 00:00:05,176 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 00:00:05,176 - INFO - Fetching job details for Amgen.
+2025-02-27 00:00:05,958 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 00:00:05,958 - INFO - Fetching job details for APC.
+2025-02-27 00:00:06,143 - INFO - Fetched 2 jobs for APC.
+2025-02-27 00:00:06,143 - INFO - Fetching job details for Astellas.
+2025-02-27 00:00:12,920 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 00:00:12,920 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 00:00:16,107 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 00:00:16,107 - INFO - Fetching job details for Takeda.
+2025-02-27 00:00:17,195 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 00:00:17,196 - INFO - Fetching job details for Vle.
+2025-02-27 00:00:17,552 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 00:00:17,553 - INFO - Completed fetching all job postings.
+2025-02-27 00:00:17,553 - INFO - No new job postings found.
+2025-02-27 00:00:17,555 - INFO - Job data updated successfully.
+2025-02-27 01:00:01,248 - INFO - Starting to fetch all job postings.
+2025-02-27 01:00:01,248 - INFO - Fetching job details for Abbvie.
+2025-02-27 01:00:02,164 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 01:00:02,164 - INFO - Fetching job details for Amgen.
+2025-02-27 01:00:03,537 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 01:00:03,537 - INFO - Fetching job details for APC.
+2025-02-27 01:00:03,723 - INFO - Fetched 2 jobs for APC.
+2025-02-27 01:00:03,724 - INFO - Fetching job details for Astellas.
+2025-02-27 01:00:09,801 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 01:00:09,802 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 01:00:12,785 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 01:00:12,786 - INFO - Fetching job details for Takeda.
+2025-02-27 01:00:13,092 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 01:00:13,093 - INFO - Fetching job details for Vle.
+2025-02-27 01:00:13,347 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 01:00:13,347 - INFO - Completed fetching all job postings.
+2025-02-27 01:00:13,348 - INFO - No new job postings found.
+2025-02-27 01:00:13,349 - INFO - Job data updated successfully.
+2025-02-27 02:00:02,001 - INFO - Starting to fetch all job postings.
+2025-02-27 02:00:02,001 - INFO - Fetching job details for Abbvie.
+2025-02-27 02:00:02,971 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 02:00:02,971 - INFO - Fetching job details for Amgen.
+2025-02-27 02:00:04,208 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 02:00:04,208 - INFO - Fetching job details for APC.
+2025-02-27 02:00:04,365 - INFO - Fetched 2 jobs for APC.
+2025-02-27 02:00:04,365 - INFO - Fetching job details for Astellas.
+2025-02-27 02:00:10,411 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 02:00:10,412 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 02:00:10,883 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 02:00:10,883 - INFO - Fetching job details for Takeda.
+2025-02-27 02:00:11,162 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 02:00:11,164 - INFO - Fetching job details for Vle.
+2025-02-27 02:00:11,405 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 02:00:11,405 - INFO - Completed fetching all job postings.
+2025-02-27 02:00:11,406 - INFO - No new job postings found.
+2025-02-27 02:00:11,407 - INFO - Job data updated successfully.
+2025-02-27 03:00:01,046 - INFO - Starting to fetch all job postings.
+2025-02-27 03:00:01,046 - INFO - Fetching job details for Abbvie.
+2025-02-27 03:00:02,051 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 03:00:02,052 - INFO - Fetching job details for Amgen.
+2025-02-27 03:00:03,867 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 03:00:03,868 - INFO - Fetching job details for APC.
+2025-02-27 03:00:04,052 - INFO - Fetched 2 jobs for APC.
+2025-02-27 03:00:04,052 - INFO - Fetching job details for Astellas.
+2025-02-27 03:00:09,998 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 03:00:09,998 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 03:00:10,517 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 03:00:10,517 - INFO - Fetching job details for Takeda.
+2025-02-27 03:00:10,829 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 03:00:10,830 - INFO - Fetching job details for Vle.
+2025-02-27 03:00:11,109 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 03:00:11,109 - INFO - Completed fetching all job postings.
+2025-02-27 03:00:11,110 - INFO - No new job postings found.
+2025-02-27 03:00:11,111 - INFO - Job data updated successfully.
+2025-02-27 04:00:01,609 - INFO - Starting to fetch all job postings.
+2025-02-27 04:00:01,609 - INFO - Fetching job details for Abbvie.
+2025-02-27 04:00:02,399 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 04:00:02,399 - INFO - Fetching job details for Amgen.
+2025-02-27 04:00:04,644 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 04:00:04,644 - INFO - Fetching job details for APC.
+2025-02-27 04:00:04,814 - INFO - Fetched 2 jobs for APC.
+2025-02-27 04:00:04,814 - INFO - Fetching job details for Astellas.
+2025-02-27 04:00:10,655 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 04:00:10,655 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 04:00:14,048 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 04:00:14,048 - INFO - Fetching job details for Takeda.
+2025-02-27 04:00:15,096 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 04:00:15,097 - INFO - Fetching job details for Vle.
+2025-02-27 04:00:15,344 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 04:00:15,344 - INFO - Completed fetching all job postings.
+2025-02-27 04:00:15,345 - INFO - No new job postings found.
+2025-02-27 04:00:15,346 - INFO - Job data updated successfully.
+2025-02-27 05:00:01,953 - INFO - Starting to fetch all job postings.
+2025-02-27 05:00:01,953 - INFO - Fetching job details for Abbvie.
+2025-02-27 05:00:02,700 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 05:00:02,700 - INFO - Fetching job details for Amgen.
+2025-02-27 05:00:05,203 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 05:00:05,203 - INFO - Fetching job details for APC.
+2025-02-27 05:00:05,373 - INFO - Fetched 2 jobs for APC.
+2025-02-27 05:00:05,374 - INFO - Fetching job details for Astellas.
+2025-02-27 05:00:11,111 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 05:00:11,111 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 05:00:14,300 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 05:00:14,300 - INFO - Fetching job details for Takeda.
+2025-02-27 05:00:14,647 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 05:00:14,648 - INFO - Fetching job details for Vle.
+2025-02-27 05:00:15,011 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 05:00:15,011 - INFO - Completed fetching all job postings.
+2025-02-27 05:00:15,012 - INFO - No new job postings found.
+2025-02-27 05:00:15,013 - INFO - Job data updated successfully.
+2025-02-27 06:00:01,574 - INFO - Starting to fetch all job postings.
+2025-02-27 06:00:01,574 - INFO - Fetching job details for Abbvie.
+2025-02-27 06:00:02,335 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 06:00:02,336 - INFO - Fetching job details for Amgen.
+2025-02-27 06:00:03,057 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 06:00:03,057 - INFO - Fetching job details for APC.
+2025-02-27 06:00:03,241 - INFO - Fetched 2 jobs for APC.
+2025-02-27 06:00:03,242 - INFO - Fetching job details for Astellas.
+2025-02-27 06:00:09,161 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 06:00:09,161 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 06:00:12,394 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 06:00:12,394 - INFO - Fetching job details for Takeda.
+2025-02-27 06:00:13,387 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 06:00:13,388 - INFO - Fetching job details for Vle.
+2025-02-27 06:00:13,627 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 06:00:13,627 - INFO - Completed fetching all job postings.
+2025-02-27 06:00:13,628 - INFO - No new job postings found.
+2025-02-27 06:00:13,630 - INFO - Job data updated successfully.
+2025-02-27 07:00:01,523 - INFO - Starting to fetch all job postings.
+2025-02-27 07:00:01,523 - INFO - Fetching job details for Abbvie.
+2025-02-27 07:00:02,446 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 07:00:02,446 - INFO - Fetching job details for Amgen.
+2025-02-27 07:00:04,705 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 07:00:04,706 - INFO - Fetching job details for APC.
+2025-02-27 07:00:05,261 - INFO - Fetched 2 jobs for APC.
+2025-02-27 07:00:05,262 - INFO - Fetching job details for Astellas.
+2025-02-27 07:00:11,520 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 07:00:11,520 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 07:00:14,811 - INFO - Fetched 35 jobs for Astrazeneca.
+2025-02-27 07:00:14,811 - INFO - Fetching job details for Takeda.
+2025-02-27 07:00:15,117 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 07:00:15,118 - INFO - Fetching job details for Vle.
+2025-02-27 07:00:15,389 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 07:00:15,389 - INFO - Completed fetching all job postings.
+2025-02-27 07:00:15,389 - INFO - No new job postings found.
+2025-02-27 07:00:15,391 - INFO - Job data updated successfully.
+2025-02-27 08:00:01,183 - INFO - Starting to fetch all job postings.
+2025-02-27 08:00:01,183 - INFO - Fetching job details for Abbvie.
+2025-02-27 08:00:02,203 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 08:00:02,203 - INFO - Fetching job details for Amgen.
+2025-02-27 08:00:04,135 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 08:00:04,135 - INFO - Fetching job details for APC.
+2025-02-27 08:00:04,309 - INFO - Fetched 2 jobs for APC.
+2025-02-27 08:00:04,309 - INFO - Fetching job details for Astellas.
+2025-02-27 08:00:10,662 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 08:00:10,663 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 08:00:13,853 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-02-27 08:00:13,854 - INFO - Fetching job details for Takeda.
+2025-02-27 08:00:14,151 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 08:00:14,153 - INFO - Fetching job details for Vle.
+2025-02-27 08:00:14,423 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 08:00:14,424 - INFO - Completed fetching all job postings.
+2025-02-27 08:00:14,424 - INFO - No new job postings found.
+2025-02-27 08:00:14,426 - INFO - Job data updated successfully.
+2025-02-27 09:00:01,648 - INFO - Starting to fetch all job postings.
+2025-02-27 09:00:01,648 - INFO - Fetching job details for Abbvie.
+2025-02-27 09:00:02,526 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 09:00:02,526 - INFO - Fetching job details for Amgen.
+2025-02-27 09:00:03,422 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 09:00:03,422 - INFO - Fetching job details for APC.
+2025-02-27 09:00:03,601 - INFO - Fetched 2 jobs for APC.
+2025-02-27 09:00:03,602 - INFO - Fetching job details for Astellas.
+2025-02-27 09:00:09,865 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 09:00:09,865 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 09:00:13,277 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-02-27 09:00:13,277 - INFO - Fetching job details for Takeda.
+2025-02-27 09:00:13,568 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 09:00:13,569 - INFO - Fetching job details for Vle.
+2025-02-27 09:00:13,842 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 09:00:13,843 - INFO - Completed fetching all job postings.
+2025-02-27 09:00:13,843 - INFO - No new job postings found.
+2025-02-27 09:00:13,851 - INFO - Job data updated successfully.
+2025-02-27 10:00:01,173 - INFO - Starting to fetch all job postings.
+2025-02-27 10:00:01,173 - INFO - Fetching job details for Abbvie.
+2025-02-27 10:00:02,067 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 10:00:02,067 - INFO - Fetching job details for Amgen.
+2025-02-27 10:00:02,969 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 10:00:02,969 - INFO - Fetching job details for APC.
+2025-02-27 10:00:03,145 - INFO - Fetched 2 jobs for APC.
+2025-02-27 10:00:03,145 - INFO - Fetching job details for Astellas.
+2025-02-27 10:00:09,813 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 10:00:09,813 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 10:00:10,367 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-02-27 10:00:10,367 - INFO - Fetching job details for Takeda.
+2025-02-27 10:00:11,364 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 10:00:11,365 - INFO - Fetching job details for Vle.
+2025-02-27 10:00:11,642 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 10:00:11,642 - INFO - Completed fetching all job postings.
+2025-02-27 10:00:11,643 - INFO - New job postings found: 1 companies with new jobs.
+2025-02-27 10:00:14,843 - INFO - Email sent successfully.
+2025-02-27 10:00:14,844 - INFO - Abbvie:
+2025-02-27 10:00:14,844 - INFO - {
+    "company": "Abbvie",
+    "title": "ME&C EHS Manager - Regional Support",
+    "application link": "https://careers.abbvie.com/en/job/me-and-c-ehs-manager-regional-support-in-dublin-county-dublin-jid-12172",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-02-27 10:00:14,846 - INFO - Job data updated successfully.
+2025-02-27 11:00:01,729 - INFO - Starting to fetch all job postings.
+2025-02-27 11:00:01,729 - INFO - Fetching job details for Abbvie.
+2025-02-27 11:00:02,666 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 11:00:02,666 - INFO - Fetching job details for Amgen.
+2025-02-27 11:00:05,106 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 11:00:05,106 - INFO - Fetching job details for APC.
+2025-02-27 11:00:05,281 - INFO - Fetched 2 jobs for APC.
+2025-02-27 11:00:05,282 - INFO - Fetching job details for Astellas.
+2025-02-27 11:00:11,844 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 11:00:11,845 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 11:00:14,315 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-02-27 11:00:14,315 - INFO - Fetching job details for Takeda.
+2025-02-27 11:00:14,659 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 11:00:14,660 - INFO - Fetching job details for Vle.
+2025-02-27 11:00:14,968 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 11:00:14,968 - INFO - Completed fetching all job postings.
+2025-02-27 11:00:14,969 - INFO - No new job postings found.
+2025-02-27 11:00:14,977 - INFO - Job data updated successfully.
+2025-02-27 12:00:01,611 - INFO - Starting to fetch all job postings.
+2025-02-27 12:00:01,611 - INFO - Fetching job details for Abbvie.
+2025-02-27 12:00:02,586 - INFO - Fetched 10 jobs for Abbvie.
+2025-02-27 12:00:02,586 - INFO - Fetching job details for Amgen.
+2025-02-27 12:00:04,356 - INFO - Fetched 0 jobs for Amgen.
+2025-02-27 12:00:04,356 - INFO - Fetching job details for APC.
+2025-02-27 12:00:04,555 - INFO - Fetched 2 jobs for APC.
+2025-02-27 12:00:04,555 - INFO - Fetching job details for Astellas.
+2025-02-27 12:00:10,944 - INFO - Fetched 34 jobs for Astellas.
+2025-02-27 12:00:10,944 - INFO - Fetching job details for Astrazeneca.
+2025-02-27 12:00:13,926 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-02-27 12:00:13,926 - INFO - Fetching job details for Takeda.
+2025-02-27 12:00:14,859 - INFO - Fetched 14 jobs for Takeda.
+2025-02-27 12:00:14,861 - INFO - Fetching job details for Vle.
+2025-02-27 12:00:15,110 - INFO - Fetched 3 jobs for Vle.
+2025-02-27 12:00:15,110 - INFO - Completed fetching all job postings.
+2025-02-27 12:00:15,111 - INFO - No new job postings found.
+2025-02-27 12:00:15,112 - INFO - Job data updated successfully.

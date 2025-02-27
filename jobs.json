@@ -2,6 +2,18 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "ME&C EHS Manager - Regional Support",
+            "application link": "https://careers.abbvie.com/en/job/me-and-c-ehs-manager-regional-support-in-dublin-county-dublin-jid-12172",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "Quality Control Analyst",
+            "application link": "https://careers.abbvie.com/en/job/quality-control-analyst-in-dublin-county-dublin-jid-12369",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Supply Chain Planner",
             "application link": "https://careers.abbvie.com/en/job/supply-chain-planner-in-dublin-county-dublin-jid-12539",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -44,20 +56,8 @@
         },
         {
             "company": "Abbvie",
-            "title": "IME EHS Manager - Regional Support",
-            "application link": "https://careers.abbvie.com/en/job/ime-ehs-manager-regional-support-in-dublin-county-dublin-jid-12172",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
             "title": "Manufacturing Supervisor",
             "application link": "https://careers.abbvie.com/en/job/manufacturing-supervisor-in-dublin-county-dublin-jid-12142",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "In-Field Medical Advisor",
-            "application link": "https://careers.abbvie.com/en/job/in-field-medical-advisor-in-dublin-county-dublin-jid-11837",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
@@ -165,12 +165,6 @@
         },
         {
             "company": "Astellas",
-            "title": "Omnichanel Content Factory Lead",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Content-Factory-Lead/5076",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
             "title": "Finance Graduate",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Finance-Graduate/5100",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
@@ -203,7 +197,7 @@
             "company": "Astellas",
             "title": "Graduate Validation Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Validation-Engineer/5110",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
@@ -263,7 +257,7 @@
             "company": "Astellas",
             "title": "Validation Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Validation-Engineer/5200",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
@@ -291,6 +285,18 @@
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Accounting Manager",
+            "application url": "https://careers.astrazeneca.com//job/dublin/accounting-manager/43991/77963367152",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Clinical Product Quality Lead",
+            "application url": "https://careers.astrazeneca.com//job/dublin/clinical-product-quality-lead/43991/77963367136",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "Communications & Patient Engagement Manager (6 months FTC)",
@@ -371,20 +377,8 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior International Regulatory Affairs Specialist",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-international-regulatory-affairs-specialist/43991/76996214864",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Head of Diagnostics Ireland",
             "application url": "https://careers.astrazeneca.com//job/dublin/head-of-diagnostics-ireland/7684/76020918000",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Finance & Accounting Graduate",
-            "application url": "https://careers.astrazeneca.com//job/dublin/finance-and-accounting-graduate/43991/77655050944",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -403,12 +397,6 @@
             "company": "Astrazeneca",
             "title": "Senior Director, Supply Chain S&OP Strategy",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-s-and-op-strategy/43991/77589893744",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Bio-Process Technician (FTC)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/bio-process-technician-ftc/43991/77560948064",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
