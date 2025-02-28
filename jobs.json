@@ -65,16 +65,16 @@
     "APC": [
         {
             "company": "APC",
-            "title": "Senior Process Development Engineer - Digital",
-            "application link": "https://talent.sage.hr/jobs/a5e23cd4-2222-4aaa-8c9f-4bb056a0b62f",
-            "closing_date": "7th February 2025",
+            "title": "Project Manager",
+            "application link": "https://talent.sage.hr/jobs/68881e36-ad2f-4a19-99d3-6f7b535d9c7c",
+            "closing_date": "28th February 2025",
             "job portal link": "https://approcess.com/careers"
         },
         {
             "company": "APC",
-            "title": "Project Manager",
-            "application link": "https://talent.sage.hr/jobs/68881e36-ad2f-4a19-99d3-6f7b535d9c7c",
-            "closing_date": "28th February 2025",
+            "title": "Administrative Coordinator",
+            "application link": "https://talent.sage.hr/jobs/d1e9b8b7-6db5-4cdf-aabb-4ee8df6c19fa",
+            "closing_date": "14th March 2025",
             "job portal link": "https://approcess.com/careers"
         }
     ],
@@ -287,6 +287,12 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
+            "title": "QC Compliance Lead (12 month fixed term contract)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qc-compliance-lead-12-month-fixed-term-contract/43991/78027645968",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Manager, Statutory Reporting (15 months Fixed term)",
             "application url": "https://careers.astrazeneca.com//job/dublin/manager-statutory-reporting-15-months-fixed-term/43991/78009805728",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -419,12 +425,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager, Senior Master Data Quality Analyst",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-senior-master-data-quality-analyst/43991/72533989872",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "QC Senior Manager , External QC",
             "application url": "https://careers.astrazeneca.com//job/dublin/qc-senior-manager-external-qc/43991/77425092000",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -433,12 +433,6 @@
             "company": "Astrazeneca",
             "title": "Senior Director, Supply Chain Services. Dublin or Cork",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-services-dublin-or-cork/43991/77414912656",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QC Senior Analyst",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-senior-analyst/43991/77379666896",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -497,6 +491,12 @@
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Site Utility Electical Technician",
+            "application url": "https://jobs.takeda.com//job/dublin/site-utility-electical-technician/1113/78032083104",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "Process Development Engineer (Packaging)",
