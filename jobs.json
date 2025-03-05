@@ -2,6 +2,12 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "QC Metrology & Informatics Chemist",
+            "application link": "https://careers.abbvie.com/en/job/qc-metrology-and-informatics-chemist-in-dublin-county-dublin-jid-11433",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "ME&C EHS Manager - Regional Support",
             "application link": "https://careers.abbvie.com/en/job/me-and-c-ehs-manager-regional-support-in-dublin-county-dublin-jid-12172",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -53,12 +59,6 @@
             "title": "Director, Europe Regulatory Affairs Policy & Intelligence (Flexible Location)",
             "application link": "https://careers.abbvie.com/en/job/director-europe-regulatory-affairs-policy-and-intelligence-flexible-location-in-dublin-county-dublin-jid-12268",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Manufacturing Supervisor",
-            "application link": "https://careers.abbvie.com/en/job/manufacturing-supervisor-in-dublin-county-dublin-jid-12142",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
     "Amgen": [],
@@ -95,12 +95,6 @@
             "company": "Astellas",
             "title": "Project Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445/4951",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
-            "title": "Process Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer-10578/4952",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
@@ -143,25 +137,7 @@
             "company": "Astellas",
             "title": "Quality Assurance for Quality Control",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Quality-Control/5026",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "Senior Process Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Process-Engineer/5029",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "Senior Manufacturing Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Manufacturing-Engineer/5031",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "Senior Systems Engineer",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Systems-Engineer/5032",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
@@ -173,12 +149,6 @@
             "company": "Astellas",
             "title": "Graduate Facilities Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Facilities-Engineer/5103",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
-            "title": "Engineering Graduate",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Graduate/5104",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
@@ -203,31 +173,31 @@
             "company": "Astellas",
             "title": "Graduate Systems Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Systems-Engineer/5115",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Engineering Graduate",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Graduate/5121",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Graduate Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Engineer/5122",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Quality Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Quality-Engineer/5123",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
             "title": "Graduate Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Engineer/5126",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
             "company": "Astellas",
@@ -237,20 +207,8 @@
         },
         {
             "company": "Astellas",
-            "title": "Manufacturing Operations Graduate",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Operations-Graduate/5140",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
-        },
-        {
-            "company": "Astellas",
             "title": "Graduate",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate/5148",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
-        },
-        {
-            "company": "Astellas",
-            "title": "Manufacturing Operations Graduate",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Operations-Graduate/5149",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
@@ -263,28 +221,34 @@
             "company": "Astellas",
             "title": "Quality Control Microbiologist Graduate",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Microbiologist-Graduate/5202",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
             "title": "Summer Student",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Summer-Student/5203",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
             "title": "Senior Onsite Support Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer/5207",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         },
         {
             "company": "Astellas",
             "title": "Senior Onsite Support Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer/5208",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=30"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "Head of Diagnostics Ireland",
+            "application url": "https://careers.astrazeneca.com//job/dublin/head-of-diagnostics-ireland/7684/76020918000",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "QC Compliance Lead (12 month fixed term contract)",
@@ -371,12 +335,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Real World Data Scientist",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-real-world-data-scientist/43991/71675525408",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Nominated Signatory 12 Month FTC",
             "application url": "https://careers.astrazeneca.com//job/dublin/nominated-signatory-12-month-ftc/7684/77690285984",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -385,12 +343,6 @@
             "company": "Astrazeneca",
             "title": "Associate Director, Medical Writing",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-medical-writing/7684/76712037648",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Head of Diagnostics Ireland",
-            "application url": "https://careers.astrazeneca.com//job/dublin/head-of-diagnostics-ireland/7684/76020918000",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -421,12 +373,6 @@
             "company": "Astrazeneca",
             "title": "Knowledge Transfer Lead",
             "application url": "https://careers.astrazeneca.com//job/dublin/knowledge-transfer-lead/43991/77543545040",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QC Senior Manager , External QC",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-senior-manager-external-qc/43991/77425092000",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -469,18 +415,6 @@
             "company": "Astrazeneca",
             "title": "Manager, Development Quality Documentation and Training",
             "application url": "https://careers.astrazeneca.com//job/dublin/manager-development-quality-documentation-and-training/43991/76965611520",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Principal Enterprise Architect, RDU Operations IT",
-            "application url": "https://careers.astrazeneca.com//job/dublin/principal-enterprise-architect-rdu-operations-it/43991/76783056800",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Traceability Manager",
-            "application url": "https://careers.astrazeneca.com//job/dublin/traceability-manager/43991/76695962208",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
