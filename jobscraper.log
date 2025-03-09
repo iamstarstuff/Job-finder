@@ -34,3 +34,582 @@
 2025-03-09 00:12:19,780 - INFO - Completed fetching all job postings.
 2025-03-09 00:12:19,781 - INFO - No new job postings found.
 2025-03-09 00:12:19,782 - INFO - Job data updated successfully.
+2025-03-09 11:30:56,858 - INFO - Starting to fetch all job postings.
+2025-03-09 11:30:56,859 - INFO - Fetching job details for Abbvie.
+2025-03-09 11:30:57,707 - INFO - Fetched 10 jobs for Abbvie.
+2025-03-09 11:30:57,709 - INFO - Fetching job details for Amgen.
+2025-03-09 11:30:58,526 - INFO - Fetched 0 jobs for Amgen.
+2025-03-09 11:30:58,528 - INFO - Fetching job details for APC.
+2025-03-09 11:30:58,717 - INFO - Fetched 2 jobs for APC.
+2025-03-09 11:30:58,719 - INFO - Fetching job details for Astellas.
+2025-03-09 11:31:04,010 - INFO - Fetched 21 jobs for Astellas.
+2025-03-09 11:31:04,012 - INFO - Fetching job details for Astrazeneca.
+2025-03-09 11:31:07,309 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-03-09 11:31:07,311 - INFO - Fetching job details for Takeda.
+2025-03-09 11:31:08,319 - INFO - Fetched 14 jobs for Takeda.
+2025-03-09 11:31:08,321 - INFO - Fetching job details for Vle.
+2025-03-09 11:31:08,606 - INFO - Fetched 3 jobs for Vle.
+2025-03-09 11:31:08,609 - INFO - Completed fetching all job postings.
+2025-03-09 11:31:08,616 - INFO - No new job postings found.
+2025-03-09 11:31:08,618 - INFO - Job data updated successfully.
+2025-03-09 14:42:29,695 - INFO - Starting to fetch all job postings.
+2025-03-09 14:42:29,695 - INFO - Fetching job details for Abbvie.
+2025-03-09 14:42:30,389 - ERROR - Error fetching Abbvie jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:30,389 - INFO - Fetching job details for Amgen.
+2025-03-09 14:42:31,085 - ERROR - Error fetching Amgen jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:31,085 - INFO - Fetching job details for APC.
+2025-03-09 14:42:31,236 - ERROR - Error fetching APC jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:31,237 - INFO - Fetching job details for Astellas.
+2025-03-09 14:42:32,619 - ERROR - Error fetching Astellas jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:32,619 - INFO - Fetching job details for Astrazeneca.
+2025-03-09 14:42:33,542 - ERROR - Error fetching Astrazeneca jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:33,542 - INFO - Fetching job details for Takeda.
+2025-03-09 14:42:33,799 - ERROR - Error fetching Takeda jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:33,799 - INFO - Fetching job details for Vle.
+2025-03-09 14:42:34,048 - ERROR - Error fetching Vle Therapeutics jobs: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:34,048 - INFO - Completed fetching all job postings.
+2025-03-09 14:42:34,048 - INFO - No new job postings found.
+2025-03-09 14:42:34,055 - INFO - Job data updated successfully.
+2025-03-09 14:42:34,055 - ERROR - Job fetching failed for the following companies: Abbvie: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+Amgen: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+APC: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+Astellas: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+Astrazeneca: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+Takeda: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+Vle therapeutics: Couldn't find a tree builder with the features you requested: lxml. Do you need to install a parser library?
+2025-03-09 14:42:35,818 - INFO - Email sent successfully.
+2025-03-09 14:44:55,266 - INFO - Starting to fetch all job postings.
+2025-03-09 14:44:55,266 - INFO - Fetching job details for Abbvie.
+2025-03-09 14:44:56,041 - INFO - Fetched 10 jobs for Abbvie.
+2025-03-09 14:44:56,043 - INFO - Fetching job details for Amgen.
+2025-03-09 14:44:56,643 - INFO - Fetched 0 jobs for Amgen.
+2025-03-09 14:44:56,645 - INFO - Fetching job details for APC.
+2025-03-09 14:44:56,807 - INFO - Fetched 2 jobs for APC.
+2025-03-09 14:44:56,809 - INFO - Fetching job details for Astellas.
+2025-03-09 14:45:01,630 - INFO - Fetched 21 jobs for Astellas.
+2025-03-09 14:45:01,632 - INFO - Fetching job details for Astrazeneca.
+2025-03-09 14:45:04,620 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-03-09 14:45:04,622 - INFO - Fetching job details for Takeda.
+2025-03-09 14:45:04,880 - INFO - Fetched 14 jobs for Takeda.
+2025-03-09 14:45:04,882 - INFO - Fetching job details for Vle.
+2025-03-09 14:45:05,041 - INFO - Fetched 3 jobs for Vle.
+2025-03-09 14:45:05,043 - INFO - Completed fetching all job postings.
+2025-03-09 14:45:05,043 - INFO - New job postings found: 7 companies with new jobs.
+2025-03-09 14:45:06,144 - INFO - Email sent successfully.
+2025-03-09 14:45:06,144 - INFO - Abbvie:
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "Manager, Category Management - Facilities",
+    "application link": "https://careers.abbvie.com/en/job/manager-category-management-facilities-in-dublin-county-dublin-jid-12839",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "QC Metrology & Informatics Chemist",
+    "application link": "https://careers.abbvie.com/en/job/qc-metrology-and-informatics-chemist-in-dublin-county-dublin-jid-11433",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "ME&C EHS Manager - Regional Support",
+    "application link": "https://careers.abbvie.com/en/job/me-and-c-ehs-manager-regional-support-in-dublin-county-dublin-jid-12172",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "Supply Chain Planner",
+    "application link": "https://careers.abbvie.com/en/job/supply-chain-planner-in-dublin-county-dublin-jid-12539",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "Senior Program Manager, Factory of the Future Transformation",
+    "application link": "https://careers.abbvie.com/en/job/senior-program-manager-factory-of-the-future-transformation-in-dublin-county-dublin-jid-11316",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "Supply Chain Brand Manager",
+    "application link": "https://careers.abbvie.com/en/job/supply-chain-brand-manager-in-dublin-county-dublin-jid-10059",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,145 - INFO - {
+    "company": "Abbvie",
+    "title": "Quality Control Laboratory Trainer ( Raw Materials)",
+    "application link": "https://careers.abbvie.com/en/job/quality-control-laboratory-trainer-raw-materials-in-dublin-county-dublin-jid-12368",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,146 - INFO - {
+    "company": "Abbvie",
+    "title": "Business Excellence Partner",
+    "application link": "https://careers.abbvie.com/en/job/business-excellence-partner-in-dublin-county-dublin-jid-12351",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,146 - INFO - {
+    "company": "Abbvie",
+    "title": "Director, Product Quality (Aseptic Manufacturing)",
+    "application link": "https://careers.abbvie.com/en/job/director-product-quality-aseptic-manufacturing-in-dublin-county-dublin-jid-10954",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,146 - INFO - {
+    "company": "Abbvie",
+    "title": "Director, Europe Regulatory Affairs Policy & Intelligence (Flexible Location)",
+    "application link": "https://careers.abbvie.com/en/job/director-europe-regulatory-affairs-policy-and-intelligence-flexible-location-in-dublin-county-dublin-jid-12268",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2025-03-09 14:45:06,146 - INFO - Amgen:
+2025-03-09 14:45:06,146 - INFO - APC:
+2025-03-09 14:45:06,146 - INFO - {
+    "company": "APC",
+    "title": "Project Manager",
+    "application link": "https://talent.sage.hr/jobs/68881e36-ad2f-4a19-99d3-6f7b535d9c7c",
+    "closing_date": "28th February 2025",
+    "job portal link": "https://approcess.com/careers"
+}
+2025-03-09 14:45:06,146 - INFO - {
+    "company": "APC",
+    "title": "Administrative Coordinator",
+    "application link": "https://talent.sage.hr/jobs/d1e9b8b7-6db5-4cdf-aabb-4ee8df6c19fa",
+    "closing_date": "14th March 2025",
+    "job portal link": "https://approcess.com/careers"
+}
+2025-03-09 14:45:06,146 - INFO - Astellas:
+2025-03-09 14:45:06,146 - INFO - {
+    "company": "Astellas",
+    "title": "Head, Clinical Data Enablement, Data Aggregation",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-CDE-Data-Aggregation/4789",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Project Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Engineer-10445/4951",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Systems Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Systems-Engineer-10180/4954",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Manufacturing Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Manufacturing-Engineer-10222/4955",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Facilities Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Facilities-Engineer/4997",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Control Biochemist",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Biochemist/5024",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Assurance Validation",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Validation/5025",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Assurance for Quality Control",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Quality-Control/5026",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Graduate Facilities Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Facilities-Engineer/5103",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,147 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Assurance Specialist",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Specialist/5119",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Quality-Engineer/5123",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Graduate Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate-Engineer/5126",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Graduate",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Graduate/5148",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Validation Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Validation-Engineer/5200",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Control Microbiologist Graduate",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Microbiologist-Graduate/5202",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Summer Student",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Summer-Student/5203",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Senior Onsite Support Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer/5207",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Senior Onsite Support Engineer",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Senior-Onsite-Support-Engineer/5208",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Customer Engagement & Value Partner",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Customer-Engagement-Value-Partner/5231",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,148 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Operations Graduate",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Quality-Operations-Graduate/5247",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astellas",
+    "title": "Quality Control Chemist – Dublin",
+    "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QC-Chemist/5249",
+    "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+}
+2025-03-09 14:45:06,149 - INFO - Astrazeneca:
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director of Manufacturing Science & Commercial Supply",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-of-manufacturing-science-and-commercial-supply/7684/73770591024",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director, Accounting 18 Month FTC",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-accounting-18-month-ftc/43991/78396890688",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Manager, External Manufacturing & Operations",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-external-manufacturing-and-operations/43991/78396890608",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "QC Analyst (12 month fixed term contract)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/qc-analyst-12-month-fixed-term-contract/43991/78379080368",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Head of QA Operations, BDS",
+    "application url": "https://careers.astrazeneca.com//job/dublin/head-of-qa-operations-bds/43991/77748701184",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "QC Senior Analyst - APICOM",
+    "application url": "https://careers.astrazeneca.com//job/dublin/qc-senior-analyst-apicom/7684/76312511152",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,149 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Principal Enterprise Architect, RDU Operations IT",
+    "application url": "https://careers.astrazeneca.com//job/dublin/principal-enterprise-architect-rdu-operations-it/7684/78231229296",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Nominated Signatory 12 Month FTC",
+    "application url": "https://careers.astrazeneca.com//job/dublin/nominated-signatory-12-month-ftc/7684/77690285984",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Director, Supply Chain, Strategic Product Lead",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-strategic-product-lead/43991/78304145136",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Key Account Manager",
+    "application url": "https://careers.astrazeneca.com//job/dublin/key-account-manager/7684/78200022624",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Specialist, Supplier Quality - Materials (FTC)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-specialist-supplier-quality-materials-ftc/43991/76679771312",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Manager - Supplier Quality (Materials)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-supplier-quality-materials/43991/76679771328",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Manager, Medical Writing",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-medical-writing/43991/76313292560",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Quality Assurance Lead - APICOM",
+    "application url": "https://careers.astrazeneca.com//job/dublin/quality-assurance-lead-apicom/7684/78256722256",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director, Medical Writing",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-medical-writing/7684/76712037648",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "BDS Manufacturing Support Training Specialist",
+    "application url": "https://careers.astrazeneca.com//job/dublin/bds-manufacturing-support-training-specialist/43991/78263550448",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Head of Diagnostics Ireland",
+    "application url": "https://careers.astrazeneca.com//job/dublin/head-of-diagnostics-ireland/7684/76020918000",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,150 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director Development Quality Documentation and Training",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-development-quality-documentation-and-training/43991/78211778336",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "QC Compliance Lead (12 month fixed term contract)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/qc-compliance-lead-12-month-fixed-term-contract/43991/78027645968",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Manager, Statutory Reporting (15 months Fixed term)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/manager-statutory-reporting-15-months-fixed-term/43991/78009805728",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Clinical Product Quality Lead",
+    "application url": "https://careers.astrazeneca.com//job/dublin/clinical-product-quality-lead/43991/77963367136",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director, Quality Systems - Change Control",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-quality-systems-change-control/43991/77886710480",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director, Medical Writing",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-medical-writing/43991/77886710448",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Director, Medical Writing",
+    "application url": "https://careers.astrazeneca.com//job/dublin/director-medical-writing/43991/77886710432",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Manager, IT Business Partner (Supply Chain)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-it-business-partner-supply-chain/43991/71349833792",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Manufacturing Associate IV",
+    "application url": "https://careers.astrazeneca.com//job/athlone/manufacturing-associate-iv/43991/77875481040",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Associate Director, Supply Chain Business Intelligence Reporting & Analytics",
+    "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-supply-chain-business-intelligence-reporting-and-analytics/43991/77655050864",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "QA Specialist (12 months fixed term)",
+    "application url": "https://careers.astrazeneca.com//job/athlone/qa-specialist-12-months-fixed-term/43991/77608141712",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,151 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Director, Supply Chain S&OP Strategy",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-s-and-op-strategy/43991/77589893744",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Customer Operations Specialist (24 month fixed term)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/customer-operations-specialist-24-month-fixed-term/43991/77560948016",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Director, Supply Chain Services. Dublin or Cork",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-services-dublin-or-cork/43991/77414912656",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Manager, Medical Writing",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-medical-writing/43991/77270165488",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Regulatory Affairs Management Director, Regulatory Science & Execution",
+    "application url": "https://careers.astrazeneca.com//job/dublin/regulatory-affairs-management-director-regulatory-science-and-execution/43991/77241409504",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Head of Indication Repurposing and Innovation, Alexion",
+    "application url": "https://careers.astrazeneca.com//job/dublin/head-of-indication-repurposing-and-innovation-alexion/43991/76131942528",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2025-03-09 14:45:06,152 - INFO - Takeda:
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Takeda",
+    "title": "Site Utility Electical Technician",
+    "application url": "https://jobs.takeda.com//job/dublin/site-utility-electical-technician/1113/78032083104",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Takeda",
+    "title": "Process Development Engineer (Packaging)",
+    "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-packaging/1113/77337100368",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Takeda",
+    "title": "Packaging Technologist (FTC 11 months)",
+    "application url": "https://jobs.takeda.com//job/dublin/packaging-technologist-ftc-11-months/1113/77319925888",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,152 - INFO - {
+    "company": "Takeda",
+    "title": "Operational Excellence Champion (Lean/OpEx Project Manager)",
+    "application url": "https://jobs.takeda.com//job/wicklow/operational-excellence-champion-lean-opex-project-manager/1113/77281658256",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "Automation Engineer",
+    "application url": "https://jobs.takeda.com//job/wicklow/automation-engineer/1113/77277275376",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "QC Student",
+    "application url": "https://jobs.takeda.com//job/wicklow/qc-student/1113/77058142000",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "External Supply Quality Manager, SM&O External Operations EU",
+    "application url": "https://jobs.takeda.com//job/dublin/external-supply-quality-manager-sm-and-o-external-operations-eu/1113/76963697280",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "Automation Engineer",
+    "application url": "https://jobs.takeda.com//job/wicklow/automation-engineer/1113/74029519744",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "Engineering Student",
+    "application url": "https://jobs.takeda.com//job/dublin/engineering-student/1113/73701421504",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "HR and Administrations Intern",
+    "application url": "https://jobs.takeda.com//job/dublin/hr-and-administrations-intern/1113/72966789824",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "Electrical Engineer",
+    "application url": "https://jobs.takeda.com//job/dublin/electrical-engineer/1113/72586259776",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "Quality Control Analyst",
+    "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst/1113/71728746304",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,153 - INFO - {
+    "company": "Takeda",
+    "title": "Supply Chain & Planning Student",
+    "application url": "https://jobs.takeda.com//job/wicklow/supply-chain-and-planning-student/1113/71253028880",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,154 - INFO - {
+    "company": "Takeda",
+    "title": "HR & Communications Student",
+    "application url": "https://jobs.takeda.com//job/wicklow/hr-and-communications-student/1113/71253013200",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2025-03-09 14:45:06,154 - INFO - Vle therapeutics:
+2025-03-09 14:45:06,154 - INFO - {
+    "company": "Vle therapeutics",
+    "title": "Supply Chain logistics Apprenticeship",
+    "closing_date": "Sep 2, 2024",
+    "application url": "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Ftalent.sage.hr%2Fjobs%2F609ecaec-f06e-4284-abe7-e20a18bf4e9f&data=05%7C02%7Criyazul.mohamed%40approcess.com%7C9e8b9639649d4603022608dcbc5f22a4%7C454b1ff5365240d490978f06553e105b%7C0%7C0%7C638592364022668850%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=L6PHnk8ECBp3fTaOiyW5Nt%2Fj68%2BqvQ1o2npM%2Bjwl6L0%3D&reserved=0",
+    "job portal link": "https://www.vletherapeutics.com/careers"
+}
+2025-03-09 14:45:06,154 - INFO - {
+    "company": "Vle therapeutics",
+    "title": "Bioprocess Operator",
+    "closing_date": "Oct 18, 2024",
+    "application url": "https://talent.sage.hr/jobs/4fc148f3-7669-4b70-bb9a-b6f2f4db12a9",
+    "job portal link": "https://www.vletherapeutics.com/careers"
+}
+2025-03-09 14:45:06,154 - INFO - {
+    "company": "Vle therapeutics",
+    "title": "Maintenance Technician - VLE Therapeutics",
+    "closing_date": "Nov 30, 2024",
+    "application url": "https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Flogin.hirelocker.com%2Fapc-ltd%2Fjobs%2F30637%2Fmaintenance-technician-vle-therapeutics-dublin&data=05%7C02%7Criyazul.mohamed%40approcess.com%7C7c4df558697b488cf80b08dd07eb50e3%7C454b1ff5365240d490978f06553e105b%7C0%7C0%7C638675429576104646%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=YxGZxgGoLvpaAN0sEAmF7XJ9dB50058ZFeXoZuEb2Bc%3D&reserved=0",
+    "job portal link": "https://www.vletherapeutics.com/careers"
+}
+2025-03-09 14:45:06,155 - INFO - Job data updated successfully.
