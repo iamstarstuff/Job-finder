@@ -1,0 +1,36 @@
+2025-03-08 23:11:53,290 - INFO - Starting to fetch all job postings.
+2025-03-08 23:11:53,290 - INFO - Fetching job details for Abbvie.
+2025-03-08 23:11:53,986 - INFO - Fetched 10 jobs for Abbvie.
+2025-03-08 23:11:53,988 - INFO - Fetching job details for Amgen.
+2025-03-08 23:11:54,532 - INFO - Fetched 0 jobs for Amgen.
+2025-03-08 23:11:54,535 - INFO - Fetching job details for APC.
+2025-03-08 23:11:54,688 - INFO - Fetched 2 jobs for APC.
+2025-03-08 23:11:54,690 - INFO - Fetching job details for Astellas.
+2025-03-08 23:11:59,375 - INFO - Fetched 21 jobs for Astellas.
+2025-03-08 23:11:59,377 - INFO - Fetching job details for Astrazeneca.
+2025-03-08 23:11:59,985 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-03-08 23:11:59,987 - INFO - Fetching job details for Takeda.
+2025-03-08 23:12:00,229 - INFO - Fetched 14 jobs for Takeda.
+2025-03-08 23:12:00,231 - INFO - Fetching job details for Vle.
+2025-03-08 23:12:00,382 - INFO - Fetched 3 jobs for Vle.
+2025-03-08 23:12:00,384 - INFO - Completed fetching all job postings.
+2025-03-08 23:12:00,385 - INFO - No new job postings found.
+2025-03-08 23:12:00,386 - INFO - Job data updated successfully.
+2025-03-09 00:12:08,227 - INFO - Starting to fetch all job postings.
+2025-03-09 00:12:08,228 - INFO - Fetching job details for Abbvie.
+2025-03-09 00:12:09,174 - INFO - Fetched 10 jobs for Abbvie.
+2025-03-09 00:12:09,176 - INFO - Fetching job details for Amgen.
+2025-03-09 00:12:11,448 - INFO - Fetched 0 jobs for Amgen.
+2025-03-09 00:12:11,450 - INFO - Fetching job details for APC.
+2025-03-09 00:12:11,628 - INFO - Fetched 2 jobs for APC.
+2025-03-09 00:12:11,630 - INFO - Fetching job details for Astellas.
+2025-03-09 00:12:16,501 - INFO - Fetched 21 jobs for Astellas.
+2025-03-09 00:12:16,503 - INFO - Fetching job details for Astrazeneca.
+2025-03-09 00:12:19,180 - INFO - Fetched 34 jobs for Astrazeneca.
+2025-03-09 00:12:19,182 - INFO - Fetching job details for Takeda.
+2025-03-09 00:12:19,463 - INFO - Fetched 14 jobs for Takeda.
+2025-03-09 00:12:19,465 - INFO - Fetching job details for Vle.
+2025-03-09 00:12:19,778 - INFO - Fetched 3 jobs for Vle.
+2025-03-09 00:12:19,780 - INFO - Completed fetching all job postings.
+2025-03-09 00:12:19,781 - INFO - No new job postings found.
+2025-03-09 00:12:19,782 - INFO - Job data updated successfully.
