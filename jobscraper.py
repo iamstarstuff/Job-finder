@@ -441,7 +441,7 @@ def main():
                 smtp_server="smtp.gmail.com",
                 smtp_port=465,
                 smtp_username="barvepratik96@gmail.com",
-                smtp_password="qkgb oxdd etzu zqyj",
+                smtp_password="fnuo ryem rbqa fqas",
             )
             # Print new jobs
             for company, jobs in new_jobs.items():
@@ -470,7 +470,7 @@ def main():
                 smtp_server="smtp.gmail.com",
                 smtp_port=465,
                 smtp_username="barvepratik96@gmail.com",
-                smtp_password="qkgb oxdd etzu zqyj",
+                smtp_password="fnuo ryem rbqa fqas",
             )
 
     except Exception as e:
@@ -485,7 +485,7 @@ def main():
             smtp_server="smtp.gmail.com",
             smtp_port=465,
             smtp_username="barvepratik96@gmail.com",
-            smtp_password="qkgb oxdd etzu zqyj",
+            smtp_password="fnuo ryem rbqa fqas",
         )
 
 
