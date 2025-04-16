@@ -2,6 +2,24 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Senior Manager, External Manufacturing",
+            "application link": "https://careers.abbvie.com/en/job/senior-manager-external-manufacturing-in-dublin-county-dublin-jid-13101",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "QA BMR Reviewer",
+            "application link": "https://careers.abbvie.com/en/job/qa-bmr-reviewer-in-dublin-county-dublin-jid-15315",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "QA Technician",
+            "application link": "https://careers.abbvie.com/en/job/qa-technician-in-dublin-county-dublin-jid-15314",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Supervisor, Laboratory Quality Control",
             "application link": "https://careers.abbvie.com/en/job/supervisor-laboratory-quality-control-in-dublin-county-dublin-jid-15205",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -16,18 +34,6 @@
             "company": "Abbvie",
             "title": "Business Excellence Partner (12 months contract)",
             "application link": "https://careers.abbvie.com/en/job/business-excellence-partner-12-months-contract-in-dublin-county-dublin-jid-12351",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Medical Manager - Immunology",
-            "application link": "https://careers.abbvie.com/en/job/medical-manager-immunology-in-dublin-county-dublin-jid-8895",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Senior Manager - Third Party Manufacturing",
-            "application link": "https://careers.abbvie.com/en/job/senior-manager-third-party-manufacturing-in-dublin-county-dublin-jid-13101",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -52,12 +58,6 @@
             "company": "Abbvie",
             "title": "Affiliate Safety Representative",
             "application link": "https://careers.abbvie.com/en/job/affiliate-safety-representative-in-dublin-county-dublin-jid-13233",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Manager, Category Management - Facilities",
-            "application link": "https://careers.abbvie.com/en/job/manager-category-management-facilities-in-dublin-county-dublin-jid-12839",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
@@ -278,6 +278,30 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
+            "title": "QC Laboratory Apprentice (Athlone)",
+            "application url": "https://careers.astrazeneca.com//job/athlone/qc-laboratory-apprentice-athlone/43991/80119147984",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "QC Laboratory Apprentice (Dublin)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qc-laboratory-apprentice-dublin/43991/80102889488",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Medical Science Liaison - 6 Month Secondment/FTC",
+            "application url": "https://careers.astrazeneca.com//job/dublin/medical-science-liaison-6-month-secondment-ftc/7684/80038897584",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Medical Science Liaison/Medical Advisor - Haematology",
+            "application url": "https://careers.astrazeneca.com//job/dublin/medical-science-liaison-medical-advisor-haematology/7684/80029269088",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Senior Packaging Design Engineer",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-packaging-design-engineer/43991/79922732464",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -334,12 +358,6 @@
             "company": "Astrazeneca",
             "title": "Associate IV Manufacturing -Drug Product",
             "application url": "https://careers.astrazeneca.com//job/athlone/associate-iv-manufacturing-drug-product/43991/77875481040",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Learning Lead - APICOM",
-            "application url": "https://careers.astrazeneca.com//job/dublin/learning-lead-apicom/7684/79191492144",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -404,12 +422,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Manager, IT Business Partner (Supply Chain)",
-            "application url": "https://careers.astrazeneca.com//job/athlone/senior-manager-it-business-partner-supply-chain/43991/71349833792",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Specialist , Technical Services  Drug Product",
             "application url": "https://careers.astrazeneca.com//job/dublin/specialist-technical-services-drug-product/43991/79174330544",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -418,12 +430,6 @@
             "company": "Astrazeneca",
             "title": "Senior Specialist, External Quality (12 months fixed term, FTC)",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-specialist-external-quality-12-months-fixed-term-ftc/43991/79054784848",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior Manager, Supply Chain International Distribution",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-supply-chain-international-distribution/43991/78962497184",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -440,24 +446,18 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Technical Specialist, Upstream Technical Services",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-technical-specialist-upstream-technical-services/43991/78736125280",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Manager, Supply Chain Planning",
             "application url": "https://careers.astrazeneca.com//job/dublin/manager-supply-chain-planning/43991/78729754032",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior director, Supply Chain, Head of International Fulfilment",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-head-of-international-fulfilment/43991/78582508256",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "QC Laboratory Apprentice",
+            "application url": "https://jobs.takeda.com//job/wicklow/qc-laboratory-apprentice/1113/80069491584",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "Quality Control Analyst (FTC 11 months)",
@@ -490,12 +490,6 @@
         },
         {
             "company": "Takeda",
-            "title": "Process Development Engineer (Packaging)",
-            "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-packaging/1113/77337100368",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
             "title": "Automation Engineer",
             "application url": "https://jobs.takeda.com//job/wicklow/automation-engineer/1113/77277275376",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
@@ -504,12 +498,6 @@
             "company": "Takeda",
             "title": "Automation Engineer",
             "application url": "https://jobs.takeda.com//job/wicklow/automation-engineer/1113/74029519744",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Automation Engineer Internship",
-            "application url": "https://jobs.takeda.com//job/wicklow/automation-engineer-internship/1113/72951145824",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         }
     ],
