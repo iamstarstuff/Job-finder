@@ -2,6 +2,12 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Supply Chain Planner",
+            "application link": "https://careers.abbvie.com/en/job/supply-chain-planner-in-dublin-county-dublin-jid-15413",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Senior Manager, External Manufacturing",
             "application link": "https://careers.abbvie.com/en/job/senior-manager-external-manufacturing-in-dublin-county-dublin-jid-13101",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -52,12 +58,6 @@
             "company": "Abbvie",
             "title": "Regional Director Business Technology Solutions – (Sterile Fill Region)",
             "application link": "https://careers.abbvie.com/en/job/regional-director-business-technology-solutions-sterile-fill-region-in-dublin-county-dublin-jid-13007",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Affiliate Safety Representative",
-            "application link": "https://careers.abbvie.com/en/job/affiliate-safety-representative-in-dublin-county-dublin-jid-13233",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         }
     ],
@@ -273,9 +273,27 @@
             "title": "Lead, Finance Business Partner - Dublin Plant",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Lead-Finance-Business-Partner-Dublin-Plant/5423",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
+        },
+        {
+            "company": "Astellas",
+            "title": "Learning & Development LMS Operations Partner",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Learning-Development-LMS-Operations-Partner/5449",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=20"
         }
     ],
     "Astrazeneca": [
+        {
+            "company": "Astrazeneca",
+            "title": "QA Specialist (12 month fixed term contract)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qa-specialist-12-month-fixed-term-contract/43991/74770443824",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Supply Chain International Distribution",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-supply-chain-international-distribution/43991/78962497184",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
         {
             "company": "Astrazeneca",
             "title": "QC Laboratory Apprentice (Athlone)",
@@ -374,18 +392,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "QC Sample Management Supervisor (12 month fixed term contract)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-sample-management-supervisor-12-month-fixed-term-contract/43991/79612274048",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "QC Operations, Senior Specialist",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-operations-senior-specialist/43991/79603140272",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Director, Supply Chain Excellence & Transformation",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-director-supply-chain-excellence-and-transformation/43991/79574718336",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -452,6 +458,12 @@
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Head of DD&T - Bray",
+            "application url": "https://jobs.takeda.com//job/wicklow/head-of-dd-and-t-bray/1113/80122659776",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "QC Laboratory Apprentice",
