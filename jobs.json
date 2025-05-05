@@ -235,12 +235,6 @@
         },
         {
             "company": "Astellas",
-            "title": "Quality Assurance Specialist",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/QA-Specialist/5318",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
-        },
-        {
-            "company": "Astellas",
             "title": "Learning & Development Specialist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Learning-Development-Specialist/5395",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
@@ -466,5 +460,27 @@
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         }
     ],
-    "Vle therapeutics": []
+    "Vle therapeutics": [
+        {
+            "company": "Vle therapeutics",
+            "title": "Quality Control Specialist",
+            "closing_date": "May 31, 2025",
+            "application url": "https://talent.sage.hr/jobs/3a4e3a6a-e474-490d-ad77-fa596e2654f9",
+            "job portal link": "https://www.vletherapeutics.com/careers"
+        },
+        {
+            "company": "Vle therapeutics",
+            "title": "Regulatory Specialist",
+            "closing_date": "May 31, 2025",
+            "application url": "https://talent.sage.hr/jobs/58c9bd8a-1526-4686-b67a-b8962ace7a58",
+            "job portal link": "https://www.vletherapeutics.com/careers"
+        },
+        {
+            "company": "Vle therapeutics",
+            "title": "Senior Quality Assurance QA Specialist - 12 Month Contract",
+            "closing_date": "May 31, 2025",
+            "application url": "https://talent.sage.hr/jobs/8f2f5112-5c16-49de-b379-f1719ac08ad7",
+            "job portal link": "https://www.vletherapeutics.com/careers"
+        }
+    ]
 }
