@@ -2,6 +2,18 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Qualified Person",
+            "application link": "https://careers.abbvie.com/en/job/qualified-person-in-dublin-county-dublin-jid-15985",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
+            "title": "QA Specialist",
+            "application link": "https://careers.abbvie.com/en/job/qa-specialist-in-dublin-county-dublin-jid-15954",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Expression of Interest - AbbVie",
             "application link": "https://careers.abbvie.com/en/job/expression-of-interest-abbvie-in-dublin-county-dublin-jid-15654",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -28,18 +40,6 @@
             "company": "Abbvie",
             "title": "Supply Chain Brand Manager",
             "application link": "https://careers.abbvie.com/en/job/supply-chain-brand-manager-in-dublin-county-dublin-jid-10059",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Customer Experience (Omnichannel) Lead",
-            "application link": "https://careers.abbvie.com/en/job/customer-experience-omnichannel-lead-in-dublin-county-dublin-jid-11731",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Director, Product Quality (Aseptic Manufacturing)",
-            "application link": "https://careers.abbvie.com/en/job/director-product-quality-aseptic-manufacturing-in-dublin-county-dublin-jid-10954",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -261,6 +261,24 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
+            "title": "Senior Manager – Regulatory - Chemistry, Manufacturing, and Controls",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-regulatory-chemistry-manufacturing-and-controls/43991/80752675984",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Nominated Signatory",
+            "application url": "https://careers.astrazeneca.com//job/dublin/nominated-signatory/7684/80360174448",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Medical Writing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-medical-writing/43991/77270165488",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Senior Manager / Auditor",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-auditor/43991/79834964160",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -327,12 +345,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Market Access - Pricing Manager",
-            "application url": "https://careers.astrazeneca.com//job/dublin/market-access-pricing-manager/7684/78659207104",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Vice President, Technical Operations",
             "application url": "https://careers.astrazeneca.com//job/dublin/vice-president-technical-operations/43991/80684057344",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -381,20 +393,8 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Senior Specialist, Development Supply Quality",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-specialist-development-supply-quality/43991/80442744688",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "QA Specialist (12 months fixed term)",
             "application url": "https://careers.astrazeneca.com//job/athlone/qa-specialist-12-months-fixed-term/43991/80386043360",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Nominated Signatory",
-            "application url": "https://careers.astrazeneca.com//job/dublin/nominated-signatory/7684/80360174448",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -405,6 +405,12 @@
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Associate Director Business Excellence",
+            "application url": "https://jobs.takeda.com//job/wicklow/associate-director-business-excellence/1113/80968801840",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "Head of DD&T - Bray",
@@ -419,20 +425,8 @@
         },
         {
             "company": "Takeda",
-            "title": "Quality Control Analyst (FTC 11 months)",
-            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-ftc-11-months/1113/79631462448",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
             "title": "Quality Control Instrumentation Lead Analyst (FTC 18 months)",
             "application url": "https://jobs.takeda.com//job/wicklow/quality-control-instrumentation-lead-analyst-ftc-18-months/1113/78683582912",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Quality Control Analyst  (FTC 11 months)",
-            "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-ftc-11-months/1113/78668097648",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
