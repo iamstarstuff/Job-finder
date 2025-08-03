@@ -2454,3 +2454,147 @@
 2025-08-03 14:00:14,539 - INFO - Completed fetching all job postings.
 2025-08-03 14:00:14,541 - INFO - No new job postings found.
 2025-08-03 14:00:14,544 - INFO - Job data updated successfully.
+2025-08-03 15:00:01,666 - INFO - Starting to fetch all job postings.
+2025-08-03 15:00:01,667 - INFO - Fetching job details for Abbvie.
+2025-08-03 15:00:02,679 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 15:00:02,680 - INFO - Fetching job details for Amgen.
+2025-08-03 15:00:03,376 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 15:00:03,377 - INFO - Fetching job details for APC.
+2025-08-03 15:00:03,826 - INFO - Fetched 2 jobs for APC.
+2025-08-03 15:00:03,828 - INFO - Fetching job details for Astellas.
+2025-08-03 15:00:07,515 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 15:00:07,517 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 15:00:08,587 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 15:00:08,589 - INFO - Fetching job details for Takeda.
+2025-08-03 15:00:09,087 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 15:00:09,089 - INFO - Fetching job details for Vle.
+2025-08-03 15:00:09,400 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 15:00:09,402 - INFO - Completed fetching all job postings.
+2025-08-03 15:00:09,408 - INFO - No new job postings found.
+2025-08-03 15:00:09,410 - INFO - Job data updated successfully.
+2025-08-03 16:00:01,734 - INFO - Starting to fetch all job postings.
+2025-08-03 16:00:01,735 - INFO - Fetching job details for Abbvie.
+2025-08-03 16:00:02,828 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 16:00:02,831 - INFO - Fetching job details for Amgen.
+2025-08-03 16:00:03,525 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 16:00:03,527 - INFO - Fetching job details for APC.
+2025-08-03 16:00:03,999 - INFO - Fetched 2 jobs for APC.
+2025-08-03 16:00:04,001 - INFO - Fetching job details for Astellas.
+2025-08-03 16:00:07,438 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 16:00:07,441 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 16:00:08,521 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 16:00:08,523 - INFO - Fetching job details for Takeda.
+2025-08-03 16:00:09,119 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 16:00:09,121 - INFO - Fetching job details for Vle.
+2025-08-03 16:00:09,446 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 16:00:09,448 - INFO - Completed fetching all job postings.
+2025-08-03 16:00:09,449 - INFO - No new job postings found.
+2025-08-03 16:00:09,457 - INFO - Job data updated successfully.
+2025-08-03 17:00:02,058 - INFO - Starting to fetch all job postings.
+2025-08-03 17:00:02,059 - INFO - Fetching job details for Abbvie.
+2025-08-03 17:00:03,343 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 17:00:03,345 - INFO - Fetching job details for Amgen.
+2025-08-03 17:00:04,144 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 17:00:04,146 - INFO - Fetching job details for APC.
+2025-08-03 17:00:04,648 - INFO - Fetched 2 jobs for APC.
+2025-08-03 17:00:04,650 - INFO - Fetching job details for Astellas.
+2025-08-03 17:00:07,942 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 17:00:07,944 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 17:00:11,288 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 17:00:11,290 - INFO - Fetching job details for Takeda.
+2025-08-03 17:00:12,599 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 17:00:12,601 - INFO - Fetching job details for Vle.
+2025-08-03 17:00:12,956 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 17:00:12,957 - INFO - Completed fetching all job postings.
+2025-08-03 17:00:12,964 - INFO - No new job postings found.
+2025-08-03 17:00:12,965 - INFO - Job data updated successfully.
+2025-08-03 18:00:02,331 - INFO - Starting to fetch all job postings.
+2025-08-03 18:00:02,332 - INFO - Fetching job details for Abbvie.
+2025-08-03 18:00:03,095 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 18:00:03,097 - INFO - Fetching job details for Amgen.
+2025-08-03 18:00:05,532 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 18:00:05,534 - INFO - Fetching job details for APC.
+2025-08-03 18:00:05,744 - INFO - Fetched 2 jobs for APC.
+2025-08-03 18:00:05,746 - INFO - Fetching job details for Astellas.
+2025-08-03 18:00:10,471 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 18:00:10,473 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 18:00:13,150 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 18:00:13,152 - INFO - Fetching job details for Takeda.
+2025-08-03 18:00:14,186 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 18:00:14,188 - INFO - Fetching job details for Vle.
+2025-08-03 18:00:14,519 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 18:00:14,521 - INFO - Completed fetching all job postings.
+2025-08-03 18:00:14,527 - INFO - No new job postings found.
+2025-08-03 18:00:14,530 - INFO - Job data updated successfully.
+2025-08-03 19:00:01,713 - INFO - Starting to fetch all job postings.
+2025-08-03 19:00:01,714 - INFO - Fetching job details for Abbvie.
+2025-08-03 19:00:02,706 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 19:00:02,708 - INFO - Fetching job details for Amgen.
+2025-08-03 19:00:03,437 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 19:00:03,440 - INFO - Fetching job details for APC.
+2025-08-03 19:00:03,652 - INFO - Fetched 2 jobs for APC.
+2025-08-03 19:00:03,654 - INFO - Fetching job details for Astellas.
+2025-08-03 19:00:06,545 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 19:00:06,546 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 19:00:06,978 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 19:00:06,979 - INFO - Fetching job details for Takeda.
+2025-08-03 19:00:07,282 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 19:00:07,284 - INFO - Fetching job details for Vle.
+2025-08-03 19:00:07,590 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 19:00:07,592 - INFO - Completed fetching all job postings.
+2025-08-03 19:00:07,598 - INFO - No new job postings found.
+2025-08-03 19:00:07,600 - INFO - Job data updated successfully.
+2025-08-03 20:00:00,983 - INFO - Starting to fetch all job postings.
+2025-08-03 20:00:00,984 - INFO - Fetching job details for Abbvie.
+2025-08-03 20:00:01,947 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 20:00:01,949 - INFO - Fetching job details for Amgen.
+2025-08-03 20:00:03,938 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 20:00:03,940 - INFO - Fetching job details for APC.
+2025-08-03 20:00:04,150 - INFO - Fetched 2 jobs for APC.
+2025-08-03 20:00:04,152 - INFO - Fetching job details for Astellas.
+2025-08-03 20:00:07,106 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 20:00:07,109 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 20:00:10,014 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 20:00:10,016 - INFO - Fetching job details for Takeda.
+2025-08-03 20:00:10,420 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 20:00:10,422 - INFO - Fetching job details for Vle.
+2025-08-03 20:00:10,721 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 20:00:10,723 - INFO - Completed fetching all job postings.
+2025-08-03 20:00:10,731 - INFO - No new job postings found.
+2025-08-03 20:00:10,734 - INFO - Job data updated successfully.
+2025-08-03 21:00:02,116 - INFO - Starting to fetch all job postings.
+2025-08-03 21:00:02,116 - INFO - Fetching job details for Abbvie.
+2025-08-03 21:00:03,180 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 21:00:03,182 - INFO - Fetching job details for Amgen.
+2025-08-03 21:00:05,014 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 21:00:05,016 - INFO - Fetching job details for APC.
+2025-08-03 21:00:05,245 - INFO - Fetched 2 jobs for APC.
+2025-08-03 21:00:05,247 - INFO - Fetching job details for Astellas.
+2025-08-03 21:00:08,026 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 21:00:08,029 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 21:00:10,307 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 21:00:10,309 - INFO - Fetching job details for Takeda.
+2025-08-03 21:00:10,803 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 21:00:10,805 - INFO - Fetching job details for Vle.
+2025-08-03 21:00:11,105 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 21:00:11,107 - INFO - Completed fetching all job postings.
+2025-08-03 21:00:11,114 - INFO - No new job postings found.
+2025-08-03 21:00:11,116 - INFO - Job data updated successfully.
+2025-08-03 22:00:01,253 - INFO - Starting to fetch all job postings.
+2025-08-03 22:00:01,253 - INFO - Fetching job details for Abbvie.
+2025-08-03 22:00:02,360 - INFO - Fetched 10 jobs for Abbvie.
+2025-08-03 22:00:02,362 - INFO - Fetching job details for Amgen.
+2025-08-03 22:00:03,048 - INFO - Fetched 0 jobs for Amgen.
+2025-08-03 22:00:03,050 - INFO - Fetching job details for APC.
+2025-08-03 22:00:03,270 - INFO - Fetched 2 jobs for APC.
+2025-08-03 22:00:03,272 - INFO - Fetching job details for Astellas.
+2025-08-03 22:00:06,081 - INFO - Fetched 11 jobs for Astellas.
+2025-08-03 22:00:06,083 - INFO - Fetching job details for Astrazeneca.
+2025-08-03 22:00:06,781 - INFO - Fetched 21 jobs for Astrazeneca.
+2025-08-03 22:00:06,783 - INFO - Fetching job details for Takeda.
+2025-08-03 22:00:07,195 - INFO - Fetched 10 jobs for Takeda.
+2025-08-03 22:00:07,197 - INFO - Fetching job details for Vle.
+2025-08-03 22:00:07,471 - INFO - Fetched 3 jobs for Vle.
+2025-08-03 22:00:07,473 - INFO - Completed fetching all job postings.
+2025-08-03 22:00:07,479 - INFO - No new job postings found.
+2025-08-03 22:00:07,482 - INFO - Job data updated successfully.
