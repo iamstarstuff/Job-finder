@@ -418,14 +418,18 @@ def send_email(
         print(f"Failed to send email. Error: {str(e)}")
         logging.error(f"Failed to send email. Error: {str(e)}")
 
+def get_smtp_password():
+    with open("/Users/pratik/Github/Job-finder/smtp_password.txt","r") as f:
+        return f.read().strip()
 
 def main():
     json_file = "/Users/pratik/Github/Job-finder/jobs.json"
+    smtp_password = get_smtp_password()
     try:
         current_jobs, failed_companies = get_all_job_postings()
         previous_jobs = load_previous_jobs(json_file)
         new_jobs = find_new_jobs(previous_jobs, current_jobs)
-
+       
         # If new jobs are found, send an email notification
         if new_jobs:
             logging.info(
@@ -441,7 +445,7 @@ def main():
                 smtp_server="smtp.gmail.com",
                 smtp_port=465,
                 smtp_username="barvepratik96@gmail.com",
-                smtp_password="fnuo ryem rbqa fqas",
+                smtp_password=smtp_password,
             )
             # Print new jobs
             for company, jobs in new_jobs.items():
@@ -470,7 +474,7 @@ def main():
                 smtp_server="smtp.gmail.com",
                 smtp_port=465,
                 smtp_username="barvepratik96@gmail.com",
-                smtp_password="fnuo ryem rbqa fqas",
+                smtp_password=smtp_password,
             )
 
     except Exception as e:
@@ -485,7 +489,7 @@ def main():
             smtp_server="smtp.gmail.com",
             smtp_port=465,
             smtp_username="barvepratik96@gmail.com",
-            smtp_password="fnuo ryem rbqa fqas",
+            smtp_password=smtp_password,
         )
 
 
