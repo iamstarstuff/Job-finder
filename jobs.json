@@ -2,6 +2,12 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Global Labeling Operations Manager",
+            "application link": "https://careers.abbvie.com/en/job/global-labeling-operations-manager-in-dublin-county-dublin-jid-18313",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Global Commercial Quality Systems Manager",
             "application link": "https://careers.abbvie.com/en/job/global-commercial-quality-systems-manager-in-dublin-d-jid-18733",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -16,12 +22,6 @@
             "company": "Abbvie",
             "title": "Qualified Person",
             "application link": "https://careers.abbvie.com/en/job/qualified-person-in-dublin-d-jid-18318",
-            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
-        },
-        {
-            "company": "Abbvie",
-            "title": "Global Labeling Operations Manager",
-            "application link": "https://careers.abbvie.com/en/job/global-labeling-operations-manager-in-dublin-county-dublin-jid-18313",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
         },
         {
@@ -99,12 +99,6 @@
         },
         {
             "company": "Astellas",
-            "title": "Capital Projects Lead, Real Estate & Workplace Experience, Senior Director",
-            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Capital-Projects-Lead/5571",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
-        },
-        {
-            "company": "Astellas",
             "title": "Business Systems Specialist",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Business-Systems-Specialist/5677",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
@@ -143,7 +137,7 @@
             "company": "Astellas",
             "title": "Process Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Process-Engineer/5798",
-            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
         {
             "company": "Astellas",
@@ -161,14 +155,14 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "Qualified Person (12 months Fixed Term)",
-            "application url": "https://careers.astrazeneca.com//job/athlone/qualified-person-12-months-fixed-term/43991/84417808160",
+            "title": "Communications Associate",
+            "application url": "https://careers.astrazeneca.com//job/dublin/communications-associate/7684/84453427808",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
             "company": "Astrazeneca",
-            "title": "Communications Associate",
-            "application url": "https://careers.astrazeneca.com//job/dublin/communications-associate/7684/84453427808",
+            "title": "Qualified Person (12 months Fixed Term)",
+            "application url": "https://careers.astrazeneca.com//job/athlone/qualified-person-12-months-fixed-term/43991/84417808160",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -297,12 +291,6 @@
             "company": "Takeda",
             "title": "Head of EHS",
             "application url": "https://jobs.takeda.com//job/dublin/head-of-ehs/1113/82775646864",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Process Development Laboratory Chemist FTC (30.11.2027)",
-            "application url": "https://jobs.takeda.com//job/dublin/process-development-laboratory-chemist-ftc-30-11-2027/1113/81625366688",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
