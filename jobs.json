@@ -161,6 +161,18 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
+            "title": "Deputy Shift Production Leader Technologist - APICOM",
+            "application url": "https://careers.astrazeneca.com//job/dublin/deputy-shift-production-leader-technologist-apicom/7684/85171292544",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Vice President Diagnostic Innovation and Projects",
+            "application url": "https://careers.astrazeneca.com//job/dublin/vice-president-diagnostic-innovation-and-projects/7684/85165719840",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
             "title": "Medical Advisor - Ireland",
             "application url": "https://careers.astrazeneca.com//job/dublin/medical-advisor-ireland/7684/83232372352",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -227,12 +239,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Key Account Manager",
-            "application url": "https://careers.astrazeneca.com//job/dublin/key-account-manager/7684/82397105248",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Technical Services Specialist",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-technical-services-specialist/43991/82889932272",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -266,15 +272,21 @@
             "title": "Associate Director, Pre-Commercial Launch Lead (GOLT Lead)(12 months fixed term",
             "application url": "https://careers.astrazeneca.com//job/dublin/associate-director-pre-commercial-launch-lead-golt-lead-12-months-fixed-term/43991/84049358720",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Director, Safety, Health and Environment",
-            "application url": "https://careers.astrazeneca.com//job/dublin/director-safety-health-and-environment/43991/84040593728",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
     "Takeda": [
+        {
+            "company": "Takeda",
+            "title": "Tech Transfer Project Manager (FTC 12 months)",
+            "application url": "https://jobs.takeda.com//job/dublin/tech-transfer-project-manager-ftc-12-months/1113/85166866560",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "Validation Specialist ( FTC 12 Months)",
+            "application url": "https://jobs.takeda.com//job/dublin/validation-specialist-ftc-12-months/1113/85156727376",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
         {
             "company": "Takeda",
             "title": "QC Analyst (FTC 12 Months)",
