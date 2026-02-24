@@ -1,0 +1,225 @@
+2026-02-10 08:01:01,619 - INFO - Starting to fetch all job postings.
+2026-02-10 08:01:01,804 - INFO - Fetching job details for Abbvie.
+2026-02-10 08:01:05,124 - INFO - Fetched 8 jobs for Abbvie.
+2026-02-10 08:01:05,125 - INFO - Fetching job details for Amgen.
+2026-02-10 08:01:05,951 - INFO - Fetched 0 jobs for Amgen.
+2026-02-10 08:01:05,953 - INFO - Fetching job details for APC.
+2026-02-10 08:01:06,125 - INFO - Fetched 1 jobs for APC.
+2026-02-10 08:01:06,126 - INFO - Fetching job details for Astellas.
+2026-02-10 08:01:10,978 - INFO - Fetched 21 jobs for Astellas.
+2026-02-10 08:01:10,980 - INFO - Fetching job details for Astrazeneca.
+2026-02-10 08:01:13,238 - INFO - Fetched 21 jobs for Astrazeneca.
+2026-02-10 08:01:13,240 - INFO - Fetching job details for Takeda.
+2026-02-10 08:01:13,612 - INFO - Fetched 15 jobs for Takeda.
+2026-02-10 08:01:13,615 - INFO - Fetching job details for Vle.
+2026-02-10 08:01:13,880 - INFO - Fetched 6 jobs for Vle.
+2026-02-10 08:01:13,882 - INFO - Completed fetching all job postings.
+2026-02-10 08:01:14,039 - INFO - New job postings found: 2 companies with new jobs.
+2026-02-10 08:01:15,907 - INFO - Email sent successfully.
+2026-02-10 08:01:15,907 - INFO - Abbvie:
+2026-02-10 08:01:15,907 - INFO - {
+    "company": "Abbvie",
+    "title": "Production Operator",
+    "application link": "https://careers.abbvie.com/en/job/production-operator-in-dublin-d-jid-24449",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2026-02-10 08:01:15,907 - INFO - Takeda:
+2026-02-10 08:01:15,908 - INFO - {
+    "company": "Takeda",
+    "title": "Complaints Lead",
+    "application url": "https://jobs.takeda.com//job/dublin/complaints-lead/1113/91558123424",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2026-02-10 08:01:15,908 - INFO - {
+    "company": "Takeda",
+    "title": "Quality Control Analyst (FTC - 9 months)",
+    "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-ftc-9-months/1113/91558123104",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2026-02-10 08:01:15,990 - INFO - Job data updated successfully.
+2026-02-10 09:00:02,250 - INFO - Starting to fetch all job postings.
+2026-02-10 09:00:02,251 - INFO - Fetching job details for Abbvie.
+2026-02-10 09:00:03,224 - INFO - Fetched 8 jobs for Abbvie.
+2026-02-10 09:00:03,226 - INFO - Fetching job details for Amgen.
+2026-02-10 09:00:04,072 - INFO - Fetched 0 jobs for Amgen.
+2026-02-10 09:00:04,077 - INFO - Fetching job details for APC.
+2026-02-10 09:00:04,369 - INFO - Fetched 1 jobs for APC.
+2026-02-10 09:00:04,374 - INFO - Fetching job details for Astellas.
+2026-02-10 09:00:10,617 - INFO - Fetched 21 jobs for Astellas.
+2026-02-10 09:00:10,621 - INFO - Fetching job details for Astrazeneca.
+2026-02-10 09:00:11,525 - INFO - Fetched 21 jobs for Astrazeneca.
+2026-02-10 09:00:11,531 - INFO - Fetching job details for Takeda.
+2026-02-10 09:00:12,956 - INFO - Fetched 15 jobs for Takeda.
+2026-02-10 09:00:12,961 - INFO - Fetching job details for Vle.
+2026-02-10 09:00:13,324 - INFO - Fetched 6 jobs for Vle.
+2026-02-10 09:00:13,329 - INFO - Completed fetching all job postings.
+2026-02-10 09:00:13,331 - INFO - No new job postings found.
+2026-02-10 09:00:13,335 - INFO - Job data updated successfully.
+2026-02-10 17:00:02,023 - INFO - Starting to fetch all job postings.
+2026-02-10 17:00:02,023 - INFO - Fetching job details for Abbvie.
+2026-02-10 17:00:02,839 - INFO - Fetched 7 jobs for Abbvie.
+2026-02-10 17:00:02,842 - INFO - Fetching job details for Amgen.
+2026-02-10 17:00:03,579 - INFO - Fetched 0 jobs for Amgen.
+2026-02-10 17:00:03,582 - INFO - Fetching job details for APC.
+2026-02-10 17:00:03,772 - INFO - Fetched 1 jobs for APC.
+2026-02-10 17:00:03,775 - INFO - Fetching job details for Astellas.
+2026-02-10 17:00:09,556 - INFO - Fetched 21 jobs for Astellas.
+2026-02-10 17:00:09,559 - INFO - Fetching job details for Astrazeneca.
+2026-02-10 17:00:12,165 - INFO - Fetched 22 jobs for Astrazeneca.
+2026-02-10 17:00:12,168 - INFO - Fetching job details for Takeda.
+2026-02-10 17:00:13,074 - INFO - Fetched 15 jobs for Takeda.
+2026-02-10 17:00:13,077 - INFO - Fetching job details for Vle.
+2026-02-10 17:00:13,350 - INFO - Fetched 6 jobs for Vle.
+2026-02-10 17:00:13,354 - INFO - Completed fetching all job postings.
+2026-02-10 17:00:13,361 - INFO - New job postings found: 1 companies with new jobs.
+2026-02-10 17:00:14,966 - INFO - Email sent successfully.
+2026-02-10 17:00:14,967 - INFO - Astrazeneca:
+2026-02-10 17:00:14,967 - INFO - {
+    "company": "Astrazeneca",
+    "title": "QC Analyst",
+    "application url": "https://careers.astrazeneca.com//job/dublin/qc-analyst/43991/91576937968",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-10 17:00:14,975 - INFO - Job data updated successfully.
+2026-02-15 15:00:09,633 - INFO - Starting to fetch all job postings.
+2026-02-15 15:00:09,633 - INFO - Fetching job details for Abbvie.
+2026-02-15 15:00:10,403 - INFO - Fetched 8 jobs for Abbvie.
+2026-02-15 15:00:10,405 - INFO - Fetching job details for Amgen.
+2026-02-15 15:00:11,251 - INFO - Fetched 0 jobs for Amgen.
+2026-02-15 15:00:11,252 - INFO - Fetching job details for APC.
+2026-02-15 15:00:11,401 - INFO - Fetched 1 jobs for APC.
+2026-02-15 15:00:11,404 - INFO - Fetching job details for Astellas.
+2026-02-15 15:00:15,011 - INFO - Fetched 20 jobs for Astellas.
+2026-02-15 15:00:15,013 - INFO - Fetching job details for Astrazeneca.
+2026-02-15 15:00:17,019 - INFO - Fetched 23 jobs for Astrazeneca.
+2026-02-15 15:00:17,021 - INFO - Fetching job details for Takeda.
+2026-02-15 15:00:18,298 - INFO - Fetched 13 jobs for Takeda.
+2026-02-15 15:00:18,299 - INFO - Fetching job details for Vle.
+2026-02-15 15:00:18,540 - INFO - Fetched 1 jobs for Vle.
+2026-02-15 15:00:18,541 - INFO - Completed fetching all job postings.
+2026-02-15 15:00:18,587 - INFO - New job postings found: 3 companies with new jobs.
+2026-02-15 15:00:20,140 - INFO - Email sent successfully.
+2026-02-15 15:00:20,141 - INFO - Abbvie:
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Abbvie",
+    "title": "Operations Engineer (Manufacturing)",
+    "application link": "https://careers.abbvie.com/en/job/operations-engineer-manufacturing-in-dublin-county-dublin-jid-24648",
+    "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+}
+2026-02-15 15:00:20,141 - INFO - Astrazeneca:
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Clinical Quality Product Lead",
+    "application url": "https://careers.astrazeneca.com//job/dublin/clinical-quality-product-lead/43991/91683963424",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior CQV Engineer",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-cqv-engineer/43991/91683963328",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Astrazeneca",
+    "title": "QC Incoming Inspection Analyst",
+    "application url": "https://careers.astrazeneca.com//job/dublin/qc-incoming-inspection-analyst/43991/91683963296",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Astrazeneca",
+    "title": "CSV Lead",
+    "application url": "https://careers.astrazeneca.com//job/dublin/csv-lead/43991/91683963104",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Enterprise Process: Senior Manager – Account to Report - 12 Month Secondment",
+    "application url": "https://careers.astrazeneca.com//job/dublin/enterprise-process-senior-manager-account-to-report-12-month-secondment/7684/91683957216",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,141 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Finance & Accounting Graduate",
+    "application url": "https://careers.astrazeneca.com//job/dublin/finance-and-accounting-graduate/43991/91612668016",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,142 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Senior Manager, Accounting (Inventory)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-accounting-inventory/43991/91612667744",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,142 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Warehouse Operator (12 Months Fixed Term)",
+    "application url": "https://careers.astrazeneca.com//job/dublin/warehouse-operator-12-months-fixed-term/43991/91612667632",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,142 - INFO - {
+    "company": "Astrazeneca",
+    "title": "Franchise Manager - Lung",
+    "application url": "https://careers.astrazeneca.com//job/dublin/franchise-manager-lung/7684/90341516096",
+    "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+}
+2026-02-15 15:00:20,142 - INFO - Takeda:
+2026-02-15 15:00:20,142 - INFO - {
+    "company": "Takeda",
+    "title": "Lead Process Scientist, Drug Product (Sr. Manager)",
+    "application url": "https://jobs.takeda.com//job/boston/lead-process-scientist-drug-product-sr-manager/1113/89638132352",
+    "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+}
+2026-02-15 15:00:20,183 - INFO - Job data updated successfully.
+2026-02-15 16:00:01,254 - INFO - Starting to fetch all job postings.
+2026-02-15 16:00:01,255 - INFO - Fetching job details for Abbvie.
+2026-02-15 16:00:02,206 - INFO - Fetched 8 jobs for Abbvie.
+2026-02-15 16:00:02,207 - INFO - Fetching job details for Amgen.
+2026-02-15 16:00:03,162 - INFO - Fetched 0 jobs for Amgen.
+2026-02-15 16:00:03,163 - INFO - Fetching job details for APC.
+2026-02-15 16:00:03,313 - INFO - Fetched 1 jobs for APC.
+2026-02-15 16:00:03,315 - INFO - Fetching job details for Astellas.
+2026-02-15 16:00:06,409 - INFO - Fetched 20 jobs for Astellas.
+2026-02-15 16:00:06,411 - INFO - Fetching job details for Astrazeneca.
+2026-02-15 16:00:08,508 - INFO - Fetched 23 jobs for Astrazeneca.
+2026-02-15 16:00:08,510 - INFO - Fetching job details for Takeda.
+2026-02-15 16:00:08,808 - INFO - Fetched 13 jobs for Takeda.
+2026-02-15 16:00:08,810 - INFO - Fetching job details for Vle.
+2026-02-15 16:00:09,060 - INFO - Fetched 1 jobs for Vle.
+2026-02-15 16:00:09,062 - INFO - Completed fetching all job postings.
+2026-02-15 16:00:09,064 - INFO - No new job postings found.
+2026-02-15 16:00:09,065 - INFO - Job data updated successfully.
+2026-02-15 17:00:02,716 - INFO - Starting to fetch all job postings.
+2026-02-15 17:00:02,717 - INFO - Fetching job details for Abbvie.
+2026-02-15 17:00:03,692 - INFO - Fetched 8 jobs for Abbvie.
+2026-02-15 17:00:03,699 - INFO - Fetching job details for Amgen.
+2026-02-15 17:00:04,408 - INFO - Fetched 0 jobs for Amgen.
+2026-02-15 17:00:04,410 - INFO - Fetching job details for APC.
+2026-02-15 17:00:04,671 - INFO - Fetched 1 jobs for APC.
+2026-02-15 17:00:04,677 - INFO - Fetching job details for Astellas.
+2026-02-15 17:00:08,005 - INFO - Fetched 20 jobs for Astellas.
+2026-02-15 17:00:08,010 - INFO - Fetching job details for Astrazeneca.
+2026-02-15 17:00:08,755 - INFO - Fetched 23 jobs for Astrazeneca.
+2026-02-15 17:00:08,759 - INFO - Fetching job details for Takeda.
+2026-02-15 17:00:09,216 - INFO - Fetched 13 jobs for Takeda.
+2026-02-15 17:00:09,220 - INFO - Fetching job details for Vle.
+2026-02-15 17:00:09,483 - INFO - Fetched 1 jobs for Vle.
+2026-02-15 17:00:09,486 - INFO - Completed fetching all job postings.
+2026-02-15 17:00:09,493 - INFO - No new job postings found.
+2026-02-15 17:00:09,496 - INFO - Job data updated successfully.
+2026-02-15 18:00:01,558 - INFO - Starting to fetch all job postings.
+2026-02-15 18:00:01,559 - INFO - Fetching job details for Abbvie.
+2026-02-15 18:00:02,590 - INFO - Fetched 8 jobs for Abbvie.
+2026-02-15 18:00:02,591 - INFO - Fetching job details for Amgen.
+2026-02-15 18:00:03,563 - INFO - Fetched 0 jobs for Amgen.
+2026-02-15 18:00:03,564 - INFO - Fetching job details for APC.
+2026-02-15 18:00:03,708 - INFO - Fetched 1 jobs for APC.
+2026-02-15 18:00:03,709 - INFO - Fetching job details for Astellas.
+2026-02-15 18:00:06,757 - INFO - Fetched 20 jobs for Astellas.
+2026-02-15 18:00:06,759 - INFO - Fetching job details for Astrazeneca.
+2026-02-15 18:00:07,195 - INFO - Fetched 23 jobs for Astrazeneca.
+2026-02-15 18:00:07,196 - INFO - Fetching job details for Takeda.
+2026-02-15 18:00:07,572 - INFO - Fetched 13 jobs for Takeda.
+2026-02-15 18:00:07,574 - INFO - Fetching job details for Vle.
+2026-02-15 18:00:07,791 - INFO - Fetched 1 jobs for Vle.
+2026-02-15 18:00:07,792 - INFO - Completed fetching all job postings.
+2026-02-15 18:00:07,793 - INFO - No new job postings found.
+2026-02-15 18:00:07,794 - INFO - Job data updated successfully.

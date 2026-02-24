@@ -17,3 +17,5 @@ Failed to send email. Error: (535, b'5.7.8 Username and Password not accepted. F
 Failed to send email. Error: [Errno 60] Operation timed out
 Failed to send email. Error: [Errno 60] Operation timed out
 Failed to send email. Error: [Errno 60] Operation timed out
+Failed to send email. Error: Connection unexpectedly closed: [Errno 65] No route to host
+Failed to send email. Error: [Errno 8] nodename nor servname provided, or not known
