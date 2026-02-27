@@ -2,6 +2,12 @@
     "Abbvie": [
         {
             "company": "Abbvie",
+            "title": "Senior Global MES Engineer",
+            "application link": "https://careers.abbvie.com/en/job/senior-global-mes-engineer-in-dublin-county-dublin-jid-23343",
+            "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
+        },
+        {
+            "company": "Abbvie",
             "title": "Affiliate Safety Representative",
             "application link": "https://careers.abbvie.com/en/job/affiliate-safety-representative-in-dublin-county-dublin-jid-24836",
             "job portal link": "https://careers.abbvie.com/en/jobs?q=&options=&page=1&la=53.3498053&lo=-6.2603097&ln=Dublin,%20Ireland&lr=100"
@@ -47,9 +53,44 @@
     "APC": [
         {
             "company": "APC",
-            "title": "Maintenance Technician",
-            "application link": "https://apc-ltd.hirehive.com/maintenance-technician-south-dublin-nDFlT2",
-            "closing_date": "16th January 2026",
+            "title": "Head of Analytical Chemistry",
+            "application link": "https://talent.sage.hr/jobs/2237a8f2-6130-4d2c-a374-1616e5b80b89",
+            "closing_date": "6th March 2026",
+            "job portal link": "https://approcess.com/careers"
+        },
+        {
+            "company": "APC",
+            "title": "Head of BioAnalytical Sciences",
+            "application link": "https://talent.sage.hr/jobs/59dd51c7-eb37-43d8-8fa7-1339c2966322",
+            "closing_date": "6th March 2026",
+            "job portal link": "https://approcess.com/careers"
+        },
+        {
+            "company": "APC",
+            "title": "Head of Bioprocess Sciences",
+            "application link": "https://talent.sage.hr/jobs/0c784021-da64-4bb1-b2c1-1ed06e862981",
+            "closing_date": "6th March 2026",
+            "job portal link": "https://approcess.com/careers"
+        },
+        {
+            "company": "APC",
+            "title": "Head of Bioprocess and Digital Engineering",
+            "application link": "https://talent.sage.hr/jobs/38f71745-9d60-4428-bdec-b9ad3ce56623",
+            "closing_date": "6th March 2026",
+            "job portal link": "https://approcess.com/careers"
+        },
+        {
+            "company": "APC",
+            "title": "Head of Chemistry",
+            "application link": "https://talent.sage.hr/jobs/7b88c694-36ef-4f26-aa2d-88289448f58c",
+            "closing_date": "6th March 2026",
+            "job portal link": "https://approcess.com/careers"
+        },
+        {
+            "company": "APC",
+            "title": "Associate Director of Large Molecule Medicines (Specific Purpose, Maternity Leave Cover)",
+            "application link": "https://talent.sage.hr/jobs/b18d3319-8b19-4f02-ad5e-4f8f032e0042",
+            "closing_date": "6th March 2026",
             "job portal link": "https://approcess.com/careers"
         }
     ],
@@ -74,7 +115,7 @@
         },
         {
             "company": "Astellas",
-            "title": "Project Lead Engineer, 23-month FTC",
+            "title": "Project Lead Engineer",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Project-Lead-Engineer-23-mth-FTC/6190",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=0"
         },
@@ -116,7 +157,7 @@
         },
         {
             "company": "Astellas",
-            "title": "Production Technician - Fixed Term Contract (until December 2026)",
+            "title": "Production Technician, Fixed Term Contract, Until December 2026",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Engineering-Production-Technician-Pack/6297",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
@@ -146,8 +187,14 @@
         },
         {
             "company": "Astellas",
-            "title": "Head of AICL, QA",
+            "title": "AICL QA Head, Full Time, Onsite",
             "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-of-AICL-QA/6393",
+            "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
+        },
+        {
+            "company": "Astellas",
+            "title": "Head of Kerry QA – Full-Time (Onsite)",
+            "application url": "https://astellas.avature.net/en_GB/careers/JobDetail/Head-of-Kerry-QA/6403",
             "job portal link": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=10"
         },
         {
@@ -160,8 +207,62 @@
     "Astrazeneca": [
         {
             "company": "Astrazeneca",
-            "title": "QC Incoming Inspection Analyst",
-            "application url": "https://careers.astrazeneca.com//job/dublin/qc-incoming-inspection-analyst/43991/91683963296",
+            "title": "Qualified Person (Clinical), External Quality Operations",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qualified-person-clinical-external-quality-operations/43991/92190925152",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Advanced Manufacturing Technician (API) APICOM",
+            "application url": "https://careers.astrazeneca.com//job/dublin/advanced-manufacturing-technician-api-apicom/7684/87033016832",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Manager, Medical Writing",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-medical-writing/43991/88124436784",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Process Engineer",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-process-engineer/43991/92154194736",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Specialist External Drug Substance Manufacturing, Alexion Technical Operations (ATO)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/specialist-external-drug-substance-manufacturing-alexion-technical-operations-ato/43991/88934589520",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Director, Business Analyst",
+            "application url": "https://careers.astrazeneca.com//job/dublin/director-business-analyst/7684/92154135072",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Plant Maintenance Engineer - APICOM",
+            "application url": "https://careers.astrazeneca.com//job/dublin/plant-maintenance-engineer-apicom/7684/90943810496",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "QC Microbiology Analyst (12 month fixed term contract - Shift)",
+            "application url": "https://careers.astrazeneca.com//job/dublin/qc-microbiology-analyst-12-month-fixed-term-contract-shift/43991/92117042304",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Sustainability Utility Engineer",
+            "application url": "https://careers.astrazeneca.com//job/athlone/sustainability-utility-engineer/43991/92117042144",
+            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
+        },
+        {
+            "company": "Astrazeneca",
+            "title": "Senior Real World Data Scientist",
+            "application url": "https://careers.astrazeneca.com//job/dublin/senior-real-world-data-scientist/43991/85950796656",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         },
         {
@@ -214,12 +315,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Advanced Manufacturing Technician (API) APICOM",
-            "application url": "https://careers.astrazeneca.com//job/dublin/advanced-manufacturing-technician-api-apicom/7684/87033016832",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior CSV Engineer",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-csv-engineer/7684/91860712848",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -256,24 +351,6 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "Clinical Quality Product Lead",
-            "application url": "https://careers.astrazeneca.com//job/dublin/clinical-quality-product-lead/43991/91683963424",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Senior CQV Engineer",
-            "application url": "https://careers.astrazeneca.com//job/dublin/senior-cqv-engineer/43991/91683963328",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Enterprise Process: Senior Manager – Account to Report - 12 Month Secondment",
-            "application url": "https://careers.astrazeneca.com//job/dublin/enterprise-process-senior-manager-account-to-report-12-month-secondment/7684/91683957216",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "QC Analyst",
             "application url": "https://careers.astrazeneca.com//job/dublin/qc-analyst/43991/91576937968",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
@@ -292,34 +369,34 @@
         },
         {
             "company": "Astrazeneca",
-            "title": "MCS Lead Automation Engineer – BDS MCS",
-            "application url": "https://careers.astrazeneca.com//job/dublin/mcs-lead-automation-engineer-bds-mcs/43991/91084766256",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
             "title": "Senior Manager, GFS (Global Financial Services) Controlling Ireland",
             "application url": "https://careers.astrazeneca.com//job/dublin/senior-manager-gfs-global-financial-services-controlling-ireland/43991/91155491520",
-            "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
-        },
-        {
-            "company": "Astrazeneca",
-            "title": "Quality Assurance Manager (12 months fixed term)",
-            "application url": "https://careers.astrazeneca.com//job/dublin/quality-assurance-manager-12-months-fixed-term/43991/91226591728",
             "job portal link": "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
         }
     ],
     "Takeda": [
         {
             "company": "Takeda",
-            "title": "CSV Engineer ( FTC 12 Months)",
+            "title": "Human Resources and Administration Student",
+            "application url": "https://jobs.takeda.com//job/dublin/human-resources-and-administration-student/1113/91850395152",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "QC Analyst (FTC 12 Months)",
+            "application url": "https://jobs.takeda.com//job/dublin/qc-analyst-ftc-12-months/1113/92133626400",
+            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
+        },
+        {
+            "company": "Takeda",
+            "title": "CSV Engineer (FTC 12 Months)",
             "application url": "https://jobs.takeda.com//job/dublin/csv-engineer-ftc-12-months/1113/92095123616",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
             "company": "Takeda",
-            "title": "Process Development Engineer (Manufacturing)- FTC 18 Months",
-            "application url": "https://jobs.takeda.com//job/dublin/process-development-engineer-manufacturing-ftc-18-months/1113/92059207328",
+            "title": "Manufacturing Process Engineer (FTC 18 Months)",
+            "application url": "https://jobs.takeda.com//job/dublin/manufacturing-process-engineer-ftc-18-months/1113/92059207328",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
@@ -336,19 +413,13 @@
         },
         {
             "company": "Takeda",
-            "title": "Human Resources and Administration Student",
-            "application url": "https://jobs.takeda.com//job/dublin/human-resources-and-administration-student/1113/91850395152",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Instrumentation & Calibration Engineer",
+            "title": "Instrumentation and Calibration Engineer",
             "application url": "https://jobs.takeda.com//job/dublin/instrumentation-and-calibration-engineer/1113/91841195248",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
             "company": "Takeda",
-            "title": "Quality Control Analyst (FTC - 9 months)",
+            "title": "Quality Control Analyst (FTC 9 months)",
             "application url": "https://jobs.takeda.com//job/wicklow/quality-control-analyst-ftc-9-months/1113/91558123104",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
@@ -368,12 +439,6 @@
             "company": "Takeda",
             "title": "Supply Chain & Planning Student",
             "application url": "https://jobs.takeda.com//job/wicklow/supply-chain-and-planning-student/1113/86586013472",
-            "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
-        },
-        {
-            "company": "Takeda",
-            "title": "Operational Excellence Champion",
-            "application url": "https://jobs.takeda.com//job/wicklow/operational-excellence-champion/1113/89200177664",
             "job portal link": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2"
         },
         {
