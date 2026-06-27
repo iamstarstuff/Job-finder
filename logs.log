@@ -19,3 +19,4 @@ Failed to send email. Error: [Errno 60] Operation timed out
 Failed to send email. Error: [Errno 60] Operation timed out
 Failed to send email. Error: Connection unexpectedly closed: [Errno 65] No route to host
 Failed to send email. Error: [Errno 8] nodename nor servname provided, or not known
+Failed to send email. Error: Connection unexpectedly closed: [Errno 60] Operation timed out
