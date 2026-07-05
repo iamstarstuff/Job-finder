@@ -23,10 +23,10 @@ AMGEN_PAGE2 = b"<h4><a href='/irl/jobs/j2'>Engineer II</a></h4>"
 
 VLE_HTML = b"""<div class="table-content">
 <p class="job-description">Scientist</p>
-<a class="careers-link" href="https://vle.example/apply/1">Apply</a>
+<a class="careers-link" href="/apply/1">Apply</a>
 </div>"""
 
-ASTELLAS_PAGE1 = b'<h3 class="article__header__text__title"><a href="https://astellas.example/j1">Director QA</a></h3>'
+ASTELLAS_PAGE1 = b'<h3 class="article__header__text__title"><a href="/careers/j1">Director QA</a></h3>'
 ASTELLAS_EMPTY = b"<div></div>"
 
 
@@ -73,6 +73,7 @@ def test_vle():
     fake = FakeSession({"https://www.vletherapeutics.com/careers": FakeResponse(VLE_HTML)})
     jobs = scrapers.vle(fake)
     assert jobs[0].title == "Scientist"
+    assert jobs[0].url == "https://www.vletherapeutics.com/apply/1"
     assert jobs[0].closing_date is None or jobs[0].closing_date == "N/A"
 
 
@@ -82,6 +83,7 @@ def test_astellas_paginates_by_offset():
                         base + "10": FakeResponse(ASTELLAS_EMPTY)})
     jobs = scrapers.astellas(fake)
     assert jobs[0].title == "Director QA"
+    assert jobs[0].url == "https://astellas.avature.net/careers/j1"
 
 
 def test_registry_contains_all_companies():

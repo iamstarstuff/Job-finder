@@ -123,7 +123,7 @@ def vle(session) -> List[Job]:
         jobs.append(Job(
             "Vle therapeutics",
             block.find("p", class_="job-description").text.strip(),
-            block.find("a", class_="careers-link")["href"],
+            urljoin(URLS["Vle therapeutics"], block.find("a", class_="careers-link")["href"]),
             URLS["Vle therapeutics"],
             closing.text.strip() if closing else None,
         ))
@@ -140,7 +140,7 @@ def astellas(session) -> List[Job]:
         if not tiles:
             break
         for tile in tiles:
-            jobs.append(Job("Astellas", tile.text.strip(), tile.find("a")["href"], url))
+            jobs.append(Job("Astellas", tile.text.strip(), urljoin(url, tile.find("a")["href"]), url))
         offset += 10
     return jobs
 
