@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Overview</h2>
+<div class="cards">
+  <div class="card"><div class="num">{{ overview.active_jobs }}</div><div class="label">Active jobs</div></div>
+  <div class="card"><div class="num">{{ overview.new_this_week }}</div><div class="label">New this week</div></div>
+  <div class="card"><div class="num">{{ overview.total_jobs_seen }}</div><div class="label">Total ever seen</div></div>
+  <div class="card"><div class="num">{{ overview.companies }}</div><div class="label">Companies</div></div>
+  <div class="card"><div class="num">{{ overview.emails_sent }}</div><div class="label">Emails sent</div></div>
+</div>
+
+<h3>Last run</h3>
+<table>
+  <tr><th>Started</th><th>Finished</th><th>Jobs</th><th>New</th><th>Failures</th></tr>
+  {% if overview.last_run %}
+  <tr>
+    <td>{{ overview.last_run.started_at }}</td>
+    <td>{{ overview.last_run.finished_at or "running…" }}</td>
+    <td>{{ overview.last_run.total_jobs }}</td>
+    <td>{{ overview.last_run.new_jobs }}</td>
+    <td>{{ overview.last_run.failed_companies or "{}" }}</td>
+  </tr>
+  {% else %}<tr><td colspan="5">No runs yet.</td></tr>{% endif %}
+</table>
+
+<h3>Jobs per company</h3>
+<table>
+  <tr><th>Company</th><th>Active</th><th>Total seen</th></tr>
+  {% for row in per_company %}
+  <tr><td>{{ row.company }}</td><td>{{ row.active }}</td><td>{{ row.total }}</td></tr>
+  {% endfor %}
+</table>
+
+{% if lifespans %}
+<h3>Median days a posting stays up</h3>
+<table>
+  <tr><th>Company</th><th>Median days</th></tr>
+  {% for row in lifespans %}
+  <tr><td>{{ row.company }}</td><td>{{ row.median_days }}</td></tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

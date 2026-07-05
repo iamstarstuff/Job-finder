@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Job history</h2>
+<form class="filters" method="get" action="/jobs">
+  <select name="company">
+    <option value="">All companies</option>
+    {% for c in companies %}
+    <option value="{{ c }}" {{ "selected" if c == company }}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <input type="text" name="q" placeholder="Search titles…" value="{{ q }}">
+  <label><input type="checkbox" name="active" value="1" {{ "checked" if active == "1" }}> Active only</label>
+  <button type="submit">Filter</button>
+</form>
+<table>
+  <tr><th>Company</th><th>Title</th><th>First seen</th><th>Status</th><th></th></tr>
+  {% for job in jobs %}
+  <tr>
+    <td>{{ job.company }}</td>
+    <td>{{ job.title }}</td>
+    <td>{{ job.first_seen[:10] }}</td>
+    <td><span class="pill {{ 'on' if job.is_active else 'off' }}">
+        {{ "active" if job.is_active else "closed" }}</span></td>
+    <td>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener">Apply</a>{% endif %}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No jobs match.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

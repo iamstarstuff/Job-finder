@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Email history</h2>
+<div class="cards">
+  {% for s in stats %}
+  <div class="card">
+    <div class="num">{{ s.ok }}/{{ s.total }}</div>
+    <div class="label">{{ s.kind }} emails delivered</div>
+  </div>
+  {% endfor %}
+</div>
+<table>
+  <tr><th>Sent at</th><th>Kind</th><th>Subject</th><th>Recipients</th><th>Status</th></tr>
+  {% for e in emails %}
+  <tr>
+    <td>{{ e.sent_at }}</td><td>{{ e.kind }}</td><td>{{ e.subject }}</td>
+    <td>{{ e.recipients }}</td>
+    <td><span class="pill {{ 'on' if e.success else 'off' }}">
+        {{ "sent" if e.success else "failed" }}</span>
+        {% if e.error %} — {{ e.error }}{% endif %}</td>
+  </tr>
+  {% else %}<tr><td colspan="5">No emails yet.</td></tr>{% endfor %}
+</table>
+{% endblock %}

@@ -1,4 +1,11 @@
 smtp_password.txt
 ScrapeJobs.ipynb
+jobfinder.db*
+jobscraper.log*
+logs.log
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
 /docs
 .claude/
