@@ -2,3 +2,5 @@ requests
 beautifulsoup4
 lxml
 certifi
+flask
+pytest
