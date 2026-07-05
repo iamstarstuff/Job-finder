@@ -30,6 +30,13 @@ def test_categorize_titles():
     assert analytics.categorize("Senior Research Scientist") == "R&D / Science"
     assert analytics.categorize("Regulatory Affairs Manager") == "Regulatory"
     assert analytics.categorize("Something Odd") == "Other"
+    # Regression: word-boundary fixes for "it", "hr", "account"
+    assert analytics.categorize("Credit Analyst") == "Other"
+    assert analytics.categorize("Unit Manager") == "Other"
+    assert analytics.categorize("Accountant") == "HR / Finance / Admin"
+    assert analytics.categorize("IT Support Engineer") == "Engineering"
+    assert analytics.categorize("IT Support Specialist") == "IT / Digital"
+    assert analytics.categorize("HR Business Partner") == "HR / Finance / Admin"
 
 
 def test_jobs_per_company(tmp_path):

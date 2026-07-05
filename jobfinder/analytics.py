@@ -15,10 +15,10 @@ CATEGORY_KEYWORDS = [
     ("Manufacturing / Ops", ["manufacturing", "production", "operator",
                              "operations", "warehouse", "supply chain",
                              "logistics", "packaging"]),
-    ("IT / Digital", ["it ", "digital", "data", "software", "system"]),
-    ("Commercial", ["sales", "marketing", "commercial", "account",
+    ("IT / Digital", [" it ", "digital", "data", "software", "system"]),
+    ("Commercial", ["sales", "marketing", "commercial", " account ",
                     "business development", "product specialist"]),
-    ("HR / Finance / Admin", ["hr", "human resources", "finance", "accountant",
+    ("HR / Finance / Admin", [" hr ", "human resources", "finance", "accountant",
                               "administrat", "payroll", "legal"]),
 ]
 
