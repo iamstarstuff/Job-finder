@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+import re
+import unicodedata
 from collections import OrderedDict
 from typing import List
 from urllib.parse import urljoin
@@ -97,21 +99,53 @@ def takeda(session) -> List[Job]:
     return jobs
 
 
+AMGEN_API = "https://prod-search-api.jobsyn.org/api/v1/solr/search"
+AMGEN_BASE = "https://www.amgen.jobs"
+# The site's own Nuxt bundle builds job urls as
+# `/${slugify(location_exact)}/${title_slug}/${guid}/job/`; slugify normalizes
+# to NFD, strips diacritics/quotes, then joins \w+ chunks with "-".
+
+
+def _amgen_slugify(text: str) -> str:
+    normalized = unicodedata.normalize("NFD", text)
+    stripped = "".join(c for c in normalized if unicodedata.category(c) != "Mn")
+    stripped = re.sub(r"[\"’+:/]", "", stripped)
+    words = re.findall(r"\w+", stripped)
+    return "-".join(w.lower() for w in words)
+
+
 def amgen(session) -> List[Job]:
     jobs = []
-    url = URLS["Amgen"]
-    while url:
-        soup = _soup(fetch(session, url))
-        for h4 in soup.find_all("h4"):
-            a = h4.find("a")
-            if a is None:
+    page = 1
+    while True:
+        resp = fetch(
+            session, AMGEN_API,
+            params={"location": "Ireland", "page": page},
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Origin": "www.amgen.jobs",
+            },
+        )
+        data = resp.json()
+        batch = data.get("jobs", [])
+        if not batch:
+            break
+        for item in batch:
+            title = item.get("title_exact", "").strip()
+            if not title:
                 continue
-            jobs.append(Job(
-                "Amgen", h4.text.strip(),
-                urljoin("https://www.amgen.jobs", a["href"]),
-                URLS["Amgen"],
-            ))
-        url = _follow_next(soup, url)
+            path = "/{}/{}/{}/job/".format(
+                _amgen_slugify(item.get("location_exact", "")),
+                item.get("title_slug", ""),
+                item.get("guid", ""),
+            )
+            jobs.append(Job("Amgen", title, urljoin(AMGEN_BASE, path), URLS["Amgen"]))
+        pagination = data.get("pagination", {})
+        total = pagination.get("total", 0)
+        if len(jobs) >= total or not pagination.get("has_more_pages", False):
+            break
+        page += 1
     return jobs
 
 

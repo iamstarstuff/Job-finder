@@ -17,9 +17,28 @@ AZ_EMPTY = b"<div>no results</div>"
 
 TAKEDA_HTML = b'<a data-job-id="1" href="job/tak-1"><h2 class="title">Process Lead</h2></a>'
 
-AMGEN_PAGE1 = b"""<h4><a href="/irl/jobs/j1">Engineer I</a></h4>
-<a class="next" href="/irl/jobs/?page=2">Next</a>"""
-AMGEN_PAGE2 = b"<h4><a href='/irl/jobs/j2'>Engineer II</a></h4>"
+def _amgen_response(jobs, total, page, total_pages):
+    return FakeResponse(json_data={
+        "jobs": jobs,
+        "pagination": {
+            "has_more_pages": page < total_pages,
+            "offset": (page - 1) * 10,
+            "page": page,
+            "page_size": 10,
+            "total": total,
+            "total_pages": total_pages,
+        },
+    })
+
+
+AMGEN_JOB1 = {
+    "title_exact": "Engineer I", "title_slug": "engineer-i",
+    "guid": "GUID1", "location_exact": "Dublin, IRL",
+}
+AMGEN_JOB2 = {
+    "title_exact": "Engineer II", "title_slug": "engineer-ii",
+    "guid": "GUID2", "location_exact": "Cork, IRL",
+}
 
 VLE_HTML = b"""<div class="table-content">
 <p class="job-description">Scientist</p>
@@ -60,13 +79,49 @@ def test_takeda():
     assert jobs[0].url == "https://jobs.takeda.com/job/tak-1"
 
 
-def test_amgen_follows_next_link():
+def test_amgen_parses_and_paginates_jobsyn_api():
+    responses = iter([
+        _amgen_response([AMGEN_JOB1], total=2, page=1, total_pages=2),
+        _amgen_response([AMGEN_JOB2], total=2, page=2, total_pages=2),
+    ])
+
+    class Seq:
+        calls = []
+
+        def get(self, url, **kwargs):
+            self.calls.append((url, kwargs))
+            return next(responses)
+
+    session = Seq()
+    jobs = scrapers.amgen(session)
+    assert [j.title for j in jobs] == ["Engineer I", "Engineer II"]
+    assert jobs[0].url == (
+        "https://www.amgen.jobs/dublin-irl/engineer-i/GUID1/job/"
+    )
+    assert jobs[1].url == (
+        "https://www.amgen.jobs/cork-irl/engineer-ii/GUID2/job/"
+    )
+    assert jobs[0].portal_url == scrapers.URLS["Amgen"]
+    # X-Origin header required by the jobsyn API (400 without it, live-verified)
+    assert session.calls[0][1]["headers"]["X-Origin"] == "www.amgen.jobs"
+    assert session.calls[0][1]["params"]["page"] == 1
+    assert session.calls[1][1]["params"]["page"] == 2
+
+
+def test_amgen_stops_on_empty_batch():
     fake = FakeSession({
-        "https://www.amgen.jobs/irl/jobs/?page=2": FakeResponse(AMGEN_PAGE2),
-        "https://www.amgen.jobs/irl/jobs/": FakeResponse(AMGEN_PAGE1),
+        "https://prod-search-api.jobsyn.org/api/v1/solr/search": FakeResponse(
+            json_data={
+                "jobs": [],
+                "pagination": {
+                    "has_more_pages": False, "offset": 0, "page": 1,
+                    "page_size": 10, "total": 0, "total_pages": 0,
+                },
+            }
+        ),
     })
     jobs = scrapers.amgen(fake)
-    assert [j.title for j in jobs] == ["Engineer I", "Engineer II"]
+    assert jobs == []
 
 
 def test_vle():
