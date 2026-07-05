@@ -127,3 +127,38 @@ def test_pfizer_parses_and_paginates_workday_api():
 
 def test_pfizer_in_registry():
     assert "Pfizer" in scrapers.SCRAPERS
+
+
+def test_bms_parses_eightfold_api():
+    fake = FakeSession({
+        "https://jobs.bms.com/api/apply/v2/jobs": FakeResponse(json_data={
+            "count": 1,
+            "positions": [{"name": "Associate Director QA",
+                           "canonicalPositionUrl": "https://jobs.bms.com/careers/job/1"}],
+        }),
+    })
+    jobs = scrapers.bms(fake)
+    assert jobs[0].title == "Associate Director QA"
+    assert jobs[0].url == "https://jobs.bms.com/careers/job/1"
+
+
+def test_msd_parses_phenom_api():
+    fake = FakeSession({
+        "https://jobs.msd.com/widgets": FakeResponse(json_data={
+            "refineSearch": {"totalHits": 1, "data": {"jobs": [
+                {"title": "Bioprocess Engineer",
+                 "applyUrl": "https://jobs.msd.com/job/123"},
+            ]}},
+        }),
+    })
+    jobs = scrapers.msd(fake)
+    assert jobs[0].title == "Bioprocess Engineer"
+    assert jobs[0].url == "https://jobs.msd.com/job/123"
+
+
+def test_bms_and_msd_in_registry():
+    assert "MSD" in scrapers.SCRAPERS
+    # BMS is implemented but deliberately excluded from the registry: the live
+    # Eightfold API rejects non-browser sessions (401/403 "Not authorized for
+    # PCSX"). See .superpowers/sdd/task-8-report.md.
+    assert "BMS" not in scrapers.SCRAPERS

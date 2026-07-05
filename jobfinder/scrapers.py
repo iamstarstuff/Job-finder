@@ -178,6 +178,67 @@ def pfizer(session) -> List[Job]:
     return jobs
 
 
+BMS_API = "https://jobs.bms.com/api/apply/v2/jobs"
+BMS_PORTAL = "https://jobs.bms.com/careers?location=ireland"
+
+
+def bms(session) -> List[Job]:
+    jobs = []
+    start = 0
+    num = 20
+    while True:
+        resp = fetch(session, BMS_API, params={
+            "domain": "bms.com", "location": "Ireland",
+            "start": start, "num": num,
+        })
+        data = resp.json()
+        positions = data.get("positions", [])
+        for pos in positions:
+            jobs.append(Job(
+                "BMS", pos.get("name", "").strip(),
+                pos.get("canonicalPositionUrl", ""),
+                BMS_PORTAL,
+            ))
+        start += len(positions)
+        if not positions or start >= data.get("count", 0):
+            break
+    return jobs
+
+
+MSD_API = "https://jobs.msd.com/widgets"
+MSD_PORTAL = "https://jobs.msd.com/gb/en/ireland-job-search"
+
+
+def _msd_payload(offset: int, size: int) -> dict:
+    return {
+        "lang": "en", "deviceType": "desktop", "country": "gb",
+        "pageName": "search-results", "ddoKey": "refineSearch",
+        "sortBy": "", "subsearch": "", "from": offset, "jobs": True,
+        "counts": True, "all_fields": ["category", "country", "state", "city", "type"],
+        "size": size, "clearAll": False, "jdsource": "facets",
+        "isSliderEnable": False, "pageId": "page10", "siteType": "external",
+        "keywords": "", "global": True,
+        "selected_fields": {"country": ["Ireland"]}, "locationData": {},
+    }
+
+
+def msd(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    size = 20
+    while True:
+        resp = fetch(session, MSD_API, method="post", json=_msd_payload(offset, size))
+        payload = resp.json().get("refineSearch", {})
+        batch = payload.get("data", {}).get("jobs", [])
+        for item in batch:
+            url = item.get("applyUrl") or item.get("jobUrl") or ""
+            jobs.append(Job("MSD", item.get("title", "").strip(), url, MSD_PORTAL))
+        offset += len(batch)
+        if not batch or offset >= payload.get("totalHits", 0):
+            break
+    return jobs
+
+
 SCRAPERS = OrderedDict([
     ("APC", apc),
     ("Abbvie", abbvie),
@@ -187,4 +248,6 @@ SCRAPERS = OrderedDict([
     ("Vle therapeutics", vle),
     ("Astellas", astellas),
     ("Pfizer", pfizer),
+    # BMS excluded: Eightfold API returns 401 without browser session; see task-8 report
+    ("MSD", msd),
 ])
