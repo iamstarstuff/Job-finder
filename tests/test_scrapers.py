@@ -186,14 +186,18 @@ def test_pfizer_in_registry():
 
 def test_bms_parses_eightfold_api():
     fake = FakeSession({
-        "https://jobs.bms.com/api/apply/v2/jobs": FakeResponse(json_data={
-            "count": 1,
-            "positions": [{"name": "Associate Director QA",
-                           "canonicalPositionUrl": "https://jobs.bms.com/careers/job/1"}],
+        "https://jobs.bms.com/api/pcsx/search": FakeResponse(json_data={
+            "status": 200,
+            "data": {
+                "count": 1,
+                "positions": [{"name": "Associate Director QA",
+                               "positionUrl": "/careers/job/1"}],
+            },
         }),
     })
     jobs = scrapers.bms(fake)
     assert jobs[0].title == "Associate Director QA"
+    # relative positionUrl made absolute
     assert jobs[0].url == "https://jobs.bms.com/careers/job/1"
 
 
@@ -216,8 +220,4 @@ def test_msd_parses_phenom_api():
 
 
 def test_bms_and_msd_in_registry():
-    assert "MSD" in scrapers.SCRAPERS
-    # BMS is implemented but deliberately excluded from the registry: the live
-    # Eightfold API rejects non-browser sessions (401/403 "Not authorized for
-    # PCSX"). See .superpowers/sdd/task-8-report.md.
-    assert "BMS" not in scrapers.SCRAPERS
+    assert {"BMS", "MSD"} <= set(scrapers.SCRAPERS)

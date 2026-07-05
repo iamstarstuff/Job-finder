@@ -8,14 +8,10 @@ for continuous monitoring.
 
 ## Features
 
-- Scrapes job postings from **9 companies**: APC, Abbvie, Astrazeneca, Takeda,
-  Amgen, Vle Therapeutics, Astellas, Pfizer, and MSD (see `SCRAPERS` in
-  `jobfinder/scrapers.py`).
-  A tenth scraper, **BMS**, is implemented and unit-tested but disabled by
-  default — BMS's Eightfold-powered API returns 401/403 without a real
-  browser session, so it isn't reliable from a plain HTTP client. See the
-  comment above the `SCRAPERS` registry in `jobfinder/scrapers.py` for
-  details.
+- Scrapes job postings from **10 companies**: APC, Abbvie, Astrazeneca, Takeda,
+  Amgen, Vle Therapeutics, Astellas, Pfizer, BMS, and MSD (see `SCRAPERS` in
+  `jobfinder/scrapers.py`). Pfizer, BMS, MSD, and Amgen use their sites'
+  JSON APIs since those career pages render with JavaScript.
 - Stores all job data in a local SQLite database (`jobfinder.db`) instead of
   a flat JSON file, tracking first/last-seen timestamps and active status per
   job.

@@ -212,25 +212,27 @@ def pfizer(session) -> List[Job]:
     return jobs
 
 
-BMS_API = "https://jobs.bms.com/api/apply/v2/jobs"
-BMS_PORTAL = "https://jobs.bms.com/careers?location=ireland"
+# Eightfold "pcsx" search API — the /api/apply/v2/jobs path 403s, but this
+# endpoint (the one the careers SPA itself calls) works anonymously.
+BMS_API = "https://jobs.bms.com/api/pcsx/search"
+BMS_BASE = "https://jobs.bms.com"
+BMS_PORTAL = "https://jobs.bms.com/careers?domain=bms.com&location=Ireland"
 
 
 def bms(session) -> List[Job]:
     jobs = []
     start = 0
-    num = 20
     while True:
         resp = fetch(session, BMS_API, params={
-            "domain": "bms.com", "location": "Ireland",
-            "start": start, "num": num,
+            "domain": "bms.com", "query": "", "location": "Ireland",
+            "start": start, "sort_by": "distance", "filter_include_remote": 1,
         })
-        data = resp.json()
+        data = resp.json().get("data", {})
         positions = data.get("positions", [])
         for pos in positions:
             jobs.append(Job(
                 "BMS", pos.get("name", "").strip(),
-                pos.get("canonicalPositionUrl", ""),
+                urljoin(BMS_BASE, pos.get("positionUrl", "")),
                 BMS_PORTAL,
             ))
         start += len(positions)
@@ -285,6 +287,6 @@ SCRAPERS = OrderedDict([
     ("Vle therapeutics", vle),
     ("Astellas", astellas),
     ("Pfizer", pfizer),
-    # BMS excluded: Eightfold API returns 401 without browser session; see task-8 report
+    ("BMS", bms),
     ("MSD", msd),
 ])
