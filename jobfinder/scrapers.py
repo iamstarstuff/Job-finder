@@ -266,6 +266,9 @@ def msd(session) -> List[Job]:
         batch = payload.get("data", {}).get("jobs", [])
         for item in batch:
             url = item.get("applyUrl") or item.get("jobUrl") or ""
+            # applyUrl points at the application form; link the listing page instead
+            if url.endswith("/apply"):
+                url = url[: -len("/apply")]
             jobs.append(Job("MSD", item.get("title", "").strip(), url, MSD_PORTAL))
         offset += len(batch)
         if not batch or offset >= payload.get("totalHits", 0):

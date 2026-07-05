@@ -200,15 +200,19 @@ def test_bms_parses_eightfold_api():
 def test_msd_parses_phenom_api():
     fake = FakeSession({
         "https://jobs.msd.com/widgets": FakeResponse(json_data={
-            "refineSearch": {"totalHits": 1, "data": {"jobs": [
+            "refineSearch": {"totalHits": 2, "data": {"jobs": [
                 {"title": "Bioprocess Engineer",
-                 "applyUrl": "https://jobs.msd.com/job/123"},
+                 "applyUrl": "https://jobs.msd.com/job/123/apply"},
+                {"title": "QA Specialist",
+                 "applyUrl": "https://jobs.msd.com/job/456"},
             ]}},
         }),
     })
     jobs = scrapers.msd(fake)
     assert jobs[0].title == "Bioprocess Engineer"
+    # /apply suffix stripped so the link lands on the listing page
     assert jobs[0].url == "https://jobs.msd.com/job/123"
+    assert jobs[1].url == "https://jobs.msd.com/job/456"
 
 
 def test_bms_and_msd_in_registry():
