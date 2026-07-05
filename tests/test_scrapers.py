@@ -100,3 +100,30 @@ def test_scrapers_do_not_swallow_errors():
         assert False, "should raise"
     except Exception:
         pass
+
+
+def _wd_response(postings, total):
+    return FakeResponse(json_data={"total": total, "jobPostings": postings})
+
+
+def test_pfizer_parses_and_paginates_workday_api():
+    page1 = [{"title": "Senior Scientist", "externalPath": "/job/Dublin/Senior-Scientist_1"}]
+    page2 = [{"title": "QA Manager", "externalPath": "/job/Cork/QA-Manager_2"}]
+    responses = iter([_wd_response(page1, 2), _wd_response(page2, 2)])
+
+    class Seq:
+        calls = []
+        def post(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.pfizer(Seq())
+    assert [j.title for j in jobs] == ["Senior Scientist", "QA Manager"]
+    assert jobs[0].url == (
+        "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers"
+        "/job/Dublin/Senior-Scientist_1"
+    )
+
+
+def test_pfizer_in_registry():
+    assert "Pfizer" in scrapers.SCRAPERS

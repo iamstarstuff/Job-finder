@@ -145,6 +145,39 @@ def astellas(session) -> List[Job]:
     return jobs
 
 
+PFIZER_API = "https://pfizer.wd1.myworkdayjobs.com/wday/cxs/pfizer/PfizerCareers/jobs"
+PFIZER_BASE = "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers"
+# Facet GUID for Ireland, taken from the original careers URL
+PFIZER_FACETS = {"Location_Country": ["04a05835925f45b3a59406a2a6b72c8a"]}
+
+
+def pfizer(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, PFIZER_API, method="post", json={
+            "appliedFacets": PFIZER_FACETS,
+            "limit": limit,
+            "offset": offset,
+            "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            if not posting.get("title"):
+                continue
+            jobs.append(Job(
+                "Pfizer", posting["title"],
+                PFIZER_BASE + posting.get("externalPath", ""),
+                PFIZER_BASE,
+            ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
 SCRAPERS = OrderedDict([
     ("APC", apc),
     ("Abbvie", abbvie),
@@ -153,4 +186,5 @@ SCRAPERS = OrderedDict([
     ("Amgen", amgen),
     ("Vle therapeutics", vle),
     ("Astellas", astellas),
+    ("Pfizer", pfizer),
 ])
