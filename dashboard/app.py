@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# allow running as a script: python dashboard/app.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from flask import Flask, g, jsonify, render_template, request
 
 from jobfinder import analytics, config, storage

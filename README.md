@@ -105,6 +105,8 @@ crontab -e
 python dashboard/app.py
 ```
 
+`python -m dashboard.app` also works if you prefer running it as a module.
+
 Then open http://127.0.0.1:5050. Pages:
 
 - `/` — overview stats (active jobs, jobs per company, median days active).

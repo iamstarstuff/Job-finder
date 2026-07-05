@@ -21,7 +21,7 @@
     <td>{{ job.first_seen[:10] }}</td>
     <td><span class="pill {{ 'on' if job.is_active else 'off' }}">
         {{ "active" if job.is_active else "closed" }}</span></td>
-    <td>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank">Apply</a>{% endif %}</td>
+    <td>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener">Apply</a>{% endif %}</td>
   </tr>
   {% else %}
   <tr><td colspan="5">No jobs match.</td></tr>

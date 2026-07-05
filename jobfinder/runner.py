@@ -69,16 +69,30 @@ def setup_logging() -> None:
 
 def main() -> None:
     setup_logging()
-    now = datetime.now().isoformat(timespec="seconds")
-    conn = storage.connect(config.DB_PATH)
-    migrated = storage.migrate_legacy_json(conn, config.LEGACY_JOBS_JSON, now)
-    if migrated:
-        log.info("Migrated %d jobs from legacy jobs.json", migrated)
-    session = build_session()
-    result = run_scrape(conn, session, now)
-    # Email notifications are wired in Task 6 (emailer module).
-    from jobfinder import emailer  # local import; module exists after Task 6
-    emailer.send_run_notifications(conn, result)
+    try:
+        now = datetime.now().isoformat(timespec="seconds")
+        conn = storage.connect(config.DB_PATH)
+        migrated = storage.migrate_legacy_json(conn, config.LEGACY_JOBS_JSON, now)
+        if migrated:
+            log.info("Migrated %d jobs from legacy jobs.json", migrated)
+        session = build_session()
+        result = run_scrape(conn, session, now)
+        # Email notifications are wired in Task 6 (emailer module).
+        from jobfinder import emailer  # local import; module exists after Task 6
+        emailer.send_run_notifications(conn, result)
+    except Exception as exc:  # pipeline-wide safety net: never crash silently
+        log.exception("Unhandled error in scraper run: %s", exc)
+        try:
+            from html import escape
+
+            from jobfinder import emailer
+            emailer.send_email(
+                "Job Scraper Crash",
+                f"<pre>{escape(str(exc))}</pre>",
+                config.ERROR_RECIPIENTS,
+            )
+        except Exception:
+            log.exception("Failed to send crash notification email")
 
 
 if __name__ == "__main__":
