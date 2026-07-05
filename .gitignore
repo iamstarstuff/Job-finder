@@ -1,6 +1,6 @@
 smtp_password.txt
 ScrapeJobs.ipynb
-jobfinder.db
+jobfinder.db*
 jobscraper.log*
 logs.log
 .DS_Store
