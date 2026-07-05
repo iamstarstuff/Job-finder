@@ -65,6 +65,28 @@ def create_app(db_path=None) -> Flask:
     def api_categories():
         return jsonify(analytics.category_breakdown(get_conn()))
 
+    @app.route("/analytics")
+    def analytics_page():
+        return render_template("analytics.html")
+
+    @app.route("/emails")
+    def emails_page():
+        conn = get_conn()
+        rows = conn.execute(
+            "SELECT * FROM emails ORDER BY id DESC LIMIT 200").fetchall()
+        stats = conn.execute(
+            """SELECT kind, COUNT(*) total, SUM(success) ok
+               FROM emails GROUP BY kind""").fetchall()
+        return render_template("emails.html", emails=rows, stats=stats)
+
+    @app.route("/logs")
+    def logs_page():
+        try:
+            lines = config.LOG_PATH.read_text().splitlines()[-300:]
+        except FileNotFoundError:
+            lines = ["(no log file yet)"]
+        return render_template("logs.html", lines=lines)
+
     return app
 
 

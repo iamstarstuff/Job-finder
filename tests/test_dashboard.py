@@ -38,3 +38,19 @@ def test_api_endpoints_return_json(client):
         resp = client.get(path)
         assert resp.status_code == 200
         assert resp.is_json
+
+
+def test_analytics_page(client):
+    resp = client.get("/analytics")
+    assert resp.status_code == 200
+    assert b"chart" in resp.data.lower()
+
+
+def test_emails_page(client):
+    resp = client.get("/emails")
+    assert resp.status_code == 200
+
+
+def test_logs_page_missing_file_is_handled(client):
+    resp = client.get("/logs")
+    assert resp.status_code == 200

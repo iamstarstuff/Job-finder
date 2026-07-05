@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Log tail (last 300 lines)</h2>
+<pre class="log">{% for line in lines %}{{ line }}
+{% endfor %}</pre>
+{% endblock %}
