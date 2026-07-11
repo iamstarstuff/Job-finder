@@ -12,7 +12,7 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 SMTP_USERNAME = "barvepratik96@gmail.com"
 FROM_EMAIL = SMTP_USERNAME
-ALERT_RECIPIENTS = ["barvepratik96@gmail.com"]  # DEV: switch back to ["vaidehipatil2011@gmail.com"] at merge
+ALERT_RECIPIENTS = ["vaidehipatil2011@gmail.com"]
 ERROR_RECIPIENTS = ["barvepratik96@gmail.com"]
 
 REQUEST_TIMEOUT = 20  # seconds
