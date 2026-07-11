@@ -443,3 +443,216 @@ def test_gsk_parses_and_paginates_workday_api():
 
 def test_gsk_in_registry():
     assert "GSK" in scrapers.SCRAPERS
+
+
+def _alkermes_response(reqs, total):
+    return FakeResponse(json_data={"items": [{
+        "TotalJobsCount": total,
+        "requisitionList": reqs,
+    }]})
+
+
+def test_alkermes_parses_and_paginates_oracle_recruiting_cloud_api():
+    responses = iter([
+        _alkermes_response(
+            [{"Id": "13992", "Title": "Lead, GMP Auditor"},
+             {"Id": "13993", "Title": "Sr Financial Analyst"}],
+            total=3,
+        ),
+        _alkermes_response([{"Id": "14001", "Title": "QA Specialist"}], total=3),
+    ])
+
+    class Seq:
+        calls = []
+        def get(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.alkermes(Seq())
+    assert [j.title for j in jobs] == ["Lead, GMP Auditor", "Sr Financial Analyst", "QA Specialist"]
+    assert jobs[0].url == (
+        "https://hbap.fa.us1.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/13992"
+    )
+    assert jobs[0].portal_url == scrapers.ALKERMES_PORTAL
+
+
+def test_alkermes_in_registry():
+    assert "Alkermes" in scrapers.SCRAPERS
+
+
+def _teva_response(positions, count):
+    return FakeResponse(json_data={"positions": positions, "count": count})
+
+
+def test_teva_parses_and_paginates_eightfold_api():
+    responses = iter([
+        _teva_response(
+            [{"name": "Associate Director Global Quality Compliance TORCH",
+              "canonicalPositionUrl": "https://www.careers.teva/careers/job/563602812978494"}],
+            count=2,
+        ),
+        _teva_response(
+            [{"name": "Site Microbiologist",
+              "canonicalPositionUrl": "https://www.careers.teva/careers/job/563602812102826"}],
+            count=2,
+        ),
+    ])
+
+    class Seq:
+        calls = []
+        def get(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    session = Seq()
+    jobs = scrapers.teva(session)
+    assert [j.title for j in jobs] == [
+        "Associate Director Global Quality Compliance TORCH", "Site Microbiologist",
+    ]
+    assert jobs[0].url == "https://www.careers.teva/careers/job/563602812978494"
+    assert session.calls[0]["params"]["location"] == "Ireland"
+
+
+def test_teva_in_registry():
+    assert "Teva" in scrapers.SCRAPERS
+
+
+def test_viatris_parses_and_paginates_workday_api_with_country_facet():
+    # This tenant's "total" is only trustworthy on page 1 -- page 2 reports
+    # total=0 live even though postings keep coming, so the second page's
+    # (bogus) total=0 must NOT stop the loop early; only the cached
+    # first-page total (2) should be used to decide when to stop.
+    page1 = [{"title": "Manufacturing Operator",
+              "externalPath": "/job/Damastown-Dublin-Ireland/Manufacturing-Operator_R5671425"}]
+    page2 = [{"title": "Director Global Regulatory Compliance",
+              "externalPath": "/job/Northern-Cross-Dublin-Ireland/Director-Regulatory-Compliance_R5665632"}]
+    responses = iter([_wd_response(page1, 2), _wd_response(page2, 0)])
+
+    class Seq:
+        calls = []
+        def post(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    session = Seq()
+    jobs = scrapers.viatris(session)
+    assert [j.title for j in jobs] == ["Manufacturing Operator", "Director Global Regulatory Compliance"]
+    assert jobs[0].url == (
+        "https://viatris.wd5.myworkdayjobs.com/en-US/External"
+        "/job/Damastown-Dublin-Ireland/Manufacturing-Operator_R5671425"
+    )
+    # tenant-specific facet key is "Country", not "Location_Country" (verified live)
+    assert session.calls[0]["json"]["appliedFacets"] == {"Country": ["04a05835925f45b3a59406a2a6b72c8a"]}
+
+
+def test_viatris_in_registry():
+    assert "Viatris" in scrapers.SCRAPERS
+
+
+GRIFOLS_PAGE1 = b"""<span class="paginationLabel">Results <b>1 \xe2\x80\x93 2</b> of <b>3</b></span>
+<table>
+<tbody>
+<tr class="data-row">
+    <td class="colTitle"><span class="jobTitle hidden-phone">
+        <a href="/job/Dublin-Site-Procurement-Senior-Specialist/1393405333/" class="jobTitle-link">Site Procurement Senior Specialist</a>
+    </span></td>
+</tr>
+<tr class="data-row">
+    <td class="colTitle"><span class="jobTitle hidden-phone">
+        <a href="/job/Dublin-Calibration-Engineer/1395411333/" class="jobTitle-link">Calibration Engineer</a>
+    </span></td>
+</tr>
+</tbody>
+</table>"""
+
+GRIFOLS_PAGE2 = b"""<span class="paginationLabel">Results <b>3 \xe2\x80\x93 3</b> of <b>3</b></span>
+<table>
+<tbody>
+<tr class="data-row">
+    <td class="colTitle"><span class="jobTitle hidden-phone">
+        <a href="/job/Dublin-Clinical-Research-Associate/1387026233/" class="jobTitle-link">Clinical Research Associate</a>
+    </span></td>
+</tr>
+</tbody>
+</table>"""
+
+
+def test_grifols_paginates_successfactors_job2web_site():
+    fake = FakeSession({
+        scrapers.GRIFOLS_SEARCH + "2": FakeResponse(GRIFOLS_PAGE2),
+        scrapers.GRIFOLS_SEARCH + "0": FakeResponse(GRIFOLS_PAGE1),
+    })
+    jobs = scrapers.grifols(fake)
+    assert [j.title for j in jobs] == [
+        "Site Procurement Senior Specialist", "Calibration Engineer", "Clinical Research Associate",
+    ]
+    assert jobs[0].url == "https://jobsearch.grifols.com/job/Dublin-Site-Procurement-Senior-Specialist/1393405333/"
+    assert jobs[0].portal_url == scrapers.GRIFOLS_PORTAL
+
+
+def test_grifols_in_registry():
+    assert "Grifols" in scrapers.SCRAPERS
+
+
+def test_leo_pharma_returns_empty_when_no_ireland_postings():
+    # Real observed shape: LEO Pharma currently has zero open Ireland roles,
+    # and the SuccessFactors site omits the results table entirely (no
+    # paginationLabel, no data-row) rather than rendering a "0 results" page.
+    fake = FakeSession({scrapers.LEO_SEARCH + "0": FakeResponse(b"<div>no results</div>")})
+    jobs = scrapers.leo_pharma(fake)
+    assert jobs == []
+
+
+LEO_SINGLE_PAGE = b"""<span class="paginationLabel">Results <b>1 \xe2\x80\x93 1</b> of <b>1</b></span>
+<table>
+<tbody>
+<tr class="data-row">
+    <td class="colTitle"><span class="jobTitle hidden-phone">
+        <a href="/job/Dublin-Clinical-Research-Associate/1387026233/" class="jobTitle-link">Clinical Research Associate</a>
+    </span></td>
+</tr>
+</tbody>
+</table>"""
+
+
+def test_leo_pharma_parses_rows_when_present():
+    # Same SuccessFactors job2web markup as Grifols, verified live to be the
+    # identical platform -- exercised here in case Leo Pharma later posts an
+    # Irish role.
+    fake = FakeSession({scrapers.LEO_SEARCH + "0": FakeResponse(LEO_SINGLE_PAGE)})
+    jobs = scrapers.leo_pharma(fake)
+    assert jobs[0].title == "Clinical Research Associate"
+    assert jobs[0].company == "Leo Pharma"
+    assert jobs[0].url == "https://jobs.leo-pharma.com/job/Dublin-Clinical-Research-Associate/1387026233/"
+
+
+def test_leo_pharma_in_registry():
+    assert "Leo Pharma" in scrapers.SCRAPERS
+
+
+ICON_PAGE1 = b"""<a class="attrax-vacancy-tile__title" href="/job/contract-analyst-i-in-ireland-dublin-jid-52013">Contract Analyst I</a>
+<a class="attrax-vacancy-tile__title" href="/job/site-payment-analyst-in-regional-great-britain-northern-ireland-jid-51915">Site Payment Analyst</a>"""
+
+ICON_PAGE2 = b"<div>no more results</div>"
+
+
+def test_icon_filters_out_northern_ireland_and_paginates():
+    # ICON posts globally; q=Ireland keyword search also returns Northern
+    # Ireland roles (UK) and unrelated jobs whose descriptions merely
+    # mention Ireland -- verified live. Only the URL slug's "-in-ireland-"
+    # marker reliably identifies genuine Republic-of-Ireland postings.
+    fake = FakeSession({
+        scrapers.ICON_SEARCH + "2": FakeResponse(ICON_PAGE2),
+        scrapers.ICON_SEARCH + "1": FakeResponse(ICON_PAGE1),
+    })
+    jobs = scrapers.icon(fake)
+    assert [j.title for j in jobs] == ["Contract Analyst I"]
+    assert jobs[0].url == "https://careers.iconplc.com/job/contract-analyst-i-in-ireland-dublin-jid-52013"
+
+
+def test_icon_in_registry():
+    assert "ICON" in scrapers.SCRAPERS
+
+
+def test_batch_c_registry_contains_all_companies():
+    assert {"Alkermes", "Teva", "Viatris", "Grifols", "Leo Pharma", "ICON"} <= set(scrapers.SCRAPERS)

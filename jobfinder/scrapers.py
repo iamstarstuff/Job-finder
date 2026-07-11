@@ -488,6 +488,246 @@ def gsk(session) -> List[Job]:
     return jobs
 
 
+# Alkermes' careers.alkermes.com redirects to an Oracle Recruiting Cloud (Fusion
+# HCM Candidate Experience) tenant, not any of the ATS patterns in the brief's
+# discovery list -- verified live: the redirect target's <base> tag exposes
+# data-apibaseurl="https://hbap.fa.us1.oraclecloud.com". Its REST API
+# (hcmRestApi/resources/latest/recruitingCEJobRequisitions) is callable
+# anonymously with no auth headers. The "LOCATIONS" facet's country-level
+# entries were fetched once to find "Ireland" -> id 300000000191040
+# (verified live: 2 hits, both Dublin).
+ALKERMES_API = "https://hbap.fa.us1.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+ALKERMES_JOB_BASE = "https://hbap.fa.us1.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job"
+ALKERMES_PORTAL = "https://careers.alkermes.com/"
+ALKERMES_IRELAND_FACET = "300000000191040"
+
+
+def alkermes(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 25
+    while True:
+        resp = fetch(session, ALKERMES_API, params={
+            "onlyData": "true",
+            "expand": "requisitionList",
+            "finder": (
+                "findReqs;siteNumber=CX_1,facetsList=LOCATIONS,"
+                f"limit={limit},offset={offset},"
+                f"selectedLocationsFacet={ALKERMES_IRELAND_FACET}"
+            ),
+        })
+        item = resp.json()["items"][0]
+        total = item.get("TotalJobsCount", 0)
+        reqs = item.get("requisitionList") or []
+        for req in reqs:
+            title = (req.get("Title") or "").strip()
+            if not title:
+                continue
+            jobs.append(Job(
+                "Alkermes", title,
+                f"{ALKERMES_JOB_BASE}/{req['Id']}",
+                ALKERMES_PORTAL,
+            ))
+        offset += len(reqs)
+        if not reqs or offset >= total:
+            break
+    return jobs
+
+
+# Teva's www.tevapharm.com/careers/ redirects to the Eightfold-hosted
+# www.careers.teva/careers -- same ATS family as bms(), but the "pcsx" search
+# endpoint bms() uses 403s here ("PCSX is not enabled for this user", verified
+# live). The underlying Eightfold widget itself calls /api/apply/v2/jobs
+# (the endpoint that 403s for BMS) which works anonymously for this domain.
+TEVA_API = "https://www.careers.teva/api/apply/v2/jobs"
+TEVA_PORTAL = "https://www.careers.teva/careers?location=Ireland"
+
+
+def teva(session) -> List[Job]:
+    jobs = []
+    start = 0
+    while True:
+        resp = fetch(session, TEVA_API, params={
+            "domain": "tevapharm.com", "query": "", "location": "Ireland", "start": start,
+        })
+        data = resp.json()
+        positions = data.get("positions", [])
+        for pos in positions:
+            title = (pos.get("name") or "").strip()
+            if not title:
+                continue
+            jobs.append(Job(
+                "Teva", title,
+                pos.get("canonicalPositionUrl", ""),
+                TEVA_PORTAL,
+            ))
+        start += len(positions)
+        if not positions or start >= data.get("count", 0):
+            break
+    return jobs
+
+
+# Viatris' www.viatris.ie/en-ie/careers links to a Workday tenant
+# (viatris.wd5.myworkdayjobs.com/External) -- same pattern as pfizer()/
+# gilead(). Unlike Pfizer, the appliedFacets key is "Country" not
+# "Location_Country" (verified live: posting a "Location_Country" facet
+# 400s; the tenant's own facets response names the field "Country"). The
+# GUID in the site's own career-page link ("...?Country=04a058...") is
+# confirmed live as Ireland (61 hits).
+# This tenant's "total" field is only reliable on the *first* page --
+# verified live, pages 2+ report total=0 (postings keep coming correctly)
+# and paging past the true end wraps back around to page-1 results with
+# total=61 again. So "total" is captured once from the first response and
+# reused, rather than re-read (and trusted) on every page.
+VIATRIS_API = "https://viatris.wd5.myworkdayjobs.com/wday/cxs/viatris/External/jobs"
+VIATRIS_BASE = "https://viatris.wd5.myworkdayjobs.com/en-US/External"
+VIATRIS_FACETS = {"Country": ["04a05835925f45b3a59406a2a6b72c8a"]}
+
+
+def viatris(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    total = None
+    while True:
+        resp = fetch(session, VIATRIS_API, method="post", json={
+            "appliedFacets": VIATRIS_FACETS,
+            "limit": limit,
+            "offset": offset,
+            "searchText": "",
+        })
+        data = resp.json()
+        if total is None:
+            total = data.get("total", 0)
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            if not posting.get("title"):
+                continue
+            jobs.append(Job(
+                "Viatris", posting["title"],
+                VIATRIS_BASE + posting.get("externalPath", ""),
+                VIATRIS_BASE,
+            ))
+        offset += len(postings)
+        if not postings or offset >= total:
+            break
+    return jobs
+
+
+# Grifols' www.grifols.com/en/careers links to jobsearch.grifols.com, a
+# legacy SAP SuccessFactors "job2web" career site (server-rendered HTML
+# table, same platform Leo Pharma uses below). /search/?locationsearch=
+# filters by location text and is paginated via "startrow"; the results
+# table degrades to an unrelated default list once startrow reaches the
+# filtered total (verified live), so pagination must stop via the parsed
+# total rather than looping on "any rows returned".
+GRIFOLS_BASE = "https://jobsearch.grifols.com"
+GRIFOLS_SEARCH = "https://jobsearch.grifols.com/search/?q=&locationsearch=Ireland&startrow="
+GRIFOLS_PORTAL = "https://jobsearch.grifols.com/search/?q=&locationsearch=Ireland"
+
+
+def grifols(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    total = None
+    while total is None or offset < total:
+        soup = _soup(fetch(session, f"{GRIFOLS_SEARCH}{offset}"))
+        rows = soup.find_all("tr", class_="data-row")
+        if not rows:
+            break
+        for row in rows:
+            link = row.find("a", class_="jobTitle-link")
+            if not link:
+                continue
+            jobs.append(Job(
+                "Grifols", link.get_text(strip=True),
+                urljoin(GRIFOLS_BASE, link["href"]),
+                GRIFOLS_PORTAL,
+            ))
+        label = soup.find("span", class_="paginationLabel")
+        bolds = label.find_all("b") if label else []
+        total = int(bolds[-1].get_text(strip=True)) if bolds else len(rows)
+        offset += len(rows)
+    return jobs
+
+
+# Leo Pharma's www.leo-pharma.com/your-career/jobs links to
+# jobs.leo-pharma.com, the same SuccessFactors "job2web" platform as
+# Grifols above (identical markup/pagination) -- reuses the same shape.
+# locationsearch=Ireland/Dublin/Cork all return zero results, and a full
+# scan of every live posting (5 pages / ~110 jobs, verified live) found no
+# Ireland location at all. Registered anyway since the pattern itself
+# works and will pick up a listing the moment Leo Pharma posts one.
+LEO_BASE = "https://jobs.leo-pharma.com"
+LEO_SEARCH = "https://jobs.leo-pharma.com/search/?q=&locationsearch=Ireland&startrow="
+LEO_PORTAL = "https://jobs.leo-pharma.com/search/?q=&locationsearch=Ireland"
+
+
+def leo_pharma(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    total = None
+    while total is None or offset < total:
+        soup = _soup(fetch(session, f"{LEO_SEARCH}{offset}"))
+        rows = soup.find_all("tr", class_="data-row")
+        if not rows:
+            break
+        for row in rows:
+            link = row.find("a", class_="jobTitle-link")
+            if not link:
+                continue
+            jobs.append(Job(
+                "Leo Pharma", link.get_text(strip=True),
+                urljoin(LEO_BASE, link["href"]),
+                LEO_PORTAL,
+            ))
+        label = soup.find("span", class_="paginationLabel")
+        bolds = label.find_all("b") if label else []
+        total = int(bolds[-1].get_text(strip=True)) if bolds else len(rows)
+        offset += len(rows)
+    return jobs
+
+
+# ICON plc's careers.iconplc.com is server-rendered Attrax (same platform as
+# abbvie()), "powered by SmartRecruiters" per its own footer, but the
+# geo-radius search abbvie() uses (la/lo/lr around Dublin's coordinates)
+# returns zero results here -- verified live. ICON posts globally across 53
+# countries with no Ireland entry in the default location-facet sidebar, so
+# instead this uses the site's own keyword search (?q=Ireland), which does
+# surface every Ireland posting -- but also non-Ireland noise: Northern
+# Ireland postings and unrelated jobs whose descriptions merely mention
+# "Ireland" (verified live, e.g. UK/Poland roles with no Ireland location).
+# Every genuine Republic-of-Ireland listing's own URL slug contains
+# "-in-ireland-" (e.g. ".../in-ireland-dublin-jid-..."), which Northern
+# Ireland postings (".../northern-ireland-jid-...") do not -- so results are
+# filtered on that slug marker rather than trusted keyword relevance.
+ICON_BASE = "https://careers.iconplc.com"
+ICON_SEARCH = "https://careers.iconplc.com/jobs?q=Ireland&page="
+ICON_PORTAL = "https://careers.iconplc.com/jobs?q=Ireland"
+
+
+def icon(session) -> List[Job]:
+    jobs = []
+    seen = set()
+    page = 1
+    while True:
+        soup = _soup(fetch(session, f"{ICON_SEARCH}{page}"))
+        tiles = soup.find_all("a", class_="attrax-vacancy-tile__title")
+        if not tiles:
+            break
+        for tile in tiles:
+            href = tile.get("href", "")
+            if "-in-ireland-" not in href.lower():
+                continue
+            url = urljoin(ICON_BASE, href)
+            if url in seen:
+                continue
+            seen.add(url)
+            jobs.append(Job("ICON", tile.get_text(strip=True), url, ICON_PORTAL))
+        page += 1
+    return jobs
+
+
 SCRAPERS = OrderedDict([
     ("APC", apc),
     ("Abbvie", abbvie),
@@ -505,4 +745,10 @@ SCRAPERS = OrderedDict([
     ("Johnson & Johnson", johnson_and_johnson),
     ("Regeneron", regeneron),
     ("GSK", gsk),
+    ("Alkermes", alkermes),
+    ("Teva", teva),
+    ("Viatris", viatris),
+    ("Grifols", grifols),
+    ("Leo Pharma", leo_pharma),
+    ("ICON", icon),
 ])
