@@ -1,3 +1,5 @@
+import pytest
+
 from jobfinder import scrapers
 from tests.conftest import FakeSession, FakeResponse
 
@@ -422,29 +424,6 @@ def test_regeneron_in_registry():
     assert "Regeneron" in scrapers.SCRAPERS
 
 
-def test_gsk_parses_and_paginates_workday_api():
-    page1 = [{"title": "EHS Business Partner", "externalPath": "/job/Ireland---Dungarvan/EHS-Business-Partner_545675-1"}]
-    page2 = [{"title": "CAPEX Manager", "externalPath": "/job/Ireland---Dungarvan/CAPEX-Manager_544110-1"}]
-    responses = iter([_wd_response(page1, 2), _wd_response(page2, 2)])
-
-    class Seq:
-        calls = []
-        def post(self, url, **kwargs):
-            self.calls.append(kwargs)
-            return next(responses)
-
-    jobs = scrapers.gsk(Seq())
-    assert [j.title for j in jobs] == ["EHS Business Partner", "CAPEX Manager"]
-    assert jobs[0].url == (
-        "https://gsknch.wd3.myworkdayjobs.com/en-US/GSKCareers"
-        "/job/Ireland---Dungarvan/EHS-Business-Partner_545675-1"
-    )
-
-
-def test_gsk_in_registry():
-    assert "GSK" in scrapers.SCRAPERS
-
-
 def _alkermes_response(reqs, total):
     return FakeResponse(json_data={"items": [{
         "TotalJobsCount": total,
@@ -513,20 +492,45 @@ def test_teva_parses_and_paginates_eightfold_api():
     assert session.calls[0]["params"]["location"] == "Ireland"
 
 
+def test_teva_falls_back_to_id_based_url_when_canonical_missing():
+    # Some positions omit canonicalPositionUrl (or it's blank); the scraper
+    # should build the URL from the position's numeric "id" instead of
+    # dropping the job or emitting an empty link.
+    responses = iter([
+        _teva_response(
+            [{"name": "Site Microbiologist", "id": 563602812102826, "canonicalPositionUrl": ""}],
+            count=1,
+        ),
+    ])
+
+    class Seq:
+        calls = []
+        def get(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.teva(Seq())
+    assert jobs[0].url == "https://www.careers.teva/careers/job/563602812102826"
+
+
 def test_teva_in_registry():
     assert "Teva" in scrapers.SCRAPERS
 
 
 def test_viatris_parses_and_paginates_workday_api_with_country_facet():
     # This tenant's "total" is only trustworthy on page 1 -- page 2 reports
-    # total=0 live even though postings keep coming, so the second page's
-    # (bogus) total=0 must NOT stop the loop early; only the cached
-    # first-page total (2) should be used to decide when to stop.
+    # total=0 live even though postings keep coming. A naive implementation
+    # that re-reads "total" on every page would take page 2's bogus total=0
+    # at face value and stop after page 2 (offset=2 >= total=0), silently
+    # dropping page 3. Only the cached first-page total (3) correctly keeps
+    # the loop going through all 3 pages/jobs.
     page1 = [{"title": "Manufacturing Operator",
               "externalPath": "/job/Damastown-Dublin-Ireland/Manufacturing-Operator_R5671425"}]
     page2 = [{"title": "Director Global Regulatory Compliance",
               "externalPath": "/job/Northern-Cross-Dublin-Ireland/Director-Regulatory-Compliance_R5665632"}]
-    responses = iter([_wd_response(page1, 2), _wd_response(page2, 0)])
+    page3 = [{"title": "Head of External Sterile Operations",
+              "externalPath": "/job/Anywhere-Europe/Head-of-External-Sterile-Operations_R5680119"}]
+    responses = iter([_wd_response(page1, 3), _wd_response(page2, 0), _wd_response(page3, 3)])
 
     class Seq:
         calls = []
@@ -536,7 +540,11 @@ def test_viatris_parses_and_paginates_workday_api_with_country_facet():
 
     session = Seq()
     jobs = scrapers.viatris(session)
-    assert [j.title for j in jobs] == ["Manufacturing Operator", "Director Global Regulatory Compliance"]
+    assert [j.title for j in jobs] == [
+        "Manufacturing Operator",
+        "Director Global Regulatory Compliance",
+        "Head of External Sterile Operations",
+    ]
     assert jobs[0].url == (
         "https://viatris.wd5.myworkdayjobs.com/en-US/External"
         "/job/Damastown-Dublin-Ireland/Manufacturing-Operator_R5671425"
@@ -592,6 +600,31 @@ def test_grifols_paginates_successfactors_job2web_site():
 
 def test_grifols_in_registry():
     assert "Grifols" in scrapers.SCRAPERS
+
+
+GRIFOLS_PAGE2_FILTER_DROPPED = b"""<span class="paginationLabel">Results <b>1 \xe2\x80\x93 1</b> of <b>500</b></span>
+<table>
+<tbody>
+<tr class="data-row">
+    <td class="colTitle"><span class="jobTitle hidden-phone">
+        <a href="/job/Unrelated-Default-Listing/9999999/" class="jobTitle-link">Unrelated Default Listing</a>
+    </span></td>
+</tr>
+</tbody>
+</table>"""
+
+
+def test_grifols_raises_when_pagination_range_shrinks_mid_run():
+    # If the server drops the location filter mid-run, the results table
+    # reverts to an unfiltered/default listing whose paginationLabel range
+    # ("1 - 1 of 500") no longer starts at offset+1 (3). That must raise
+    # rather than silently absorbing unrelated postings into the job list.
+    fake = FakeSession({
+        scrapers.GRIFOLS_SEARCH + "0": FakeResponse(GRIFOLS_PAGE1),
+        scrapers.GRIFOLS_SEARCH + "2": FakeResponse(GRIFOLS_PAGE2_FILTER_DROPPED),
+    })
+    with pytest.raises(ValueError):
+        scrapers.grifols(fake)
 
 
 def test_leo_pharma_returns_empty_when_no_ireland_postings():

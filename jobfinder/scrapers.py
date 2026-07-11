@@ -449,45 +449,6 @@ def regeneron(session) -> List[Job]:
     return jobs
 
 
-# GSK's own guessed tenant (gsk.wd5.myworkdayjobs.com) is live but currently
-# has zero Ireland postings -- verified via full-text search for "Cork" /
-# "Dungarvan" / "Ireland" (all returned 0, or an unrelated Northern-Ireland
-# match). GSK's Cork/Dungarvan manufacturing sites are actually posted on a
-# separate Workday tenant, "gsknch" (same GSKCareers site name), which does
-# have live Dungarvan postings -- verified live via the "location" facet
-# ("Ireland - Dungarvan") and a full-text "Dungarvan" search (4 hits).
-GSK_API = "https://gsknch.wd3.myworkdayjobs.com/wday/cxs/gsknch/GSKCareers/jobs"
-GSK_BASE = "https://gsknch.wd3.myworkdayjobs.com/en-US/GSKCareers"
-GSK_FACETS = {"location": ["03fe97f04c9a0198b3d87109a8571d6d"]}  # Ireland - Dungarvan
-
-
-def gsk(session) -> List[Job]:
-    jobs = []
-    offset = 0
-    limit = 20
-    while True:
-        resp = fetch(session, GSK_API, method="post", json={
-            "appliedFacets": GSK_FACETS,
-            "limit": limit,
-            "offset": offset,
-            "searchText": "",
-        })
-        data = resp.json()
-        postings = data.get("jobPostings", [])
-        for posting in postings:
-            if not posting.get("title"):
-                continue
-            jobs.append(Job(
-                "GSK", posting["title"],
-                GSK_BASE + posting.get("externalPath", ""),
-                GSK_BASE,
-            ))
-        offset += len(postings)
-        if not postings or offset >= data.get("total", 0):
-            break
-    return jobs
-
-
 # Alkermes' careers.alkermes.com redirects to an Oracle Recruiting Cloud (Fusion
 # HCM Candidate Experience) tenant, not any of the ATS patterns in the brief's
 # discovery list -- verified live: the redirect target's <base> tag exposes
@@ -541,6 +502,9 @@ def alkermes(session) -> List[Job]:
 # (the endpoint that 403s for BMS) which works anonymously for this domain.
 TEVA_API = "https://www.careers.teva/api/apply/v2/jobs"
 TEVA_PORTAL = "https://www.careers.teva/careers?location=Ireland"
+# Canonical listing-page URL pattern (verified live), used as a fallback when
+# a posting's own "canonicalPositionUrl" is missing/empty.
+TEVA_JOB_BASE = "https://www.careers.teva/careers/job"
 
 
 def teva(session) -> List[Job]:
@@ -556,9 +520,10 @@ def teva(session) -> List[Job]:
             title = (pos.get("name") or "").strip()
             if not title:
                 continue
+            url = pos.get("canonicalPositionUrl") or f"{TEVA_JOB_BASE}/{pos.get('id', '')}"
             jobs.append(Job(
                 "Teva", title,
-                pos.get("canonicalPositionUrl", ""),
+                url,
                 TEVA_PORTAL,
             ))
         start += len(positions)
@@ -614,6 +579,29 @@ def viatris(session) -> List[Job]:
     return jobs
 
 
+# Shared by grifols() and leo_pharma() (both are the same SAP SuccessFactors
+# "job2web" career-site platform). The paginationLabel looks like
+# "Results <b>1 - 20</b> of <b>45</b>" -- the first <b> is a "start - end"
+# range and its start index should always equal offset+1. If the server
+# drops the location filter mid-run (observed as a real failure mode on
+# this platform), the results table silently reverts to an unfiltered/
+# default listing whose range no longer lines up with our running offset,
+# which would otherwise corrupt the job list with unrelated postings. Raise
+# instead of returning bad data.
+def _sf_pagination_total(label, offset):
+    bolds = label.find_all("b") if label else []
+    if not bolds:
+        return None
+    range_start = re.split(r"[-–—]", bolds[0].get_text(strip=True))[0].strip()
+    start = int(range_start)
+    if start != offset + 1:
+        raise ValueError(
+            f"SuccessFactors pagination range starts at {start}, expected "
+            f"{offset + 1} -- server may have dropped the location filter mid-run"
+        )
+    return int(bolds[-1].get_text(strip=True))
+
+
 # Grifols' www.grifols.com/en/careers links to jobsearch.grifols.com, a
 # legacy SAP SuccessFactors "job2web" career site (server-rendered HTML
 # table, same platform Leo Pharma uses below). /search/?locationsearch=
@@ -645,8 +633,8 @@ def grifols(session) -> List[Job]:
                 GRIFOLS_PORTAL,
             ))
         label = soup.find("span", class_="paginationLabel")
-        bolds = label.find_all("b") if label else []
-        total = int(bolds[-1].get_text(strip=True)) if bolds else len(rows)
+        parsed_total = _sf_pagination_total(label, offset)
+        total = parsed_total if parsed_total is not None else len(rows)
         offset += len(rows)
     return jobs
 
@@ -682,8 +670,8 @@ def leo_pharma(session) -> List[Job]:
                 LEO_PORTAL,
             ))
         label = soup.find("span", class_="paginationLabel")
-        bolds = label.find_all("b") if label else []
-        total = int(bolds[-1].get_text(strip=True)) if bolds else len(rows)
+        parsed_total = _sf_pagination_total(label, offset)
+        total = parsed_total if parsed_total is not None else len(rows)
         offset += len(rows)
     return jobs
 
@@ -744,7 +732,6 @@ SCRAPERS = OrderedDict([
     ("Thermo Fisher", thermo_fisher),
     ("Johnson & Johnson", johnson_and_johnson),
     ("Regeneron", regeneron),
-    ("GSK", gsk),
     ("Alkermes", alkermes),
     ("Teva", teva),
     ("Viatris", viatris),
