@@ -336,3 +336,110 @@ def test_thermo_fisher_paginates_by_offset():
 
 def test_thermo_fisher_in_registry():
     assert "Thermo Fisher" in scrapers.SCRAPERS
+
+
+JNJ_PAGE1 = b"""<section id="results">
+<h2 class="job-count">Displaying <strong>1</strong> to <strong>1</strong> of <strong>2</strong> matching jobs</h2>
+<ul class="PageList-items" id="js-job-search-results" data-results="2">
+<li class="PageList-items-item card-job" data-id="r-087474">
+    <div class="PagePromo">
+        <div class="PagePromo-content">
+            <h3 class="PagePromo-title">
+                <a class="stretched-link Link js-view-job" href="/en/jobs/r-087474/director-surgical-vision/">Director, Surgical Vision Equipment Portfolio</a>
+            </h3>
+            <address class="PagePromo-location">Dublin Ireland</address>
+        </div>
+    </div>
+</li>
+</ul>
+<nav aria-label="Pagination">
+<ul class="pagination"><li class="page-item next"><a aria-label="Next page" class="page-link" href="https://www.careers.jnj.com/en/jobs/?page=2&amp;country=Ireland#results" rel="next nofollow">2</a></li></ul>
+</nav>
+</section>"""
+
+JNJ_PAGE2 = b"""<section id="results">
+<ul class="PageList-items" id="js-job-search-results" data-results="2">
+<li class="PageList-items-item card-job" data-id="r-083581">
+    <div class="PagePromo">
+        <div class="PagePromo-content">
+            <h3 class="PagePromo-title">
+                <a class="stretched-link Link js-view-job" href="/en/jobs/r-083581/senior-manager-ra/">Senior Manager, RA &amp; R&amp;D Data Office</a>
+            </h3>
+            <address class="PagePromo-location">Cork Ireland</address>
+        </div>
+    </div>
+</li>
+</ul>
+<nav aria-label="Pagination">
+<ul class="pagination"><li class="disabled next page-item"><span class="page-link">2</span></li></ul>
+</nav>
+</section>"""
+
+
+def test_jnj_paginates_server_rendered_search():
+    # More-specific route (page=2) listed first: FakeSession._lookup matches
+    # by prefix, and neither URL is a prefix of the other here since the
+    # query strings diverge at "page=2" vs "country=Ireland" -- but keep the
+    # brief's convention anyway for consistency with the other fixtures.
+    fake = FakeSession({
+        "https://www.careers.jnj.com/en/jobs/?page=2&country=Ireland": FakeResponse(JNJ_PAGE2),
+        "https://www.careers.jnj.com/en/jobs/?country=Ireland": FakeResponse(JNJ_PAGE1),
+    })
+    jobs = scrapers.johnson_and_johnson(fake)
+    assert [j.title for j in jobs] == [
+        "Director, Surgical Vision Equipment Portfolio",
+        "Senior Manager, RA & R&D Data Office",
+    ]
+    assert jobs[0].url == "https://www.careers.jnj.com/en/jobs/r-087474/director-surgical-vision/"
+    assert jobs[0].portal_url == scrapers.JNJ_URL
+
+
+def test_jnj_in_registry():
+    assert "Johnson & Johnson" in scrapers.SCRAPERS
+
+
+def test_regeneron_parses_and_paginates_workday_api():
+    page1 = [{"title": "QC Analyst HPLC", "externalPath": "/job/Limerick/QC-Analyst-HPLC_R49031"}]
+    page2 = [{"title": "Associate Director, Commercial Launch",
+              "externalPath": "/job/Dublin/Associate-Director--Commercial-Launch_R47535"}]
+    responses = iter([_wd_response(page1, 2), _wd_response(page2, 2)])
+
+    class Seq:
+        calls = []
+        def post(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.regeneron(Seq())
+    assert [j.title for j in jobs] == ["QC Analyst HPLC", "Associate Director, Commercial Launch"]
+    assert jobs[0].url == (
+        "https://regeneron.wd1.myworkdayjobs.com/en-US/Careers"
+        "/job/Limerick/QC-Analyst-HPLC_R49031"
+    )
+
+
+def test_regeneron_in_registry():
+    assert "Regeneron" in scrapers.SCRAPERS
+
+
+def test_gsk_parses_and_paginates_workday_api():
+    page1 = [{"title": "EHS Business Partner", "externalPath": "/job/Ireland---Dungarvan/EHS-Business-Partner_545675-1"}]
+    page2 = [{"title": "CAPEX Manager", "externalPath": "/job/Ireland---Dungarvan/CAPEX-Manager_544110-1"}]
+    responses = iter([_wd_response(page1, 2), _wd_response(page2, 2)])
+
+    class Seq:
+        calls = []
+        def post(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.gsk(Seq())
+    assert [j.title for j in jobs] == ["EHS Business Partner", "CAPEX Manager"]
+    assert jobs[0].url == (
+        "https://gsknch.wd3.myworkdayjobs.com/en-US/GSKCareers"
+        "/job/Ireland---Dungarvan/EHS-Business-Partner_545675-1"
+    )
+
+
+def test_gsk_in_registry():
+    assert "GSK" in scrapers.SCRAPERS

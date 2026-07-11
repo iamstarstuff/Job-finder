@@ -380,6 +380,114 @@ def thermo_fisher(session) -> List[Job]:
     return jobs
 
 
+# Johnson & Johnson's careers.jnj.com is NOT the Phenom /widgets JSON API the
+# brief expected -- verified live, the page ships server-rendered job tiles
+# (no refineSearch/ddoKey markers anywhere in the HTML). It's a GET-param
+# filtered search (?country=Ireland) with the same "next page link" pagination
+# convention as jazz(), so it reuses _soup/_follow_next.
+JNJ_URL = "https://www.careers.jnj.com/en/jobs/?country=Ireland"
+JNJ_BASE = "https://www.careers.jnj.com"
+
+
+def johnson_and_johnson(session) -> List[Job]:
+    jobs = []
+    url = JNJ_URL
+    while url:
+        soup = _soup(fetch(session, url))
+        results = soup.find("ul", id="js-job-search-results")
+        tiles = results.find_all("li", class_="card-job") if results else []
+        for tile in tiles:
+            link = tile.find("a", class_="js-view-job")
+            if not link:
+                continue
+            jobs.append(Job(
+                "Johnson & Johnson", link.get_text(strip=True),
+                urljoin(JNJ_BASE, link["href"]),
+                JNJ_URL,
+            ))
+        url = _follow_next(soup, url)
+    return jobs
+
+
+REGENERON_API = "https://regeneron.wd1.myworkdayjobs.com/wday/cxs/regeneron/Careers/jobs"
+REGENERON_BASE = "https://regeneron.wd1.myworkdayjobs.com/en-US/Careers"
+# Regeneron has no country-level facet (like Gilead) -- its "locations" facet
+# exposes individual city entries. Verified live: "Dublin" and "Limerick" are
+# the Irish offices (a "Remote - Ireland" entry also exists but was excluded
+# to avoid pulling in jobs based elsewhere that merely allow Irish remote
+# work).
+REGENERON_FACETS = {"locations": [
+    "8fa87bf3f848012f5b685634fb005a03",  # Dublin
+    "8fa87bf3f84801d96a745d34fb006a03",  # Limerick
+]}
+
+
+def regeneron(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, REGENERON_API, method="post", json={
+            "appliedFacets": REGENERON_FACETS,
+            "limit": limit,
+            "offset": offset,
+            "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            if not posting.get("title"):
+                continue
+            jobs.append(Job(
+                "Regeneron", posting["title"],
+                REGENERON_BASE + posting.get("externalPath", ""),
+                REGENERON_BASE,
+            ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# GSK's own guessed tenant (gsk.wd5.myworkdayjobs.com) is live but currently
+# has zero Ireland postings -- verified via full-text search for "Cork" /
+# "Dungarvan" / "Ireland" (all returned 0, or an unrelated Northern-Ireland
+# match). GSK's Cork/Dungarvan manufacturing sites are actually posted on a
+# separate Workday tenant, "gsknch" (same GSKCareers site name), which does
+# have live Dungarvan postings -- verified live via the "location" facet
+# ("Ireland - Dungarvan") and a full-text "Dungarvan" search (4 hits).
+GSK_API = "https://gsknch.wd3.myworkdayjobs.com/wday/cxs/gsknch/GSKCareers/jobs"
+GSK_BASE = "https://gsknch.wd3.myworkdayjobs.com/en-US/GSKCareers"
+GSK_FACETS = {"location": ["03fe97f04c9a0198b3d87109a8571d6d"]}  # Ireland - Dungarvan
+
+
+def gsk(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, GSK_API, method="post", json={
+            "appliedFacets": GSK_FACETS,
+            "limit": limit,
+            "offset": offset,
+            "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            if not posting.get("title"):
+                continue
+            jobs.append(Job(
+                "GSK", posting["title"],
+                GSK_BASE + posting.get("externalPath", ""),
+                GSK_BASE,
+            ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
 SCRAPERS = OrderedDict([
     ("APC", apc),
     ("Abbvie", abbvie),
@@ -394,4 +502,7 @@ SCRAPERS = OrderedDict([
     ("Gilead", gilead),
     ("Jazz Pharmaceuticals", jazz),
     ("Thermo Fisher", thermo_fisher),
+    ("Johnson & Johnson", johnson_and_johnson),
+    ("Regeneron", regeneron),
+    ("GSK", gsk),
 ])
