@@ -221,3 +221,118 @@ def test_msd_parses_phenom_api():
 
 def test_bms_and_msd_in_registry():
     assert {"BMS", "MSD"} <= set(scrapers.SCRAPERS)
+
+
+def test_gilead_parses_and_paginates_workday_api():
+    page1 = [{"title": "Director, Supply Chain",
+              "externalPath": "/job/Ireland---Cork/Director--Supply-Chain_R0052735-1"}]
+    page2 = [{"title": "Senior Manager, Master Data Governance",
+              "externalPath": "/job/Ireland---Cork/Senior-Manager--Master-Data-Governance_R0047916"}]
+    responses = iter([_wd_response(page1, 2), _wd_response(page2, 2)])
+
+    class Seq:
+        calls = []
+        def post(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.gilead(Seq())
+    assert [j.title for j in jobs] == ["Director, Supply Chain", "Senior Manager, Master Data Governance"]
+    assert jobs[0].url == (
+        "https://gilead.wd1.myworkdayjobs.com/en-US/gileadcareers"
+        "/job/Ireland---Cork/Director--Supply-Chain_R0052735-1"
+    )
+
+
+def test_gilead_in_registry():
+    assert "Gilead" in scrapers.SCRAPERS
+
+
+JAZZ_PAGE1 = b"""<ul class="results-content" id="job-list-section">
+<li>
+    <a href="/job/1457/associate-director-financial-planning-performance-finance-ie-dublin-dublin/" rel="nofollow">
+        <h3>Associate Director, Financial Planning &amp; Performance</h3>
+    </a>
+</li>
+</ul>
+<div class="pagination">
+<a href="?page_jobs=2" class="next">next &rsaquo;&rsaquo;</a>
+</div>"""
+
+JAZZ_PAGE2 = b"""<ul class="results-content" id="job-list-section">
+<li>
+    <a href="/job/1502/senior-scientist-analytical-ie-athlone/" rel="nofollow">
+        <h3>Senior Scientist, Analytical</h3>
+    </a>
+</li>
+</ul>"""
+
+
+def test_jazz_paginates_until_no_next_link():
+    # Longer/more specific route listed first: FakeSession._lookup matches by
+    # prefix, and the page-1 URL is itself a prefix of the page-2 URL.
+    fake = FakeSession({
+        "https://careers.jazzpharma.com/jobs/ie/?page_jobs=2": FakeResponse(JAZZ_PAGE2),
+        "https://careers.jazzpharma.com/jobs/ie/": FakeResponse(JAZZ_PAGE1),
+    })
+    jobs = scrapers.jazz(fake)
+    assert [j.title for j in jobs] == [
+        "Associate Director, Financial Planning & Performance",
+        "Senior Scientist, Analytical",
+    ]
+    assert jobs[0].url == (
+        "https://careers.jazzpharma.com/job/1457/"
+        "associate-director-financial-planning-performance-finance-ie-dublin-dublin/"
+    )
+    assert jobs[0].portal_url == scrapers.URLS["Jazz Pharmaceuticals"]
+
+
+def test_jazz_in_registry():
+    assert "Jazz Pharmaceuticals" in scrapers.SCRAPERS
+
+
+def _thermo_response(jobs, total_hits):
+    return FakeResponse(json_data={
+        "refineSearch": {"status": 200, "hits": len(jobs), "totalHits": total_hits,
+                          "data": {"jobs": jobs}},
+    })
+
+
+def test_thermo_fisher_parses_phenom_api_and_strips_apply_suffix():
+    job1 = {"title": "Scientist III (LCMS Pharma)",
+            "applyUrl": "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
+                        "/job/Athlone-Ireland/Scientist-III--LCMS-Pharma-_R-01328306/apply"}
+    job2 = {"title": "Material Handler II",
+            "applyUrl": "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
+                        "/job/Athlone-Ireland/Material-Handler-II_R-01360000"}
+    fake = FakeSession({"https://jobs.thermofisher.com/widgets": _thermo_response([job1, job2], 2)})
+    jobs = scrapers.thermo_fisher(fake)
+    assert [j.title for j in jobs] == ["Scientist III (LCMS Pharma)", "Material Handler II"]
+    assert jobs[0].url == (
+        "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
+        "/job/Athlone-Ireland/Scientist-III--LCMS-Pharma-_R-01328306"
+    )
+    assert jobs[1].url == (
+        "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
+        "/job/Athlone-Ireland/Material-Handler-II_R-01360000"
+    )
+
+
+def test_thermo_fisher_paginates_by_offset():
+    responses = iter([
+        _thermo_response([{"title": "Scientist I", "applyUrl": "https://jobs.thermofisher.com/job/1/apply"}], 2),
+        _thermo_response([{"title": "Scientist II", "applyUrl": "https://jobs.thermofisher.com/job/2/apply"}], 2),
+    ])
+
+    class Seq:
+        calls = []
+        def post(self, url, **kwargs):
+            self.calls.append(kwargs)
+            return next(responses)
+
+    jobs = scrapers.thermo_fisher(Seq())
+    assert [j.title for j in jobs] == ["Scientist I", "Scientist II"]
+
+
+def test_thermo_fisher_in_registry():
+    assert "Thermo Fisher" in scrapers.SCRAPERS

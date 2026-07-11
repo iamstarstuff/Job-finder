@@ -20,6 +20,7 @@ URLS = {
     "Amgen": "https://www.amgen.jobs/irl/jobs/",
     "Vle therapeutics": "https://www.vletherapeutics.com/careers",
     "Astellas": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=",
+    "Jazz Pharmaceuticals": "https://careers.jazzpharma.com/jobs/ie/",
 }
 
 log = logging.getLogger(__name__)
@@ -278,6 +279,107 @@ def msd(session) -> List[Job]:
     return jobs
 
 
+GILEAD_API = "https://gilead.wd1.myworkdayjobs.com/wday/cxs/gilead/gileadcareers/jobs"
+GILEAD_BASE = "https://gilead.wd1.myworkdayjobs.com/en-US/gileadcareers"
+# This tenant has no country-level facet (unlike Pfizer's Location_Country
+# GUID) — its "locations" facet only exposes individual city entries.
+# Verified live: "Ireland - Cork" is the only Irish location.
+GILEAD_FACETS = {"locations": ["173342972c12019c9d3b6073b0740a39"]}
+
+
+def gilead(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, GILEAD_API, method="post", json={
+            "appliedFacets": GILEAD_FACETS,
+            "limit": limit,
+            "offset": offset,
+            "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            if not posting.get("title"):
+                continue
+            jobs.append(Job(
+                "Gilead", posting["title"],
+                GILEAD_BASE + posting.get("externalPath", ""),
+                GILEAD_BASE,
+            ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# Jazz Pharmaceuticals' careers site is NOT Workday, despite the tenant
+# domains suggested by the brief (jazzpharma.wd5 / jazz.wd1 / vhr-jazz.wd1
+# all either 404/500 or reject the cxs jobs payload with HTTP 422 — verified
+# live). Their real job search lives on careers.jazzpharma.com, a
+# server-rendered site with the same "?page_jobs=N" / "a.next" pagination
+# convention used elsewhere in this file (see _follow_next).
+
+
+def jazz(session) -> List[Job]:
+    jobs = []
+    url = URLS["Jazz Pharmaceuticals"]
+    while url:
+        soup = _soup(fetch(session, url))
+        results = soup.find("ul", class_="results-content")
+        tiles = results.find_all("li", recursive=False) if results else []
+        for tile in tiles:
+            h3 = tile.find("h3")
+            link = tile.find("a")
+            if not h3 or not link:
+                continue
+            jobs.append(Job(
+                "Jazz Pharmaceuticals", h3.text.strip(),
+                urljoin(url, link["href"]),
+                URLS["Jazz Pharmaceuticals"],
+            ))
+        url = _follow_next(soup, url)
+    return jobs
+
+
+THERMO_API = "https://jobs.thermofisher.com/widgets"
+THERMO_PORTAL = "https://jobs.thermofisher.com/global/en/search-results?qsr=Ireland"
+
+
+def _thermo_payload(offset: int, size: int) -> dict:
+    return {
+        "lang": "en", "deviceType": "desktop", "country": "us",
+        "pageName": "search-results", "ddoKey": "refineSearch",
+        "sortBy": "", "subsearch": "", "from": offset, "jobs": True,
+        "counts": True, "all_fields": ["category", "country", "state", "city", "type"],
+        "size": size, "clearAll": False, "jdsource": "facets",
+        "isSliderEnable": False, "pageId": "page10", "siteType": "external",
+        "keywords": "", "global": True,
+        "selected_fields": {"country": ["Ireland"]}, "locationData": {},
+    }
+
+
+def thermo_fisher(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    size = 20
+    while True:
+        resp = fetch(session, THERMO_API, method="post", json=_thermo_payload(offset, size))
+        payload = resp.json().get("refineSearch", {})
+        batch = payload.get("data", {}).get("jobs", [])
+        for item in batch:
+            url = item.get("applyUrl") or item.get("jobUrl") or ""
+            # applyUrl points at the application form; link the listing page instead
+            if url.endswith("/apply"):
+                url = url[: -len("/apply")]
+            jobs.append(Job("Thermo Fisher", item.get("title", "").strip(), url, THERMO_PORTAL))
+        offset += len(batch)
+        if not batch or offset >= payload.get("totalHits", 0):
+            break
+    return jobs
+
+
 SCRAPERS = OrderedDict([
     ("APC", apc),
     ("Abbvie", abbvie),
@@ -289,4 +391,7 @@ SCRAPERS = OrderedDict([
     ("Pfizer", pfizer),
     ("BMS", bms),
     ("MSD", msd),
+    ("Gilead", gilead),
+    ("Jazz Pharmaceuticals", jazz),
+    ("Thermo Fisher", thermo_fisher),
 ])
