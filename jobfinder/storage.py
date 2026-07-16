@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Tuple
 
 from jobfinder.models import Job
 
@@ -37,6 +37,24 @@ CREATE TABLE IF NOT EXISTS emails (
     success INTEGER NOT NULL,
     error TEXT
 );
+CREATE TABLE IF NOT EXISTS job_details (
+    job_id INTEGER PRIMARY KEY REFERENCES jobs(id),
+    description TEXT NOT NULL,
+    seniority TEXT,
+    enriched_at TEXT NOT NULL,
+    enrichment_failed INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS skills (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    category TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS job_skills (
+    job_id INTEGER NOT NULL REFERENCES jobs(id),
+    skill_id INTEGER NOT NULL REFERENCES skills(id),
+    PRIMARY KEY (job_id, skill_id)
+);
+CREATE INDEX IF NOT EXISTS idx_job_skills_skill ON job_skills(skill_id);
 CREATE INDEX IF NOT EXISTS idx_jobs_company ON jobs(company);
 CREATE INDEX IF NOT EXISTS idx_jobs_first_seen ON jobs(first_seen);
 """
@@ -138,3 +156,35 @@ def migrate_legacy_json(conn, json_path, now: str) -> int:
                 count += 1
     conn.commit()
     return count
+
+
+def find_unenriched_jobs(conn) -> List[sqlite3.Row]:
+    return conn.execute(
+        """SELECT jobs.id, jobs.company, jobs.title, jobs.url
+           FROM jobs LEFT JOIN job_details ON jobs.id = job_details.job_id
+           WHERE job_details.job_id IS NULL"""
+    ).fetchall()
+
+
+def _get_or_create_skill(conn, name: str, category: str) -> int:
+    row = conn.execute("SELECT id FROM skills WHERE name = ?", (name,)).fetchone()
+    if row:
+        return row["id"]
+    cur = conn.execute("INSERT INTO skills (name, category) VALUES (?, ?)", (name, category))
+    return cur.lastrowid
+
+
+def save_enrichment(conn, job_id: int, description: str, seniority: Optional[str],
+                     skills: List[Tuple[str, str]], now: str, failed: bool = False) -> None:
+    conn.execute(
+        """INSERT INTO job_details (job_id, description, seniority, enriched_at, enrichment_failed)
+           VALUES (?, ?, ?, ?, ?)""",
+        (job_id, description, seniority, now, 1 if failed else 0),
+    )
+    for name, category in skills:
+        skill_id = _get_or_create_skill(conn, name, category)
+        conn.execute(
+            "INSERT OR IGNORE INTO job_skills (job_id, skill_id) VALUES (?, ?)",
+            (job_id, skill_id),
+        )
+    conn.commit()

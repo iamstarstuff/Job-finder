@@ -68,3 +68,57 @@ def test_migrate_legacy_json(tmp_path):
     # both old field spellings map to url
     urls = {r["url"] for r in conn.execute("SELECT url FROM jobs")}
     assert urls == {"https://careers.abbvie.com/en/job/x", "https://jobs.takeda.com/job/y"}
+
+
+def test_find_unenriched_jobs_returns_only_jobs_without_details(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "SAP Engineer", "https://a/1", "https://a/careers"),
+        Job("Abbvie", "QA Specialist", "https://a/2", "https://a/careers"),
+    ], "2026-07-16T10:00:00")
+    job1_id = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
+    storage.save_enrichment(conn, job1_id, "Some description", "Senior", [], "2026-07-16T11:00:00")
+    unenriched = storage.find_unenriched_jobs(conn)
+    assert [r["url"] for r in unenriched] == ["https://a/2"]
+
+
+def test_save_enrichment_writes_details_and_skills(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.record_company_snapshot(conn, "Abbvie", [JOB_A], "2026-07-16T10:00:00")
+    job_id = conn.execute("SELECT id FROM jobs WHERE url=?", (JOB_A.url,)).fetchone()["id"]
+    storage.save_enrichment(
+        conn, job_id, "Needs SAP and GMP.", "Senior",
+        [("SAP", "Software"), ("GMP", "Regulatory")], "2026-07-16T11:00:00",
+    )
+    details = conn.execute("SELECT * FROM job_details WHERE job_id=?", (job_id,)).fetchone()
+    assert details["description"] == "Needs SAP and GMP."
+    assert details["seniority"] == "Senior"
+    assert details["enrichment_failed"] == 0
+    skill_names = {
+        r["name"] for r in conn.execute(
+            """SELECT skills.name FROM job_skills
+               JOIN skills ON skills.id = job_skills.skill_id
+               WHERE job_skills.job_id = ?""", (job_id,)
+        ).fetchall()
+    }
+    assert skill_names == {"SAP", "GMP"}
+
+
+def test_save_enrichment_failed_writes_no_skills(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.record_company_snapshot(conn, "Abbvie", [JOB_A], "2026-07-16T10:00:00")
+    job_id = conn.execute("SELECT id FROM jobs WHERE url=?", (JOB_A.url,)).fetchone()["id"]
+    storage.save_enrichment(conn, job_id, "", None, [], "2026-07-16T11:00:00", failed=True)
+    details = conn.execute("SELECT * FROM job_details WHERE job_id=?", (job_id,)).fetchone()
+    assert details["enrichment_failed"] == 1
+    assert conn.execute("SELECT COUNT(*) c FROM job_skills WHERE job_id=?", (job_id,)).fetchone()["c"] == 0
+
+
+def test_save_enrichment_reuses_existing_skill_row(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.record_company_snapshot(conn, "Abbvie", [JOB_A, JOB_B], "2026-07-16T10:00:00")
+    id_a = conn.execute("SELECT id FROM jobs WHERE url=?", (JOB_A.url,)).fetchone()["id"]
+    id_b = conn.execute("SELECT id FROM jobs WHERE url=?", (JOB_B.url,)).fetchone()["id"]
+    storage.save_enrichment(conn, id_a, "Needs SAP.", None, [("SAP", "Software")], "2026-07-16T11:00:00")
+    storage.save_enrichment(conn, id_b, "Also needs SAP.", None, [("SAP", "Software")], "2026-07-16T11:01:00")
+    assert conn.execute("SELECT COUNT(*) c FROM skills WHERE name='SAP'").fetchone()["c"] == 1
