@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DB_PATH = BASE_DIR / "jobfinder.db"
 LOG_PATH = BASE_DIR / "jobscraper.log"
+ENRICHMENT_LOG_PATH = BASE_DIR / "enrichment.log"
 LEGACY_JOBS_JSON = BASE_DIR / "jobs.json"
 SMTP_PASSWORD_FILE = BASE_DIR / "smtp_password.txt"
 

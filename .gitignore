@@ -2,6 +2,7 @@ smtp_password.txt
 ScrapeJobs.ipynb
 jobfinder.db*
 jobscraper.log*
+enrichment.log*
 logs.log
 .DS_Store
 __pycache__/
