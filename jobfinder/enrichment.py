@@ -3,9 +3,12 @@ from __future__ import annotations
 import json
 import logging
 import re
+from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
 from bs4 import BeautifulSoup
+
+from jobfinder.http_client import fetch
 
 log = logging.getLogger(__name__)
 
@@ -77,3 +80,42 @@ def extract_seniority(title: str) -> Optional[str]:
         if any(kw in lowered for kw in keywords):
             return tier
     return None
+
+
+def fetch_description(session, url: str) -> Optional[str]:
+    response = fetch(session, url)
+    html = response.content.decode("utf-8", errors="replace")
+    return extract_ldjson_description(html)
+
+
+@dataclass
+class EnrichmentResult:
+    enriched: int = 0
+    failed: int = 0
+
+
+def run(conn, session, now: str) -> EnrichmentResult:
+    # Local import, not module-level: storage.py never imports enrichment.py,
+    # but keeping this import inside run() keeps enrichment.py's module-level
+    # import graph independent of storage.py, so the two can be reasoned
+    # about — and unit-tested — in isolation.
+    from jobfinder import storage
+
+    result = EnrichmentResult()
+    for job in storage.find_unenriched_jobs(conn):
+        try:
+            description = fetch_description(session, job["url"])
+            if description is None:
+                storage.save_enrichment(conn, job["id"], "", None, [], now, failed=True)
+                result.failed += 1
+                log.warning("No JSON-LD description found for %s (%s)", job["company"], job["url"])
+                continue
+            seniority = extract_seniority(job["title"])
+            skills = extract_skills(description)
+            storage.save_enrichment(conn, job["id"], description, seniority, skills, now, failed=False)
+            result.enriched += 1
+        except Exception as exc:  # per-job isolation — one bad job must never stop the batch
+            log.warning("Enrichment failed for %s (%s): %s", job["company"], job["url"], exc)
+            storage.save_enrichment(conn, job["id"], "", None, [], now, failed=True)
+            result.failed += 1
+    return result
