@@ -2,29 +2,49 @@
 {% block content %}
 <h2>Job history</h2>
 <form class="filters" method="get" action="/jobs">
-  <select name="company">
+  <select name="company" onchange="this.form.submit()">
     <option value="">All companies</option>
     {% for c in companies %}
     <option value="{{ c }}" {{ "selected" if c == company }}>{{ c }}</option>
     {% endfor %}
   </select>
   <input type="text" name="q" placeholder="Search titles…" value="{{ q }}">
+  <input type="text" name="skill" class="skill-search" placeholder="Search skill e.g. Airflow…" value="{{ skill }}">
   <label><input type="checkbox" name="active" value="1" {{ "checked" if active == "1" }}> Active only</label>
-  <button type="submit">Filter</button>
+  <button type="submit">Search</button>
 </form>
-<table>
-  <tr><th>Company</th><th>Title</th><th>First seen</th><th>Status</th><th></th></tr>
-  {% for job in jobs %}
-  <tr>
-    <td>{{ job.company }}</td>
-    <td>{{ job.title }}</td>
-    <td>{{ job.first_seen[:10] }}</td>
-    <td><span class="pill {{ 'on' if job.is_active else 'off' }}">
-        {{ "active" if job.is_active else "closed" }}</span></td>
-    <td>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener">Apply</a>{% endif %}</td>
-  </tr>
-  {% else %}
-  <tr><td colspan="5">No jobs match.</td></tr>
-  {% endfor %}
-</table>
+
+{% if jobs %}
+<div class="job-row-header">
+  <span></span><span>Company</span><span>Title</span><span>Seniority</span><span>Status</span><span></span>
+</div>
+{% for job in jobs %}
+<details class="job-row">
+  <summary class="job-row-summary">
+    <span></span>
+    <span>{{ job.company }}</span>
+    <span>{{ job.title }}</span>
+    <span>{{ job.seniority or "—" }}</span>
+    <span><span class="pill {{ 'on' if job.is_active else 'off' }}">
+        {{ "active" if job.is_active else "closed" }}</span></span>
+    <span>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Apply</a>{% endif %}</span>
+  </summary>
+  <div class="job-detail">
+    {% if job.enrichment_failed or not job.description %}
+      Description not available yet.
+    {% else %}
+      {{ job.description | highlight(skill) }}
+      {% set tags = skills_by_job.get(job.id) %}
+      {% if tags %}
+      <div style="margin-top:8px;">
+        {% for s in tags %}<span class="skill-tag">{{ s }}</span>{% endfor %}
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</details>
+{% endfor %}
+{% else %}
+<p>No jobs match.</p>
+{% endif %}
 {% endblock %}

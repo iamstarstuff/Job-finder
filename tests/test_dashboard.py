@@ -183,3 +183,22 @@ def test_highlight_returns_escaped_text_when_no_term():
     from dashboard.app import highlight
     result = highlight("Needs <b>Airflow</b>", "")
     assert str(result) == "Needs &lt;b&gt;Airflow&lt;/b&gt;"
+
+
+def test_jobs_page_shows_description_and_skills(jobs_search_client):
+    resp = jobs_search_client.get("/jobs")
+    assert b"Airflow" in resp.data
+    assert b"SQL" in resp.data
+
+
+def test_jobs_page_shows_placeholder_for_unenriched_job(tmp_path):
+    conn = storage.connect(tmp_path / "u.db")
+    storage.record_company_snapshot(conn, "APC", [
+        Job("APC", "Warehouse Lead", "https://a/1", "p"),
+    ], "2026-07-17T10:00:00")
+    conn.close()
+    from dashboard.app import create_app
+    app = create_app(db_path=tmp_path / "u.db")
+    app.config["TESTING"] = True
+    resp = app.test_client().get("/jobs")
+    assert b"Description not available yet" in resp.data
