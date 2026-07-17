@@ -122,3 +122,64 @@ def test_drilldown_company_respects_row_cap(tmp_path):
     app.config["TESTING"] = True
     resp = app.test_client().get("/api/drilldown/company?value=BigCo")
     assert len(resp.get_json()) == 100
+
+
+@pytest.fixture
+def jobs_search_client(tmp_path):
+    conn = storage.connect(tmp_path / "s.db")
+    storage.record_company_snapshot(conn, "BMS", [
+        Job("BMS", "Data Platform Engineer", "https://a/1", "p"),
+        Job("BMS", "QC Analyst", "https://a/2", "p"),
+    ], "2026-07-17T10:00:00")
+    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
+    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/2",)).fetchone()["id"]
+    storage.save_enrichment(
+        conn, id1, "Experience orchestrating pipelines with Airflow and dbt. SQL required.",
+        "Senior", [("SQL", "Software")], "2026-07-17T11:00:00",
+    )
+    storage.save_enrichment(conn, id2, "QC role, GMP required.", None, [], "2026-07-17T11:00:00")
+    conn.close()
+    from dashboard.app import create_app
+    app = create_app(db_path=tmp_path / "s.db")
+    app.config["TESTING"] = True
+    return app.test_client()
+
+
+def test_jobs_page_skill_search_filters_by_description(jobs_search_client):
+    resp = jobs_search_client.get("/jobs?skill=airflow")
+    assert b"Data Platform Engineer" in resp.data
+    assert b"QC Analyst" not in resp.data
+
+
+def test_jobs_page_skill_search_combines_with_company_filter(jobs_search_client):
+    resp = jobs_search_client.get("/jobs?skill=airflow&company=BMS")
+    assert b"Data Platform Engineer" in resp.data
+    resp2 = jobs_search_client.get("/jobs?skill=airflow&company=Astellas")
+    assert b"Data Platform Engineer" not in resp2.data
+
+
+def test_jobs_page_skill_search_excludes_unenriched_jobs(tmp_path):
+    conn = storage.connect(tmp_path / "n.db")
+    storage.record_company_snapshot(conn, "APC", [
+        Job("APC", "Warehouse Lead", "https://a/1", "p"),
+    ], "2026-07-17T10:00:00")
+    conn.close()
+    from dashboard.app import create_app
+    app = create_app(db_path=tmp_path / "n.db")
+    app.config["TESTING"] = True
+    resp = app.test_client().get("/jobs?skill=airflow")
+    assert b"Warehouse Lead" not in resp.data
+
+
+def test_highlight_escapes_html_and_wraps_match():
+    from dashboard.app import highlight
+    result = highlight("Needs <b>Airflow</b> experience", "airflow")
+    assert str(result) == "Needs &lt;b&gt;Airflow&lt;/b&gt; experience".replace(
+        "Airflow", "<mark>Airflow</mark>"
+    )
+
+
+def test_highlight_returns_escaped_text_when_no_term():
+    from dashboard.app import highlight
+    result = highlight("Needs <b>Airflow</b>", "")
+    assert str(result) == "Needs &lt;b&gt;Airflow&lt;/b&gt;"

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -7,13 +8,29 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from flask import Flask, g, jsonify, render_template, request
+from markupsafe import Markup, escape
 
 from jobfinder import analytics, config, storage
+
+
+def highlight(text, term):
+    """Escape `text` for safe HTML output, then wrap case-insensitive
+    matches of `term` in <mark>. Both text and term are escaped before any
+    matching happens, so this is safe even if either contains HTML — the
+    only unescaped markup ever introduced is the literal <mark>/</mark>
+    tags this function writes itself, never anything derived from input."""
+    escaped_text = str(escape(text or ""))
+    if not term:
+        return Markup(escaped_text)
+    escaped_term = str(escape(term))
+    pattern = re.compile(re.escape(escaped_term), re.IGNORECASE)
+    return Markup(pattern.sub(lambda m: f"<mark>{m.group(0)}</mark>", escaped_text))
 
 
 def create_app(db_path=None) -> Flask:
     app = Flask(__name__)
     app.config["DB_PATH"] = str(db_path or config.DB_PATH)
+    app.jinja_env.filters["highlight"] = highlight
 
     def get_conn():
         if "conn" not in g:
@@ -41,23 +58,45 @@ def create_app(db_path=None) -> Flask:
         conn = get_conn()
         company = request.args.get("company", "")
         query = request.args.get("q", "")
+        skill_query = request.args.get("skill", "")
         active = request.args.get("active", "")
-        sql = "SELECT * FROM jobs WHERE 1=1"
+        sql = """SELECT jobs.*, job_details.description, job_details.seniority,
+                         job_details.enrichment_failed
+                  FROM jobs LEFT JOIN job_details ON job_details.job_id = jobs.id
+                  WHERE 1=1"""
         params = []
         if company:
-            sql += " AND company = ?"
+            sql += " AND jobs.company = ?"
             params.append(company)
         if query:
-            sql += " AND title LIKE ?"
+            sql += " AND jobs.title LIKE ?"
             params.append(f"%{query}%")
+        if skill_query:
+            sql += " AND job_details.description LIKE ?"
+            params.append(f"%{skill_query}%")
         if active == "1":
-            sql += " AND is_active = 1"
-        sql += " ORDER BY first_seen DESC LIMIT 500"
+            sql += " AND jobs.is_active = 1"
+        sql += " ORDER BY jobs.first_seen DESC LIMIT 500"
         rows = conn.execute(sql, params).fetchall()
+
+        job_ids = [r["id"] for r in rows]
+        skills_by_job = {}
+        if job_ids:
+            placeholders = ", ".join("?" for _ in job_ids)
+            skill_rows = conn.execute(
+                f"""SELECT job_skills.job_id, skills.name
+                    FROM job_skills JOIN skills ON skills.id = job_skills.skill_id
+                    WHERE job_skills.job_id IN ({placeholders})""",
+                job_ids,
+            ).fetchall()
+            for r in skill_rows:
+                skills_by_job.setdefault(r["job_id"], []).append(r["name"])
+
         companies = [r["company"] for r in conn.execute(
             "SELECT DISTINCT company FROM jobs ORDER BY company")]
         return render_template("jobs.html", jobs=rows, companies=companies,
-                               company=company, q=query, active=active)
+                               company=company, q=query, skill=skill_query, active=active,
+                               skills_by_job=skills_by_job)
 
     @app.route("/api/jobs-per-company")
     def api_jobs_per_company():
