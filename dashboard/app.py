@@ -71,6 +71,60 @@ def create_app(db_path=None) -> Flask:
     def api_categories():
         return jsonify(analytics.category_breakdown(get_conn()))
 
+    @app.route("/api/top-skills")
+    def api_top_skills():
+        return jsonify(analytics.top_skills(get_conn()))
+
+    @app.route("/api/seniority-breakdown")
+    def api_seniority_breakdown():
+        return jsonify(analytics.seniority_breakdown(get_conn()))
+
+    @app.route("/api/skills-by-category")
+    def api_skills_by_category():
+        return jsonify(analytics.skills_by_category(get_conn()))
+
+    @app.route("/api/drilldown/<dimension>")
+    def api_drilldown(dimension):
+        conn = get_conn()
+        value = request.args.get("value", "")
+        if dimension == "company":
+            rows = conn.execute(
+                """SELECT title, company, url, first_seen FROM jobs
+                   WHERE company = ? ORDER BY first_seen DESC LIMIT 100""",
+                (value,),
+            ).fetchall()
+        elif dimension == "skill":
+            rows = conn.execute(
+                """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
+                   FROM jobs
+                   JOIN job_skills ON job_skills.job_id = jobs.id
+                   JOIN skills ON skills.id = job_skills.skill_id
+                   WHERE skills.name = ?
+                   ORDER BY jobs.first_seen DESC LIMIT 100""",
+                (value,),
+            ).fetchall()
+        elif dimension == "seniority":
+            seniority_value = None if value == "Unspecified" else value
+            rows = conn.execute(
+                """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
+                   FROM jobs
+                   JOIN job_details ON job_details.job_id = jobs.id
+                   WHERE job_details.seniority IS ? AND job_details.enrichment_failed = 0
+                   ORDER BY jobs.first_seen DESC LIMIT 100""",
+                (seniority_value,),
+            ).fetchall()
+        elif dimension == "category":
+            all_jobs = conn.execute(
+                "SELECT title, company, url, first_seen FROM jobs ORDER BY first_seen DESC"
+            ).fetchall()
+            rows = [r for r in all_jobs if analytics.categorize(r["title"]) == value][:100]
+        else:
+            return jsonify({"error": "unknown dimension"}), 400
+        return jsonify([
+            {"title": r["title"], "company": r["company"], "url": r["url"], "first_seen": r["first_seen"]}
+            for r in rows
+        ])
+
     @app.route("/analytics")
     def analytics_page():
         return render_template("analytics.html")
