@@ -158,6 +158,7 @@ def fetch_amgen_description(session, url: str) -> Optional[str]:
         return None
     guid = match.group(1)
     page = 1
+    seen = 0
     while True:
         response = fetch(
             session, AMGEN_API,
@@ -174,7 +175,12 @@ def fetch_amgen_description(session, url: str) -> Optional[str]:
             if item.get("guid") == guid:
                 description = item.get("description")
                 return description.strip() if description else None
-        if not batch or not data.get("pagination", {}).get("has_more_pages", False):
+        seen += len(batch)
+        pagination = data.get("pagination", {})
+        # Bounded by total (mirrors scrapers.amgen()'s own loop guard) so a
+        # misbehaving API that always reports has_more_pages=True can't
+        # spin this forever.
+        if not batch or seen >= pagination.get("total", 0) or not pagination.get("has_more_pages", False):
             return None
         page += 1
 
