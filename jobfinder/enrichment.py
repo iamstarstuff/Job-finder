@@ -9,6 +9,7 @@ from typing import List, Optional, Tuple
 from bs4 import BeautifulSoup
 
 from jobfinder.http_client import fetch
+from jobfinder.scrapers import AMGEN_API
 
 log = logging.getLogger(__name__)
 
@@ -140,6 +141,53 @@ def fetch_description(session, url: str) -> Optional[str]:
     return extract_ldjson_description(html)
 
 
+_AMGEN_GUID_RE = re.compile(r"/([0-9A-Fa-f]{32})/job/?$")
+
+
+def fetch_amgen_description(session, url: str) -> Optional[str]:
+    """Amgen's detail pages are a client-rendered SPA shell with no
+    server-side description (confirmed during rollout planning). The same
+    public Solr search API the listing scraper already calls
+    (jobfinder.scrapers.amgen()) returns a full description field per job,
+    so instead of fetching the detail page at all, this re-queries that
+    API and matches the target job by guid, parsed out of the job's own
+    URL (Amgen's frontend builds URLs as
+    /{location}/{title-slug}/{guid}/job/)."""
+    match = _AMGEN_GUID_RE.search(url)
+    if not match:
+        return None
+    guid = match.group(1)
+    page = 1
+    while True:
+        response = fetch(
+            session, AMGEN_API,
+            params={"location": "Ireland", "page": page},
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Origin": "www.amgen.jobs",
+            },
+        )
+        data = response.json()
+        batch = data.get("jobs", [])
+        for item in batch:
+            if item.get("guid") == guid:
+                description = item.get("description")
+                return description.strip() if description else None
+        if not batch or not data.get("pagination", {}).get("has_more_pages", False):
+            return None
+        page += 1
+
+
+# Per-company override for companies whose detail pages can't be handled
+# by the generic JSON-LD extractor. Only Amgen needs one so far — see
+# fetch_amgen_description's docstring for why. Companies not in this dict
+# use fetch_description (the generic path) as the default.
+COMPANY_FETCHERS = {
+    "Amgen": fetch_amgen_description,
+}
+
+
 @dataclass
 class EnrichmentResult:
     enriched: int = 0
@@ -182,7 +230,8 @@ def run(conn, session, now: str) -> EnrichmentResult:
     result = EnrichmentResult()
     for job in storage.find_unenriched_jobs(conn, companies=ENRICHMENT_COMPANIES):
         try:
-            description = fetch_description(session, job["url"])
+            fetcher = COMPANY_FETCHERS.get(job["company"], fetch_description)
+            description = fetcher(session, job["url"])
             if description is None:
                 storage.save_enrichment(conn, job["id"], "", None, [], now, failed=True)
                 result.failed += 1

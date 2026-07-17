@@ -217,6 +217,67 @@ def test_run_only_processes_scoped_companies(tmp_path):
     ).fetchone()["c"] == 0
 
 
+AMGEN_SOLR_PAGE_1 = {
+    "jobs": [
+        {"guid": "AAAA0000AAAA0000AAAA0000AAAA0000",
+         "description": "Wrong job, page 1 entry 1."},
+        {"guid": "91F9C7D5EFFF4A1696A7370CB6EFB74A",
+         "description": "Needs SAP and GMP experience for this role."},
+    ],
+    "pagination": {"total": 2, "has_more_pages": False},
+}
+
+AMGEN_SOLR_NO_MATCH = {
+    "jobs": [
+        {"guid": "AAAA0000AAAA0000AAAA0000AAAA0000", "description": "Not the target job."},
+    ],
+    "pagination": {"total": 1, "has_more_pages": False},
+}
+
+
+def test_fetch_amgen_description_matches_by_guid():
+    session = FakeSession({
+        "https://prod-search-api.jobsyn.org/api/v1/solr/search": FakeResponse(json_data=AMGEN_SOLR_PAGE_1),
+    })
+    url = "https://www.amgen.jobs/dublin-irl/some-role/91F9C7D5EFFF4A1696A7370CB6EFB74A/job/"
+    assert enrichment.fetch_amgen_description(session, url) == "Needs SAP and GMP experience for this role."
+
+
+def test_fetch_amgen_description_returns_none_when_guid_not_found():
+    session = FakeSession({
+        "https://prod-search-api.jobsyn.org/api/v1/solr/search": FakeResponse(json_data=AMGEN_SOLR_NO_MATCH),
+    })
+    url = "https://www.amgen.jobs/dublin-irl/some-role/91F9C7D5EFFF4A1696A7370CB6EFB74A/job/"
+    assert enrichment.fetch_amgen_description(session, url) is None
+
+
+def test_fetch_amgen_description_returns_none_for_unparseable_url():
+    session = FakeSession({})
+    assert enrichment.fetch_amgen_description(session, "https://www.amgen.jobs/not-a-job-url") is None
+    assert session.calls == []  # no point calling the API without a guid to match
+
+
+def test_run_dispatches_amgen_jobs_to_amgen_fetcher(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Amgen", [
+        Job("Amgen", "Sr Associate Business Performance",
+            "https://www.amgen.jobs/dublin-irl/some-role/91F9C7D5EFFF4A1696A7370CB6EFB74A/job/",
+            "https://www.amgen.jobs/dublin-irl/"),
+    ], "2026-07-17T10:00:00")
+
+    # Deliberately no route for the job's own detail-page URL — if run()
+    # ever fetched it directly (the generic JSON-LD path), FakeSession
+    # would 404 and this test would fail with result.failed == 1.
+    session = FakeSession({
+        "https://prod-search-api.jobsyn.org/api/v1/solr/search": FakeResponse(json_data=AMGEN_SOLR_PAGE_1),
+    })
+
+    result = enrichment.run(conn, session, "2026-07-17T12:00:00")
+
+    assert result.enriched == 1
+    assert result.failed == 0
+
+
 def test_run_skips_jobs_already_enriched(tmp_path):
     conn = storage.connect(tmp_path / "t.db")
     storage.record_company_snapshot(conn, "Abbvie", [
