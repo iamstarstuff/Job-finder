@@ -96,6 +96,28 @@ def test_extract_seniority_lead_does_not_match_misleading():
     assert enrichment.extract_seniority("Misleading Job Title Example") is None
 
 
+def test_extract_seniority_intern_matches_inflections():
+    assert enrichment.extract_seniority("Data Science Internship") == "Junior"
+    assert enrichment.extract_seniority("Graduate Internship Programme") == "Junior"
+    assert enrichment.extract_seniority("Summer Intern - Quality") == "Junior"
+    assert enrichment.extract_seniority("Internships Available - R&D") == "Junior"
+
+
+def test_extract_seniority_intern_does_not_match_unrelated_words():
+    assert enrichment.extract_seniority("International Sales Manager") is None
+    assert enrichment.extract_seniority("Internal Audit Manager") is None
+    assert enrichment.extract_seniority("Internet Systems Analyst") is None
+
+
+def test_extract_seniority_pre_existing_behaviors_unchanged():
+    assert enrichment.extract_seniority("Senior Quality Investigation Engineer") == "Senior"
+    assert enrichment.extract_seniority("Director, Global Compound Market Access") == "Director"
+    assert enrichment.extract_seniority(
+        "Site Analytical Sciences Associate Principal Scientist"
+    ) == "Lead"
+    assert enrichment.extract_seniority("Technology Engineer - SAP Supply Chain") is None
+
+
 BMS_STYLE_HTML = ("<script type=\"application/ld+json\">"
                    '{"@type": "JobPosting", "description": '
                    '"Adheres to GMP and uses SAP and Trackwise."}'

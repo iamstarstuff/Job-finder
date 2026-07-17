@@ -76,8 +76,22 @@ def _compile_keyword(keyword: str) -> re.Pattern:
     this class of false positive, and anchoring the trailing edge would
     break legitimate plural/inflected matches (e.g. "Good Manufacturing
     Practices" should still match the "practice" phrase).
+
+    Special case: "intern" needs its own inflection-aware pattern. A bare
+    trailing \\b (\\bintern\\b) rejects legitimate matches like "Internship"
+    and "Interns" (no word boundary right after "intern" in those words).
+    But simply dropping the trailing \\b would make "intern" match as a
+    prefix of unrelated words like "International", "Internal", and
+    "Internet". So we anchor on the start of the word (leading \\b) and
+    allow only a small, explicit set of inflections to follow before the
+    word actually ends: "" (bare "Intern"), "s" (Interns), "ship"/"ships"
+    (Internship/Internships), "ee"/"ees" (Internee/Internees) — each
+    followed by a trailing \\b so e.g. "Internet" (which continues with
+    "et") still correctly fails to match.
     """
     stripped = keyword.strip()
+    if stripped.lower() == "intern":
+        return re.compile(r"\bintern(ships?|ees?|s)?\b", re.IGNORECASE)
     if " " in stripped:
         return re.compile(re.escape(stripped), re.IGNORECASE)
     prefix = r"\b" if stripped[:1].isalnum() else ""
