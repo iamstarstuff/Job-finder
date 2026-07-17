@@ -10,6 +10,19 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// escapeHtml() only escapes &, <, > (text-node context) — it does not
+// escape quote characters, so it is unsafe to use directly inside an HTML
+// attribute value (e.g. href="..."). A url containing a bare double quote
+// could otherwise break out of the attribute and inject markup. Also
+// restrict to http(s) so a scraped url can't smuggle a javascript: link.
+function escapeAttr(str) {
+  return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function isSafeUrl(url) {
+  return /^https?:\/\//i.test(url);
+}
+
 function closeDrilldownPanel(panel) {
   panel.classList.add("hidden");
   panel.innerHTML = "";
@@ -21,8 +34,8 @@ function renderDrilldownPanel(panel, value, rows) {
     panel.innerHTML = closeBtn + "<p>No jobs found for “" + escapeHtml(value) + "”.</p>";
   } else {
     const rowsHtml = rows.map(function (r) {
-      const applyLink = r.url
-        ? '<a class="btn" href="' + escapeHtml(r.url) + '" target="_blank" rel="noopener">Apply</a>'
+      const applyLink = (r.url && isSafeUrl(r.url))
+        ? '<a class="btn" href="' + escapeAttr(r.url) + '" target="_blank" rel="noopener">Apply</a>'
         : "";
       return "<tr><td>" + escapeHtml(r.company) + "</td><td>" + escapeHtml(r.title) +
         "</td><td>" + escapeHtml(r.first_seen.slice(0, 10)) + "</td><td>" + applyLink + "</td></tr>";
