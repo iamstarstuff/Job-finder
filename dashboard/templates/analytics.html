@@ -2,11 +2,32 @@
 {% block content %}
 <h2>Analytics</h2>
 <div class="cards">
-  <div class="card" style="grid-column:1/-1"><canvas id="perCompany" height="90"></canvas></div>
-  <div class="card" style="grid-column:1/-1"><canvas id="newPerWeek" height="90"></canvas></div>
-  <div class="card" style="grid-column:1/-1"><canvas id="categories" height="120"></canvas></div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="perCompany"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-perCompany"></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="newPerWeek"></canvas></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="categories"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-categories"></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="topSkills"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-topSkills"></div>
+  </div>
+  <div class="card">
+    <div class="chart-wrap small"><canvas id="seniority"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-seniority"></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="skillsByCategory"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-skillsByCategory"></div>
+  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="{{ url_for('static', filename='drilldown.js') }}"></script>
 <script>
 async function j(url) { return (await fetch(url)).json(); }
 const PALETTE = ["#0b5394","#1a7f37","#9a6700","#cf222e","#8250df",
@@ -19,7 +40,10 @@ j("/api/jobs-per-company").then(rows => {
         { label: "Active", data: rows.map(r => r.active), backgroundColor: "#0b5394" },
         { label: "Total seen", data: rows.map(r => r.total), backgroundColor: "#c7d9ec" },
       ]},
-    options: { plugins: { title: { display: true, text: "Jobs per company" } } },
+    options: { maintainAspectRatio: false,
+      onClick: makeDrilldownHandler("drilldown-perCompany", "company",
+        (el, c) => c.data.labels[el.index]),
+      plugins: { title: { display: true, text: "Jobs per company" } } },
   });
 });
 
@@ -28,7 +52,8 @@ j("/api/new-per-week").then(rows => {
     data: { labels: rows.map(r => r.week),
       datasets: [{ label: "New jobs", data: rows.map(r => r.count),
                    borderColor: "#1a7f37", tension: .3, fill: false }]},
-    options: { plugins: { title: { display: true, text: "New jobs per week" } } },
+    options: { maintainAspectRatio: false,
+      plugins: { title: { display: true, text: "New jobs per week" } } },
   });
 });
 
@@ -43,8 +68,54 @@ j("/api/categories").then(rows => {
   }));
   new Chart(document.getElementById("categories"), { type: "bar",
     data: { labels: companies, datasets },
-    options: { scales: { x: { stacked: true }, y: { stacked: true } },
+    options: { maintainAspectRatio: false,
+      scales: { x: { stacked: true }, y: { stacked: true } },
+      onClick: makeDrilldownHandler("drilldown-categories", "category",
+        (el, c) => c.data.datasets[el.datasetIndex].label),
       plugins: { title: { display: true, text: "What each company posts (by category)" } } },
+  });
+});
+
+j("/api/top-skills").then(rows => {
+  new Chart(topSkills, { type: "bar",
+    data: { labels: rows.map(r => r.skill),
+      datasets: [{ label: "Jobs mentioning skill", data: rows.map(r => r.count),
+                   backgroundColor: "#0b5394" }] },
+    options: { indexAxis: "y", maintainAspectRatio: false,
+      onClick: makeDrilldownHandler("drilldown-topSkills", "skill",
+        (el, c) => c.data.labels[el.index]),
+      plugins: { title: { display: true, text: "Top skills" }, legend: { display: false } } },
+  });
+});
+
+j("/api/seniority-breakdown").then(rows => {
+  new Chart(seniority, { type: "doughnut",
+    data: { labels: rows.map(r => r.seniority),
+      datasets: [{ data: rows.map(r => r.count),
+                   backgroundColor: rows.map((_, i) => PALETTE[i % PALETTE.length]) }] },
+    options: { maintainAspectRatio: false,
+      onClick: makeDrilldownHandler("drilldown-seniority", "seniority",
+        (el, c) => c.data.labels[el.index]),
+      plugins: { title: { display: true, text: "Seniority breakdown" } } },
+  });
+});
+
+j("/api/skills-by-category").then(rows => {
+  const categories = [...new Set(rows.map(r => r.category))];
+  const skills = [...new Set(rows.map(r => r.skill))];
+  const datasets = categories.map((cat, i) => ({
+    label: cat,
+    backgroundColor: PALETTE[i % PALETTE.length],
+    data: skills.map(s =>
+      (rows.find(r => r.skill === s && r.category === cat) || {count: 0}).count),
+  }));
+  new Chart(skillsByCategory, { type: "bar",
+    data: { labels: skills, datasets },
+    options: { indexAxis: "y", maintainAspectRatio: false,
+      scales: { x: { stacked: true }, y: { stacked: true } },
+      onClick: makeDrilldownHandler("drilldown-skillsByCategory", "skill",
+        (el, c) => c.data.labels[el.index]),
+      plugins: { title: { display: true, text: "Skills by category" } } },
   });
 });
 </script>
