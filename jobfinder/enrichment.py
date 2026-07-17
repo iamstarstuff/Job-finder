@@ -146,20 +146,30 @@ class EnrichmentResult:
     failed: int = 0
 
 
-# Pilot scope: this pipeline is being piloted on these two companies only
-# (design spec §7: "pilot on 3-5 companies... before wider rollout").
-# Several other companies' detail pages are known to 403 or serve an empty
-# JS shell (Astellas, Amgen, APC, Vle Therapeutics, J&J confirmed during
-# planning). If run() weren't scoped, enriching those jobs would write a
-# permanent job_details row with enrichment_failed=1 — and since
-# find_unenriched_jobs excludes any job with an existing job_details row,
-# those jobs would never be retried, even after a future rollout adds a
-# working fetcher for that company.
-#
-# Removing this list (or passing companies=None to find_unenriched_jobs) is
-# the full-rollout step, to be done as its own separate change once more
-# companies have working detail-page fetchers.
-PILOT_COMPANIES = ["Abbvie", "BMS"]
+# Companies whose detail pages carry a schema.org JobPosting JSON-LD block
+# (confirmed live during rollout planning) plus Amgen (via its own
+# dedicated fetcher — see COMPANY_FETCHERS below). This intentionally
+# excludes 7 of the 21 scraped companies:
+#   - APC, Vle therapeutics, Johnson & Johnson: confirmed Cloudflare
+#     bot-management (403 even with full realistic browser headers, or a
+#     JS challenge page) — same unsolvable-without-headless-browser class
+#     as Eli Lilly, already excluded from job-finder entirely. Settled,
+#     not pending.
+#   - Astellas, Alkermes, Grifols, Leo Pharma: JS-rendered SPAs with no
+#     server-side description anywhere (no JSON-LD, no populated meta/og
+#     description, no content-bearing markup). Each needs its platform's
+#     internal API reverse-engineered — deferred as separate follow-up
+#     work, not attempted here.
+# If run() weren't scoped to this list, enriching an excluded company's
+# jobs would write a permanent job_details row with enrichment_failed=1 —
+# and since find_unenriched_jobs excludes any job with an existing
+# job_details row, those jobs would never be retried even after a future
+# fetcher is added for that company.
+ENRICHMENT_COMPANIES = [
+    "Abbvie", "BMS", "Astrazeneca", "Takeda", "Pfizer", "MSD", "Gilead",
+    "Jazz Pharmaceuticals", "Thermo Fisher", "Regeneron", "Teva", "Viatris",
+    "ICON", "Amgen",
+]
 
 
 def run(conn, session, now: str) -> EnrichmentResult:
@@ -170,7 +180,7 @@ def run(conn, session, now: str) -> EnrichmentResult:
     from jobfinder import storage
 
     result = EnrichmentResult()
-    for job in storage.find_unenriched_jobs(conn, companies=PILOT_COMPANIES):
+    for job in storage.find_unenriched_jobs(conn, companies=ENRICHMENT_COMPANIES):
         try:
             description = fetch_description(session, job["url"])
             if description is None:

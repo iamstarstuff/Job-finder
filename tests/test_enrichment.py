@@ -169,7 +169,24 @@ def test_run_enriches_new_jobs_and_isolates_failures(tmp_path):
     assert no_ldjson["enrichment_failed"] == 1
 
 
-def test_run_only_processes_pilot_companies(tmp_path):
+def test_run_enriches_a_newly_added_rollout_company(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Regeneron", [
+        Job("Regeneron", "QC Technical Resources Specialist",
+            "https://example.com/regeneron/1", "https://example.com/careers"),
+    ], "2026-07-17T10:00:00")
+
+    session = FakeSession({
+        "https://example.com/regeneron/1": FakeResponse(content=BMS_STYLE_HTML),
+    })
+
+    result = enrichment.run(conn, session, "2026-07-17T12:00:00")
+
+    assert result.enriched == 1
+    assert result.failed == 0
+
+
+def test_run_only_processes_scoped_companies(tmp_path):
     conn = storage.connect(tmp_path / "t.db")
     storage.record_company_snapshot(conn, "Abbvie", [
         Job("Abbvie", "SAP Engineer", "https://example.com/abbvie/1", "https://example.com/careers"),
@@ -182,7 +199,7 @@ def test_run_only_processes_pilot_companies(tmp_path):
         "https://example.com/abbvie/1": FakeResponse(content=BMS_STYLE_HTML),
         # No route for astellas/1 -- if run() ever requests it, FakeSession
         # returns a 404 stub rather than raising, so we must assert on
-        # session.calls to prove the non-pilot company was never touched.
+        # session.calls to prove the out-of-scope company was never touched.
     })
 
     result = enrichment.run(conn, session, "2026-07-16T12:00:00")
