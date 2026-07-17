@@ -90,3 +90,42 @@ def overview(conn) -> dict:
         "emails_failed": conn.execute(
             "SELECT COUNT(*) c FROM emails WHERE success = 0").fetchone()["c"],
     }
+
+
+def top_skills(conn, limit: int = 15) -> List[dict]:
+    rows = conn.execute(
+        """SELECT skills.name AS skill, skills.category AS category, COUNT(*) AS count
+           FROM job_skills
+           JOIN skills ON skills.id = job_skills.skill_id
+           JOIN job_details ON job_details.job_id = job_skills.job_id
+           WHERE job_details.enrichment_failed = 0
+           GROUP BY skills.id
+           ORDER BY count DESC, skills.name
+           LIMIT ?""",
+        (limit,),
+    ).fetchall()
+    return [{"skill": r["skill"], "category": r["category"], "count": r["count"]} for r in rows]
+
+
+def seniority_breakdown(conn) -> List[dict]:
+    rows = conn.execute(
+        """SELECT COALESCE(seniority, 'Unspecified') AS seniority, COUNT(*) AS count
+           FROM job_details
+           WHERE enrichment_failed = 0
+           GROUP BY COALESCE(seniority, 'Unspecified')
+           ORDER BY count DESC"""
+    ).fetchall()
+    return [{"seniority": r["seniority"], "count": r["count"]} for r in rows]
+
+
+def skills_by_category(conn) -> List[dict]:
+    rows = conn.execute(
+        """SELECT skills.category AS category, skills.name AS skill, COUNT(*) AS count
+           FROM job_skills
+           JOIN skills ON skills.id = job_skills.skill_id
+           JOIN job_details ON job_details.job_id = job_skills.job_id
+           WHERE job_details.enrichment_failed = 0
+           GROUP BY skills.id
+           ORDER BY category, count DESC"""
+    ).fetchall()
+    return [{"category": r["category"], "skill": r["skill"], "count": r["count"]} for r in rows]

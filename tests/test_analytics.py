@@ -24,6 +24,24 @@ def seeded_conn(tmp_path):
     return conn
 
 
+def seeded_enriched_conn(tmp_path):
+    conn = storage.connect(tmp_path / "e.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "SAP Engineer", "https://a/1", "p"),
+        Job("Abbvie", "QC Analyst", "https://a/2", "p"),
+        Job("Abbvie", "Broken Enrichment", "https://a/3", "p"),
+    ], "2026-07-17T10:00:00")
+    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
+    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/2",)).fetchone()["id"]
+    id3 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/3",)).fetchone()["id"]
+    storage.save_enrichment(conn, id1, "Needs SAP and GMP.", "Senior",
+                             [("SAP", "Software"), ("GMP", "Regulatory")], "2026-07-17T11:00:00")
+    storage.save_enrichment(conn, id2, "QC role, GMP required.", None,
+                             [("GMP", "Regulatory")], "2026-07-17T11:00:00")
+    storage.save_enrichment(conn, id3, "", None, [], "2026-07-17T11:00:00", failed=True)
+    return conn
+
+
 def test_categorize_titles():
     assert analytics.categorize("QC Analyst II") == "Quality"
     assert analytics.categorize("Process Engineer") == "Engineering"
@@ -66,3 +84,37 @@ def test_overview_smoke(tmp_path):
     assert data["total_jobs_seen"] == 3
     assert data["active_jobs"] == 2
     assert data["companies"] == 2
+
+
+def test_top_skills_counts_across_jobs(tmp_path):
+    conn = seeded_enriched_conn(tmp_path)
+    by_skill = {r["skill"]: r["count"] for r in analytics.top_skills(conn)}
+    assert by_skill["GMP"] == 2
+    assert by_skill["SAP"] == 1
+
+
+def test_top_skills_respects_limit(tmp_path):
+    conn = seeded_enriched_conn(tmp_path)
+    rows = analytics.top_skills(conn, limit=1)
+    assert len(rows) == 1
+    assert rows[0]["skill"] == "GMP"
+
+
+def test_seniority_breakdown_labels_null_as_unspecified(tmp_path):
+    conn = seeded_enriched_conn(tmp_path)
+    rows = {r["seniority"]: r["count"] for r in analytics.seniority_breakdown(conn)}
+    assert rows["Senior"] == 1
+    assert rows["Unspecified"] == 1
+
+
+def test_seniority_breakdown_excludes_failed_enrichment(tmp_path):
+    conn = seeded_enriched_conn(tmp_path)
+    total = sum(r["count"] for r in analytics.seniority_breakdown(conn))
+    assert total == 2  # the failed-enrichment job (id3) is excluded
+
+
+def test_skills_by_category(tmp_path):
+    conn = seeded_enriched_conn(tmp_path)
+    rows = analytics.skills_by_category(conn)
+    assert {"category": "Software", "skill": "SAP", "count": 1} in rows
+    assert {"category": "Regulatory", "skill": "GMP", "count": 2} in rows
