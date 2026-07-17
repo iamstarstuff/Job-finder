@@ -5,47 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Job-Finder Dashboard</title>
 <style>
-  :root { --bg:#f6f8fa; --card:#fff; --border:#e1e4e8; --ink:#24292f;
-          --muted:#57606a; --accent:#0b5394; --green:#1a7f37; }
+  :root {
+    --bg:#FAF7F2; --card:#fff; --border:#E8E0D4; --ink:#22392F;
+    --muted:#8A7F6E; --accent:#2F5D50; --accent2:#D98E4A; --green:#2F5D50;
+  }
   * { box-sizing: border-box; }
-  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+  body { margin:0; font-family:-apple-system,"Inter",Segoe UI,Roboto,sans-serif;
          background:var(--bg); color:var(--ink); }
   nav { background:var(--accent); padding:0 24px; display:flex; gap:4px; }
   nav a { color:#fff; text-decoration:none; padding:14px 16px; font-size:14px;
-          font-weight:600; opacity:.85; }
-  nav a:hover, nav a.active { opacity:1; border-bottom:3px solid #fff; }
+          font-weight:600; opacity:.85; border-bottom:2px solid transparent; }
+  nav a:hover { opacity:1; }
+  nav a.active { opacity:1; border-bottom:2px solid var(--accent2); }
   main { max-width:1100px; margin:24px auto; padding:0 24px; }
   .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
            gap:16px; margin-bottom:24px; }
-  .card { background:var(--card); border:1px solid var(--border);
-          border-radius:10px; padding:16px; }
-  .card .num { font-size:28px; font-weight:700; }
+  .card { background:var(--card); border-radius:12px; padding:16px;
+          box-shadow:0 1px 3px rgba(47,93,80,.08); }
+  .card .num { font-size:28px; font-weight:700; font-variant-numeric: tabular-nums; }
   .card .label { color:var(--muted); font-size:13px; }
+  table { width:100%; border-collapse:collapse; background:var(--card);
+          border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(47,93,80,.08);
+          font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding:10px 14px; border-top:1px solid #F5F1E8;
+           font-size:14px; }
+  th { background:#FBF8F2; border-top:none; color:var(--muted); font-size:11px;
+       text-transform:uppercase; letter-spacing:.04em; }
+  a.btn { background:var(--accent); color:#fff; padding:5px 12px; border-radius:8px;
+          text-decoration:none; font-size:13px; }
+  .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:12px; }
+  .pill.on { background:#E7F2EC; color:var(--accent); }
+  .pill.off { background:#F0EAD9; color:var(--muted); }
+  form.filters { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+  input, select { padding:8px 12px; border:1px solid var(--border);
+                  border-radius:8px; font-size:14px; background:#fff; color:var(--ink); }
+  .skill-search { border-color:var(--accent2); }
+  pre.log { background:#0d1117; color:#c9d1d9; padding:16px; border-radius:12px;
+            font-size:12px; overflow-x:auto; max-height:70vh; }
   .chart-wrap { position:relative; height:320px; }
   .chart-wrap.small { height:280px; }
-  .drilldown { margin-top:12px; border-top:1px solid var(--border); padding-top:12px; }
+  .drilldown { margin-top:12px; border-top:1px solid #F0EAD9; padding-top:12px; }
   .drilldown.hidden { display:none; }
   .drilldown-close { float:right; background:none; border:1px solid var(--border);
-                      border-radius:6px; color:var(--muted); cursor:pointer;
+                      border-radius:8px; color:var(--muted); cursor:pointer;
                       font-size:12px; padding:2px 8px; }
   .drilldown table { margin-top:8px; }
   .drilldown h4 { margin:0; font-size:14px; }
-  table { width:100%; border-collapse:collapse; background:var(--card);
-          border:1px solid var(--border); border-radius:10px; overflow:hidden; }
-  th, td { text-align:left; padding:10px 14px; border-top:1px solid var(--border);
-           font-size:14px; }
-  th { background:#f0f3f6; border-top:none; color:var(--muted); font-size:12px;
-       text-transform:uppercase; letter-spacing:.4px; }
-  a.btn { background:var(--green); color:#fff; padding:4px 12px; border-radius:6px;
-          text-decoration:none; font-size:13px; }
-  .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:12px; }
-  .pill.on { background:#dafbe1; color:var(--green); }
-  .pill.off { background:#f0f3f6; color:var(--muted); }
-  form.filters { display:flex; gap:8px; margin-bottom:16px; }
-  input, select { padding:8px 10px; border:1px solid var(--border);
-                  border-radius:6px; font-size:14px; }
-  pre.log { background:#0d1117; color:#c9d1d9; padding:16px; border-radius:10px;
-            font-size:12px; overflow-x:auto; max-height:70vh; }
+  details.job-row { background:var(--card); border-radius:12px; margin-bottom:6px;
+                     box-shadow:0 1px 3px rgba(47,93,80,.06); overflow:hidden; }
+  .job-row-summary { display:grid; grid-template-columns:20px 1.4fr 2fr 100px 90px 90px;
+                      align-items:center; padding:12px 16px; cursor:pointer;
+                      list-style:none; font-size:14px; gap:8px; }
+  .job-row-summary::-webkit-details-marker { display:none; }
+  .job-row-summary::before { content:"▸"; color:var(--accent2); }
+  details.job-row[open] > .job-row-summary::before { content:"▾"; }
+  .job-row-header { display:grid; grid-template-columns:20px 1.4fr 2fr 100px 90px 90px;
+                     padding:0 16px 8px; font-size:11px; text-transform:uppercase;
+                     letter-spacing:.04em; color:var(--muted); gap:8px; }
+  .job-detail { padding:14px 16px 14px 42px; background:#FBF8F2;
+                border-top:1px solid #F0EAD9; font-size:13px; color:#5B5245; line-height:1.6; }
+  .skill-tag { background:#EAF1EC; color:var(--accent); font-size:11px;
+               padding:3px 9px; border-radius:999px; margin-right:6px; display:inline-block; }
+  mark { background:#F6DFC0; color:var(--ink); padding:0 3px; border-radius:3px; }
 </style>
 </head>
 <body>
