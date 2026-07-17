@@ -158,12 +158,16 @@ def migrate_legacy_json(conn, json_path, now: str) -> int:
     return count
 
 
-def find_unenriched_jobs(conn) -> List[sqlite3.Row]:
-    return conn.execute(
-        """SELECT jobs.id, jobs.company, jobs.title, jobs.url
-           FROM jobs LEFT JOIN job_details ON jobs.id = job_details.job_id
-           WHERE job_details.job_id IS NULL"""
-    ).fetchall()
+def find_unenriched_jobs(conn, companies: Optional[List[str]] = None) -> List[sqlite3.Row]:
+    query = """SELECT jobs.id, jobs.company, jobs.title, jobs.url
+               FROM jobs LEFT JOIN job_details ON jobs.id = job_details.job_id
+               WHERE job_details.job_id IS NULL"""
+    params: List[str] = []
+    if companies:
+        placeholders = ", ".join("?" for _ in companies)
+        query += f" AND jobs.company IN ({placeholders})"
+        params.extend(companies)
+    return conn.execute(query, params).fetchall()
 
 
 def _get_or_create_skill(conn, name: str, category: str) -> int:

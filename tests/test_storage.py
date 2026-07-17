@@ -82,6 +82,22 @@ def test_find_unenriched_jobs_returns_only_jobs_without_details(tmp_path):
     assert [r["url"] for r in unenriched] == ["https://a/2"]
 
 
+def test_find_unenriched_jobs_filters_by_companies(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "SAP Engineer", "https://a/1", "https://a/careers"),
+    ], "2026-07-16T10:00:00")
+    storage.record_company_snapshot(conn, "Astellas", [
+        Job("Astellas", "QC Analyst", "https://b/1", "https://b/careers"),
+    ], "2026-07-16T10:00:00")
+
+    filtered = storage.find_unenriched_jobs(conn, companies=["Abbvie", "BMS"])
+    assert [r["url"] for r in filtered] == ["https://a/1"]
+
+    unfiltered = storage.find_unenriched_jobs(conn)
+    assert {r["url"] for r in unfiltered} == {"https://a/1", "https://b/1"}
+
+
 def test_save_enrichment_writes_details_and_skills(tmp_path):
     conn = make_conn(tmp_path)
     storage.record_company_snapshot(conn, "Abbvie", [JOB_A], "2026-07-16T10:00:00")

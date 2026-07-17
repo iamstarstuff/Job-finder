@@ -67,6 +67,35 @@ def test_extract_skills_returns_category_alongside_name():
     assert ("SQL", "Software") in result
 
 
+def test_extract_skills_bare_sap_does_not_match_asap():
+    names = {name for name, _ in enrichment.extract_skills("We work ASAP on tasks")}
+    assert "SAP" not in names
+
+
+def test_extract_skills_matches_short_tokens_followed_by_punctuation():
+    names = {name for name, _ in enrichment.extract_skills("Experience with GMP, SQL and Excel.")}
+    assert {"GMP", "SQL", "Excel"} <= names
+
+
+def test_extract_skills_matches_parenthesized_gmp():
+    names = {name for name, _ in enrichment.extract_skills("Knowledge of (GMP) required")}
+    assert "GMP" in names
+
+
+def test_extract_skills_matches_slash_separated_tokens():
+    names = {name for name, _ in enrichment.extract_skills("Skills: SQL/Python.")}
+    assert {"SQL", "Python"} <= names
+
+
+def test_extract_skills_excel_does_not_match_excellent():
+    names = {name for name, _ in enrichment.extract_skills("Excellent communication skills required.")}
+    assert "Excel" not in names
+
+
+def test_extract_seniority_lead_does_not_match_misleading():
+    assert enrichment.extract_seniority("Misleading Job Title Example") is None
+
+
 BMS_STYLE_HTML = ("<script type=\"application/ld+json\">"
                    '{"@type": "JobPosting", "description": '
                    '"Adheres to GMP and uses SAP and Trackwise."}'
@@ -116,6 +145,37 @@ def test_run_enriches_new_jobs_and_isolates_failures(tmp_path):
 
     no_ldjson = details_for("https://example.com/job/no-ldjson")
     assert no_ldjson["enrichment_failed"] == 1
+
+
+def test_run_only_processes_pilot_companies(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "SAP Engineer", "https://example.com/abbvie/1", "https://example.com/careers"),
+    ], "2026-07-16T10:00:00")
+    storage.record_company_snapshot(conn, "Astellas", [
+        Job("Astellas", "QC Analyst", "https://example.com/astellas/1", "https://example.com/careers"),
+    ], "2026-07-16T10:00:00")
+
+    session = FakeSession({
+        "https://example.com/abbvie/1": FakeResponse(content=BMS_STYLE_HTML),
+        # No route for astellas/1 -- if run() ever requests it, FakeSession
+        # returns a 404 stub rather than raising, so we must assert on
+        # session.calls to prove the non-pilot company was never touched.
+    })
+
+    result = enrichment.run(conn, session, "2026-07-16T12:00:00")
+
+    assert result.enriched == 1
+    assert result.failed == 0
+    called_urls = {url for _, url, _ in session.calls}
+    assert "https://example.com/astellas/1" not in called_urls
+
+    astellas_job_id = conn.execute(
+        "SELECT id FROM jobs WHERE url=?", ("https://example.com/astellas/1",)
+    ).fetchone()["id"]
+    assert conn.execute(
+        "SELECT COUNT(*) c FROM job_details WHERE job_id=?", (astellas_job_id,)
+    ).fetchone()["c"] == 0
 
 
 def test_run_skips_jobs_already_enriched(tmp_path):
