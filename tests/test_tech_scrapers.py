@@ -72,3 +72,27 @@ def test_aib_filters_roles_and_builds_absolute_urls():
     assert jobs[0].url == "https://jobs.aib.ie/aib/job/Dublin-Fraud-Data-Scientist-IE/1366746757/"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "AIB"
+
+
+def test_microsoft_parses_guessed_api_shape_and_filters_roles():
+    fake = FakeSession({
+        "https://gcsservices.careers.microsoft.com/search/api/v1/search": FakeResponse(json_data={
+            "operationResult": {"result": {
+                "totalJobCount": 2,
+                "jobs": [
+                    {"jobId": "1700000001", "title": "Senior DevOps Engineer"},
+                    {"jobId": "1700000002", "title": "Retail Store Associate"},
+                ],
+            }},
+        }),
+    })
+    jobs = tech_scrapers.microsoft(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior DevOps Engineer"
+    assert jobs[0].url == "https://jobs.careers.microsoft.com/global/en/job/1700000001"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Microsoft"
+
+
+def test_tech_scrapers_registry_has_all_three_companies():
+    assert set(tech_scrapers.TECH_SCRAPERS) == {"Google", "Microsoft", "AIB"}

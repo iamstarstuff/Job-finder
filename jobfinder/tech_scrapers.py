@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import OrderedDict
 from typing import List
 from urllib.parse import urljoin
 
@@ -143,3 +144,52 @@ def aib(session) -> List[Job]:
         total = parsed_total if parsed_total is not None else len(rows)
         offset += len(rows)
     return jobs
+
+
+# BEST-EFFORT / UNVERIFIED. This endpoint and response shape are based on
+# Microsoft's generally-documented public careers search API, not
+# confirmed live -- network access to jobs.careers.microsoft.com and this
+# API were both unreachable from the sandboxed environment that wrote
+# this scraper (a curl request hung mid-TLS-handshake; two browser
+# navigation attempts each timed out after 5 minutes). Before trusting
+# this in production: fetch MSFT_API directly with a real request from a
+# normal network, compare the actual response JSON structure against the
+# parsing below, and adjust field names if they differ.
+MSFT_API = "https://gcsservices.careers.microsoft.com/search/api/v1/search"
+MSFT_PORTAL = "https://jobs.careers.microsoft.com/global/en/search?lc=Ireland"
+
+
+def _msft_params(page: int, page_size: int = 20) -> dict:
+    return {"lc": "Ireland", "l": "en_us", "pg": page, "pgSz": page_size, "o": "Relevance"}
+
+
+def microsoft(session) -> List[Job]:
+    jobs = []
+    page = 1
+    while True:
+        resp = fetch(session, MSFT_API, params=_msft_params(page))
+        result = resp.json().get("operationResult", {}).get("result", {})
+        batch = result.get("jobs", [])
+        if not batch:
+            break
+        for item in batch:
+            title = item.get("title", "").strip()
+            if not matches_target_role(title):
+                continue
+            job_id = item.get("jobId", "")
+            jobs.append(Job(
+                "Microsoft", title,
+                f"https://jobs.careers.microsoft.com/global/en/job/{job_id}",
+                MSFT_PORTAL, sector="tech",
+            ))
+        page += 1
+        if page * 20 >= result.get("totalJobCount", 0):
+            break
+    return jobs
+
+
+TECH_SCRAPERS = OrderedDict([
+    ("Google", google),
+    ("Microsoft", microsoft),
+    ("AIB", aib),
+])
