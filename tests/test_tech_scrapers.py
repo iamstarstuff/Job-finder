@@ -27,19 +27,19 @@ def test_matches_target_role_excludes_noise_and_false_substrings():
         assert not tech_scrapers.matches_target_role(title), title
 
 
-GOOGLE_PAGE1 = b"""<script>AF_initDataCallback({key: 'ds:1', hash: '1', data:[["1001","Senior SRE, Cloud Storage","https://google.com/apply?jobId=1001"],["1002","Sales Rep","https://google.com/apply?jobId=1002"]]
+# Real shape (live-verified): data:[jobs_list, null, total_count, page_size].
+# total=3, page_size=2 here -> page 1 has 2 jobs (fetched=2 < 3, continue),
+# page 2 has the remaining 1 job (fetched=3 >= 3, stop).
+GOOGLE_PAGE1 = b"""<script>AF_initDataCallback({key: 'ds:1', hash: '1', data:[[["1001","Senior SRE, Cloud Storage","https://google.com/apply?jobId=1001"],["1002","Sales Rep","https://google.com/apply?jobId=1002"]],null,3,2]
 , sideChannel: {}});</script>"""
-GOOGLE_PAGE2 = b"""<script>AF_initDataCallback({key: 'ds:1', hash: '1', data:[["1003","Data Scientist, Ads","https://google.com/apply?jobId=1003"],["1004","Warehouse Associate","https://google.com/apply?jobId=1004"]]
+GOOGLE_PAGE2 = b"""<script>AF_initDataCallback({key: 'ds:1', hash: '1', data:[[["1003","Data Scientist, Ads","https://google.com/apply?jobId=1003"]],null,3,2]
 , sideChannel: {}});</script>"""
 
 
-def test_google_paginates_filters_roles_and_stops_on_repeated_page():
+def test_google_paginates_using_total_count_and_filters_roles():
     fake = FakeSession({
         "https://careers.google.com/jobs/results/?location=Ireland&page=1": FakeResponse(GOOGLE_PAGE1),
         "https://careers.google.com/jobs/results/?location=Ireland&page=2": FakeResponse(GOOGLE_PAGE2),
-        # page 3 repeats page 2's content verbatim, simulating Google's real
-        # behavior of clamping to the last valid page instead of returning empty
-        "https://careers.google.com/jobs/results/?location=Ireland&page=3": FakeResponse(GOOGLE_PAGE2),
     })
     jobs = tech_scrapers.google(fake)
     assert [j.title for j in jobs] == ["Senior SRE, Cloud Storage", "Data Scientist, Ads"]
@@ -74,22 +74,23 @@ def test_aib_filters_roles_and_builds_absolute_urls():
     assert jobs[0].company == "AIB"
 
 
-def test_microsoft_parses_guessed_api_shape_and_filters_roles():
+def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     fake = FakeSession({
-        "https://gcsservices.careers.microsoft.com/search/api/v1/search": FakeResponse(json_data={
-            "operationResult": {"result": {
-                "totalJobCount": 2,
-                "jobs": [
-                    {"jobId": "1700000001", "title": "Senior DevOps Engineer"},
-                    {"jobId": "1700000002", "title": "Retail Store Associate"},
+        "https://apply.careers.microsoft.com/api/pcsx/search": FakeResponse(json_data={
+            "status": 200,
+            "data": {
+                "count": 2,
+                "positions": [
+                    {"name": "Senior DevOps Engineer", "positionUrl": "/careers/job/1700000001"},
+                    {"name": "Retail Store Associate", "positionUrl": "/careers/job/1700000002"},
                 ],
-            }},
+            },
         }),
     })
     jobs = tech_scrapers.microsoft(fake)
     assert len(jobs) == 1
     assert jobs[0].title == "Senior DevOps Engineer"
-    assert jobs[0].url == "https://jobs.careers.microsoft.com/global/en/job/1700000001"
+    assert jobs[0].url == "https://apply.careers.microsoft.com/careers/job/1700000001"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "Microsoft"
 
