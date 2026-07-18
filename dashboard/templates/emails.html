@@ -9,6 +9,7 @@
   </div>
   {% endfor %}
 </div>
+<div class="table-scroll">
 <table>
   <tr><th>Sent at</th><th>Kind</th><th>Subject</th><th>Recipients</th><th>Status</th></tr>
   {% for e in emails %}
@@ -21,4 +22,5 @@
   </tr>
   {% else %}<tr><td colspan="5">No emails yet.</td></tr>{% endfor %}
 </table>
+</div>
 {% endblock %}

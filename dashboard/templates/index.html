@@ -10,6 +10,7 @@
 </div>
 
 <h3>Last run</h3>
+<div class="table-scroll">
 <table>
   <tr><th>Started</th><th>Finished</th><th>Jobs</th><th>New</th><th>Failures</th></tr>
   {% if overview.last_run %}
@@ -22,22 +23,27 @@
   </tr>
   {% else %}<tr><td colspan="5">No runs yet.</td></tr>{% endif %}
 </table>
+</div>
 
 <h3>Jobs per company</h3>
+<div class="table-scroll">
 <table>
   <tr><th>Company</th><th>Active</th><th>Total seen</th></tr>
   {% for row in per_company %}
   <tr><td>{{ row.company }}</td><td>{{ row.active }}</td><td>{{ row.total }}</td></tr>
   {% endfor %}
 </table>
+</div>
 
 {% if lifespans %}
 <h3>Median days a posting stays up</h3>
+<div class="table-scroll">
 <table>
   <tr><th>Company</th><th>Median days</th></tr>
   {% for row in lifespans %}
   <tr><td>{{ row.company }}</td><td>{{ row.median_days }}</td></tr>
   {% endfor %}
 </table>
+</div>
 {% endif %}
 {% endblock %}

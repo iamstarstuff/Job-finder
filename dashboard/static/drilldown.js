@@ -42,7 +42,7 @@ function renderDrilldownPanel(panel, value, rows) {
     }).join("");
     panel.innerHTML = closeBtn +
       "<h4>" + rows.length + " job" + (rows.length === 1 ? "" : "s") + " — " + escapeHtml(value) + "</h4>" +
-      "<table><tr><th>Company</th><th>Title</th><th>First seen</th><th></th></tr>" + rowsHtml + "</table>";
+      "<div class=\"table-scroll\"><table><tr><th>Company</th><th>Title</th><th>First seen</th><th></th></tr>" + rowsHtml + "</table></div>";
   }
   panel.querySelector(".drilldown-close").onclick = function () { closeDrilldownPanel(panel); };
   panel.classList.remove("hidden");
