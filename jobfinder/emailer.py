@@ -124,3 +124,18 @@ def send_run_notifications(conn, result) -> None:
             render_error_html(result.failures, result.zero_warnings),
             config.ERROR_RECIPIENTS,
         )
+
+
+def send_tech_digest(conn, result) -> None:
+    if result.new_jobs:
+        total = sum(len(v) for v in result.new_jobs.values())
+        _send_and_log(
+            conn, "tech_alert", f"{total} New Tech Job Posting{'s' if total != 1 else ''}",
+            render_new_jobs_html(result.new_jobs), config.TECH_ALERT_RECIPIENTS,
+        )
+    if result.failures or result.zero_warnings:
+        _send_and_log(
+            conn, "tech_error", "Tech Job Scraper Error Notification",
+            render_error_html(result.failures, result.zero_warnings),
+            config.ERROR_RECIPIENTS,
+        )

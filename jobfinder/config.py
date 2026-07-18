@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DB_PATH = BASE_DIR / "jobfinder.db"
 LOG_PATH = BASE_DIR / "jobscraper.log"
 ENRICHMENT_LOG_PATH = BASE_DIR / "enrichment.log"
+TECH_LOG_PATH = BASE_DIR / "tech_scraper.log"
 LEGACY_JOBS_JSON = BASE_DIR / "jobs.json"
 SMTP_PASSWORD_FILE = BASE_DIR / "smtp_password.txt"
 
@@ -15,6 +16,7 @@ SMTP_USERNAME = "barvepratik96@gmail.com"
 FROM_EMAIL = SMTP_USERNAME
 ALERT_RECIPIENTS = ["vaidehipatil2011@gmail.com"]
 ERROR_RECIPIENTS = ["barvepratik96@gmail.com"]
+TECH_ALERT_RECIPIENTS = ["barvepratik96@gmail.com"]
 
 REQUEST_TIMEOUT = 20  # seconds
 

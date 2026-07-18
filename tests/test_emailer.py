@@ -1,4 +1,4 @@
-from jobfinder import emailer, storage
+from jobfinder import config, emailer, storage
 from jobfinder.models import Job
 from jobfinder.runner import RunResult
 
@@ -48,3 +48,22 @@ def test_send_failure_is_logged_not_raised(tmp_path, monkeypatch):
     row = conn.execute("SELECT success, error FROM emails").fetchone()
     assert row["success"] == 0
     assert "smtp down" in row["error"]
+
+
+def test_send_tech_digest_uses_tech_recipients_and_kind(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = {}
+
+    def fake_send_email(subject, html, recipients):
+        sent["subject"] = subject
+        sent["recipients"] = recipients
+
+    monkeypatch.setattr(emailer, "send_email", fake_send_email)
+
+    tech_jobs = {"Google": [Job("Google", "Senior SRE", "https://g/1", "https://g", sector="tech")]}
+    result = RunResult(run_id=1, new_jobs=tech_jobs)
+    emailer.send_tech_digest(conn, result)
+
+    assert sent["recipients"] == config.TECH_ALERT_RECIPIENTS
+    row = conn.execute("SELECT kind FROM emails ORDER BY id DESC LIMIT 1").fetchone()
+    assert row["kind"] == "tech_alert"
