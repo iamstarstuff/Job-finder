@@ -60,11 +60,18 @@ CREATE INDEX IF NOT EXISTS idx_jobs_first_seen ON jobs(first_seen);
 """
 
 
+def _migrate_sector_column(conn: sqlite3.Connection) -> None:
+    columns = [row["name"] for row in conn.execute("PRAGMA table_info(jobs)")]
+    if "sector" not in columns:
+        conn.execute("ALTER TABLE jobs ADD COLUMN sector TEXT NOT NULL DEFAULT 'pharma'")
+
+
 def connect(db_path) -> sqlite3.Connection:
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA)
+    _migrate_sector_column(conn)
     conn.commit()
     return conn
 
@@ -85,10 +92,10 @@ def record_company_snapshot(conn, company: str, jobs: List[Job], now: str) -> Li
         else:
             conn.execute(
                 """INSERT INTO jobs (company, title, url, portal_url, closing_date,
-                   job_key, first_seen, last_seen, is_active)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)""",
+                   job_key, first_seen, last_seen, is_active, sector)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)""",
                 (job.company, job.title, job.url, job.portal_url,
-                 job.closing_date, job.key, now, now),
+                 job.closing_date, job.key, now, now, job.sector),
             )
             new_jobs.append(job)
     # Deactivate jobs for this company that vanished from the site.

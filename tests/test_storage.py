@@ -1,4 +1,5 @@
 import json
+import sqlite3
 
 from jobfinder import storage
 from jobfinder.models import Job
@@ -138,3 +139,48 @@ def test_save_enrichment_reuses_existing_skill_row(tmp_path):
     storage.save_enrichment(conn, id_a, "Needs SAP.", None, [("SAP", "Software")], "2026-07-16T11:00:00")
     storage.save_enrichment(conn, id_b, "Also needs SAP.", None, [("SAP", "Software")], "2026-07-16T11:01:00")
     assert conn.execute("SELECT COUNT(*) c FROM skills WHERE name='SAP'").fetchone()["c"] == 1
+
+
+def test_connect_migrates_sector_column_on_existing_db(tmp_path):
+    db_path = tmp_path / "old.db"
+    # Simulate a pre-existing DB created before the sector column existed.
+    conn = sqlite3.connect(str(db_path))
+    conn.execute("""CREATE TABLE jobs (
+        id INTEGER PRIMARY KEY, company TEXT NOT NULL, title TEXT NOT NULL,
+        url TEXT, portal_url TEXT, closing_date TEXT, job_key TEXT NOT NULL UNIQUE,
+        first_seen TEXT NOT NULL, last_seen TEXT NOT NULL,
+        is_active INTEGER NOT NULL DEFAULT 1)""")
+    conn.execute(
+        """INSERT INTO jobs (company, title, url, portal_url, job_key, first_seen, last_seen)
+           VALUES ('Abbvie', 'QC Analyst', 'https://a/1', 'https://a', 'k1', 'now', 'now')"""
+    )
+    conn.commit()
+    conn.close()
+
+    conn = storage.connect(db_path)
+    row = conn.execute("SELECT sector FROM jobs WHERE company = 'Abbvie'").fetchone()
+    assert row["sector"] == "pharma"
+
+
+def test_connect_on_fresh_db_has_sector_column(tmp_path):
+    conn = storage.connect(tmp_path / "fresh.db")
+    columns = [r["name"] for r in conn.execute("PRAGMA table_info(jobs)")]
+    assert "sector" in columns
+
+
+def test_record_company_snapshot_defaults_sector_to_pharma(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "QC Analyst", "https://a/1", "https://a"),
+    ], "2026-07-18T10:00:00")
+    row = conn.execute("SELECT sector FROM jobs WHERE company = 'Abbvie'").fetchone()
+    assert row["sector"] == "pharma"
+
+
+def test_record_company_snapshot_stores_explicit_tech_sector(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Google", [
+        Job("Google", "Senior SRE", "https://g/1", "https://g", sector="tech"),
+    ], "2026-07-18T10:00:00")
+    row = conn.execute("SELECT sector FROM jobs WHERE company = 'Google'").fetchone()
+    assert row["sector"] == "tech"

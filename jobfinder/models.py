@@ -11,6 +11,7 @@ class Job:
     url: str
     portal_url: str
     closing_date: Optional[str] = None
+    sector: str = "pharma"
 
     @property
     def key(self) -> str:
