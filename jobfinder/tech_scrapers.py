@@ -3,9 +3,11 @@ from __future__ import annotations
 import json
 import re
 from typing import List
+from urllib.parse import urljoin
 
 from jobfinder.http_client import fetch
 from jobfinder.models import Job
+from jobfinder.scrapers import _sf_pagination_total
 
 # Role-keyword filter, applied before any job is returned from a tech
 # scraper. Short/ambiguous tokens (ml, sre, bi) use \b word boundaries so
@@ -102,4 +104,42 @@ def google(session) -> List[Job]:
         page += 1
         if page > 500:  # safety cap -- should never trigger in practice
             raise RuntimeError("Google pagination exceeded safety cap of 500 pages")
+    return jobs
+
+
+# AIB (Pratik's employer) runs the same SAP SuccessFactors "job2web"
+# platform as Grifols/Leo Pharma in jobfinder/scrapers.py -- confirmed
+# live during design: identical data-row/jobTitle-link/paginationLabel
+# markup, real live postings including "Fraud Data Scientist". No
+# location filter needed -- AIB is an Ireland-only bank.
+AIB_BASE = "https://jobs.aib.ie"
+AIB_SEARCH = "https://jobs.aib.ie/aib/go/SearchAllJobs/9605800/?startrow="
+AIB_PORTAL = "https://jobs.aib.ie/aib/go/SearchAllJobs/9605800/"
+
+
+def aib(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    total = None
+    while total is None or offset < total:
+        resp = fetch(session, f"{AIB_SEARCH}{offset}")
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(resp.content, "lxml")
+        rows = soup.find_all("tr", class_="data-row")
+        if not rows:
+            break
+        for row in rows:
+            link = row.find("a", class_="jobTitle-link")
+            if not link:
+                continue
+            title = link.get_text(strip=True)
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "AIB", title, urljoin(AIB_BASE, link["href"]), AIB_PORTAL,
+                    sector="tech",
+                ))
+        label = soup.find("span", class_="paginationLabel")
+        parsed_total = _sf_pagination_total(label, offset)
+        total = parsed_total if parsed_total is not None else len(rows)
+        offset += len(rows)
     return jobs

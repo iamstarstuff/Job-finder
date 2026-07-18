@@ -53,3 +53,22 @@ def test_google_returns_empty_when_no_data_chunk_found():
         "https://careers.google.com/jobs/results/?location=Ireland&page=1": FakeResponse(b"<html>no data here</html>"),
     })
     assert tech_scrapers.google(fake) == []
+
+
+AIB_PAGE_HTML = b"""
+<span class="paginationLabel" aria-label="Results 1 - 2">Results <b>1 - 2</b> of <b>2</b></span>
+<tr class="data-row"><td><a class="jobTitle-link" href="/aib/job/Dublin-Fraud-Data-Scientist-IE/1366746757/">Fraud Data Scientist</a></td></tr>
+<tr class="data-row"><td><a class="jobTitle-link" href="/aib/job/Dublin-Homes-Advisor-IE/1366858457/">Homes Advisor, Dundalk</a></td></tr>
+"""
+
+
+def test_aib_filters_roles_and_builds_absolute_urls():
+    fake = FakeSession({
+        "https://jobs.aib.ie/aib/go/SearchAllJobs/9605800/?startrow=0": FakeResponse(AIB_PAGE_HTML),
+    })
+    jobs = tech_scrapers.aib(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Fraud Data Scientist"
+    assert jobs[0].url == "https://jobs.aib.ie/aib/job/Dublin-Fraud-Data-Scientist-IE/1366746757/"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "AIB"
