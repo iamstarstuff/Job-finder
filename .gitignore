@@ -3,6 +3,8 @@ ScrapeJobs.ipynb
 jobfinder.db*
 jobscraper.log*
 enrichment.log*
+tech_scraper.log*
+tech_scraper_cron.log*
 logs.log
 .DS_Store
 __pycache__/
