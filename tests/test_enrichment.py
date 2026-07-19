@@ -1,3 +1,5 @@
+import json
+
 from jobfinder import enrichment
 from jobfinder import storage
 from jobfinder.models import Job
@@ -313,3 +315,41 @@ def test_extract_skills_existing_pharma_keywords_still_work():
     desc = "Adheres to Good Manufacturing Practices and uses SAP daily."
     names = {name for name, _ in enrichment.extract_skills(desc)}
     assert {"GMP", "SAP"} <= names
+
+
+def _google_entry(job_id, title, url, desc="", resp="", quals=""):
+    entry = [None] * 21
+    entry[0], entry[1], entry[2] = job_id, title, url
+    entry[3] = [None, resp]
+    entry[4] = [None, quals]
+    entry[10] = [None, desc]
+    return entry
+
+
+def _google_page_html(entries, total):
+    return ("<script>AF_initDataCallback({key: 'ds:1', hash: '1', data:[" +
+            json.dumps(entries) + f",null,{total},{len(entries)}]" +
+            ", sideChannel: {}});</script>").encode()
+
+
+def test_fetch_google_description_matches_by_url_and_combines_fields():
+    entries = [
+        _google_entry("1", "Senior SRE", "https://apply/1",
+                       desc="<p>Main desc</p>", resp="<ul><li>Resp</li></ul>", quals="<ul><li>Quals</li></ul>"),
+        _google_entry("2", "Sales Rep", "https://apply/2"),
+    ]
+    session = FakeSession({
+        "https://careers.google.com/jobs/results/?location=Ireland&page=1":
+            FakeResponse(_google_page_html(entries, total=2)),
+    })
+    result = enrichment.fetch_google_description(session, "https://apply/1")
+    assert result == "Main desc Resp Quals"
+
+
+def test_fetch_google_description_returns_none_when_no_match():
+    entries = [_google_entry("1", "Senior SRE", "https://apply/1", desc="<p>Main desc</p>")]
+    session = FakeSession({
+        "https://careers.google.com/jobs/results/?location=Ireland&page=1":
+            FakeResponse(_google_page_html(entries, total=1)),
+    })
+    assert enrichment.fetch_google_description(session, "https://apply/999") is None

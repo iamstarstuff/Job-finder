@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 from jobfinder.http_client import fetch
 from jobfinder.scrapers import AMGEN_API
+from jobfinder.tech_scrapers import GOOGLE_SEARCH, _extract_google_data_chunk
 
 log = logging.getLogger(__name__)
 
@@ -219,6 +220,45 @@ def fetch_amgen_description(session, url: str) -> Optional[str]:
         if not batch or seen >= pagination.get("total", 0) or not pagination.get("has_more_pages", False):
             return None
         page += 1
+
+
+def fetch_google_description(session, url: str) -> Optional[str]:
+    """Google's apply URL (the scraper's own stored Job.url) is a sign-in
+    -gated URL with no public content -- confirmed live during design, it
+    resolves to accounts.google.com/v3/signin. But the same ds:1 search
+    data google() already parses carries the full description inline,
+    split across three fields per job entry (confirmed by exact
+    field-by-field inspection during design): index [10] is the main
+    "About the job" text, [3] is responsibilities, [4] is qualifications.
+    This re-runs the same paginated search and matches by exact apply-URL
+    equality."""
+    page = 1
+    while True:
+        response = fetch(session, f"{GOOGLE_SEARCH}{page}")
+        payload = _extract_google_data_chunk(response.content.decode("utf-8"))
+        if not payload:
+            return None
+        batch = payload[0] or []
+        if not batch:
+            return None
+        for entry in batch:
+            if entry[2] == url:
+                parts = []
+                if entry[3] and entry[3][1]:
+                    parts.append(entry[3][1])
+                if entry[4] and entry[4][1]:
+                    parts.append(entry[4][1])
+                if entry[10] and entry[10][1]:
+                    parts.insert(0, entry[10][1])
+                html = " ".join(parts)
+                return BeautifulSoup(html, "lxml").get_text(separator=" ", strip=True) if html else None
+        total = payload[2] if len(payload) > 2 and isinstance(payload[2], int) else None
+        fetched = page * len(batch)
+        page += 1
+        if total is not None and fetched >= total:
+            return None
+        if page > 50:  # safety cap, mirrors google()'s own
+            return None
 
 
 # Per-company override for companies whose detail pages can't be handled
