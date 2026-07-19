@@ -353,3 +353,27 @@ def test_fetch_google_description_returns_none_when_no_match():
             FakeResponse(_google_page_html(entries, total=1)),
     })
     assert enrichment.fetch_google_description(session, "https://apply/999") is None
+
+
+def test_fetch_amazon_description_matches_by_url():
+    session = FakeSession({
+        "https://www.amazon.jobs/en/search.json": FakeResponse(json_data={
+            "hits": 2,
+            "jobs": [
+                {"job_path": "/en/jobs/1/devops", "description": "Needs Kubernetes and Terraform."},
+                {"job_path": "/en/jobs/2/retail", "description": "Retail job desc."},
+            ],
+        }),
+    })
+    result = enrichment.fetch_amazon_description(session, "https://www.amazon.jobs/en/jobs/1/devops")
+    assert result == "Needs Kubernetes and Terraform."
+
+
+def test_fetch_amazon_description_returns_none_when_no_match():
+    session = FakeSession({
+        "https://www.amazon.jobs/en/search.json": FakeResponse(json_data={
+            "hits": 1,
+            "jobs": [{"job_path": "/en/jobs/1/devops", "description": "Needs Kubernetes."}],
+        }),
+    })
+    assert enrichment.fetch_amazon_description(session, "https://www.amazon.jobs/en/jobs/999/nope") is None

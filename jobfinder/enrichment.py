@@ -5,12 +5,13 @@ import logging
 import re
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
+from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
 from jobfinder.http_client import fetch
 from jobfinder.scrapers import AMGEN_API
-from jobfinder.tech_scrapers import GOOGLE_SEARCH, _extract_google_data_chunk
+from jobfinder.tech_scrapers import AMAZON_API, AMAZON_BASE, GOOGLE_SEARCH, _extract_google_data_chunk
 
 log = logging.getLogger(__name__)
 
@@ -258,6 +259,31 @@ def fetch_google_description(session, url: str) -> Optional[str]:
         if total is not None and fetched >= total:
             return None
         if page > 50:  # safety cap, mirrors google()'s own
+            return None
+
+
+def fetch_amazon_description(session, url: str) -> Optional[str]:
+    """amazon()/aws()'s own search.json API already returns a full
+    description field per job (confirmed live during design) -- no
+    separate detail-page fetch needed. Shared by both companies: they're
+    the identical underlying site, and URL-matching doesn't care which
+    company name a job was stored under."""
+    offset = 0
+    limit = 100
+    while True:
+        response = fetch(session, AMAZON_API, params={
+            "base_query": "", "country": "IRL", "offset": offset, "result_limit": limit,
+        })
+        data = response.json()
+        postings = data.get("jobs") or []
+        if not postings:
+            return None
+        for posting in postings:
+            if urljoin(AMAZON_BASE, posting.get("job_path", "")) == url:
+                description = posting.get("description", "")
+                return BeautifulSoup(description, "lxml").get_text(separator=" ", strip=True) if description else None
+        offset += len(postings)
+        if offset >= data.get("hits", 0):
             return None
 
 
