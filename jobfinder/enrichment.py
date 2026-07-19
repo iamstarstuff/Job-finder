@@ -303,11 +303,23 @@ def fetch_successfactors_description(session, url: str) -> Optional[str]:
 
 
 # Per-company override for companies whose detail pages can't be handled
-# by the generic JSON-LD extractor. Only Amgen needs one so far — see
-# fetch_amgen_description's docstring for why. Companies not in this dict
-# use fetch_description (the generic path) as the default.
+# by the generic JSON-LD extractor. Companies not in this dict use
+# fetch_description (the generic path) as the default -- this correctly
+# covers Mastercard/Accenture/Intel/Citibank/Microsoft (Round 3), which
+# all have real JSON-LD detail pages, needing no override.
+#
+# Allianz Partners is deliberately absent from ENRICHMENT_COMPANIES
+# entirely (see that list below) rather than given a fetcher here -- its
+# apply flow has no JSON-LD, no matching HTML class, and no description
+# field in its own search API (confirmed during design), so there is no
+# working fetcher to register for it yet.
 COMPANY_FETCHERS = {
     "Amgen": fetch_amgen_description,
+    "Google": fetch_google_description,
+    "Amazon": fetch_amazon_description,
+    "AWS": fetch_amazon_description,
+    "AIB": fetch_successfactors_description,
+    "EY": fetch_successfactors_description,
 }
 
 
@@ -340,6 +352,12 @@ ENRICHMENT_COMPANIES = [
     "Abbvie", "BMS", "Astrazeneca", "Takeda", "Pfizer", "MSD", "Gilead",
     "Jazz Pharmaceuticals", "Thermo Fisher", "Regeneron", "Teva", "Viatris",
     "ICON", "Amgen",
+    # Tech sector (Round 3) -- Mastercard/Accenture/Intel/Citibank/Microsoft
+    # have JSON-LD detail pages and need no dedicated fetcher (they fall
+    # through to the generic fetch_description). Allianz Partners is
+    # deliberately NOT included -- see COMPANY_FETCHERS comment above.
+    "Mastercard", "Accenture", "Intel", "Citibank", "Microsoft",
+    "Google", "Amazon", "AWS", "AIB", "EY",
 ]
 
 

@@ -392,3 +392,24 @@ def test_fetch_successfactors_description_extracts_text():
 def test_fetch_successfactors_description_returns_none_when_class_absent():
     session = FakeSession({"https://careers.ey.com/ey/job/1": FakeResponse(SUCCESSFACTORS_NO_DESCRIPTION_HTML)})
     assert enrichment.fetch_successfactors_description(session, "https://careers.ey.com/ey/job/1") is None
+
+
+def test_enrichment_companies_includes_ten_tech_companies():
+    tech_companies = {
+        "Mastercard", "Accenture", "Intel", "Citibank", "Microsoft",
+        "Google", "Amazon", "AWS", "AIB", "EY",
+    }
+    assert tech_companies <= set(enrichment.ENRICHMENT_COMPANIES)
+    assert "Allianz Partners" not in enrichment.ENRICHMENT_COMPANIES
+
+
+def test_company_fetchers_routes_tech_companies_correctly():
+    assert enrichment.COMPANY_FETCHERS["Google"] is enrichment.fetch_google_description
+    assert enrichment.COMPANY_FETCHERS["Amazon"] is enrichment.fetch_amazon_description
+    assert enrichment.COMPANY_FETCHERS["AWS"] is enrichment.fetch_amazon_description
+    assert enrichment.COMPANY_FETCHERS["AIB"] is enrichment.fetch_successfactors_description
+    assert enrichment.COMPANY_FETCHERS["EY"] is enrichment.fetch_successfactors_description
+    # Mastercard/Accenture/Intel/Citibank/Microsoft deliberately have no
+    # entry here -- they fall through to the generic fetch_description
+    # via COMPANY_FETCHERS.get(company, fetch_description) in run().
+    assert "Mastercard" not in enrichment.COMPANY_FETCHERS
