@@ -56,6 +56,42 @@ SKILL_KEYWORDS: List[Tuple[str, str, List[str]]] = [
     ("Python", "Software", ["python"]),
     ("SQL", "Software", [" sql "]),
     ("Validation", "Regulatory", ["process validation", "equipment validation"]),
+    # Cloud & Infrastructure
+    ("Kubernetes", "Cloud & Infrastructure", ["kubernetes", "k8s"]),
+    ("Docker", "Cloud & Infrastructure", ["docker"]),
+    ("Terraform", "Cloud & Infrastructure", ["terraform"]),
+    ("Ansible", "Cloud & Infrastructure", ["ansible"]),
+    ("AWS", "Cloud & Infrastructure", ["aws", "amazon web services"]),
+    ("Azure", "Cloud & Infrastructure", ["azure"]),
+    ("GCP", "Cloud & Infrastructure", ["gcp", "google cloud"]),
+    # Observability
+    ("Splunk", "Observability", ["splunk"]),
+    ("Prometheus", "Observability", ["prometheus"]),
+    ("Grafana", "Observability", ["grafana"]),
+    ("Datadog", "Observability", ["datadog"]),
+    ("ELK Stack", "Observability", ["elk stack", "elasticsearch"]),
+    # Data Engineering
+    ("Airflow", "Data Engineering", ["airflow"]),
+    ("Snowflake", "Data Engineering", ["snowflake"]),
+    ("dbt", "Data Engineering", ["dbt"]),
+    ("Spark", "Data Engineering", ["apache spark", " spark "]),
+    ("Kafka", "Data Engineering", ["kafka"]),
+    # Analytics/BI
+    ("Tableau", "Analytics", ["tableau"]),
+    ("Power BI", "Analytics", ["power bi", "powerbi"]),
+    # Data Science/ML
+    ("Machine Learning", "Data Science", ["machine learning", " ml "]),
+    ("TensorFlow", "Data Science", ["tensorflow"]),
+    ("PyTorch", "Data Science", ["pytorch"]),
+    # CI/CD
+    ("Jenkins", "CI/CD", ["jenkins"]),
+    ("GitHub Actions", "CI/CD", ["github actions"]),
+    ("GitLab CI", "CI/CD", ["gitlab ci", "gitlab"]),
+    # Languages/Frameworks
+    ("Java", "Software", ["java"]),
+    ("Kotlin", "Software", ["kotlin"]),
+    ("React", "Software", ["react"]),
+    ("Node.js", "Software", ["node.js", "nodejs"]),
 ]
 
 

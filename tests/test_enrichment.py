@@ -292,3 +292,24 @@ def test_run_skips_jobs_already_enriched(tmp_path):
     assert result.enriched == 0
     assert result.failed == 0
     assert session.calls == []
+
+
+def test_extract_skills_matches_new_tech_keywords():
+    desc = ("Requires strong Kubernetes and Terraform experience, plus AWS "
+            "and Splunk. Familiarity with Airflow and dbt models a plus.")
+    names = {name for name, _ in enrichment.extract_skills(desc)}
+    assert {"Kubernetes", "Terraform", "AWS", "Splunk", "Airflow", "dbt"} <= names
+
+
+def test_extract_skills_tech_keywords_avoid_false_positives():
+    desc = "There are no flaws or laws being broken here, just JavaScript and a reaction."
+    names = {name for name, _ in enrichment.extract_skills(desc)}
+    assert "AWS" not in names
+    assert "Java" not in names
+    assert "React" not in names
+
+
+def test_extract_skills_existing_pharma_keywords_still_work():
+    desc = "Adheres to Good Manufacturing Practices and uses SAP daily."
+    names = {name for name, _ in enrichment.extract_skills(desc)}
+    assert {"GMP", "SAP"} <= names
