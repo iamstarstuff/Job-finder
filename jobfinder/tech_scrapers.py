@@ -389,6 +389,44 @@ def allianz_partners(session) -> List[Job]:
     return jobs
 
 
+# Same SAP SuccessFactors "job2web" platform as aib() (Round 1) and
+# grifols()/leo_pharma() in jobfinder/scrapers.py -- identical markup.
+# careers.ey.com has a broken TLS cert chain from this environment,
+# handled transparently by INSECURE_HOSTS in jobfinder/http_client.py
+# (Task 1) -- no cert-related code needed here.
+EY_BASE = "https://careers.ey.com"
+EY_SEARCH = "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland&startrow="
+EY_PORTAL = "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland"
+
+
+def ey(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    total = None
+    while total is None or offset < total:
+        resp = fetch(session, f"{EY_SEARCH}{offset}")
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(resp.content, "lxml")
+        rows = soup.find_all("tr", class_="data-row")
+        if not rows:
+            break
+        for row in rows:
+            link = row.find("a", class_="jobTitle-link")
+            if not link:
+                continue
+            title = link.get_text(strip=True)
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "EY", title, urljoin(EY_BASE, link["href"]), EY_PORTAL,
+                    sector="tech",
+                ))
+        label = soup.find("span", class_="paginationLabel")
+        parsed_total = _sf_pagination_total(label, offset)
+        total = parsed_total if parsed_total is not None else len(rows)
+        offset += len(rows)
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),

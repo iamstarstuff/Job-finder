@@ -176,6 +176,25 @@ def test_allianz_partners_filters_by_entity_and_role():
     assert jobs[0].company == "Allianz Partners"
 
 
+EY_PAGE_HTML = b"""
+<span class="paginationLabel" aria-label="Results 1 - 2">Results <b>1 - 2</b> of <b>2</b></span>
+<tr class="data-row"><td><a class="jobTitle-link" href="/ey/job/Dublin-Cloud-Security-Consultant-IE/1400000001/">Cloud Infrastructure Consultant</a></td></tr>
+<tr class="data-row"><td><a class="jobTitle-link" href="/ey/job/Dublin-Tax-Advisor-IE/1400000002/">Tax Advisor</a></td></tr>
+"""
+
+
+def test_ey_filters_roles_and_builds_absolute_urls():
+    fake = FakeSession({
+        "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland&startrow=0": FakeResponse(EY_PAGE_HTML),
+    })
+    jobs = tech_scrapers.ey(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Cloud Infrastructure Consultant"
+    assert jobs[0].url == "https://careers.ey.com/ey/job/Dublin-Cloud-Security-Consultant-IE/1400000001/"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "EY"
+
+
 def test_intel_filters_roles():
     fake = FakeSession({
         "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs": FakeResponse(json_data={
