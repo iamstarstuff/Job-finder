@@ -134,6 +134,27 @@ def test_accenture_filters_roles():
     assert jobs[0].company == "Accenture"
 
 
+def test_citibank_filters_roles_and_paginates():
+    fake = FakeSession({
+        "https://citi.eightfold.ai/api/pcsx/search": FakeResponse(json_data={
+            "status": 200,
+            "data": {
+                "count": 1,
+                "positions": [
+                    {"name": "Cloud Infrastructure Engineer, VP", "positionUrl": "/careers/job/859000001"},
+                    {"name": "CitiService Financial Institution Head", "positionUrl": "/careers/job/859000002"},
+                ],
+            },
+        }),
+    })
+    jobs = tech_scrapers.citibank(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Cloud Infrastructure Engineer, VP"
+    assert jobs[0].url == "https://citi.eightfold.ai/careers/job/859000001"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Citibank"
+
+
 def test_intel_filters_roles():
     fake = FakeSession({
         "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs": FakeResponse(json_data={

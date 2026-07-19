@@ -301,6 +301,42 @@ def intel(session) -> List[Job]:
     return jobs
 
 
+# Eightfold "pcsx" API -- identical pattern to bms()/microsoft(), just a
+# different tenant domain. Citibank's public-facing jobs.citi.com runs on
+# a different platform (Symphony Talent/TalentBrew) with no discoverable
+# API, but confirmed live to show the same underlying postings as this
+# feed (a job found on jobs.citi.com matched by title here, under a
+# different internal ID) -- TalentBrew is a separate branded frontend
+# Citi also maintains, not an independent data source.
+CITIBANK_API = "https://citi.eightfold.ai/api/pcsx/search"
+CITIBANK_BASE = "https://citi.eightfold.ai"
+CITIBANK_PORTAL = "https://citi.eightfold.ai/careers?domain=citi.com&location=Ireland"
+
+
+def citibank(session) -> List[Job]:
+    jobs = []
+    start = 0
+    while True:
+        resp = fetch(session, CITIBANK_API, params={
+            "domain": "citi.com", "query": "", "location": "Ireland",
+            "start": start, "sort_by": "distance", "filter_include_remote": 1,
+        })
+        data = resp.json().get("data", {})
+        positions = data.get("positions", [])
+        for pos in positions:
+            title = pos.get("name", "").strip()
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Citibank", title,
+                    urljoin(CITIBANK_BASE, pos.get("positionUrl", "")),
+                    CITIBANK_PORTAL, sector="tech",
+                ))
+        start += len(positions)
+        if not positions or start >= data.get("count", 0):
+            break
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
