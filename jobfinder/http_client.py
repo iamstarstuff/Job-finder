@@ -31,7 +31,16 @@ def build_session() -> requests.Session:
     adapter = HTTPAdapter(max_retries=retry)
     session.mount("https://", adapter)
     session.mount("http://", adapter)
-    session.headers.update({"User-Agent": USER_AGENT})
+    session.headers.update({
+        "User-Agent": USER_AGENT,
+        # urllib3 2.x auto-negotiates zstd if the zstandard package is
+        # installed, but this environment's urllib3+zstandard version
+        # pair has a real decode bug on multi-chunk streamed responses
+        # ("cannot use a decompressobj multiple times") -- confirmed live
+        # against Amazon's careers API. Excluding zstd from what this
+        # session advertises support for means servers never send it.
+        "Accept-Encoding": "gzip, deflate",
+    })
     return session
 
 

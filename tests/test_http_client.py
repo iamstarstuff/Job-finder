@@ -30,6 +30,19 @@ def test_fetch_disables_verify_for_ey_too():
     assert kwargs["verify"] is False
 
 
+def test_session_excludes_zstd_from_accept_encoding():
+    # urllib3 2.x + the zstandard package installed in this environment
+    # (0.19.0) has a real decode bug on multi-chunk streamed responses
+    # ("cannot use a decompressobj multiple times") -- confirmed live
+    # against a real zstd-serving host (Amazon's careers API) during
+    # Round 2 manual verification. Excluding zstd from what this session
+    # advertises support for means servers never send it, sidestepping
+    # the bug entirely rather than working around it per-request.
+    session = http_client.build_session()
+    accept_encoding = session.headers.get("Accept-Encoding", "")
+    assert "zstd" not in accept_encoding.lower()
+
+
 def test_fetch_raises_on_http_error():
     fake = FakeSession({"https://example.com": FakeResponse(status_code=500)})
     try:
