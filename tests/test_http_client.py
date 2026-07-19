@@ -23,6 +23,13 @@ def test_fetch_disables_verify_only_for_insecure_hosts():
     assert kwargs["verify"] is False
 
 
+def test_fetch_disables_verify_for_ey_too():
+    fake = FakeSession({"https://careers.ey.com": FakeResponse(b"ok")})
+    http_client.fetch(fake, "https://careers.ey.com/ey/search/")
+    _, _, kwargs = fake.calls[0]
+    assert kwargs["verify"] is False
+
+
 def test_fetch_raises_on_http_error():
     fake = FakeSession({"https://example.com": FakeResponse(status_code=500)})
     try:

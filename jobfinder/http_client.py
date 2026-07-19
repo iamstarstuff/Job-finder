@@ -12,7 +12,7 @@ from jobfinder import config
 
 # Hosts with broken cert chains. Scoped exception instead of a
 # process-wide ssl bypass — everything else stays verified.
-INSECURE_HOSTS = {"jobs.takeda.com"}
+INSECURE_HOSTS = {"jobs.takeda.com", "careers.ey.com"}
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
