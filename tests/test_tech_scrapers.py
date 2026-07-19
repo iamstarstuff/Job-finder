@@ -155,6 +155,27 @@ def test_citibank_filters_roles_and_paginates():
     assert jobs[0].company == "Citibank"
 
 
+def test_allianz_partners_filters_by_entity_and_role():
+    fake = FakeSession({
+        "https://careers.allianz.com/widgets": FakeResponse(json_data={
+            "refineSearch": {"data": {"jobs": [
+                {"title": "Data Scientist", "employingEntity": "AWP Assistance UK Ltd",
+                 "applyUrl": "https://career5.successfactors.eu/careers?career_job_req_id=1"},
+                {"title": "Data Scientist", "employingEntity": "Allianz Global Life dac",
+                 "applyUrl": "https://career5.successfactors.eu/careers?career_job_req_id=2"},
+                {"title": "Broker Consultant", "employingEntity": "ALLIANZ PARTNERS",
+                 "applyUrl": "https://career5.successfactors.eu/careers?career_job_req_id=3"},
+            ]}},
+        }),
+    })
+    jobs = tech_scrapers.allianz_partners(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Data Scientist"
+    assert jobs[0].url == "https://career5.successfactors.eu/careers?career_job_req_id=1"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Allianz Partners"
+
+
 def test_intel_filters_roles():
     fake = FakeSession({
         "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs": FakeResponse(json_data={

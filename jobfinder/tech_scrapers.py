@@ -337,6 +337,58 @@ def citibank(session) -> List[Job]:
     return jobs
 
 
+# Phenom People "widgets" API -- identical pattern to MSD's
+# _msd_payload()/msd() in jobfinder/scrapers.py. This feed covers the
+# whole Allianz Group, not just Allianz Partners -- confirmed live that
+# most Ireland postings belong to sibling entities ("Allianz Global Life
+# dac", "Allianz Technology SE Ireland Branch", etc). Allianz Partners'
+# own postings are tagged either "ALLIANZ PARTNERS" or its legacy
+# pre-rebrand name "AWP" (Allianz Worldwide Partners) in the
+# employingEntity field -- both must be checked. Unlike most scrapers in
+# this codebase, applyUrl is already a complete absolute URL, so no
+# urljoin is needed here.
+ALLIANZ_API = "https://careers.allianz.com/widgets"
+
+
+def _allianz_payload(offset: int, size: int) -> dict:
+    return {
+        "lang": "en", "deviceType": "desktop", "country": "gb",
+        "pageName": "search-results", "ddoKey": "refineSearch",
+        "sortBy": "", "subsearch": "", "from": offset, "jobs": True,
+        "counts": True, "all_fields": ["category", "country", "state", "city", "type", "company"],
+        "size": size, "clearAll": False, "jdsource": "facets",
+        "isSliderEnable": False, "pageId": "page10", "siteType": "external",
+        "keywords": "", "global": True,
+        "selected_fields": {"country": ["Ireland"]}, "locationData": {},
+    }
+
+
+def _is_allianz_partners_entity(entity: str) -> bool:
+    entity = (entity or "").upper()
+    return "ALLIANZ PARTNERS" in entity or "AWP" in entity
+
+
+def allianz_partners(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    size = 20
+    while True:
+        resp = fetch(session, ALLIANZ_API, method="post", json=_allianz_payload(offset, size))
+        payload = resp.json().get("refineSearch", {})
+        batch = payload.get("data", {}).get("jobs", [])
+        for item in batch:
+            title = item.get("title", "").strip()
+            if matches_target_role(title) and _is_allianz_partners_entity(item.get("employingEntity")):
+                jobs.append(Job(
+                    "Allianz Partners", title, item.get("applyUrl", ""),
+                    ALLIANZ_API, sector="tech",
+                ))
+        offset += len(batch)
+        if not batch or offset >= payload.get("totalHits", 0):
+            break
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
