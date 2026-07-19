@@ -427,8 +427,68 @@ def ey(session) -> List[Job]:
     return jobs
 
 
+# Amazon runs its own JSON search API -- not a third-party ATS. The
+# `.json` suffix on the same URL structure the human-facing search page
+# uses returns a clean JSON payload. country=IRL is the correct location
+# filter -- loc_query=Ireland and location=Ireland (plausible-looking
+# alternatives) both silently return unfiltered global results (verified
+# live). result_limit cannot exceed 100 -- above that the API returns
+# {"jobs": null, "hits": 0} rather than an HTTP error, so a missing/None
+# jobs list is treated as a hard stop here, matching that ceiling never
+# being crossed since this always requests exactly 100.
+AMAZON_API = "https://www.amazon.jobs/en/search.json"
+AMAZON_BASE = "https://www.amazon.jobs"
+
+
+def _amazon_search(session, want_aws: bool) -> List[Job]:
+    company = "AWS" if want_aws else "Amazon"
+    jobs = []
+    offset = 0
+    limit = 100
+    while True:
+        resp = fetch(session, AMAZON_API, params={
+            "base_query": "", "country": "IRL", "offset": offset, "result_limit": limit,
+        })
+        data = resp.json()
+        postings = data.get("jobs") or []
+        if not postings:
+            break
+        for posting in postings:
+            title = posting.get("title", "")
+            if not matches_target_role(title):
+                continue
+            is_aws = posting.get("business_category") == "aws"
+            if is_aws != want_aws:
+                continue
+            jobs.append(Job(
+                company, title,
+                urljoin(AMAZON_BASE, posting.get("job_path", "")), AMAZON_BASE,
+                sector="tech",
+            ))
+        offset += len(postings)
+        if offset >= data.get("hits", 0):
+            break
+    return jobs
+
+
+def amazon(session) -> List[Job]:
+    return _amazon_search(session, want_aws=False)
+
+
+def aws(session) -> List[Job]:
+    return _amazon_search(session, want_aws=True)
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
     ("AIB", aib),
+    ("Mastercard", mastercard),
+    ("Accenture", accenture),
+    ("Intel", intel),
+    ("Citibank", citibank),
+    ("Allianz Partners", allianz_partners),
+    ("EY", ey),
+    ("Amazon", amazon),
+    ("AWS", aws),
 ])

@@ -95,8 +95,60 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     assert jobs[0].company == "Microsoft"
 
 
-def test_tech_scrapers_registry_has_all_three_companies():
-    assert set(tech_scrapers.TECH_SCRAPERS) == {"Google", "Microsoft", "AIB"}
+def test_tech_scrapers_registry_has_all_eleven_companies():
+    assert set(tech_scrapers.TECH_SCRAPERS) == {
+        "Google", "Microsoft", "AIB", "Mastercard", "Accenture", "Intel",
+        "Citibank", "Allianz Partners", "EY", "Amazon", "AWS",
+    }
+
+
+AMAZON_PAGE1 = {
+    "hits": 3,
+    "jobs": [
+        {"title": "Senior DevOps Engineer, AWS Infrastructure", "job_path": "/en/jobs/1001/devops", "business_category": "aws"},
+        {"title": "Retail Store Lead", "job_path": "/en/jobs/1002/retail", "business_category": "retail"},
+    ],
+}
+AMAZON_PAGE2 = {
+    "hits": 3,
+    "jobs": [
+        {"title": "Senior Data Scientist, Supply Chain", "job_path": "/en/jobs/1003/ds", "business_category": "finance"},
+    ],
+}
+
+
+class _AmazonSeq:
+    """Amazon's pagination is via `params={"offset": ...}` on a GET request
+    to a constant URL, not a URL that changes per page -- FakeSession's
+    prefix-match routing can't distinguish two calls to the same URL, so
+    (matching the existing test_gilead_parses_and_paginates_workday_api
+    pattern for the same underlying problem with POST-body pagination)
+    this returns responses from a queue regardless of URL/params."""
+    def __init__(self, responses):
+        self._responses = iter(responses)
+
+    def get(self, url, **kwargs):
+        return next(self._responses)
+
+
+def test_amazon_filters_roles_excludes_aws_category():
+    fake = _AmazonSeq([FakeResponse(json_data=AMAZON_PAGE1), FakeResponse(json_data=AMAZON_PAGE2)])
+    jobs = tech_scrapers.amazon(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior Data Scientist, Supply Chain"
+    assert jobs[0].url == "https://www.amazon.jobs/en/jobs/1003/ds"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Amazon"
+
+
+def test_aws_filters_roles_includes_only_aws_category():
+    fake = _AmazonSeq([FakeResponse(json_data=AMAZON_PAGE1), FakeResponse(json_data=AMAZON_PAGE2)])
+    jobs = tech_scrapers.aws(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior DevOps Engineer, AWS Infrastructure"
+    assert jobs[0].url == "https://www.amazon.jobs/en/jobs/1001/devops"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "AWS"
 
 
 def test_mastercard_filters_roles_and_paginates():
