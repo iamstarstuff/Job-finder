@@ -197,6 +197,110 @@ def microsoft(session) -> List[Job]:
     return jobs
 
 
+# Workday CXS API. Facet GUIDs are Workday location-facet IDs; unlike the
+# shared platform-wide "Ireland" country ID some tenants expose (see
+# Accenture below), most tenants only expose per-city location IDs, which
+# are tenant-specific and were found by inspecting each tenant's own facet
+# list during design (POST the jobs endpoint with an empty search --
+# Workday returns available facet values, including their IDs, alongside
+# results).
+MASTERCARD_API = "https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs"
+MASTERCARD_BASE = "https://mastercard.wd1.myworkdayjobs.com/en-US/CorporateCareers"
+MASTERCARD_FACETS = {"locations": ["8eab563831bf10acb918385326cff456", "c17ea515bfcf010108dc84da21c80000"]}
+
+
+def mastercard(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, MASTERCARD_API, method="post", json={
+            "appliedFacets": MASTERCARD_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Mastercard", title,
+                    MASTERCARD_BASE + posting.get("externalPath", ""), MASTERCARD_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# Accenture's tenant exposes a "locationCountry" facet with the same
+# shared, platform-wide Workday GUID for Ireland that PFIZER_FACETS/
+# VIATRIS_FACETS already use in jobfinder/scrapers.py -- confirmed by
+# finding this exact GUID under this tenant's own facet list next to the
+# "Ireland" label. A plain searchText:"Ireland" free-text search does NOT
+# filter by location on this tenant (verified live: it matched unrelated
+# global postings whose descriptions merely mentioned Ireland) -- the
+# facet is required.
+ACCENTURE_API = "https://accenture.wd103.myworkdayjobs.com/wday/cxs/accenture/AccentureCareers/jobs"
+ACCENTURE_BASE = "https://accenture.wd103.myworkdayjobs.com/en-US/AccentureCareers"
+ACCENTURE_FACETS = {"locationCountry": ["04a05835925f45b3a59406a2a6b72c8a"]}
+
+
+def accenture(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, ACCENTURE_API, method="post", json={
+            "appliedFacets": ACCENTURE_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Accenture", title,
+                    ACCENTURE_BASE + posting.get("externalPath", ""), ACCENTURE_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# Intel's Ireland presence is a single site (Leixlip), so this uses that
+# specific city-level location facet ID rather than a country-level one.
+INTEL_API = "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs"
+INTEL_BASE = "https://intel.wd1.myworkdayjobs.com/en-US/External"
+INTEL_FACETS = {"locations": ["1e4a4eb3adf101424c5a8574bf8175cd"]}
+
+
+def intel(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, INTEL_API, method="post", json={
+            "appliedFacets": INTEL_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Intel", title,
+                    INTEL_BASE + posting.get("externalPath", ""), INTEL_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),

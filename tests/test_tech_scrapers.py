@@ -97,3 +97,54 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
 
 def test_tech_scrapers_registry_has_all_three_companies():
     assert set(tech_scrapers.TECH_SCRAPERS) == {"Google", "Microsoft", "AIB"}
+
+
+def test_mastercard_filters_roles_and_paginates():
+    fake = FakeSession({
+        "https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "Senior Site Reliability Engineer", "externalPath": "/job/Dublin/SRE_R1"},
+                {"title": "Retail Branch Associate", "externalPath": "/job/Dublin/Retail_R2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.mastercard(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior Site Reliability Engineer"
+    assert jobs[0].url == "https://mastercard.wd1.myworkdayjobs.com/en-US/CorporateCareers/job/Dublin/SRE_R1"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Mastercard"
+
+
+def test_accenture_filters_roles():
+    fake = FakeSession({
+        "https://accenture.wd103.myworkdayjobs.com/wday/cxs/accenture/AccentureCareers/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "Cloud Platform Architect", "externalPath": "/job/Dublin/Cloud_R1"},
+                {"title": "Junior Copywriter", "externalPath": "/job/Dublin/Copy_R2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.accenture(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Cloud Platform Architect"
+    assert jobs[0].url == "https://accenture.wd103.myworkdayjobs.com/en-US/AccentureCareers/job/Dublin/Cloud_R1"
+    assert jobs[0].company == "Accenture"
+
+
+def test_intel_filters_roles():
+    fake = FakeSession({
+        "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "AI Framework DevOps Engineer", "externalPath": "/job/Leixlip/DevOps_R1"},
+                {"title": "Manufacturing Technician", "externalPath": "/job/Leixlip/Mfg_R2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.intel(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "AI Framework DevOps Engineer"
+    assert jobs[0].company == "Intel"
