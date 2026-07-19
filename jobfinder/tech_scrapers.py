@@ -197,8 +197,298 @@ def microsoft(session) -> List[Job]:
     return jobs
 
 
+# Workday CXS API. Facet GUIDs are Workday location-facet IDs; unlike the
+# shared platform-wide "Ireland" country ID some tenants expose (see
+# Accenture below), most tenants only expose per-city location IDs, which
+# are tenant-specific and were found by inspecting each tenant's own facet
+# list during design (POST the jobs endpoint with an empty search --
+# Workday returns available facet values, including their IDs, alongside
+# results).
+MASTERCARD_API = "https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs"
+MASTERCARD_BASE = "https://mastercard.wd1.myworkdayjobs.com/en-US/CorporateCareers"
+MASTERCARD_FACETS = {"locations": ["8eab563831bf10acb918385326cff456", "c17ea515bfcf010108dc84da21c80000"]}
+
+
+def mastercard(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, MASTERCARD_API, method="post", json={
+            "appliedFacets": MASTERCARD_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Mastercard", title,
+                    MASTERCARD_BASE + posting.get("externalPath", ""), MASTERCARD_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# Accenture's tenant exposes a "locationCountry" facet with the same
+# shared, platform-wide Workday GUID for Ireland that PFIZER_FACETS/
+# VIATRIS_FACETS already use in jobfinder/scrapers.py -- confirmed by
+# finding this exact GUID under this tenant's own facet list next to the
+# "Ireland" label. A plain searchText:"Ireland" free-text search does NOT
+# filter by location on this tenant (verified live: it matched unrelated
+# global postings whose descriptions merely mentioned Ireland) -- the
+# facet is required.
+ACCENTURE_API = "https://accenture.wd103.myworkdayjobs.com/wday/cxs/accenture/AccentureCareers/jobs"
+ACCENTURE_BASE = "https://accenture.wd103.myworkdayjobs.com/en-US/AccentureCareers"
+ACCENTURE_FACETS = {"locationCountry": ["04a05835925f45b3a59406a2a6b72c8a"]}
+
+
+def accenture(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, ACCENTURE_API, method="post", json={
+            "appliedFacets": ACCENTURE_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Accenture", title,
+                    ACCENTURE_BASE + posting.get("externalPath", ""), ACCENTURE_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# Intel's Ireland presence is a single site (Leixlip), so this uses that
+# specific city-level location facet ID rather than a country-level one.
+INTEL_API = "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs"
+INTEL_BASE = "https://intel.wd1.myworkdayjobs.com/en-US/External"
+INTEL_FACETS = {"locations": ["1e4a4eb3adf101424c5a8574bf8175cd"]}
+
+
+def intel(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, INTEL_API, method="post", json={
+            "appliedFacets": INTEL_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Intel", title,
+                    INTEL_BASE + posting.get("externalPath", ""), INTEL_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
+# Eightfold "pcsx" API -- identical pattern to bms()/microsoft(), just a
+# different tenant domain. Citibank's public-facing jobs.citi.com runs on
+# a different platform (Symphony Talent/TalentBrew) with no discoverable
+# API, but confirmed live to show the same underlying postings as this
+# feed (a job found on jobs.citi.com matched by title here, under a
+# different internal ID) -- TalentBrew is a separate branded frontend
+# Citi also maintains, not an independent data source.
+CITIBANK_API = "https://citi.eightfold.ai/api/pcsx/search"
+CITIBANK_BASE = "https://citi.eightfold.ai"
+CITIBANK_PORTAL = "https://citi.eightfold.ai/careers?domain=citi.com&location=Ireland"
+
+
+def citibank(session) -> List[Job]:
+    jobs = []
+    start = 0
+    while True:
+        resp = fetch(session, CITIBANK_API, params={
+            "domain": "citi.com", "query": "", "location": "Ireland",
+            "start": start, "sort_by": "distance", "filter_include_remote": 1,
+        })
+        data = resp.json().get("data", {})
+        positions = data.get("positions", [])
+        for pos in positions:
+            title = pos.get("name", "").strip()
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Citibank", title,
+                    urljoin(CITIBANK_BASE, pos.get("positionUrl", "")),
+                    CITIBANK_PORTAL, sector="tech",
+                ))
+        start += len(positions)
+        if not positions or start >= data.get("count", 0):
+            break
+    return jobs
+
+
+# Phenom People "widgets" API -- identical pattern to MSD's
+# _msd_payload()/msd() in jobfinder/scrapers.py. This feed covers the
+# whole Allianz Group, not just Allianz Partners -- confirmed live that
+# most Ireland postings belong to sibling entities ("Allianz Global Life
+# dac", "Allianz Technology SE Ireland Branch", etc). Allianz Partners'
+# own postings are tagged either "ALLIANZ PARTNERS" or its legacy
+# pre-rebrand name "AWP" (Allianz Worldwide Partners) in the
+# employingEntity field -- both must be checked. Unlike most scrapers in
+# this codebase, applyUrl is already a complete absolute URL, so no
+# urljoin is needed here.
+ALLIANZ_API = "https://careers.allianz.com/widgets"
+
+
+def _allianz_payload(offset: int, size: int) -> dict:
+    return {
+        "lang": "en", "deviceType": "desktop", "country": "gb",
+        "pageName": "search-results", "ddoKey": "refineSearch",
+        "sortBy": "", "subsearch": "", "from": offset, "jobs": True,
+        "counts": True, "all_fields": ["category", "country", "state", "city", "type", "company"],
+        "size": size, "clearAll": False, "jdsource": "facets",
+        "isSliderEnable": False, "pageId": "page10", "siteType": "external",
+        "keywords": "", "global": True,
+        "selected_fields": {"country": ["Ireland"]}, "locationData": {},
+    }
+
+
+def _is_allianz_partners_entity(entity: str) -> bool:
+    entity = (entity or "").upper()
+    return "ALLIANZ PARTNERS" in entity or "AWP" in entity
+
+
+def allianz_partners(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    size = 20
+    while True:
+        resp = fetch(session, ALLIANZ_API, method="post", json=_allianz_payload(offset, size))
+        payload = resp.json().get("refineSearch", {})
+        batch = payload.get("data", {}).get("jobs", [])
+        for item in batch:
+            title = item.get("title", "").strip()
+            if matches_target_role(title) and _is_allianz_partners_entity(item.get("employingEntity")):
+                jobs.append(Job(
+                    "Allianz Partners", title, item.get("applyUrl", ""),
+                    ALLIANZ_API, sector="tech",
+                ))
+        offset += len(batch)
+        if not batch or offset >= payload.get("totalHits", 0):
+            break
+    return jobs
+
+
+# Same SAP SuccessFactors "job2web" platform as aib() (Round 1) and
+# grifols()/leo_pharma() in jobfinder/scrapers.py -- identical markup.
+# careers.ey.com has a broken TLS cert chain from this environment,
+# handled transparently by INSECURE_HOSTS in jobfinder/http_client.py
+# (Task 1) -- no cert-related code needed here.
+EY_BASE = "https://careers.ey.com"
+EY_SEARCH = "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland&startrow="
+EY_PORTAL = "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland"
+
+
+def ey(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    total = None
+    while total is None or offset < total:
+        resp = fetch(session, f"{EY_SEARCH}{offset}")
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(resp.content, "lxml")
+        rows = soup.find_all("tr", class_="data-row")
+        if not rows:
+            break
+        for row in rows:
+            link = row.find("a", class_="jobTitle-link")
+            if not link:
+                continue
+            title = link.get_text(strip=True)
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "EY", title, urljoin(EY_BASE, link["href"]), EY_PORTAL,
+                    sector="tech",
+                ))
+        label = soup.find("span", class_="paginationLabel")
+        parsed_total = _sf_pagination_total(label, offset)
+        total = parsed_total if parsed_total is not None else len(rows)
+        offset += len(rows)
+    return jobs
+
+
+# Amazon runs its own JSON search API -- not a third-party ATS. The
+# `.json` suffix on the same URL structure the human-facing search page
+# uses returns a clean JSON payload. country=IRL is the correct location
+# filter -- loc_query=Ireland and location=Ireland (plausible-looking
+# alternatives) both silently return unfiltered global results (verified
+# live). result_limit cannot exceed 100 -- above that the API returns
+# {"jobs": null, "hits": 0} rather than an HTTP error, so a missing/None
+# jobs list is treated as a hard stop here, matching that ceiling never
+# being crossed since this always requests exactly 100.
+AMAZON_API = "https://www.amazon.jobs/en/search.json"
+AMAZON_BASE = "https://www.amazon.jobs"
+
+
+def _amazon_search(session, want_aws: bool) -> List[Job]:
+    company = "AWS" if want_aws else "Amazon"
+    jobs = []
+    offset = 0
+    limit = 100
+    while True:
+        resp = fetch(session, AMAZON_API, params={
+            "base_query": "", "country": "IRL", "offset": offset, "result_limit": limit,
+        })
+        data = resp.json()
+        postings = data.get("jobs") or []
+        if not postings:
+            break
+        for posting in postings:
+            title = posting.get("title", "")
+            if not matches_target_role(title):
+                continue
+            is_aws = posting.get("business_category") == "aws"
+            if is_aws != want_aws:
+                continue
+            jobs.append(Job(
+                company, title,
+                urljoin(AMAZON_BASE, posting.get("job_path", "")), AMAZON_BASE,
+                sector="tech",
+            ))
+        offset += len(postings)
+        if offset >= data.get("hits", 0):
+            break
+    return jobs
+
+
+def amazon(session) -> List[Job]:
+    return _amazon_search(session, want_aws=False)
+
+
+def aws(session) -> List[Job]:
+    return _amazon_search(session, want_aws=True)
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
     ("AIB", aib),
+    ("Mastercard", mastercard),
+    ("Accenture", accenture),
+    ("Intel", intel),
+    ("Citibank", citibank),
+    ("Allianz Partners", allianz_partners),
+    ("EY", ey),
+    ("Amazon", amazon),
+    ("AWS", aws),
 ])

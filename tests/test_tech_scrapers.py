@@ -95,5 +95,169 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     assert jobs[0].company == "Microsoft"
 
 
-def test_tech_scrapers_registry_has_all_three_companies():
-    assert set(tech_scrapers.TECH_SCRAPERS) == {"Google", "Microsoft", "AIB"}
+def test_tech_scrapers_registry_has_all_eleven_companies():
+    assert set(tech_scrapers.TECH_SCRAPERS) == {
+        "Google", "Microsoft", "AIB", "Mastercard", "Accenture", "Intel",
+        "Citibank", "Allianz Partners", "EY", "Amazon", "AWS",
+    }
+
+
+AMAZON_PAGE1 = {
+    "hits": 3,
+    "jobs": [
+        {"title": "Senior DevOps Engineer, AWS Infrastructure", "job_path": "/en/jobs/1001/devops", "business_category": "aws"},
+        {"title": "Retail Store Lead", "job_path": "/en/jobs/1002/retail", "business_category": "retail"},
+    ],
+}
+AMAZON_PAGE2 = {
+    "hits": 3,
+    "jobs": [
+        {"title": "Senior Data Scientist, Supply Chain", "job_path": "/en/jobs/1003/ds", "business_category": "finance"},
+    ],
+}
+
+
+class _AmazonSeq:
+    """Amazon's pagination is via `params={"offset": ...}` on a GET request
+    to a constant URL, not a URL that changes per page -- FakeSession's
+    prefix-match routing can't distinguish two calls to the same URL, so
+    (matching the existing test_gilead_parses_and_paginates_workday_api
+    pattern for the same underlying problem with POST-body pagination)
+    this returns responses from a queue regardless of URL/params."""
+    def __init__(self, responses):
+        self._responses = iter(responses)
+
+    def get(self, url, **kwargs):
+        return next(self._responses)
+
+
+def test_amazon_filters_roles_excludes_aws_category():
+    fake = _AmazonSeq([FakeResponse(json_data=AMAZON_PAGE1), FakeResponse(json_data=AMAZON_PAGE2)])
+    jobs = tech_scrapers.amazon(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior Data Scientist, Supply Chain"
+    assert jobs[0].url == "https://www.amazon.jobs/en/jobs/1003/ds"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Amazon"
+
+
+def test_aws_filters_roles_includes_only_aws_category():
+    fake = _AmazonSeq([FakeResponse(json_data=AMAZON_PAGE1), FakeResponse(json_data=AMAZON_PAGE2)])
+    jobs = tech_scrapers.aws(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior DevOps Engineer, AWS Infrastructure"
+    assert jobs[0].url == "https://www.amazon.jobs/en/jobs/1001/devops"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "AWS"
+
+
+def test_mastercard_filters_roles_and_paginates():
+    fake = FakeSession({
+        "https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "Senior Site Reliability Engineer", "externalPath": "/job/Dublin/SRE_R1"},
+                {"title": "Retail Branch Associate", "externalPath": "/job/Dublin/Retail_R2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.mastercard(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior Site Reliability Engineer"
+    assert jobs[0].url == "https://mastercard.wd1.myworkdayjobs.com/en-US/CorporateCareers/job/Dublin/SRE_R1"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Mastercard"
+
+
+def test_accenture_filters_roles():
+    fake = FakeSession({
+        "https://accenture.wd103.myworkdayjobs.com/wday/cxs/accenture/AccentureCareers/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "Cloud Platform Architect", "externalPath": "/job/Dublin/Cloud_R1"},
+                {"title": "Junior Copywriter", "externalPath": "/job/Dublin/Copy_R2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.accenture(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Cloud Platform Architect"
+    assert jobs[0].url == "https://accenture.wd103.myworkdayjobs.com/en-US/AccentureCareers/job/Dublin/Cloud_R1"
+    assert jobs[0].company == "Accenture"
+
+
+def test_citibank_filters_roles_and_paginates():
+    fake = FakeSession({
+        "https://citi.eightfold.ai/api/pcsx/search": FakeResponse(json_data={
+            "status": 200,
+            "data": {
+                "count": 1,
+                "positions": [
+                    {"name": "Cloud Infrastructure Engineer, VP", "positionUrl": "/careers/job/859000001"},
+                    {"name": "CitiService Financial Institution Head", "positionUrl": "/careers/job/859000002"},
+                ],
+            },
+        }),
+    })
+    jobs = tech_scrapers.citibank(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Cloud Infrastructure Engineer, VP"
+    assert jobs[0].url == "https://citi.eightfold.ai/careers/job/859000001"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Citibank"
+
+
+def test_allianz_partners_filters_by_entity_and_role():
+    fake = FakeSession({
+        "https://careers.allianz.com/widgets": FakeResponse(json_data={
+            "refineSearch": {"data": {"jobs": [
+                {"title": "Data Scientist", "employingEntity": "AWP Assistance UK Ltd",
+                 "applyUrl": "https://career5.successfactors.eu/careers?career_job_req_id=1"},
+                {"title": "Data Scientist", "employingEntity": "Allianz Global Life dac",
+                 "applyUrl": "https://career5.successfactors.eu/careers?career_job_req_id=2"},
+                {"title": "Broker Consultant", "employingEntity": "ALLIANZ PARTNERS",
+                 "applyUrl": "https://career5.successfactors.eu/careers?career_job_req_id=3"},
+            ]}},
+        }),
+    })
+    jobs = tech_scrapers.allianz_partners(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Data Scientist"
+    assert jobs[0].url == "https://career5.successfactors.eu/careers?career_job_req_id=1"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Allianz Partners"
+
+
+EY_PAGE_HTML = b"""
+<span class="paginationLabel" aria-label="Results 1 - 2">Results <b>1 - 2</b> of <b>2</b></span>
+<tr class="data-row"><td><a class="jobTitle-link" href="/ey/job/Dublin-Cloud-Security-Consultant-IE/1400000001/">Cloud Infrastructure Consultant</a></td></tr>
+<tr class="data-row"><td><a class="jobTitle-link" href="/ey/job/Dublin-Tax-Advisor-IE/1400000002/">Tax Advisor</a></td></tr>
+"""
+
+
+def test_ey_filters_roles_and_builds_absolute_urls():
+    fake = FakeSession({
+        "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland&startrow=0": FakeResponse(EY_PAGE_HTML),
+    })
+    jobs = tech_scrapers.ey(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Cloud Infrastructure Consultant"
+    assert jobs[0].url == "https://careers.ey.com/ey/job/Dublin-Cloud-Security-Consultant-IE/1400000001/"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "EY"
+
+
+def test_intel_filters_roles():
+    fake = FakeSession({
+        "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "AI Framework DevOps Engineer", "externalPath": "/job/Leixlip/DevOps_R1"},
+                {"title": "Manufacturing Technician", "externalPath": "/job/Leixlip/Mfg_R2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.intel(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "AI Framework DevOps Engineer"
+    assert jobs[0].company == "Intel"
