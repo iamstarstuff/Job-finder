@@ -287,6 +287,21 @@ def fetch_amazon_description(session, url: str) -> Optional[str]:
             return None
 
 
+def fetch_successfactors_description(session, url: str) -> Optional[str]:
+    """AIB and EY are both the SAP SuccessFactors "job2web" platform
+    (the same one grifols()/leo_pharma() already scrape) -- but unlike
+    the JSON-LD companies, job2web's detail pages carry no schema.org
+    markup. Confirmed live: the full description renders in a
+    <div class="jobdescription"> element. job.url is the real detail
+    page here, so no re-querying is needed."""
+    response = fetch(session, url)
+    soup = BeautifulSoup(response.content, "lxml")
+    div = soup.find(class_="jobdescription")
+    if not div:
+        return None
+    return div.get_text(separator=" ", strip=True)
+
+
 # Per-company override for companies whose detail pages can't be handled
 # by the generic JSON-LD extractor. Only Amgen needs one so far — see
 # fetch_amgen_description's docstring for why. Companies not in this dict

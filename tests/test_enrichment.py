@@ -377,3 +377,18 @@ def test_fetch_amazon_description_returns_none_when_no_match():
         }),
     })
     assert enrichment.fetch_amazon_description(session, "https://www.amazon.jobs/en/jobs/999/nope") is None
+
+
+SUCCESSFACTORS_JOB_HTML = b'<html><body><div class="jobdescription"><p>Needs <strong>Splunk</strong> and Kubernetes.</p></div></body></html>'
+SUCCESSFACTORS_NO_DESCRIPTION_HTML = b"<html><body>No description here.</body></html>"
+
+
+def test_fetch_successfactors_description_extracts_text():
+    session = FakeSession({"https://jobs.aib.ie/aib/job/1": FakeResponse(SUCCESSFACTORS_JOB_HTML)})
+    result = enrichment.fetch_successfactors_description(session, "https://jobs.aib.ie/aib/job/1")
+    assert result == "Needs Splunk and Kubernetes."
+
+
+def test_fetch_successfactors_description_returns_none_when_class_absent():
+    session = FakeSession({"https://careers.ey.com/ey/job/1": FakeResponse(SUCCESSFACTORS_NO_DESCRIPTION_HTML)})
+    assert enrichment.fetch_successfactors_description(session, "https://careers.ey.com/ey/job/1") is None
