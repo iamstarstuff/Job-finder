@@ -456,6 +456,18 @@ def test_fetch_jpmorganchase_description_returns_none_for_unparseable_url():
     assert enrichment.fetch_jpmorganchase_description(session, "https://example.com/not-a-job-url") is None
 
 
+def test_enrichment_companies_includes_round5_companies():
+    round5 = {"Stripe", "JPMorganChase", "Salesforce"}
+    assert round5 <= set(enrichment.ENRICHMENT_COMPANIES)
+    assert "Infosys" not in enrichment.ENRICHMENT_COMPANIES
+
+
+def test_company_fetchers_includes_round5_dedicated_fetchers():
+    assert enrichment.COMPANY_FETCHERS["Stripe"] is enrichment.fetch_stripe_description
+    assert enrichment.COMPANY_FETCHERS["JPMorganChase"] is enrichment.fetch_jpmorganchase_description
+    assert "Salesforce" not in enrichment.COMPANY_FETCHERS
+
+
 def test_company_fetchers_routes_tech_companies_correctly():
     assert enrichment.COMPANY_FETCHERS["Google"] is enrichment.fetch_google_description
     assert enrichment.COMPANY_FETCHERS["Amazon"] is enrichment.fetch_amazon_description

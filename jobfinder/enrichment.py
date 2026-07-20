@@ -378,6 +378,8 @@ COMPANY_FETCHERS = {
     "AWS": fetch_amazon_description,
     "AIB": fetch_successfactors_description,
     "EY": fetch_successfactors_description,
+    "Stripe": fetch_stripe_description,
+    "JPMorganChase": fetch_jpmorganchase_description,
 }
 
 
@@ -416,6 +418,13 @@ ENRICHMENT_COMPANIES = [
     # deliberately NOT included -- see COMPANY_FETCHERS comment above.
     "Mastercard", "Accenture", "Intel", "Citibank", "Microsoft",
     "Google", "Amazon", "AWS", "AIB", "EY",
+    # Tech sector (Round 5) -- Salesforce has JSON-LD on its Workday
+    # detail pages (confirmed live) and needs no dedicated fetcher, same
+    # as Mastercard/Accenture/Intel above. Infosys is deliberately NOT
+    # included -- every reachable page (listing preview and detail page)
+    # only ever serves an ellipsis-truncated description, confirmed live
+    # during design; same class of dead end as Allianz Partners.
+    "Stripe", "JPMorganChase", "Salesforce",
 ]
 
 
