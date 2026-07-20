@@ -95,12 +95,30 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     assert jobs[0].company == "Microsoft"
 
 
-def test_tech_scrapers_registry_has_thirteen_companies():
+def test_tech_scrapers_registry_has_fourteen_companies():
     assert set(tech_scrapers.TECH_SCRAPERS) == {
         "Google", "Microsoft", "AIB", "Mastercard", "Accenture", "Intel",
         "Citibank", "Allianz Partners", "EY", "Amazon", "AWS", "Stripe",
-        "JPMorganChase",
+        "JPMorganChase", "Salesforce",
     }
+
+
+def test_salesforce_filters_roles_and_paginates():
+    fake = FakeSession({
+        "https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs": FakeResponse(json_data={
+            "total": 1,
+            "jobPostings": [
+                {"title": "Forward Deployed Engineer, Data Science", "externalPath": "/job/Ireland---Dublin/FDE_JR1"},
+                {"title": "Account Executive, SMB", "externalPath": "/job/Ireland---Dublin/AE_JR2"},
+            ],
+        }),
+    })
+    jobs = tech_scrapers.salesforce(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Forward Deployed Engineer, Data Science"
+    assert jobs[0].url == "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site/job/Ireland---Dublin/FDE_JR1"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Salesforce"
 
 
 def test_jpmorganchase_filters_roles_and_paginates():

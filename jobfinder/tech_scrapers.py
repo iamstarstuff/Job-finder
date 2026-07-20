@@ -561,6 +561,50 @@ def jpmorganchase(session) -> List[Job]:
     return jobs
 
 
+# Salesforce's careers site runs on Workday, the same platform as
+# mastercard()/accenture()/intel() above -- confirmed live during
+# design: 116 real Ireland postings. One real wrinkle: this tenant's
+# Ireland facet *parameter name* is a long custom string
+# ("CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended"),
+# not the simple "locationCountry" key Mastercard/Accenture/Intel use --
+# discovered by requesting with empty appliedFacets and reading the
+# `facets` array the API returns, which lists every available facet
+# parameter alongside its values. The facet *value* GUID for Ireland is
+# still the same shared, platform-wide one used elsewhere
+# ("04a05835925f45b3a59406a2a6b72c8a").
+SALESFORCE_API = "https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs"
+SALESFORCE_BASE = "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site"
+SALESFORCE_FACETS = {
+    "CF_-_REC_-_LRV_-_Job_Posting_Anchor_-_Country_from_Job_Posting_Location_Extended": [
+        "04a05835925f45b3a59406a2a6b72c8a"
+    ]
+}
+
+
+def salesforce(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 20
+    while True:
+        resp = fetch(session, SALESFORCE_API, method="post", json={
+            "appliedFacets": SALESFORCE_FACETS, "limit": limit, "offset": offset, "searchText": "",
+        })
+        data = resp.json()
+        postings = data.get("jobPostings", [])
+        for posting in postings:
+            title = posting.get("title", "")
+            if matches_target_role(title):
+                jobs.append(Job(
+                    "Salesforce", title,
+                    SALESFORCE_BASE + posting.get("externalPath", ""), SALESFORCE_BASE,
+                    sector="tech",
+                ))
+        offset += len(postings)
+        if not postings or offset >= data.get("total", 0):
+            break
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
@@ -575,4 +619,5 @@ TECH_SCRAPERS = OrderedDict([
     ("AWS", aws),
     ("Stripe", stripe),
     ("JPMorganChase", jpmorganchase),
+    ("Salesforce", salesforce),
 ])
