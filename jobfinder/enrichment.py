@@ -11,7 +11,10 @@ from bs4 import BeautifulSoup
 
 from jobfinder.http_client import fetch
 from jobfinder.scrapers import AMGEN_API
-from jobfinder.tech_scrapers import AMAZON_API, AMAZON_BASE, GOOGLE_SEARCH, _extract_google_data_chunk
+from jobfinder.tech_scrapers import (
+    AMAZON_API, AMAZON_BASE, GOOGLE_SEARCH, _extract_google_data_chunk,
+    JPMORGANCHASE_API, JPMORGANCHASE_IRELAND_FACET,
+)
 
 log = logging.getLogger(__name__)
 
@@ -300,6 +303,49 @@ def fetch_successfactors_description(session, url: str) -> Optional[str]:
     if not div:
         return None
     return div.get_text(separator=" ", strip=True)
+
+
+_JPMORGANCHASE_ID_RE = re.compile(r"/job/(\d+)$")
+
+
+def fetch_jpmorganchase_description(session, url: str) -> Optional[str]:
+    """JPMorganChase's Oracle Recruiting Cloud detail page
+    (hcmUI/CandidateExperience) is a client-rendered SPA shell with no
+    server-side description -- same dead end as Alkermes' own detail page
+    on the identical platform. But the search API's own requisitionList
+    entries already carry a ShortDescriptionStr per job (confirmed live
+    during design -- a short teaser, not a full JD, but the only
+    description text this platform exposes at all, and already plain
+    text with no HTML tags to strip). Re-queries the same search and
+    matches by the numeric Id embedded in the job's stored URL."""
+    match = _JPMORGANCHASE_ID_RE.search(url)
+    if not match:
+        return None
+    job_id = match.group(1)
+    offset = 0
+    limit = 25
+    while True:
+        response = fetch(session, JPMORGANCHASE_API, params={
+            "onlyData": "true",
+            "expand": "requisitionList",
+            "finder": (
+                "findReqs;siteNumber=CX_1001,facetsList=LOCATIONS,"
+                f"limit={limit},offset={offset},"
+                f"selectedLocationsFacet={JPMORGANCHASE_IRELAND_FACET}"
+            ),
+        })
+        item = response.json()["items"][0]
+        total = item.get("TotalJobsCount", 0)
+        reqs = item.get("requisitionList") or []
+        if not reqs:
+            return None
+        for req in reqs:
+            if str(req.get("Id")) == job_id:
+                description = (req.get("ShortDescriptionStr") or "").strip()
+                return description or None
+        offset += len(reqs)
+        if offset >= total:
+            return None
 
 
 def fetch_stripe_description(session, url: str) -> Optional[str]:

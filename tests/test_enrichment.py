@@ -418,6 +418,44 @@ def test_fetch_stripe_description_returns_none_when_class_absent():
     assert enrichment.fetch_stripe_description(session, "https://stripe.com/jobs/listing/data-scientist/2") is None
 
 
+def test_fetch_jpmorganchase_description_matches_by_id():
+    session = FakeSession({
+        "https://jpmc.fa.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions": FakeResponse(json_data={
+            "items": [{
+                "TotalJobsCount": 2,
+                "requisitionList": [
+                    {"Id": "210708545", "ShortDescriptionStr": "Needs Databricks and SQL."},
+                    {"Id": "210759082", "ShortDescriptionStr": "Needs React."},
+                ],
+            }],
+        }),
+    })
+    result = enrichment.fetch_jpmorganchase_description(
+        session, "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210708545",
+    )
+    assert result == "Needs Databricks and SQL."
+
+
+def test_fetch_jpmorganchase_description_returns_none_when_no_match():
+    session = FakeSession({
+        "https://jpmc.fa.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions": FakeResponse(json_data={
+            "items": [{
+                "TotalJobsCount": 1,
+                "requisitionList": [{"Id": "210708545", "ShortDescriptionStr": "Needs Databricks."}],
+            }],
+        }),
+    })
+    result = enrichment.fetch_jpmorganchase_description(
+        session, "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/999999999",
+    )
+    assert result is None
+
+
+def test_fetch_jpmorganchase_description_returns_none_for_unparseable_url():
+    session = FakeSession({})
+    assert enrichment.fetch_jpmorganchase_description(session, "https://example.com/not-a-job-url") is None
+
+
 def test_company_fetchers_routes_tech_companies_correctly():
     assert enrichment.COMPANY_FETCHERS["Google"] is enrichment.fetch_google_description
     assert enrichment.COMPANY_FETCHERS["Amazon"] is enrichment.fetch_amazon_description
