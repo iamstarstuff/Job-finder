@@ -46,12 +46,7 @@ def create_app(db_path=None) -> Flask:
     @app.route("/")
     def index():
         conn = get_conn()
-        return render_template(
-            "index.html",
-            overview=analytics.overview(conn),
-            per_company=analytics.jobs_per_company(conn),
-            lifespans=analytics.median_days_active(conn),
-        )
+        return render_template("index.html", overview=analytics.overview(conn))
 
     @app.route("/sector/<name>")
     def sector_page(name):

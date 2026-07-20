@@ -112,6 +112,18 @@ def test_drilldown_unknown_dimension_returns_400(enriched_client):
     assert resp.status_code == 400
 
 
+def test_landing_page_links_to_both_sector_pages(client):
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert b'href="/sector/pharma"' in resp.data
+    assert b'href="/sector/tech"' in resp.data
+
+
+def test_landing_page_no_longer_shows_per_company_table(client):
+    resp = client.get("/")
+    assert b"Jobs per company" not in resp.data
+
+
 def test_sector_page_pharma_shows_only_pharma_data(client):
     resp = client.get("/sector/pharma")
     assert resp.status_code == 200
