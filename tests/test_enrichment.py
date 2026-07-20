@@ -403,6 +403,21 @@ def test_enrichment_companies_includes_ten_tech_companies():
     assert "Allianz Partners" not in enrichment.ENRICHMENT_COMPANIES
 
 
+STRIPE_JOB_HTML = b'<html><body><div class="ArticleMarkdown"><p>Needs <strong>SQL</strong> and Python.</p></div></body></html>'
+STRIPE_NO_DESCRIPTION_HTML = b"<html><body>No description here.</body></html>"
+
+
+def test_fetch_stripe_description_extracts_text():
+    session = FakeSession({"https://stripe.com/jobs/listing/data-scientist/1": FakeResponse(STRIPE_JOB_HTML)})
+    result = enrichment.fetch_stripe_description(session, "https://stripe.com/jobs/listing/data-scientist/1")
+    assert result == "Needs SQL and Python."
+
+
+def test_fetch_stripe_description_returns_none_when_class_absent():
+    session = FakeSession({"https://stripe.com/jobs/listing/data-scientist/2": FakeResponse(STRIPE_NO_DESCRIPTION_HTML)})
+    assert enrichment.fetch_stripe_description(session, "https://stripe.com/jobs/listing/data-scientist/2") is None
+
+
 def test_company_fetchers_routes_tech_companies_correctly():
     assert enrichment.COMPANY_FETCHERS["Google"] is enrichment.fetch_google_description
     assert enrichment.COMPANY_FETCHERS["Amazon"] is enrichment.fetch_amazon_description

@@ -302,6 +302,18 @@ def fetch_successfactors_description(session, url: str) -> Optional[str]:
     return div.get_text(separator=" ", strip=True)
 
 
+def fetch_stripe_description(session, url: str) -> Optional[str]:
+    """Stripe's job detail pages (job.url is the real detail page) render
+    the full description in a <div class="ArticleMarkdown"> element --
+    confirmed live during design, no JSON-LD present on this platform."""
+    response = fetch(session, url)
+    soup = BeautifulSoup(response.content, "lxml")
+    div = soup.find(class_="ArticleMarkdown")
+    if not div:
+        return None
+    return div.get_text(separator=" ", strip=True)
+
+
 # Per-company override for companies whose detail pages can't be handled
 # by the generic JSON-LD extractor. Companies not in this dict use
 # fetch_description (the generic path) as the default -- this correctly
