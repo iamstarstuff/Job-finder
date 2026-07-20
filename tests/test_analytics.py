@@ -118,3 +118,83 @@ def test_skills_by_category(tmp_path):
     rows = analytics.skills_by_category(conn)
     assert {"category": "Software", "skill": "SAP", "count": 1} in rows
     assert {"category": "Regulatory", "skill": "GMP", "count": 2} in rows
+
+
+def seeded_mixed_sector_conn(tmp_path):
+    conn = storage.connect(tmp_path / "mixed.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "QC Analyst", "https://a/1", "p"),
+    ], "2026-07-01T10:00:00")
+    storage.record_company_snapshot(conn, "Google", [
+        Job("Google", "Senior SRE", "https://g/1", "p", sector="tech"),
+    ], "2026-07-01T10:00:00")
+    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
+    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://g/1",)).fetchone()["id"]
+    storage.save_enrichment(conn, id1, "Needs SAP.", "Senior", [("SAP", "Software")], "2026-07-01T11:00:00")
+    storage.save_enrichment(conn, id2, "Needs Kubernetes.", None, [("Kubernetes", "Cloud & Infrastructure")], "2026-07-01T11:00:00")
+    return conn
+
+
+def test_jobs_per_company_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    all_rows = {r["company"] for r in analytics.jobs_per_company(conn)}
+    pharma_rows = {r["company"] for r in analytics.jobs_per_company(conn, sector="pharma")}
+    tech_rows = {r["company"] for r in analytics.jobs_per_company(conn, sector="tech")}
+    assert all_rows == {"Abbvie", "Google"}
+    assert pharma_rows == {"Abbvie"}
+    assert tech_rows == {"Google"}
+
+
+def test_overview_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    assert analytics.overview(conn)["total_jobs_seen"] == 2
+    assert analytics.overview(conn, sector="pharma")["total_jobs_seen"] == 1
+    assert analytics.overview(conn, sector="tech")["total_jobs_seen"] == 1
+    assert analytics.overview(conn, sector="tech")["companies"] == 1
+
+
+def test_top_skills_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    pharma_skills = {r["skill"] for r in analytics.top_skills(conn, sector="pharma")}
+    tech_skills = {r["skill"] for r in analytics.top_skills(conn, sector="tech")}
+    assert pharma_skills == {"SAP"}
+    assert tech_skills == {"Kubernetes"}
+
+
+def test_seniority_breakdown_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    pharma = {r["seniority"]: r["count"] for r in analytics.seniority_breakdown(conn, sector="pharma")}
+    assert pharma == {"Senior": 1}
+
+
+def test_skills_by_category_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    tech_rows = analytics.skills_by_category(conn, sector="tech")
+    assert {"category": "Cloud & Infrastructure", "skill": "Kubernetes", "count": 1} in tech_rows
+    assert all(r["skill"] != "SAP" for r in tech_rows)
+
+
+def test_category_breakdown_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    tech_rows = analytics.category_breakdown(conn, sector="tech")
+    assert all(r["company"] == "Google" for r in tech_rows)
+
+
+def test_new_jobs_per_week_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    total_all = sum(r["count"] for r in analytics.new_jobs_per_week(conn))
+    total_pharma = sum(r["count"] for r in analytics.new_jobs_per_week(conn, sector="pharma"))
+    assert total_all == 2
+    assert total_pharma == 1
+
+
+def test_median_days_active_filters_by_sector(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    assert analytics.median_days_active(conn, sector="pharma") == []
+    assert analytics.median_days_active(conn, sector="tech") == []
+
+
+def test_sector_none_preserves_existing_unfiltered_behavior(tmp_path):
+    conn = seeded_mixed_sector_conn(tmp_path)
+    assert len(analytics.jobs_per_company(conn)) == 2
+    assert analytics.overview(conn)["companies"] == 2
