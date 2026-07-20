@@ -605,6 +605,35 @@ def salesforce(session) -> List[Job]:
     return jobs
 
 
+# Infosys's careers site genuinely filters server-side on
+# `?location=Ireland` -- confirmed live during design (8 real Ireland
+# postings returned, all in a single page, no pagination markup present
+# for this small a result set). href values are already absolute URLs,
+# no urljoin needed. Note: the detail page (and even the listing
+# card's own preview snippet) only ever expose an ellipsis-truncated
+# description everywhere reachable via static HTTP -- confirmed live,
+# same class of dead end as Allianz Partners -- so Infosys is
+# deliberately NOT added to ENRICHMENT_COMPANIES (see enrichment.py).
+INFOSYS_SEARCH = "https://digitalcareers.infosys.com/infosys/global-careers?location=Ireland"
+
+
+def infosys(session) -> List[Job]:
+    from bs4 import BeautifulSoup
+    resp = fetch(session, INFOSYS_SEARCH)
+    soup = BeautifulSoup(resp.content, "lxml")
+    jobs = []
+    for card in soup.select("a.job"):
+        title_div = card.select_one(".job-title")
+        url = card.get("href")
+        if not title_div or not url:
+            continue
+        title = title_div.get("data-title") or title_div.get_text(strip=True)
+        if not matches_target_role(title):
+            continue
+        jobs.append(Job("Infosys", title, url, INFOSYS_SEARCH, sector="tech"))
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
@@ -620,4 +649,5 @@ TECH_SCRAPERS = OrderedDict([
     ("Stripe", stripe),
     ("JPMorganChase", jpmorganchase),
     ("Salesforce", salesforce),
+    ("Infosys", infosys),
 ])

@@ -95,12 +95,38 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     assert jobs[0].company == "Microsoft"
 
 
-def test_tech_scrapers_registry_has_fourteen_companies():
+def test_tech_scrapers_registry_has_fifteen_companies():
     assert set(tech_scrapers.TECH_SCRAPERS) == {
         "Google", "Microsoft", "AIB", "Mastercard", "Accenture", "Intel",
         "Citibank", "Allianz Partners", "EY", "Amazon", "AWS", "Stripe",
-        "JPMorganChase", "Salesforce",
+        "JPMorganChase", "Salesforce", "Infosys",
     }
+
+
+INFOSYS_PAGE_HTML = b"""
+<a class="job" href="https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148920BR">
+  <div class="left-section">
+    <div class="job-title" data-title="Practice Lead - Data Science_ ML">Practice Lead - Data Science_ ML</div>
+  </div>
+</a>
+<a class="job" href="https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/141411BR">
+  <div class="left-section">
+    <div class="job-title" data-title="HR Lead - Dublin">HR Lead - Dublin</div>
+  </div>
+</a>
+"""
+
+
+def test_infosys_filters_by_role():
+    fake = FakeSession({
+        "https://digitalcareers.infosys.com/infosys/global-careers?location=Ireland": FakeResponse(INFOSYS_PAGE_HTML),
+    })
+    jobs = tech_scrapers.infosys(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Practice Lead - Data Science_ ML"
+    assert jobs[0].url == "https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148920BR"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Infosys"
 
 
 def test_salesforce_filters_roles_and_paginates():
