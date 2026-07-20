@@ -126,36 +126,47 @@ def create_app(db_path=None) -> Flask:
     def api_drilldown(dimension):
         conn = get_conn()
         value = request.args.get("value", "")
+        sector = request.args.get("sector") or None
         if dimension == "company":
-            rows = conn.execute(
-                """SELECT title, company, url, first_seen FROM jobs
-                   WHERE company = ? ORDER BY first_seen DESC LIMIT 100""",
-                (value,),
-            ).fetchall()
+            sql = "SELECT title, company, url, first_seen FROM jobs WHERE company = ?"
+            params = [value]
+            if sector:
+                sql += " AND sector = ?"
+                params.append(sector)
+            sql += " ORDER BY first_seen DESC LIMIT 100"
+            rows = conn.execute(sql, params).fetchall()
         elif dimension == "skill":
-            rows = conn.execute(
-                """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
-                   FROM jobs
-                   JOIN job_skills ON job_skills.job_id = jobs.id
-                   JOIN skills ON skills.id = job_skills.skill_id
-                   WHERE skills.name = ?
-                   ORDER BY jobs.first_seen DESC LIMIT 100""",
-                (value,),
-            ).fetchall()
+            sql = """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
+                     FROM jobs
+                     JOIN job_skills ON job_skills.job_id = jobs.id
+                     JOIN skills ON skills.id = job_skills.skill_id
+                     WHERE skills.name = ?"""
+            params = [value]
+            if sector:
+                sql += " AND jobs.sector = ?"
+                params.append(sector)
+            sql += " ORDER BY jobs.first_seen DESC LIMIT 100"
+            rows = conn.execute(sql, params).fetchall()
         elif dimension == "seniority":
             seniority_value = None if value == "Unspecified" else value
-            rows = conn.execute(
-                """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
-                   FROM jobs
-                   JOIN job_details ON job_details.job_id = jobs.id
-                   WHERE job_details.seniority IS ? AND job_details.enrichment_failed = 0
-                   ORDER BY jobs.first_seen DESC LIMIT 100""",
-                (seniority_value,),
-            ).fetchall()
+            sql = """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
+                     FROM jobs
+                     JOIN job_details ON job_details.job_id = jobs.id
+                     WHERE job_details.seniority IS ? AND job_details.enrichment_failed = 0"""
+            params = [seniority_value]
+            if sector:
+                sql += " AND jobs.sector = ?"
+                params.append(sector)
+            sql += " ORDER BY jobs.first_seen DESC LIMIT 100"
+            rows = conn.execute(sql, params).fetchall()
         elif dimension == "category":
-            all_jobs = conn.execute(
-                "SELECT title, company, url, first_seen FROM jobs ORDER BY first_seen DESC"
-            ).fetchall()
+            sql = "SELECT title, company, url, first_seen FROM jobs"
+            params = []
+            if sector:
+                sql += " WHERE sector = ?"
+                params.append(sector)
+            sql += " ORDER BY first_seen DESC"
+            all_jobs = conn.execute(sql, params).fetchall()
             rows = [r for r in all_jobs if analytics.categorize(r["title"]) == value][:100]
         else:
             return jsonify({"error": "unknown dimension"}), 400

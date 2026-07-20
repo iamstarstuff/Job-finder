@@ -112,6 +112,18 @@ def test_drilldown_unknown_dimension_returns_400(enriched_client):
     assert resp.status_code == 400
 
 
+def test_api_drilldown_company_respects_sector_filter(enriched_client):
+    resp = enriched_client.get("/api/drilldown/company?value=Abbvie&sector=tech")
+    assert resp.status_code == 200
+    assert resp.get_json() == []
+
+
+def test_api_drilldown_company_without_sector_is_unfiltered(enriched_client):
+    resp = enriched_client.get("/api/drilldown/company?value=Abbvie")
+    assert resp.status_code == 200
+    assert len(resp.get_json()) == 2
+
+
 def test_drilldown_company_respects_row_cap(tmp_path):
     conn = storage.connect(tmp_path / "cap.db")
     jobs = [Job("BigCo", f"Role {i}", f"https://x/{i}", "p") for i in range(150)]

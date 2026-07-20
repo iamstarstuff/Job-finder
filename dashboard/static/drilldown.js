@@ -48,10 +48,11 @@ function renderDrilldownPanel(panel, value, rows) {
   panel.classList.remove("hidden");
 }
 
-async function loadDrilldown(panel, dimension, value) {
+async function loadDrilldown(panel, dimension, value, sector) {
   panel.classList.remove("hidden");
   panel.innerHTML = "<p>Loading…</p>";
-  const url = "/api/drilldown/" + encodeURIComponent(dimension) + "?value=" + encodeURIComponent(value);
+  let url = "/api/drilldown/" + encodeURIComponent(dimension) + "?value=" + encodeURIComponent(value);
+  if (sector) url += "&sector=" + encodeURIComponent(sector);
   const resp = await fetch(url);
   const rows = await resp.json();
   renderDrilldownPanel(panel, value, rows);
@@ -61,7 +62,7 @@ async function loadDrilldown(panel, dimension, value) {
 // `labelFn(element, chart)` extracts the drilldown value (e.g. a company or
 // skill name) from the clicked chart element. Clicking the same value again
 // closes the panel instead of re-fetching.
-function makeDrilldownHandler(panelId, dimension, labelFn) {
+function makeDrilldownHandler(panelId, dimension, labelFn, sector) {
   const panel = document.getElementById(panelId);
   let openValue = null;
   return function (event, elements, chart) {
@@ -73,6 +74,6 @@ function makeDrilldownHandler(panelId, dimension, labelFn) {
       return;
     }
     openValue = value;
-    loadDrilldown(panel, dimension, value);
+    loadDrilldown(panel, dimension, value, sector);
   };
 }
