@@ -100,27 +100,27 @@ def create_app(db_path=None) -> Flask:
 
     @app.route("/api/jobs-per-company")
     def api_jobs_per_company():
-        return jsonify(analytics.jobs_per_company(get_conn()))
+        return jsonify(analytics.jobs_per_company(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/new-per-week")
     def api_new_per_week():
-        return jsonify(analytics.new_jobs_per_week(get_conn()))
+        return jsonify(analytics.new_jobs_per_week(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/categories")
     def api_categories():
-        return jsonify(analytics.category_breakdown(get_conn()))
+        return jsonify(analytics.category_breakdown(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/top-skills")
     def api_top_skills():
-        return jsonify(analytics.top_skills(get_conn()))
+        return jsonify(analytics.top_skills(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/seniority-breakdown")
     def api_seniority_breakdown():
-        return jsonify(analytics.seniority_breakdown(get_conn()))
+        return jsonify(analytics.seniority_breakdown(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/skills-by-category")
     def api_skills_by_category():
-        return jsonify(analytics.skills_by_category(get_conn()))
+        return jsonify(analytics.skills_by_category(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/drilldown/<dimension>")
     def api_drilldown(dimension):

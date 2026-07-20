@@ -208,3 +208,16 @@ def test_jobs_page_row_markup_unchanged_after_macro_extraction(client):
     resp = client.get("/jobs")
     assert b'class="job-row"' in resp.data
     assert b'class="job-row-summary"' in resp.data
+
+
+def test_api_jobs_per_company_respects_sector_filter(client):
+    resp = client.get("/api/jobs-per-company?sector=pharma")
+    assert resp.status_code == 200
+    companies = {row["company"] for row in resp.get_json()}
+    assert "APC" in companies
+
+
+def test_api_top_skills_accepts_sector_param_without_erroring(client):
+    resp = client.get("/api/top-skills?sector=tech")
+    assert resp.status_code == 200
+    assert resp.get_json() == []

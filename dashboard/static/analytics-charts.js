@@ -1,0 +1,92 @@
+function initAnalyticsCharts(sector) {
+  const suffix = sector ? `?sector=${encodeURIComponent(sector)}` : "";
+  async function j(url) { return (await fetch(url + suffix)).json(); }
+  const PALETTE = ["#0b5394","#1a7f37","#9a6700","#cf222e","#8250df",
+                   "#0969da","#bf3989","#57606a","#1b7c83","#953800"];
+
+  j("/api/jobs-per-company").then(rows => {
+    new Chart(perCompany, { type: "bar",
+      data: { labels: rows.map(r => r.company),
+        datasets: [
+          { label: "Active", data: rows.map(r => r.active), backgroundColor: "#0b5394" },
+          { label: "Total seen", data: rows.map(r => r.total), backgroundColor: "#c7d9ec" },
+        ]},
+      options: { maintainAspectRatio: false,
+        onClick: makeDrilldownHandler("drilldown-perCompany", "company",
+          (el, c) => c.data.labels[el.index], sector),
+        plugins: { title: { display: true, text: "Jobs per company" } } },
+    });
+  });
+
+  j("/api/new-per-week").then(rows => {
+    new Chart(newPerWeek, { type: "line",
+      data: { labels: rows.map(r => r.week),
+        datasets: [{ label: "New jobs", data: rows.map(r => r.count),
+                     borderColor: "#1a7f37", tension: .3, fill: false }]},
+      options: { maintainAspectRatio: false,
+        plugins: { title: { display: true, text: "New jobs per week" } } },
+    });
+  });
+
+  j("/api/categories").then(rows => {
+    const companies = [...new Set(rows.map(r => r.company))];
+    const categories = [...new Set(rows.map(r => r.category))];
+    const datasets = categories.map((cat, i) => ({
+      label: cat,
+      backgroundColor: PALETTE[i % PALETTE.length],
+      data: companies.map(c =>
+        (rows.find(r => r.company === c && r.category === cat) || {count: 0}).count),
+    }));
+    new Chart(document.getElementById("categories"), { type: "bar",
+      data: { labels: companies, datasets },
+      options: { maintainAspectRatio: false,
+        scales: { x: { stacked: true }, y: { stacked: true } },
+        onClick: makeDrilldownHandler("drilldown-categories", "category",
+          (el, c) => c.data.datasets[el.datasetIndex].label, sector),
+        plugins: { title: { display: true, text: "What each company posts (by category)" } } },
+    });
+  });
+
+  j("/api/top-skills").then(rows => {
+    new Chart(topSkills, { type: "bar",
+      data: { labels: rows.map(r => r.skill),
+        datasets: [{ label: "Jobs mentioning skill", data: rows.map(r => r.count),
+                     backgroundColor: "#0b5394" }] },
+      options: { indexAxis: "y", maintainAspectRatio: false,
+        onClick: makeDrilldownHandler("drilldown-topSkills", "skill",
+          (el, c) => c.data.labels[el.index], sector),
+        plugins: { title: { display: true, text: "Top skills" }, legend: { display: false } } },
+    });
+  });
+
+  j("/api/seniority-breakdown").then(rows => {
+    new Chart(seniority, { type: "doughnut",
+      data: { labels: rows.map(r => r.seniority),
+        datasets: [{ data: rows.map(r => r.count),
+                     backgroundColor: rows.map((_, i) => PALETTE[i % PALETTE.length]) }] },
+      options: { maintainAspectRatio: false,
+        onClick: makeDrilldownHandler("drilldown-seniority", "seniority",
+          (el, c) => c.data.labels[el.index], sector),
+        plugins: { title: { display: true, text: "Seniority breakdown" } } },
+    });
+  });
+
+  j("/api/skills-by-category").then(rows => {
+    const categories = [...new Set(rows.map(r => r.category))];
+    const skills = [...new Set(rows.map(r => r.skill))];
+    const datasets = categories.map((cat, i) => ({
+      label: cat,
+      backgroundColor: PALETTE[i % PALETTE.length],
+      data: skills.map(s =>
+        (rows.find(r => r.skill === s && r.category === cat) || {count: 0}).count),
+    }));
+    new Chart(skillsByCategory, { type: "bar",
+      data: { labels: skills, datasets },
+      options: { indexAxis: "y", maintainAspectRatio: false,
+        scales: { x: { stacked: true }, y: { stacked: true } },
+        onClick: makeDrilldownHandler("drilldown-skillsByCategory", "skill",
+          (el, c) => c.data.labels[el.index], sector),
+        plugins: { title: { display: true, text: "Skills by category" } } },
+    });
+  });
+}
