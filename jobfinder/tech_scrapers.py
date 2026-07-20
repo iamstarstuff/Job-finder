@@ -514,6 +514,53 @@ def stripe(session) -> List[Job]:
     return jobs
 
 
+# JPMorganChase's careers site (jobs.jpmorganchase.com) runs on the exact
+# same Oracle Recruiting Cloud (Fusion) platform pharma's alkermes()
+# already uses in jobfinder/scrapers.py -- same hcmRestApi
+# recruitingCEJobRequisitions "findReqs" finder pattern, just a new
+# tenant host and site number. Confirmed live during design: 58 real
+# Ireland postings via the LOCATIONS facet. Like Alkermes, the job
+# detail page (hcmUI/CandidateExperience) is a client-rendered SPA shell
+# with no server-side description -- see fetch_jpmorganchase_description
+# in jobfinder/enrichment.py for how the listing API's own short
+# description field is reused instead.
+JPMORGANCHASE_API = "https://jpmc.fa.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+JPMORGANCHASE_JOB_BASE = "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job"
+JPMORGANCHASE_PORTAL = "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/jobs"
+JPMORGANCHASE_IRELAND_FACET = "300000000289351"
+
+
+def jpmorganchase(session) -> List[Job]:
+    jobs = []
+    offset = 0
+    limit = 25
+    while True:
+        resp = fetch(session, JPMORGANCHASE_API, params={
+            "onlyData": "true",
+            "expand": "requisitionList",
+            "finder": (
+                "findReqs;siteNumber=CX_1001,facetsList=LOCATIONS,"
+                f"limit={limit},offset={offset},"
+                f"selectedLocationsFacet={JPMORGANCHASE_IRELAND_FACET}"
+            ),
+        })
+        item = resp.json()["items"][0]
+        total = item.get("TotalJobsCount", 0)
+        reqs = item.get("requisitionList") or []
+        for req in reqs:
+            title = (req.get("Title") or "").strip()
+            if title and matches_target_role(title):
+                jobs.append(Job(
+                    "JPMorganChase", title,
+                    f"{JPMORGANCHASE_JOB_BASE}/{req['Id']}", JPMORGANCHASE_PORTAL,
+                    sector="tech",
+                ))
+        offset += len(reqs)
+        if not reqs or offset >= total:
+            break
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
@@ -527,4 +574,5 @@ TECH_SCRAPERS = OrderedDict([
     ("Amazon", amazon),
     ("AWS", aws),
     ("Stripe", stripe),
+    ("JPMorganChase", jpmorganchase),
 ])

@@ -95,11 +95,32 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     assert jobs[0].company == "Microsoft"
 
 
-def test_tech_scrapers_registry_has_twelve_companies():
+def test_tech_scrapers_registry_has_thirteen_companies():
     assert set(tech_scrapers.TECH_SCRAPERS) == {
         "Google", "Microsoft", "AIB", "Mastercard", "Accenture", "Intel",
         "Citibank", "Allianz Partners", "EY", "Amazon", "AWS", "Stripe",
+        "JPMorganChase",
     }
+
+
+def test_jpmorganchase_filters_roles_and_paginates():
+    fake = FakeSession({
+        "https://jpmc.fa.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions": FakeResponse(json_data={
+            "items": [{
+                "TotalJobsCount": 1,
+                "requisitionList": [
+                    {"Id": "210708545", "Title": "Senior Manager of SRE"},
+                    {"Id": "210759082", "Title": "Lead Software Engineer-Front End React/Web"},
+                ],
+            }],
+        }),
+    })
+    jobs = tech_scrapers.jpmorganchase(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Senior Manager of SRE"
+    assert jobs[0].url == "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210708545"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "JPMorganChase"
 
 
 STRIPE_PAGE_HTML = b"""
