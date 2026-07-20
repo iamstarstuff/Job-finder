@@ -44,7 +44,7 @@ def test_vanished_jobs_deactivated_and_reposted_job_is_not_new(tmp_path):
 
 def test_run_and_email_logging(tmp_path):
     conn = make_conn(tmp_path)
-    run_id = storage.start_run(conn, "2026-07-05T10:00:00")
+    run_id = storage.start_run(conn, "2026-07-05T10:00:00", "pharma")
     storage.finish_run(conn, run_id, "2026-07-05T10:01:00", 12, 2, {"Amgen": "HTTP 500"})
     row = conn.execute("SELECT * FROM runs WHERE id=?", (run_id,)).fetchone()
     assert row["new_jobs"] == 2
@@ -183,4 +183,26 @@ def test_record_company_snapshot_stores_explicit_tech_sector(tmp_path):
         Job("Google", "Senior SRE", "https://g/1", "https://g", sector="tech"),
     ], "2026-07-18T10:00:00")
     row = conn.execute("SELECT sector FROM jobs WHERE company = 'Google'").fetchone()
+    assert row["sector"] == "tech"
+
+
+def test_connect_migrates_runs_sector_column_on_existing_db(tmp_path):
+    db_path = tmp_path / "old_runs.db"
+    conn = sqlite3.connect(str(db_path))
+    conn.execute("""CREATE TABLE runs (
+        id INTEGER PRIMARY KEY, started_at TEXT NOT NULL, finished_at TEXT,
+        total_jobs INTEGER, new_jobs INTEGER, failed_companies TEXT)""")
+    conn.execute("INSERT INTO runs (started_at) VALUES ('now')")
+    conn.commit()
+    conn.close()
+
+    conn = storage.connect(db_path)
+    row = conn.execute("SELECT sector FROM runs").fetchone()
+    assert row["sector"] == "pharma"
+
+
+def test_start_run_stores_given_sector(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    run_id = storage.start_run(conn, "2026-07-20T10:00:00", "tech")
+    row = conn.execute("SELECT sector FROM runs WHERE id=?", (run_id,)).fetchone()
     assert row["sector"] == "tech"

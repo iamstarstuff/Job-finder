@@ -31,7 +31,7 @@ def _had_active_jobs(conn, company: str) -> bool:
 
 
 def run_scrape(conn, session, now: str) -> RunResult:
-    result = RunResult(run_id=storage.start_run(conn, now))
+    result = RunResult(run_id=storage.start_run(conn, now, "tech"))
     for company, scraper in TECH_SCRAPERS.items():
         try:
             jobs = scraper(session)

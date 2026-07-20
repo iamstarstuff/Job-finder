@@ -66,12 +66,19 @@ def _migrate_sector_column(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE jobs ADD COLUMN sector TEXT NOT NULL DEFAULT 'pharma'")
 
 
+def _migrate_runs_sector_column(conn: sqlite3.Connection) -> None:
+    columns = [row["name"] for row in conn.execute("PRAGMA table_info(runs)")]
+    if "sector" not in columns:
+        conn.execute("ALTER TABLE runs ADD COLUMN sector TEXT NOT NULL DEFAULT 'pharma'")
+
+
 def connect(db_path) -> sqlite3.Connection:
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA)
     _migrate_sector_column(conn)
+    _migrate_runs_sector_column(conn)
     conn.commit()
     return conn
 
@@ -109,8 +116,8 @@ def record_company_snapshot(conn, company: str, jobs: List[Job], now: str) -> Li
     return new_jobs
 
 
-def start_run(conn, started_at: str) -> int:
-    cur = conn.execute("INSERT INTO runs (started_at) VALUES (?)", (started_at,))
+def start_run(conn, started_at: str, sector: str) -> int:
+    cur = conn.execute("INSERT INTO runs (started_at, sector) VALUES (?, ?)", (started_at, sector))
     conn.commit()
     return cur.lastrowid
 
