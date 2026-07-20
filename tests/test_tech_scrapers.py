@@ -95,11 +95,56 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
     assert jobs[0].company == "Microsoft"
 
 
-def test_tech_scrapers_registry_has_all_eleven_companies():
+def test_tech_scrapers_registry_has_twelve_companies():
     assert set(tech_scrapers.TECH_SCRAPERS) == {
         "Google", "Microsoft", "AIB", "Mastercard", "Accenture", "Intel",
-        "Citibank", "Allianz Partners", "EY", "Amazon", "AWS",
+        "Citibank", "Allianz Partners", "EY", "Amazon", "AWS", "Stripe",
     }
+
+
+STRIPE_PAGE_HTML = b"""
+<table>
+<tr class="TableRow">
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--title">
+    <a class="Link JobsListings__link" href="/jobs/listing/data-scientist-payments/8018297">Data Scientist, Payments</a>
+  </td>
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--departments"></td>
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--country">
+    <span class="JobsListings__locationDisplayName">Dublin HQ</span>
+  </td>
+</tr>
+<tr class="TableRow">
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--title">
+    <a class="Link JobsListings__link" href="/jobs/listing/account-executive-dublin/1112223">Account Executive</a>
+  </td>
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--departments"></td>
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--country">
+    <span class="JobsListings__locationDisplayName">Dublin HQ</span>
+  </td>
+</tr>
+<tr class="TableRow">
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--title">
+    <a class="Link JobsListings__link" href="/jobs/listing/data-scientist-sf/9998887">Data Scientist, US</a>
+  </td>
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--departments"></td>
+  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--country">
+    <span class="JobsListings__locationDisplayName">South San Francisco HQ</span>
+  </td>
+</tr>
+</table>
+"""
+
+
+def test_stripe_filters_by_role_and_dublin_location():
+    fake = FakeSession({
+        "https://stripe.com/jobs/search": FakeResponse(STRIPE_PAGE_HTML),
+    })
+    jobs = tech_scrapers.stripe(fake)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Data Scientist, Payments"
+    assert jobs[0].url == "https://stripe.com/jobs/listing/data-scientist-payments/8018297"
+    assert jobs[0].sector == "tech"
+    assert jobs[0].company == "Stripe"
 
 
 AMAZON_PAGE1 = {

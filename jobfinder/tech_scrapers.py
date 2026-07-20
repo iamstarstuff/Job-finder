@@ -479,6 +479,41 @@ def aws(session) -> List[Job]:
     return _amazon_search(session, want_aws=True)
 
 
+# Stripe's careers page (stripe.com/jobs/search) is fully server-rendered
+# with the complete global job table embedded directly in the initial
+# HTML -- confirmed live during design: 101 real postings, each row
+# carrying title, department, and a real location string (e.g. "Dublin
+# HQ"). No auth, no JS, no pagination needed -- the `?office_locations=`
+# query param does NOT actually filter server-side (confirmed by
+# comparing filtered vs unfiltered fetches), so filtering is done here
+# client-side against the location text instead.
+STRIPE_BASE = "https://stripe.com"
+STRIPE_SEARCH = "https://stripe.com/jobs/search"
+
+
+def stripe(session) -> List[Job]:
+    from bs4 import BeautifulSoup
+    resp = fetch(session, STRIPE_SEARCH)
+    soup = BeautifulSoup(resp.content, "lxml")
+    jobs = []
+    for row in soup.select("tr.TableRow"):
+        link = row.select_one("a.JobsListings__link")
+        location = row.select_one("span.JobsListings__locationDisplayName")
+        if not link or not location:
+            continue
+        location_text = location.get_text(strip=True)
+        if "Dublin" not in location_text and "Ireland" not in location_text:
+            continue
+        title = link.get_text(strip=True)
+        if not matches_target_role(title):
+            continue
+        jobs.append(Job(
+            "Stripe", title, urljoin(STRIPE_BASE, link["href"]), STRIPE_SEARCH,
+            sector="tech",
+        ))
+    return jobs
+
+
 TECH_SCRAPERS = OrderedDict([
     ("Google", google),
     ("Microsoft", microsoft),
@@ -491,4 +526,5 @@ TECH_SCRAPERS = OrderedDict([
     ("EY", ey),
     ("Amazon", amazon),
     ("AWS", aws),
+    ("Stripe", stripe),
 ])
