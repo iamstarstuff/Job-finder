@@ -219,11 +219,15 @@ def create_app(db_path=None) -> Flask:
 
     @app.route("/logs")
     def logs_page():
+        log_files = {"pharma": config.LOG_PATH, "tech": config.TECH_LOG_PATH, "enrichment": config.ENRICHMENT_LOG_PATH}
+        selected = request.args.get("log", "pharma")
+        if selected not in log_files:
+            selected = "pharma"
         try:
-            lines = config.LOG_PATH.read_text().splitlines()[-300:]
+            lines = log_files[selected].read_text().splitlines()[-300:]
         except FileNotFoundError:
             lines = ["(no log file yet)"]
-        return render_template("logs.html", lines=lines)
+        return render_template("logs.html", lines=lines, selected_log=selected)
 
     return app
 

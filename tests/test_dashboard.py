@@ -112,6 +112,23 @@ def test_drilldown_unknown_dimension_returns_400(enriched_client):
     assert resp.status_code == 400
 
 
+def test_logs_page_defaults_to_pharma_log(client):
+    resp = client.get("/logs")
+    assert resp.status_code == 200
+
+
+def test_logs_page_accepts_tech_and_enrichment(client):
+    for log_name in ("tech", "enrichment"):
+        resp = client.get(f"/logs?log={log_name}")
+        assert resp.status_code == 200
+
+
+def test_logs_page_has_links_to_switch_logs(client):
+    resp = client.get("/logs")
+    assert b'href="/logs?log=tech"' in resp.data
+    assert b'href="/logs?log=enrichment"' in resp.data
+
+
 def test_jobs_page_sector_filter(client):
     resp = client.get("/jobs?sector=tech")
     assert b"QC Analyst" not in resp.data

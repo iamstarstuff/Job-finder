@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Log tail (last 300 lines)</h2>
+<div class="filters" style="margin-bottom:16px;">
+  <a href="/logs?log=pharma" class="btn {{ 'off' if selected_log != 'pharma' }}">Pharma</a>
+  <a href="/logs?log=tech" class="btn {{ 'off' if selected_log != 'tech' }}">Tech</a>
+  <a href="/logs?log=enrichment" class="btn {{ 'off' if selected_log != 'enrichment' }}">Enrichment</a>
+</div>
 <pre class="log">{% for line in lines %}{{ line }}
 {% endfor %}</pre>
 {% endblock %}
