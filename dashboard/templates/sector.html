@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "_macros.html" import job_row %}
+{% block content %}
+<h2>{{ sector | capitalize }}</h2>
+<div class="cards">
+  <div class="card"><div class="num">{{ overview.active_jobs }}</div><div class="label">Active jobs</div></div>
+  <div class="card"><div class="num">{{ overview.new_this_week }}</div><div class="label">New this week</div></div>
+  <div class="card"><div class="num">{{ overview.total_jobs_seen }}</div><div class="label">Total ever seen</div></div>
+  <div class="card"><div class="num">{{ overview.companies }}</div><div class="label">Companies</div></div>
+</div>
+
+<h3>Last run</h3>
+<div class="table-scroll">
+<table>
+  <tr><th>Started</th><th>Finished</th><th>Jobs</th><th>New</th><th>Failures</th></tr>
+  {% if overview.last_run %}
+  <tr>
+    <td>{{ overview.last_run.started_at }}</td>
+    <td>{{ overview.last_run.finished_at or "running…" }}</td>
+    <td>{{ overview.last_run.total_jobs }}</td>
+    <td>{{ overview.last_run.new_jobs }}</td>
+    <td>{{ overview.last_run.failed_companies or "{}" }}</td>
+  </tr>
+  {% else %}<tr><td colspan="5">No runs yet.</td></tr>{% endif %}
+</table>
+</div>
+
+<h3>Recent jobs</h3>
+{% if recent_jobs %}
+<div class="job-row-header">
+  <span></span><span>Company</span><span>Title</span><span>Seniority</span><span>Status</span><span></span>
+</div>
+{% for job in recent_jobs %}
+{{ job_row(job, "", skills_by_job) }}
+{% endfor %}
+<p><a href="/jobs?sector={{ sector }}">See all {{ overview.total_jobs_seen }} jobs →</a></p>
+{% else %}
+<p>No jobs yet.</p>
+{% endif %}
+
+<h3>Analytics</h3>
+<div class="cards">
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="perCompany"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-perCompany"></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="newPerWeek"></canvas></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="categories"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-categories"></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="topSkills"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-topSkills"></div>
+  </div>
+  <div class="card">
+    <div class="chart-wrap small"><canvas id="seniority"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-seniority"></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="chart-wrap"><canvas id="skillsByCategory"></canvas></div>
+    <div class="drilldown hidden" id="drilldown-skillsByCategory"></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="{{ url_for('static', filename='drilldown.js') }}"></script>
+<script src="{{ url_for('static', filename='analytics-charts.js') }}"></script>
+<script>initAnalyticsCharts("{{ sector }}");</script>
+{% endblock %}

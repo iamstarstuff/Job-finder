@@ -112,6 +112,23 @@ def test_drilldown_unknown_dimension_returns_400(enriched_client):
     assert resp.status_code == 400
 
 
+def test_sector_page_pharma_shows_only_pharma_data(client):
+    resp = client.get("/sector/pharma")
+    assert resp.status_code == 200
+    assert b"QC Analyst" in resp.data
+
+
+def test_sector_page_tech_shows_no_pharma_jobs(client):
+    resp = client.get("/sector/tech")
+    assert resp.status_code == 200
+    assert b"QC Analyst" not in resp.data
+
+
+def test_sector_page_rejects_invalid_name(client):
+    resp = client.get("/sector/nonsense")
+    assert resp.status_code == 404
+
+
 def test_api_drilldown_company_respects_sector_filter(enriched_client):
     resp = enriched_client.get("/api/drilldown/company?value=Abbvie&sector=tech")
     assert resp.status_code == 200

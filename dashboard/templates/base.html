@@ -89,7 +89,9 @@
 </head>
 <body>
 <nav>
-  <a href="/" class="{{ 'active' if request.path == '/' }}">Overview</a>
+  <a href="/" class="{{ 'active' if request.path == '/' }}">Home</a>
+  <a href="/sector/pharma" class="{{ 'active' if request.path == '/sector/pharma' }}">Pharma</a>
+  <a href="/sector/tech" class="{{ 'active' if request.path == '/sector/tech' }}">Tech</a>
   <a href="/jobs" class="{{ 'active' if request.path == '/jobs' }}">Jobs</a>
   <a href="/analytics" class="{{ 'active' if request.path == '/analytics' }}">Analytics</a>
   <a href="/emails" class="{{ 'active' if request.path == '/emails' }}">Emails</a>

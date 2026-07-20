@@ -53,6 +53,35 @@ def create_app(db_path=None) -> Flask:
             lifespans=analytics.median_days_active(conn),
         )
 
+    @app.route("/sector/<name>")
+    def sector_page(name):
+        if name not in ("pharma", "tech"):
+            return "Unknown sector", 404
+        conn = get_conn()
+        sql = """SELECT jobs.*, job_details.description, job_details.seniority,
+                         job_details.enrichment_failed
+                  FROM jobs LEFT JOIN job_details ON job_details.job_id = jobs.id
+                  WHERE jobs.sector = ?
+                  ORDER BY jobs.first_seen DESC LIMIT 10"""
+        rows = conn.execute(sql, (name,)).fetchall()
+        job_ids = [r["id"] for r in rows]
+        skills_by_job = {}
+        if job_ids:
+            placeholders = ", ".join("?" for _ in job_ids)
+            skill_rows = conn.execute(
+                f"""SELECT job_skills.job_id, skills.name
+                    FROM job_skills JOIN skills ON skills.id = job_skills.skill_id
+                    WHERE job_skills.job_id IN ({placeholders})""",
+                job_ids,
+            ).fetchall()
+            for r in skill_rows:
+                skills_by_job.setdefault(r["job_id"], []).append(r["name"])
+        return render_template(
+            "sector.html", sector=name,
+            overview=analytics.overview(conn, sector=name),
+            recent_jobs=rows, skills_by_job=skills_by_job,
+        )
+
     @app.route("/jobs")
     def jobs():
         conn = get_conn()
