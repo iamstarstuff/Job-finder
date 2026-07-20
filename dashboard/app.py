@@ -84,11 +84,15 @@ def create_app(db_path=None) -> Flask:
         query = request.args.get("q", "")
         skill_query = request.args.get("skill", "")
         active = request.args.get("active", "")
+        sector = request.args.get("sector", "")
         sql = """SELECT jobs.*, job_details.description, job_details.seniority,
                          job_details.enrichment_failed
                   FROM jobs LEFT JOIN job_details ON job_details.job_id = jobs.id
                   WHERE 1=1"""
         params = []
+        if sector:
+            sql += " AND jobs.sector = ?"
+            params.append(sector)
         if company:
             sql += " AND jobs.company = ?"
             params.append(company)
@@ -120,7 +124,7 @@ def create_app(db_path=None) -> Flask:
             "SELECT DISTINCT company FROM jobs ORDER BY company")]
         return render_template("jobs.html", jobs=rows, companies=companies,
                                company=company, q=query, skill=skill_query, active=active,
-                               skills_by_job=skills_by_job)
+                               sector=sector, skills_by_job=skills_by_job)
 
     @app.route("/api/jobs-per-company")
     def api_jobs_per_company():
@@ -201,7 +205,7 @@ def create_app(db_path=None) -> Flask:
 
     @app.route("/analytics")
     def analytics_page():
-        return render_template("analytics.html")
+        return render_template("analytics.html", sector=request.args.get("sector", ""))
 
     @app.route("/emails")
     def emails_page():

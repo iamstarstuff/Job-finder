@@ -2,6 +2,11 @@
 {% block content %}
 <h2>Job history</h2>
 <form class="filters" method="get" action="/jobs">
+  <select name="sector" onchange="this.form.submit()">
+    <option value="">All sectors</option>
+    <option value="pharma" {{ "selected" if sector == "pharma" }}>Pharma</option>
+    <option value="tech" {{ "selected" if sector == "tech" }}>Tech</option>
+  </select>
   <select name="company" onchange="this.form.submit()">
     <option value="">All companies</option>
     {% for c in companies %}

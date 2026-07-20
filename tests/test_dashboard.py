@@ -112,6 +112,19 @@ def test_drilldown_unknown_dimension_returns_400(enriched_client):
     assert resp.status_code == 400
 
 
+def test_jobs_page_sector_filter(client):
+    resp = client.get("/jobs?sector=tech")
+    assert b"QC Analyst" not in resp.data
+    resp = client.get("/jobs?sector=pharma")
+    assert b"QC Analyst" in resp.data
+
+
+def test_analytics_page_has_sector_filter_form(client):
+    resp = client.get("/analytics?sector=tech")
+    assert resp.status_code == 200
+    assert b'value="tech"' in resp.data or b'"tech"' in resp.data
+
+
 def test_landing_page_links_to_both_sector_pages(client):
     resp = client.get("/")
     assert resp.status_code == 200

@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Analytics</h2>
+<form class="filters" method="get" action="/analytics">
+  <select name="sector" onchange="this.form.submit()">
+    <option value="">All sectors</option>
+    <option value="pharma" {{ "selected" if sector == "pharma" }}>Pharma</option>
+    <option value="tech" {{ "selected" if sector == "tech" }}>Tech</option>
+  </select>
+</form>
 <div class="cards">
   <div class="card" style="grid-column:1/-1">
     <div class="chart-wrap"><canvas id="perCompany"></canvas></div>
@@ -29,5 +36,5 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="{{ url_for('static', filename='drilldown.js') }}"></script>
 <script src="{{ url_for('static', filename='analytics-charts.js') }}"></script>
-<script>initAnalyticsCharts("");</script>
+<script>initAnalyticsCharts("{{ sector }}");</script>
 {% endblock %}
