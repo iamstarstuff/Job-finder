@@ -202,3 +202,9 @@ def test_jobs_page_shows_placeholder_for_unenriched_job(tmp_path):
     app.config["TESTING"] = True
     resp = app.test_client().get("/jobs")
     assert b"Description not available yet" in resp.data
+
+
+def test_jobs_page_row_markup_unchanged_after_macro_extraction(client):
+    resp = client.get("/jobs")
+    assert b'class="job-row"' in resp.data
+    assert b'class="job-row-summary"' in resp.data

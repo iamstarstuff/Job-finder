@@ -1,0 +1,26 @@
+{% macro job_row(job, skill, skills_by_job) %}
+<details class="job-row">
+  <summary class="job-row-summary">
+    <span></span>
+    <span>{{ job.company }}</span>
+    <span>{{ job.title }}</span>
+    <span>{{ job.seniority or "—" }}</span>
+    <span><span class="pill {{ 'on' if job.is_active else 'off' }}">
+        {{ "active" if job.is_active else "closed" }}</span></span>
+    <span>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Apply</a>{% endif %}</span>
+  </summary>
+  <div class="job-detail">
+    {% if job.enrichment_failed or not job.description %}
+      Description not available yet.
+    {% else %}
+      {{ job.description | highlight(skill) }}
+      {% set tags = skills_by_job.get(job.id) %}
+      {% if tags %}
+      <div style="margin-top:8px;">
+        {% for s in tags %}<span class="skill-tag">{{ s }}</span>{% endfor %}
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</details>
+{% endmacro %}
