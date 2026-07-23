@@ -27,6 +27,17 @@ def test_error_html_lists_failures_and_warnings():
     assert "Takeda" in html and "0 jobs" in html
 
 
+def test_error_html_includes_recovered_section():
+    html = emailer.render_error_html({}, [], ["Johnson & Johnson"])
+    assert "Johnson &amp; Johnson" in html
+    assert "Recovered" in html
+
+
+def test_error_html_omits_recovered_section_when_none():
+    html = emailer.render_error_html({"Amgen": "HTTP 500"}, [])
+    assert "Recovered" not in html
+
+
 def test_send_run_notifications_logs_emails(tmp_path, monkeypatch):
     conn = storage.connect(tmp_path / "t.db")
     sent = []
@@ -48,6 +59,70 @@ def test_send_failure_is_logged_not_raised(tmp_path, monkeypatch):
     row = conn.execute("SELECT success, error FROM emails").fetchone()
     assert row["success"] == 0
     assert "smtp down" in row["error"]
+
+
+def test_send_run_notifications_skips_error_email_on_repeat_failure(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
+
+    result = RunResult(run_id=1, failures={"Johnson & Johnson": "403 Client Error: Forbidden"})
+    emailer.send_run_notifications(conn, result)
+    emailer.send_run_notifications(conn, result)
+    emailer.send_run_notifications(conn, result)
+
+    error_emails = [s for s in sent if s == "Job Scraper Error Notification"]
+    assert len(error_emails) == 1  # only the first failure sent an email
+
+
+def test_send_run_notifications_sends_email_on_recovery(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append((subject, html)))
+
+    emailer.send_run_notifications(
+        conn, RunResult(run_id=1, failures={"Johnson & Johnson": "403 error"}),
+    )
+    emailer.send_run_notifications(conn, RunResult(run_id=2))  # no failures this run -> recovered
+
+    error_emails = [h for s, h in sent if s == "Job Scraper Error Notification"]
+    assert len(error_emails) == 2  # one for the failure, one for the recovery
+    assert "Johnson &amp; Johnson" in error_emails[1]
+    assert "Recovered" in error_emails[1]
+
+
+def test_send_run_notifications_no_error_email_when_nothing_ever_failed(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
+    emailer.send_run_notifications(conn, RunResult(run_id=1))
+    assert "Job Scraper Error Notification" not in sent
+
+
+def test_send_tech_digest_skips_error_email_on_repeat_failure(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
+
+    result = RunResult(run_id=1, failures={"Google": "timeout"})
+    emailer.send_tech_digest(conn, result)
+    emailer.send_tech_digest(conn, result)
+
+    error_emails = [s for s in sent if s == "Tech Job Scraper Error Notification"]
+    assert len(error_emails) == 1
+
+
+def test_send_run_notifications_and_tech_digest_track_failures_independently(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
+
+    # Same company name failing in both sectors should be tracked separately.
+    emailer.send_run_notifications(conn, RunResult(run_id=1, failures={"Amgen": "boom"}))
+    emailer.send_tech_digest(conn, RunResult(run_id=2, failures={"Amgen": "boom"}))
+
+    assert sent.count("Job Scraper Error Notification") == 1
+    assert sent.count("Tech Job Scraper Error Notification") == 1
 
 
 def test_send_tech_digest_uses_tech_recipients_and_kind(tmp_path, monkeypatch):

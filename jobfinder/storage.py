@@ -57,6 +57,12 @@ CREATE TABLE IF NOT EXISTS job_skills (
 CREATE INDEX IF NOT EXISTS idx_job_skills_skill ON job_skills(skill_id);
 CREATE INDEX IF NOT EXISTS idx_jobs_company ON jobs(company);
 CREATE INDEX IF NOT EXISTS idx_jobs_first_seen ON jobs(first_seen);
+CREATE TABLE IF NOT EXISTS company_failures (
+    sector TEXT NOT NULL,
+    company TEXT NOT NULL,
+    last_error TEXT NOT NULL,
+    PRIMARY KEY (sector, company)
+);
 """
 
 
@@ -129,6 +135,44 @@ def finish_run(conn, run_id: int, finished_at: str, total_jobs: int,
         (finished_at, total_jobs, new_jobs, json.dumps(failed_companies), run_id),
     )
     conn.commit()
+
+
+def get_failing_companies(conn, sector: str) -> Dict[str, str]:
+    rows = conn.execute(
+        "SELECT company, last_error FROM company_failures WHERE sector = ?", (sector,)
+    ).fetchall()
+    return {r["company"]: r["last_error"] for r in rows}
+
+
+def sync_company_failures(
+    conn, sector: str, currently_failing: Dict[str, str]
+) -> Tuple[Dict[str, str], List[str]]:
+    """Persist this run's per-company failure state for `sector` and report
+    what changed since the last run: companies failing now that weren't
+    before (`newly_failing`), and companies that were failing before but
+    aren't now (`newly_recovered`). Companies that are failing in both runs
+    are neither -- only their stored error message gets refreshed."""
+    previously_failing = get_failing_companies(conn, sector)
+    newly_failing = {
+        company: error for company, error in currently_failing.items()
+        if company not in previously_failing
+    }
+    newly_recovered = [
+        company for company in previously_failing if company not in currently_failing
+    ]
+    for company, error in currently_failing.items():
+        conn.execute(
+            """INSERT INTO company_failures (sector, company, last_error) VALUES (?, ?, ?)
+               ON CONFLICT(sector, company) DO UPDATE SET last_error = excluded.last_error""",
+            (sector, company, error),
+        )
+    for company in newly_recovered:
+        conn.execute(
+            "DELETE FROM company_failures WHERE sector = ? AND company = ?",
+            (sector, company),
+        )
+    conn.commit()
+    return newly_failing, newly_recovered
 
 
 def log_email(conn, sent_at: str, kind: str, subject: str,

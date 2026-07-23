@@ -6,7 +6,7 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from html import escape
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from jobfinder import config, storage
 from jobfinder.models import Job
@@ -69,9 +69,16 @@ def render_new_jobs_html(new_jobs: Dict[str, List[Job]]) -> str:
     return "".join(parts)
 
 
-def render_error_html(failures: Dict[str, str], zero_warnings: List[str]) -> str:
+def render_error_html(
+    failures: Dict[str, str], zero_warnings: List[str], recovered: Optional[List[str]] = None,
+) -> str:
     parts = [f'<div style="{_STYLE_WRAP}">',
              '<h2 style="color:#cf222e;margin:0 0 16px;">Job Scraper Problems</h2>']
+    if recovered:
+        parts.append('<h3 style="color:#1a7f37;">Recovered</h3><ul>')
+        for company in sorted(recovered):
+            parts.append(f'<li><b>{escape(company)}</b> is working again.</li>')
+        parts.append('</ul>')
     if failures:
         parts.append('<h3 style="color:#24292f;">Scrapers that failed</h3><ul>')
         for company, error in sorted(failures.items()):
@@ -111,6 +118,27 @@ def _send_and_log(conn, kind: str, subject: str, html: str, recipients: List[str
         storage.log_email(conn, now, kind, subject, recipients, False, str(exc))
 
 
+def _problem_companies(result) -> Dict[str, str]:
+    problems = dict(result.failures)
+    for company in result.zero_warnings:
+        problems.setdefault(
+            company, "returned 0 jobs but previously had active listings",
+        )
+    return problems
+
+
+def _maybe_send_error_email(conn, sector: str, kind: str, subject: str, result) -> None:
+    problems = _problem_companies(result)
+    newly_failing, newly_recovered = storage.sync_company_failures(conn, sector, problems)
+    if not newly_failing and not newly_recovered:
+        return  # no change since last run -- don't re-notify for a known, ongoing problem
+    _send_and_log(
+        conn, kind, subject,
+        render_error_html(result.failures, result.zero_warnings, newly_recovered),
+        config.ERROR_RECIPIENTS,
+    )
+
+
 def send_run_notifications(conn, result) -> None:
     if result.new_jobs:
         total = sum(len(v) for v in result.new_jobs.values())
@@ -118,12 +146,7 @@ def send_run_notifications(conn, result) -> None:
             conn, "alert", f"{total} New Job Posting{'s' if total != 1 else ''}",
             render_new_jobs_html(result.new_jobs), config.ALERT_RECIPIENTS,
         )
-    if result.failures or result.zero_warnings:
-        _send_and_log(
-            conn, "error", "Job Scraper Error Notification",
-            render_error_html(result.failures, result.zero_warnings),
-            config.ERROR_RECIPIENTS,
-        )
+    _maybe_send_error_email(conn, "pharma", "error", "Job Scraper Error Notification", result)
 
 
 def send_tech_digest(conn, result) -> None:
@@ -133,9 +156,6 @@ def send_tech_digest(conn, result) -> None:
             conn, "tech_alert", f"{total} New Tech Job Posting{'s' if total != 1 else ''}",
             render_new_jobs_html(result.new_jobs), config.TECH_ALERT_RECIPIENTS,
         )
-    if result.failures or result.zero_warnings:
-        _send_and_log(
-            conn, "tech_error", "Tech Job Scraper Error Notification",
-            render_error_html(result.failures, result.zero_warnings),
-            config.ERROR_RECIPIENTS,
-        )
+    _maybe_send_error_email(
+        conn, "tech", "tech_error", "Tech Job Scraper Error Notification", result,
+    )

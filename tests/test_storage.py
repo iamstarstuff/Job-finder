@@ -206,3 +206,57 @@ def test_start_run_stores_given_sector(tmp_path):
     run_id = storage.start_run(conn, "2026-07-20T10:00:00", "tech")
     row = conn.execute("SELECT sector FROM runs WHERE id=?", (run_id,)).fetchone()
     assert row["sector"] == "tech"
+
+
+def test_get_failing_companies_empty_by_default(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    assert storage.get_failing_companies(conn, "pharma") == {}
+
+
+def test_sync_company_failures_returns_newly_failing_on_first_occurrence(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    newly_failing, newly_recovered = storage.sync_company_failures(
+        conn, "pharma", {"Johnson & Johnson": "403 Client Error: Forbidden"},
+    )
+    assert newly_failing == {"Johnson & Johnson": "403 Client Error: Forbidden"}
+    assert newly_recovered == []
+    assert storage.get_failing_companies(conn, "pharma") == {
+        "Johnson & Johnson": "403 Client Error: Forbidden",
+    }
+
+
+def test_sync_company_failures_returns_empty_newly_failing_on_repeat(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.sync_company_failures(conn, "pharma", {"Johnson & Johnson": "403 error"})
+    newly_failing, newly_recovered = storage.sync_company_failures(
+        conn, "pharma", {"Johnson & Johnson": "403 error"},
+    )
+    assert newly_failing == {}
+    assert newly_recovered == []
+
+
+def test_sync_company_failures_updates_error_message_on_repeat(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.sync_company_failures(conn, "pharma", {"Johnson & Johnson": "old error"})
+    storage.sync_company_failures(conn, "pharma", {"Johnson & Johnson": "new error"})
+    assert storage.get_failing_companies(conn, "pharma") == {"Johnson & Johnson": "new error"}
+
+
+def test_sync_company_failures_returns_newly_recovered_when_company_stops_failing(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.sync_company_failures(conn, "pharma", {"Johnson & Johnson": "403 error"})
+    newly_failing, newly_recovered = storage.sync_company_failures(conn, "pharma", {})
+    assert newly_failing == {}
+    assert newly_recovered == ["Johnson & Johnson"]
+    assert storage.get_failing_companies(conn, "pharma") == {}
+
+
+def test_sync_company_failures_scopes_by_sector(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.sync_company_failures(conn, "pharma", {"Amgen": "boom"})
+    storage.sync_company_failures(conn, "tech", {"Amgen": "boom"})
+    assert storage.get_failing_companies(conn, "pharma") == {"Amgen": "boom"}
+    assert storage.get_failing_companies(conn, "tech") == {"Amgen": "boom"}
+    _, tech_recovered = storage.sync_company_failures(conn, "tech", {})
+    assert tech_recovered == ["Amgen"]
+    assert storage.get_failing_companies(conn, "pharma") == {"Amgen": "boom"}
