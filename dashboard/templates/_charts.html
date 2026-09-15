@@ -1,5 +1,5 @@
 {% macro chart_card(name, title, subtitle, span, sector, weeks) %}
-<section class="chart-card span-{{ span }}" data-chart="{{ name }}" data-sector="{{ sector }}" data-weeks="{{ weeks }}">
+<section class="chart-card span-{{ span }}" data-chart="{{ name }}" data-sector="{{ sector or '' }}" data-weeks="{{ weeks if weeks is not none else 12 }}">
   <header>
     <h3>{{ title }}</h3>
     {% if subtitle %}<p class="subtitle">{{ subtitle }}</p>{% endif %}

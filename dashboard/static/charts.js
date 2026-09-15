@@ -82,8 +82,28 @@
     panel.replaceChildren(el("p", "empty-note", "Loading…"));
     const params = new URLSearchParams({ value: value });
     if (sector) params.set("sector", sector);
-    const resp = await fetch("/api/drilldown/" + encodeURIComponent(dimension) + "?" + params.toString());
-    renderDrilldown(panel, value, await resp.json());
+    try {
+      const resp = await fetch("/api/drilldown/" + encodeURIComponent(dimension) + "?" + params.toString());
+      if (!resp.ok) {
+        panel.replaceChildren();
+        const close = el("button", "drilldown-close", "Close");
+        close.type = "button";
+        close.addEventListener("click", () => closePanel(panel));
+        panel.appendChild(close);
+        panel.appendChild(el("p", "empty-note", "Could not load the roles behind this value."));
+        panel.hidden = false;
+        return;
+      }
+      renderDrilldown(panel, value, await resp.json());
+    } catch (err) {
+      panel.replaceChildren();
+      const close = el("button", "drilldown-close", "Close");
+      close.type = "button";
+      close.addEventListener("click", () => closePanel(panel));
+      panel.appendChild(close);
+      panel.appendChild(el("p", "empty-note", "Could not load the roles behind this value."));
+      panel.hidden = false;
+    }
   }
 
   // Which field of the ECharts click event carries the drilldown value (spec §3.1 + "row" for heatmaps).
@@ -96,36 +116,40 @@
   async function mount(card) {
     const plot = card.querySelector(".chart");
     const query = new URLSearchParams({ sector: card.dataset.sector || "", weeks: card.dataset.weeks || "12" });
-    const resp = await fetch("/api/charts/" + encodeURIComponent(card.dataset.chart) + "?" + query.toString());
-    if (!resp.ok) {
+    try {
+      const resp = await fetch("/api/charts/" + encodeURIComponent(card.dataset.chart) + "?" + query.toString());
+      if (!resp.ok) {
+        plot.replaceChildren(el("p", "empty", "This chart could not be loaded."));
+        return;
+      }
+      const payload = await resp.json();
+      renderTable(card.querySelector(".chart-table"), payload.columns, payload.rows);
+      if (!payload.rows.length) {
+        plot.replaceChildren(el("p", "empty", "No data for this window."));
+        return;
+      }
+      plot.style.height = payload.height;
+      const chart = echarts.init(plot, null, { renderer: "svg" });
+      chart.setOption(payload.option);
+      if (payload.drilldown) {
+        const panel = card.querySelector(".drilldown");
+        let open = null;
+        chart.on("click", (params) => {
+          const value = clickValue(params, payload.drilldown, payload.option);
+          if (value === undefined || value === null) return;
+          if (open === value) {
+            closePanel(panel);
+            open = null;
+            return;
+          }
+          open = value;
+          loadDrilldown(panel, payload.drilldown.dimension, value, card.dataset.sector);
+        });
+      }
+      new ResizeObserver(() => chart.resize()).observe(plot);
+    } catch (err) {
       plot.replaceChildren(el("p", "empty", "This chart could not be loaded."));
-      return;
     }
-    const payload = await resp.json();
-    renderTable(card.querySelector(".chart-table"), payload.columns, payload.rows);
-    if (!payload.rows.length) {
-      plot.replaceChildren(el("p", "empty", "No data for this window."));
-      return;
-    }
-    plot.style.height = payload.height;
-    const chart = echarts.init(plot, null, { renderer: "svg" });
-    chart.setOption(payload.option);
-    if (payload.drilldown) {
-      const panel = card.querySelector(".drilldown");
-      let open = null;
-      chart.on("click", (params) => {
-        const value = clickValue(params, payload.drilldown, payload.option);
-        if (value === undefined || value === null) return;
-        if (open === value) {
-          closePanel(panel);
-          open = null;
-          return;
-        }
-        open = value;
-        loadDrilldown(panel, payload.drilldown.dimension, value, card.dataset.sector);
-      });
-    }
-    new ResizeObserver(() => chart.resize()).observe(plot);
   }
 
   document.querySelectorAll("[data-chart]").forEach(mount);

@@ -354,3 +354,25 @@ def test_chart_card_macro_renders_the_mount_points(client):
     assert 'class="chart"' in html and 'class="drilldown" hidden' in html
     assert "<summary>Show data</summary>" in html and 'class="chart-table table-scroll"' in html
     assert '<p class="movers-test">extra</p>' in html
+
+
+def test_chart_card_macro_defaults_sector_and_weeks_safely(client):
+    from flask import render_template_string
+    app = client.application
+    with app.app_context():
+        html = render_template_string(
+            '{% from "_charts.html" import chart_card %}'
+            '{% call chart_card("skill-trend", "Skill trend", "", 6, None, 0) %}'
+            '{% endcall %}')
+    assert 'data-sector=""' in html
+    assert 'data-weeks="0"' in html
+
+
+def test_charts_js_surfaces_drilldown_fetch_failures(client):
+    resp = client.get("/static/charts.js")
+    assert resp.status_code == 200
+    js = resp.data.decode()
+    assert "echarts.init" in js
+    assert "textContent" in js
+    assert "innerHTML" not in js
+    assert "Could not load the roles behind this value." in js
