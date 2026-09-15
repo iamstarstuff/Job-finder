@@ -394,3 +394,31 @@ def test_old_chart_api_routes_are_gone(client):
     for path in ("/api/jobs-per-company", "/api/new-per-week", "/api/categories",
                  "/api/top-skills", "/api/seniority-breakdown", "/api/skills-by-category"):
         assert client.get(path).status_code == 404, path
+
+
+def test_health_page_renders_every_status_runs_and_email_stats(tmp_path):
+    conn = storage.connect(tmp_path / "h.db")
+    for company, sector in (("Pfizer", "pharma"), ("Astellas", "pharma"),
+                            ("Leo Pharma", "pharma"), ("Johnson & Johnson", "pharma")):
+        storage.record_company_snapshot(conn, company, [
+            Job(company, "Role", f"https://{company}/1", "p", sector=sector),
+        ], "2026-09-14T10:00:00")
+    storage.sync_company_failures(conn, "pharma", {
+        "Astellas": "404 Client Error: Not Found",
+        "Leo Pharma": "returned 0 jobs but previously had active listings",
+    })
+    run_id = storage.start_run(conn, "2026-09-15T16:00:00", "pharma")
+    storage.finish_run(conn, run_id, "2026-09-15T16:00:21", 355, 0, {"Astellas": "404"})
+    storage.log_email(conn, "2026-09-15T16:00:30", "alert", "3 New Job Postings", ["x@example.com"], True)
+    conn.close()
+    from dashboard.app import create_app
+    client = create_app(db_path=tmp_path / "h.db").test_client()
+    resp = client.get("/health")
+    assert resp.status_code == 200
+    html = resp.data.decode()
+    for label in ("! Failing", "○ Empty listing", "– Retired", "✓ OK"):
+        assert label in html, label
+    assert "404 Client Error" in html
+    assert "Johnson &amp; Johnson" in html
+    assert html.index("Astellas") < html.index("Pfizer")   # problems first
+    assert "21 s" in html and "1/1" in html and "alert delivered" in html

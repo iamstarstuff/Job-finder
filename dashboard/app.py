@@ -13,6 +13,8 @@ from markupsafe import Markup, escape
 
 from dashboard import brief, charts
 from jobfinder import analytics, config, storage
+from jobfinder.scrapers import SCRAPERS
+from jobfinder.tech_scrapers import TECH_SCRAPERS
 
 WINDOWS = (0, 4, 12, 26)
 WINDOW_OPTIONS = [(4, "Last 4 weeks"), (12, "Last 12 weeks"), (26, "Last 26 weeks"), (0, "All time")]
@@ -255,6 +257,18 @@ def create_app(db_path=None) -> Flask:
         except FileNotFoundError:
             lines = ["(no log file yet)"]
         return render_template("logs.html", lines=lines, selected_log=selected)
+
+    @app.route("/health")
+    def health_page():
+        conn = get_conn()
+        stats = conn.execute(
+            "SELECT kind, COUNT(*) total, SUM(success) ok FROM emails GROUP BY kind").fetchall()
+        return render_template(
+            "health.html",
+            companies=analytics.scraper_health(conn, {"pharma": list(SCRAPERS), "tech": list(TECH_SCRAPERS)}),
+            runs={s: analytics.run_history(conn, s) for s in ("pharma", "tech")},
+            stats=stats,
+        )
 
     return app
 

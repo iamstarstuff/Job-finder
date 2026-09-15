@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Health · Job Finder{% endblock %}
+{% block content %}
+<h2>Health</h2>
+<p class="note" style="margin:-10px 0 24px">Scraper status per company, recent runs and email delivery. Pharma runs hourly, tech daily at 08:00, descriptions every four hours.</p>
+
+<h3>Companies</h3>
+<div class="table-scroll" style="margin:10px 0 28px">
+<table>
+  <tr><th>Company</th><th>Sector</th><th>Status</th><th>Open roles</th><th>Last sighting</th><th>Last error</th></tr>
+  {% set labels = {"ok": "✓ OK", "failing": "! Failing", "empty": "○ Empty listing", "retired": "– Retired"} %}
+  {% for c in companies %}
+  <tr>
+    <td>{{ c.company }}</td>
+    <td>{{ c.sector }}</td>
+    <td><span class="pill {{ c.status }}">{{ labels[c.status] }}</span></td>
+    <td>{{ c.active }}</td>
+    <td>{{ c.last_seen[:16].replace("T", " ") if c.last_seen else "never" }}</td>
+    <td class="wrap" title="{{ c.error or '' }}">{{ (c.error or "")[:80] }}{% if c.error and c.error|length > 80 %}…{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+
+<div class="grid">
+{% for sector in ("pharma", "tech") %}
+  <section class="span-6">
+    <h3>{{ sector | capitalize }} runs</h3>
+    <div class="table-scroll" style="margin-top:10px">
+    <table>
+      <tr><th>Started</th><th>Took</th><th>Jobs</th><th>New</th><th>Problems</th></tr>
+      {% for r in runs[sector] %}
+      <tr>
+        <td>{{ r.started_at[:16].replace("T", " ") }}</td>
+        <td>{% if r.duration_s is not none %}{{ r.duration_s }} s{% else %}running{% endif %}</td>
+        <td>{{ r.total_jobs if r.total_jobs is not none else "" }}</td>
+        <td>{{ r.new_jobs if r.new_jobs is not none else "" }}</td>
+        <td title="{{ r.failed | join(', ') }}">{{ r.failed | length if r.failed else "" }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No runs yet.</td></tr>
+      {% endfor %}
+    </table>
+    </div>
+  </section>
+{% endfor %}
+</div>
+
+<h3 style="margin-top:28px">Email delivery</h3>
+<div class="tiles" style="margin-top:10px">
+  {% for s in stats %}
+  <div class="tile"><div class="value">{{ s.ok }}/{{ s.total }}</div><div class="label">{{ s.kind }} delivered</div></div>
+  {% else %}
+  <p class="note">No emails sent yet.</p>
+  {% endfor %}
+</div>
+<p class="note"><a href="/emails">Full email history</a></p>
+{% endblock %}
