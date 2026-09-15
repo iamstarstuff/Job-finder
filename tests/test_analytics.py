@@ -374,3 +374,42 @@ def test_median_days_active_window_and_min_closed(tmp_path):
     assert rows == [{"company": "BMS", "median_days": 0.0, "closed": 1}]  # Process Engineer: seen once, 09-09
     assert analytics.median_days_active(conn, min_closed=3, now=NOW) == []
     assert analytics.median_days_active(conn, weeks=4, now=NOW)[0]["company"] == "BMS"
+
+
+def test_scraper_health_derives_every_status(tmp_path):
+    conn = storage.connect(tmp_path / "h.db")
+    for company, sector in (("Pfizer", "pharma"), ("Astellas", "pharma"), ("Leo Pharma", "pharma"),
+                            ("Johnson & Johnson", "pharma"), ("Google", "tech")):
+        storage.record_company_snapshot(conn, company, [
+            Job(company, "Role", f"https://{company}/1", "p", sector=sector),
+        ], "2026-09-14T10:00:00")
+    storage.sync_company_failures(conn, "pharma", {
+        "Astellas": "404 Client Error: Not Found",
+        "Leo Pharma": "returned 0 jobs but previously had active listings",
+    })
+    registries = {"pharma": ["Pfizer", "Astellas", "Leo Pharma", "Stripe-new"], "tech": ["Google"]}
+    rows = analytics.scraper_health(conn, registries)
+    status = {r["company"]: r["status"] for r in rows}
+    assert status == {"Astellas": "failing", "Leo Pharma": "empty", "Johnson & Johnson": "retired",
+                      "Pfizer": "ok", "Google": "ok", "Stripe-new": "ok"}
+    assert [r["company"] for r in rows][:3] == ["Astellas", "Leo Pharma", "Johnson & Johnson"]  # problems first
+    pfizer = next(r for r in rows if r["company"] == "Pfizer")
+    assert pfizer == {"sector": "pharma", "company": "Pfizer", "status": "ok", "active": 1,
+                      "last_seen": "2026-09-14T10:00:00", "error": None}
+    stripe = next(r for r in rows if r["company"] == "Stripe-new")
+    assert stripe["active"] == 0 and stripe["last_seen"] is None
+
+
+def test_run_history_computes_duration_and_failed_names(tmp_path):
+    conn = storage.connect(tmp_path / "r.db")
+    run_id = storage.start_run(conn, "2026-09-15T16:00:00", "pharma")
+    storage.finish_run(conn, run_id, "2026-09-15T16:00:21", 355, 0, {"Astellas": "404", "Leo": "zero"})
+    storage.start_run(conn, "2026-09-15T17:00:00", "pharma")  # still running
+    storage.start_run(conn, "2026-09-15T08:00:00", "tech")
+    rows = analytics.run_history(conn, "pharma")
+    assert rows[0] == {"started_at": "2026-09-15T17:00:00", "duration_s": None, "total_jobs": None,
+                       "new_jobs": None, "failed": []}
+    assert rows[1] == {"started_at": "2026-09-15T16:00:00", "duration_s": 21, "total_jobs": 355,
+                       "new_jobs": 0, "failed": ["Astellas", "Leo"]}
+    assert len(analytics.run_history(conn, "tech")) == 1
+    assert len(analytics.run_history(conn, "pharma", limit=1)) == 1

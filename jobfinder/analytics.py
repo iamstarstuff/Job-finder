@@ -324,3 +324,56 @@ def skills_by_category(conn, sector: Optional[str] = None) -> List[dict]:
     sql += " GROUP BY skills.id ORDER BY category, count DESC"
     rows = conn.execute(sql, params).fetchall()
     return [{"category": r["category"], "skill": r["skill"], "count": r["count"]} for r in rows]
+
+
+_STATUS_ORDER = {"failing": 0, "empty": 1, "retired": 2, "ok": 3}
+
+
+def scraper_health(conn, registries: Dict[str, Iterable[str]]) -> List[dict]:
+    """One row per (sector, company) known to either the DB or a scraper
+    registry. Status is derived, never stored:
+      retired  -- has rows but is in no registry (e.g. Johnson & Johnson)
+      failing  -- company_failures holds an exception message
+      empty    -- company_failures holds the zero-listing warning
+      ok       -- everything else (including registry entries with no rows yet)"""
+    scraped = {(sector, company) for sector, names in registries.items() for company in names}
+    failures = {(r["sector"], r["company"]): r["last_error"]
+                for r in conn.execute("SELECT sector, company, last_error FROM company_failures")}
+    rows = conn.execute(
+        "SELECT sector, company, SUM(is_active) active, MAX(last_seen) last_seen"
+        " FROM jobs GROUP BY sector, company").fetchall()
+    out = []
+    seen = set()
+    for r in rows:
+        key = (r["sector"], r["company"])
+        seen.add(key)
+        error = failures.get(key)
+        if key not in scraped:
+            status = "retired"
+        elif error is None:
+            status = "ok"
+        elif error.startswith("returned 0 jobs"):
+            status = "empty"
+        else:
+            status = "failing"
+        out.append({"sector": key[0], "company": key[1], "status": status,
+                    "active": r["active"] or 0, "last_seen": r["last_seen"], "error": error})
+    for sector, company in scraped - seen:
+        out.append({"sector": sector, "company": company, "status": "ok",
+                    "active": 0, "last_seen": None, "error": None})
+    return sorted(out, key=lambda x: (_STATUS_ORDER[x["status"]], x["sector"], x["company"]))
+
+
+def run_history(conn, sector: str, limit: int = 20) -> List[dict]:
+    rows = conn.execute(
+        "SELECT * FROM runs WHERE sector = ? ORDER BY id DESC LIMIT ?", (sector, limit)).fetchall()
+    out = []
+    for r in rows:
+        duration = None
+        if r["finished_at"]:
+            duration = round((datetime.fromisoformat(r["finished_at"])
+                              - datetime.fromisoformat(r["started_at"])).total_seconds())
+        failed = list(json.loads(r["failed_companies"]).keys()) if r["failed_companies"] else []
+        out.append({"started_at": r["started_at"], "duration_s": duration,
+                    "total_jobs": r["total_jobs"], "new_jobs": r["new_jobs"], "failed": failed})
+    return out
