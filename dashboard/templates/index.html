@@ -1,23 +1,26 @@
 {% extends "base.html" %}
+{% from "_charts.html" import chart_card %}
 {% block content %}
-<h2>Overview</h2>
-<div class="cards">
-  <div class="card"><div class="num">{{ overview.active_jobs }}</div><div class="label">Active jobs</div></div>
-  <div class="card"><div class="num">{{ overview.new_this_week }}</div><div class="label">New this week</div></div>
-  <div class="card"><div class="num">{{ overview.total_jobs_seen }}</div><div class="label">Total ever seen</div></div>
-  <div class="card"><div class="num">{{ overview.companies }}</div><div class="label">Companies</div></div>
-  <div class="card"><div class="num">{{ overview.emails_sent }}</div><div class="label">Emails sent</div></div>
+<form class="filters" method="get" action="/">
+  <select name="weeks" onchange="this.form.submit()" aria-label="Time window">
+    {% for value, label in window_options %}<option value="{{ value }}"{{ " selected" if value == weeks }}>{{ label }}</option>{% endfor %}
+  </select>
+  <select name="sector" onchange="this.form.submit()" aria-label="Sector">
+    <option value="">All sectors</option>
+    <option value="pharma"{{ " selected" if sector == "pharma" }}>Pharma</option>
+    <option value="tech"{{ " selected" if sector == "tech" }}>Tech</option>
+  </select>
+</form>
+{% include "_brief.html" %}
+{% include "_tiles.html" %}
+<div class="grid">
+  {{ chart_card("skills-in-demand", "Skills in demand", "Roles with full descriptions that mention each skill", 6, sector, weeks) }}
+  {{ chart_card("hiring-velocity", "Hiring velocity", "New roles per week", 6, sector, weeks) }}
+  {% call chart_card("who-is-hiring", "Who is hiring", "Companies by open roles", 6, sector, weeks) %}
+    {% include "_movers.html" %}
+  {% endcall %}
+  {{ chart_card("skill-trend", "Skill trend", "Share of each week's new roles mentioning the skill, based on roles with full descriptions", 6, sector, weeks) }}
 </div>
-
-<h3>Browse by sector</h3>
-<div class="cards">
-  <a class="card" href="/sector/pharma" style="text-decoration:none;color:inherit;display:block;">
-    <div class="num">Pharma</div>
-    <div class="label">Ireland pharma &amp; biotech job tracking</div>
-  </a>
-  <a class="card" href="/sector/tech" style="text-decoration:none;color:inherit;display:block;">
-    <div class="num">Tech</div>
-    <div class="label">Ireland &amp; remote tech role tracking</div>
-  </a>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="{{ url_for('static', filename='charts.js') }}"></script>
 {% endblock %}

@@ -11,13 +11,35 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from flask import Flask, abort, g, jsonify, redirect, render_template, request, url_for
 from markupsafe import Markup, escape
 
-from dashboard import charts
+from dashboard import brief, charts
 from jobfinder import analytics, config, storage
 
 WINDOWS = (0, 4, 12, 26)
 WINDOW_OPTIONS = [(4, "Last 4 weeks"), (12, "Last 12 weeks"), (26, "Last 26 weeks"), (0, "All time")]
 WINDOW_LABELS = {4: "over the last 4 weeks", 12: "over the last 12 weeks",
                  26: "over the last 26 weeks", 0: "across everything tracked"}
+
+SECTOR_NAMES = {"": "pharma and tech", "pharma": "pharma", "tech": "tech"}
+
+
+def _page_context(conn, sector: str, weeks: int) -> dict:
+    """Everything the Home and sector templates share: filters, tiles, the
+    brief and the movers list. `sector` is "" for the combined view."""
+    scoped = sector or None
+    overview = analytics.overview(conn, sector=scoped)
+    velocity = analytics.company_velocity(conn, sector=scoped, weeks=weeks)
+    this_week = analytics.company_velocity(conn, sector=scoped, weeks=1)
+    return {
+        "sector": sector,
+        "weeks": weeks,
+        "window_options": WINDOW_OPTIONS,
+        "overview": overview,
+        "kicker": f"This week in Irish {SECTOR_NAMES[sector]} hiring",
+        "brief": brief.compose_brief(
+            overview, analytics.top_skills(conn, limit=3, sector=scoped, weeks=weeks),
+            this_week, WINDOW_LABELS[weeks]),
+        "movers": analytics.compute_movers(velocity) if weeks else None,
+    }
 
 
 def _window_arg() -> int:
@@ -69,14 +91,14 @@ def create_app(db_path=None) -> Flask:
 
     @app.route("/")
     def index():
-        conn = get_conn()
-        return render_template("index.html", overview=analytics.overview(conn))
+        return render_template("index.html", **_page_context(get_conn(), _sector_arg(), _window_arg()))
 
     @app.route("/sector/<name>")
     def sector_page(name):
         if name not in ("pharma", "tech"):
             return "Unknown sector", 404
         conn = get_conn()
+        weeks = _window_arg()
         sql = """SELECT jobs.*, job_details.description, job_details.seniority,
                          job_details.enrichment_failed
                   FROM jobs LEFT JOIN job_details ON job_details.job_id = jobs.id
@@ -95,11 +117,8 @@ def create_app(db_path=None) -> Flask:
             ).fetchall()
             for r in skill_rows:
                 skills_by_job.setdefault(r["job_id"], []).append(r["name"])
-        return render_template(
-            "sector.html", sector=name,
-            overview=analytics.overview(conn, sector=name),
-            recent_jobs=rows, skills_by_job=skills_by_job,
-        )
+        return render_template("sector.html", recent_jobs=rows, skills_by_job=skills_by_job,
+                               **_page_context(conn, name, weeks))
 
     @app.route("/jobs")
     def jobs():
@@ -149,30 +168,6 @@ def create_app(db_path=None) -> Flask:
         return render_template("jobs.html", jobs=rows, companies=companies,
                                company=company, q=query, skill=skill_query, active=active,
                                sector=sector, skills_by_job=skills_by_job)
-
-    @app.route("/api/jobs-per-company")
-    def api_jobs_per_company():
-        return jsonify(analytics.jobs_per_company(get_conn(), sector=request.args.get("sector") or None))
-
-    @app.route("/api/new-per-week")
-    def api_new_per_week():
-        return jsonify(analytics.new_jobs_per_week(get_conn(), sector=request.args.get("sector") or None))
-
-    @app.route("/api/categories")
-    def api_categories():
-        return jsonify(analytics.category_breakdown(get_conn(), sector=request.args.get("sector") or None))
-
-    @app.route("/api/top-skills")
-    def api_top_skills():
-        return jsonify(analytics.top_skills(get_conn(), sector=request.args.get("sector") or None))
-
-    @app.route("/api/seniority-breakdown")
-    def api_seniority_breakdown():
-        return jsonify(analytics.seniority_breakdown(get_conn(), sector=request.args.get("sector") or None))
-
-    @app.route("/api/skills-by-category")
-    def api_skills_by_category():
-        return jsonify(analytics.skills_by_category(get_conn(), sector=request.args.get("sector") or None))
 
     @app.route("/api/drilldown/<dimension>")
     def api_drilldown(dimension):

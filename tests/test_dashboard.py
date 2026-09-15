@@ -22,7 +22,7 @@ def test_overview_page(client):
     resp = client.get("/")
     assert resp.status_code == 200
     assert b"QC Analyst" not in resp.data  # overview shows stats, not job rows
-    assert b"Active jobs" in resp.data
+    assert b"Open roles" in resp.data
 
 
 def test_jobs_page_lists_and_filters(client):
@@ -32,13 +32,6 @@ def test_jobs_page_lists_and_filters(client):
     assert b"QC Analyst" not in resp.data
     resp = client.get("/jobs?q=analyst")
     assert b"QC Analyst" in resp.data
-
-
-def test_api_endpoints_return_json(client):
-    for path in ("/api/jobs-per-company", "/api/new-per-week", "/api/categories"):
-        resp = client.get(path)
-        assert resp.status_code == 200
-        assert resp.is_json
 
 
 def test_emails_page(client):
@@ -67,13 +60,6 @@ def enriched_client(tmp_path):
     app = create_app(db_path=tmp_path / "e.db")
     app.config["TESTING"] = True
     return app.test_client()
-
-
-def test_new_analytics_api_endpoints_return_json(enriched_client):
-    for path in ("/api/top-skills", "/api/seniority-breakdown", "/api/skills-by-category"):
-        resp = enriched_client.get(path)
-        assert resp.status_code == 200
-        assert resp.is_json
 
 
 def test_drilldown_by_company(enriched_client):
@@ -270,19 +256,6 @@ def test_jobs_page_row_markup_unchanged_after_macro_extraction(client):
     assert b'class="job-row-summary"' in resp.data
 
 
-def test_api_jobs_per_company_respects_sector_filter(client):
-    resp = client.get("/api/jobs-per-company?sector=pharma")
-    assert resp.status_code == 200
-    companies = {row["company"] for row in resp.get_json()}
-    assert "APC" in companies
-
-
-def test_api_top_skills_accepts_sector_param_without_erroring(client):
-    resp = client.get("/api/top-skills?sector=tech")
-    assert resp.status_code == 200
-    assert resp.get_json() == []
-
-
 def test_api_chart_returns_the_contract(client):
     resp = client.get("/api/charts/skills-in-demand")
     assert resp.status_code == 200 and resp.is_json
@@ -376,3 +349,48 @@ def test_charts_js_surfaces_drilldown_fetch_failures(client):
     assert "textContent" in js
     assert "innerHTML" not in js
     assert "Could not load the roles behind this value." in js
+
+
+def test_home_renders_filters_brief_tiles_and_chart_mounts(client):
+    html = client.get("/").data.decode()
+    assert '<select name="weeks"' in html and '<select name="sector"' in html
+    assert "This week in Irish pharma and tech hiring" in html
+    assert ("landed this week" in html) or ("No new roles have landed this week yet." in html)
+    for label in ("Open roles", "New this week", "Companies tracked", "Roles with full descriptions"):
+        assert label in html
+    for name in ("skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend"):
+        assert f'data-chart="{name}"' in html
+    assert 'data-chart="seniority-mix"' not in html
+    assert "echarts@5/dist/echarts.min.js" in html and "charts.js" in html
+    assert "chart.js@4" not in html
+
+
+def test_home_threads_window_and_sector_into_cards_and_rejects_bad_window(client):
+    html = client.get("/?weeks=4&sector=tech").data.decode()
+    assert 'data-weeks="4"' in html and 'data-sector="tech"' in html
+    assert '<option value="4" selected>' in html
+    assert '<option value="tech" selected>' in html
+    assert client.get("/?weeks=7").status_code == 400
+
+
+def test_home_shows_movers_for_windows_but_not_all_time(client):
+    assert "Rising" in client.get("/?weeks=12").data.decode()
+    assert "Rising" not in client.get("/?weeks=0").data.decode()
+
+
+def test_sector_page_has_the_extra_charts_recent_jobs_and_no_sector_select(client):
+    html = client.get("/sector/pharma").data.decode()
+    for name in ("skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend",
+                 "seniority-mix", "company-categories", "days-to-close"):
+        assert f'data-chart="{name}"' in html
+    assert "This week in Irish pharma hiring" in html
+    assert 'data-sector="pharma"' in html
+    assert '<select name="sector"' not in html and '<select name="weeks"' in html
+    assert "QC Analyst" in html            # recent-jobs list
+    assert "See all 1 jobs" in html and "→" not in html
+
+
+def test_old_chart_api_routes_are_gone(client):
+    for path in ("/api/jobs-per-company", "/api/new-per-week", "/api/categories",
+                 "/api/top-skills", "/api/seniority-breakdown", "/api/skills-by-category"):
+        assert client.get(path).status_code == 404, path

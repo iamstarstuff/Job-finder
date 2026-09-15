@@ -161,18 +161,6 @@ def seniority_by_company(conn, sector: Optional[str] = None, weeks: int = 12,
             for r in conn.execute(sql, params)]
 
 
-def jobs_per_company(conn, sector: Optional[str] = None) -> List[dict]:
-    sql = "SELECT company, COUNT(*) total, SUM(is_active) active FROM jobs"
-    params = []
-    if sector:
-        sql += " WHERE sector = ?"
-        params.append(sector)
-    sql += " GROUP BY company ORDER BY company"
-    rows = conn.execute(sql, params).fetchall()
-    return [{"company": r["company"], "total": r["total"], "active": r["active"] or 0}
-            for r in rows]
-
-
 def new_jobs_per_week(conn, weeks: int = 12, sector: Optional[str] = None,
                       now: Optional[datetime] = None) -> List[dict]:
     """New jobs per ISO week as a continuous, zero-filled series ending this
@@ -294,36 +282,6 @@ def top_skills(conn, limit: int = 15, sector: Optional[str] = None, weeks: int =
     params.append(limit)
     rows = conn.execute(sql, params).fetchall()
     return [{"skill": r["skill"], "category": r["category"], "count": r["count"]} for r in rows]
-
-
-def seniority_breakdown(conn, sector: Optional[str] = None) -> List[dict]:
-    sql = """SELECT COALESCE(job_details.seniority, 'Unspecified') AS seniority, COUNT(*) AS count
-             FROM job_details
-             JOIN jobs ON jobs.id = job_details.job_id
-             WHERE job_details.enrichment_failed = 0"""
-    params = []
-    if sector:
-        sql += " AND jobs.sector = ?"
-        params.append(sector)
-    sql += " GROUP BY COALESCE(job_details.seniority, 'Unspecified') ORDER BY count DESC"
-    rows = conn.execute(sql, params).fetchall()
-    return [{"seniority": r["seniority"], "count": r["count"]} for r in rows]
-
-
-def skills_by_category(conn, sector: Optional[str] = None) -> List[dict]:
-    sql = """SELECT skills.category AS category, skills.name AS skill, COUNT(*) AS count
-             FROM job_skills
-             JOIN skills ON skills.id = job_skills.skill_id
-             JOIN job_details ON job_details.job_id = job_skills.job_id
-             JOIN jobs ON jobs.id = job_skills.job_id
-             WHERE job_details.enrichment_failed = 0"""
-    params = []
-    if sector:
-        sql += " AND jobs.sector = ?"
-        params.append(sector)
-    sql += " GROUP BY skills.id ORDER BY category, count DESC"
-    rows = conn.execute(sql, params).fetchall()
-    return [{"category": r["category"], "skill": r["skill"], "count": r["count"]} for r in rows]
 
 
 _STATUS_ORDER = {"failing": 0, "empty": 1, "retired": 2, "ok": 3}

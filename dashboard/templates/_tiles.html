@@ -1,0 +1,25 @@
+{% set delta = overview.new_this_week - overview.new_previous_week %}
+<section class="tiles">
+  <div class="tile">
+    <div class="value">{{ overview.active_jobs }}</div>
+    <div class="label">Open roles</div>
+    <div class="note">{{ overview.closed_last_7d }} closed in the last 7 days</div>
+  </div>
+  <div class="tile">
+    <div class="value">{{ overview.new_this_week }}</div>
+    <div class="label">New this week</div>
+    <div class="delta {{ 'up' if delta > 0 else 'down' if delta < 0 else 'flat' }}">
+      {% if delta > 0 %}▲ {{ delta }} vs last week{% elif delta < 0 %}▼ {{ -delta }} vs last week{% else %}Same as last week{% endif %}
+    </div>
+  </div>
+  <div class="tile">
+    <div class="value">{{ overview.companies }}</div>
+    <div class="label">Companies tracked</div>
+    <div class="note">{% if overview.companies_failing %}<a href="/health">{{ overview.companies_failing }} with problems</a>{% else %}All scrapers healthy{% endif %}</div>
+  </div>
+  <div class="tile">
+    <div class="value">{{ overview.enriched_pct }}%</div>
+    <div class="label">Roles with full descriptions</div>
+    <div class="note">{{ overview.enriched_count }} of {{ overview.total_jobs_seen }}</div>
+  </div>
+</section>
