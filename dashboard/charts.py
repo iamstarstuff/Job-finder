@@ -16,6 +16,7 @@ echartsy rules learned during design (spec §3.2):
 """
 from __future__ import annotations
 
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Callable, Dict, List, Optional
@@ -172,6 +173,83 @@ def skill_trend(conn, sector: Optional[str], weeks: int, now: Optional[datetime]
     return ChartPayload(fig.to_option(), columns, table, drilldown, height)
 
 
+def _company_order(totals: Counter) -> List[str]:
+    """Companies by total desc, then name -- the display order (top first)."""
+    return [c for c, _ in sorted(totals.items(), key=lambda kv: (-kv[1], kv[0]))]
+
+
+def seniority_mix(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.seniority_by_company(conn, sector=sector, weeks=weeks, now=now)
+    columns = ["Company"] + SENIORITY_ORDER + ["Enriched jobs"]
+    drilldown = {"dimension": "seniority", "key": "seriesName"}
+    if not rows:
+        return _empty(columns, drilldown)
+    counts: Dict[str, Counter] = defaultdict(Counter)
+    totals: Counter = Counter()
+    for r in rows:
+        counts[r["company"]][r["seniority"]] += r["count"]
+        totals[r["company"]] += r["count"]
+    companies = _company_order(totals)
+    bottom_up = companies[::-1]
+    df = pd.DataFrame({"Company": bottom_up})
+    for tier in SENIORITY_ORDER:
+        df[tier] = [_share(counts[c][tier], totals[c]) for c in bottom_up]
+    height = f"{24 * len(companies) + 80}px"
+    fig = _figure(height=height)
+    colors = PALETTE["ordinal"] + [PALETTE["neutral"]]
+    for tier, color in zip(SENIORITY_ORDER, colors):
+        # a 2px surface-coloured border is the "surface gap" between stacked segments
+        fig.barh(df, x="Company", y=tier, stack=True, color=color, barMaxWidth=20,
+                 item_style=ec.ItemStyle(border_color="#FFFFFF", border_width=2))
+    fig.extra(xAxis={"type": "value", "min": 0, "max": 100, "axisLabel": {"formatter": "{value}%"}})
+    fig.legend(show=True, left="left", top=0)
+    table = [[c] + [counts[c][t] for t in SENIORITY_ORDER] + [totals[c]] for c in companies]
+    return ChartPayload(fig.to_option(), columns, table, drilldown, height)
+
+
+def company_categories(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.category_breakdown(conn, sector=sector, weeks=weeks, now=now)
+    columns = ["Company", "Category", "Jobs", "Share %"]
+    drilldown = {"dimension": "company", "key": "row"}
+    if not rows:
+        return _empty(columns, drilldown)
+    categories = [c for c, _ in analytics.CATEGORY_KEYWORDS] + ["Other"]
+    by: Dict[str, Counter] = defaultdict(Counter)
+    totals: Counter = Counter()
+    for r in rows:
+        by[r["company"]][r["category"]] += r["count"]
+        totals[r["company"]] += r["count"]
+    companies = _company_order(totals)
+    cells = [{"Category": cat, "Company": c, "Share": _share(by[c][cat], totals[c])}
+             for c in companies[::-1] for cat in categories]
+    df = pd.DataFrame(cells)
+    height = f"{28 * len(companies) + 90}px"
+    fig = _figure(height=height, trigger="item")
+    fig.heatmap(df, x="Category", y="Company", value="Share", in_range_colors=PALETTE["sequential"],
+                label_show=False, visual_min=0, visual_max=100)
+    fig.xticks(rotate=30)
+    table = [[c, cat, by[c][cat], _share(by[c][cat], totals[c])]
+             for c in companies for cat in categories if by[c][cat]]
+    return ChartPayload(fig.to_option(), columns, table, drilldown, height)
+
+
+def days_to_close(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.median_days_active(conn, sector=sector, weeks=weeks, min_closed=3, now=now)
+    columns = ["Company", "Median days open", "Closed jobs"]
+    drilldown = {"dimension": "company", "key": "name"}
+    if not rows:
+        return _empty(columns, drilldown)
+    rows = sorted(rows, key=lambda r: (-r["median_days"], r["company"]))
+    df = pd.DataFrame({"Company": [r["company"] for r in rows],
+                       "Median days open": [r["median_days"] for r in rows]})[::-1]
+    height = f"{24 * len(rows) + 80}px"
+    fig = _figure(height=height)
+    fig.barh(df, x="Company", y="Median days open", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
+    fig.legend(show=False)
+    return ChartPayload(fig.to_option(), columns,
+                        [[r["company"], r["median_days"], r["closed"]] for r in rows], drilldown, height)
+
+
 CHARTS: Dict[str, Callable] = {}
 
 CHARTS.update({
@@ -179,4 +257,10 @@ CHARTS.update({
     "hiring-velocity": hiring_velocity,
     "who-is-hiring": who_is_hiring,
     "skill-trend": skill_trend,
+})
+
+CHARTS.update({
+    "seniority-mix": seniority_mix,
+    "company-categories": company_categories,
+    "days-to-close": days_to_close,
 })

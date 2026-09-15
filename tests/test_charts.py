@@ -147,3 +147,64 @@ def test_skill_trend_is_a_share_heatmap_with_complete_axes(tmp_path):
 
 def test_part_one_builders_are_registered():
     assert {"skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend"} <= set(charts.CHARTS)
+
+
+def test_seniority_mix_is_a_100_percent_stack_in_fixed_tier_order(tmp_path):
+    payload = charts.seniority_mix(_seeded(tmp_path), None, 4, now=NOW)
+    option = payload.option
+    assert option["yAxis"]["data"] == ["Google", "MSD"]  # MSD has 2 enriched jobs: on top
+    assert [s["name"] for s in option["series"]] == charts.SENIORITY_ORDER
+    assert [s["itemStyle"]["color"] for s in option["series"]] == charts.PALETTE["ordinal"] + [charts.PALETTE["neutral"]]
+    assert all(s["stack"] == "total" for s in option["series"])
+    assert all(s["itemStyle"]["borderColor"] == "#FFFFFF" and s["itemStyle"]["borderWidth"] == 2 for s in option["series"])
+    by_name = {s["name"]: s["data"] for s in option["series"]}
+    assert by_name["Senior"] == [0.0, 50.0] and by_name["Director"] == [0.0, 50.0]
+    assert by_name["Unspecified"] == [100.0, 0.0]
+    assert option["xAxis"]["max"] == 100 and option["xAxis"]["axisLabel"]["formatter"] == "{value}%"
+    assert option["legend"]["show"] is True
+    assert payload.columns == ["Company"] + charts.SENIORITY_ORDER + ["Enriched jobs"]
+    assert payload.rows == [["MSD", 0, 1, 0, 1, 0, 2], ["Google", 0, 0, 0, 0, 1, 1]]
+    assert payload.drilldown == {"dimension": "seniority", "key": "seriesName"}
+    assert payload.height == "128px"  # 24px per company row + 80px axis band
+
+
+def test_company_categories_is_a_share_heatmap_over_all_nine_categories(tmp_path):
+    payload = charts.company_categories(_seeded(tmp_path), "pharma", 0, now=NOW)
+    option = payload.option
+    categories = [c for c, _ in charts.analytics.CATEGORY_KEYWORDS] + ["Other"]
+    assert option["xAxis"]["data"] == categories
+    assert option["yAxis"]["data"] == ["MSD"]
+    assert option["xAxis"]["axisLabel"]["rotate"] == 30
+    assert option["visualMap"]["min"] == 0 and option["visualMap"]["max"] == 100
+    cells = {(x, y): v for x, y, v in option["series"][0]["data"]}
+    assert cells[(categories.index("Quality"), 0)] == 100.0
+    assert cells[(categories.index("Other"), 0)] == 0.0
+    assert payload.rows == [["MSD", "Quality", 2, 100.0]]  # only non-zero cells in the table
+    assert payload.drilldown == {"dimension": "company", "key": "row"}
+
+
+def test_days_to_close_uses_min_closed_three_and_sorts_longest_first(tmp_path):
+    conn = _seeded(tmp_path)
+    assert charts.days_to_close(conn, None, 0, now=NOW).rows == []  # nothing closed yet
+    roles = [Job("BMS", f"Role {i}", f"https://b/{i}", "p") for i in range(3)]
+    # all three open on 08-01; one drops out every ten days -> open for 10, 20 and 30 days
+    storage.record_company_snapshot(conn, "BMS", roles, "2026-08-01T10:00:00")
+    storage.record_company_snapshot(conn, "BMS", roles, "2026-08-11T10:00:00")
+    storage.record_company_snapshot(conn, "BMS", roles[1:], "2026-08-21T10:00:00")   # Role 0 closes, last seen 08-11
+    storage.record_company_snapshot(conn, "BMS", roles[2:], "2026-08-31T10:00:00")   # Role 1 closes, last seen 08-21
+    storage.record_company_snapshot(conn, "BMS", [], "2026-09-01T10:00:00")          # Role 2 closes, last seen 08-31
+    payload = charts.days_to_close(conn, None, 0, now=NOW)
+    assert payload.rows == [["BMS", 20.0, 3]]
+    assert payload.option["yAxis"]["data"] == ["BMS"]
+    assert payload.option["series"][0]["name"] == "Median days open"
+    assert payload.columns == ["Company", "Median days open", "Closed jobs"]
+    assert payload.drilldown == {"dimension": "company", "key": "name"}
+
+
+def test_registry_matches_the_spec_inventory():
+    assert set(charts.CHARTS) == {
+        "skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend",
+        "seniority-mix", "company-categories", "days-to-close",
+    }
+    for builder in charts.CHARTS.values():
+        assert callable(builder)
