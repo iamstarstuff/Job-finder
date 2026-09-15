@@ -19,7 +19,6 @@ URLS = {
     "Takeda": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2",
     "Amgen": "https://www.amgen.jobs/irl/jobs/",
     "Vle therapeutics": "https://www.vletherapeutics.com/careers",
-    "Astellas": "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset=",
     "Jazz Pharmaceuticals": "https://careers.jazzpharma.com/jobs/ie/",
 }
 
@@ -165,19 +164,16 @@ def vle(session) -> List[Job]:
     return jobs
 
 
+# Astellas moved off astellas.avature.net (404 since 2026-08-21) to a
+# SuccessFactors job2web site at careers.astellas.com -- the same platform
+# as Grifols/Leo Pharma, so it shares _scrape_successfactors below.
+ASTELLAS_BASE = "https://careers.astellas.com"
+ASTELLAS_SEARCH = "https://careers.astellas.com/search/?q=&locationsearch=Ireland&startrow="
+ASTELLAS_PORTAL = "https://careers.astellas.com/search/?q=&locationsearch=Ireland"
+
+
 def astellas(session) -> List[Job]:
-    jobs = []
-    offset = 0
-    while True:
-        url = f"{URLS['Astellas']}{offset}"
-        soup = _soup(fetch(session, url))
-        tiles = soup.find_all("h3", class_="article__header__text__title")
-        if not tiles:
-            break
-        for tile in tiles:
-            jobs.append(Job("Astellas", tile.text.strip(), urljoin(url, tile.find("a")["href"]), url))
-        offset += 10
-    return jobs
+    return _scrape_successfactors(session, "Astellas", ASTELLAS_SEARCH, ASTELLAS_BASE, ASTELLAS_PORTAL)
 
 
 PFIZER_API = "https://pfizer.wd1.myworkdayjobs.com/wday/cxs/pfizer/PfizerCareers/jobs"
@@ -380,33 +376,10 @@ def thermo_fisher(session) -> List[Job]:
     return jobs
 
 
-# Johnson & Johnson's careers.jnj.com is NOT the Phenom /widgets JSON API the
-# brief expected -- verified live, the page ships server-rendered job tiles
-# (no refineSearch/ddoKey markers anywhere in the HTML). It's a GET-param
-# filtered search (?country=Ireland) with the same "next page link" pagination
-# convention as jazz(), so it reuses _soup/_follow_next.
-JNJ_URL = "https://www.careers.jnj.com/en/jobs/?country=Ireland"
-JNJ_BASE = "https://www.careers.jnj.com"
-
-
-def johnson_and_johnson(session) -> List[Job]:
-    jobs = []
-    url = JNJ_URL
-    while url:
-        soup = _soup(fetch(session, url))
-        results = soup.find("ul", id="js-job-search-results")
-        tiles = results.find_all("li", class_="card-job") if results else []
-        for tile in tiles:
-            link = tile.find("a", class_="js-view-job")
-            if not link:
-                continue
-            jobs.append(Job(
-                "Johnson & Johnson", link.get_text(strip=True),
-                urljoin(JNJ_BASE, link["href"]),
-                JNJ_URL,
-            ))
-        url = _follow_next(soup, url)
-    return jobs
+# Johnson & Johnson (careers.jnj.com) was scraped here until 2026-08-06, when
+# the site went behind a Cloudflare JS challenge ("Just a moment...", HTTP
+# 403 for every plain-HTTP client). Retired 2026-09-15; the scraper lives in
+# git history (see commit before this comment) if the block is ever lifted.
 
 
 REGENERON_API = "https://regeneron.wd1.myworkdayjobs.com/wday/cxs/regeneron/Careers/jobs"
@@ -615,28 +588,7 @@ GRIFOLS_PORTAL = "https://jobsearch.grifols.com/search/?q=&locationsearch=Irelan
 
 
 def grifols(session) -> List[Job]:
-    jobs = []
-    offset = 0
-    total = None
-    while total is None or offset < total:
-        soup = _soup(fetch(session, f"{GRIFOLS_SEARCH}{offset}"))
-        rows = soup.find_all("tr", class_="data-row")
-        if not rows:
-            break
-        for row in rows:
-            link = row.find("a", class_="jobTitle-link")
-            if not link:
-                continue
-            jobs.append(Job(
-                "Grifols", link.get_text(strip=True),
-                urljoin(GRIFOLS_BASE, link["href"]),
-                GRIFOLS_PORTAL,
-            ))
-        label = soup.find("span", class_="paginationLabel")
-        parsed_total = _sf_pagination_total(label, offset)
-        total = parsed_total if parsed_total is not None else len(rows)
-        offset += len(rows)
-    return jobs
+    return _scrape_successfactors(session, "Grifols", GRIFOLS_SEARCH, GRIFOLS_BASE, GRIFOLS_PORTAL)
 
 
 # Leo Pharma's www.leo-pharma.com/your-career/jobs links to
@@ -651,12 +603,17 @@ LEO_SEARCH = "https://jobs.leo-pharma.com/search/?q=&locationsearch=Ireland&star
 LEO_PORTAL = "https://jobs.leo-pharma.com/search/?q=&locationsearch=Ireland"
 
 
-def leo_pharma(session) -> List[Job]:
+def _scrape_successfactors(session, company: str, search_url: str, base: str,
+                           portal: str, sector: str = "pharma") -> List[Job]:
+    """Shared scraper for SAP SuccessFactors "job2web" career sites (Grifols,
+    Leo Pharma, Astellas; AIB/EY on the tech side use the same markup):
+    `tr.data-row` rows with an `a.jobTitle-link`, paginated via `startrow=`
+    and a `span.paginationLabel` that carries the total."""
     jobs = []
     offset = 0
     total = None
     while total is None or offset < total:
-        soup = _soup(fetch(session, f"{LEO_SEARCH}{offset}"))
+        soup = _soup(fetch(session, f"{search_url}{offset}"))
         rows = soup.find_all("tr", class_="data-row")
         if not rows:
             break
@@ -665,15 +622,20 @@ def leo_pharma(session) -> List[Job]:
             if not link:
                 continue
             jobs.append(Job(
-                "Leo Pharma", link.get_text(strip=True),
-                urljoin(LEO_BASE, link["href"]),
-                LEO_PORTAL,
+                company, link.get_text(strip=True),
+                urljoin(base, link["href"]),
+                portal,
+                sector=sector,
             ))
         label = soup.find("span", class_="paginationLabel")
         parsed_total = _sf_pagination_total(label, offset)
         total = parsed_total if parsed_total is not None else len(rows)
         offset += len(rows)
     return jobs
+
+
+def leo_pharma(session) -> List[Job]:
+    return _scrape_successfactors(session, "Leo Pharma", LEO_SEARCH, LEO_BASE, LEO_PORTAL)
 
 
 # ICON plc's careers.iconplc.com is server-rendered Attrax (same platform as
@@ -730,7 +692,6 @@ SCRAPERS = OrderedDict([
     ("Gilead", gilead),
     ("Jazz Pharmaceuticals", jazz),
     ("Thermo Fisher", thermo_fisher),
-    ("Johnson & Johnson", johnson_and_johnson),
     ("Regeneron", regeneron),
     ("Alkermes", alkermes),
     ("Teva", teva),

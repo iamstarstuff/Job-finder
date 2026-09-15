@@ -47,8 +47,6 @@ VLE_HTML = b"""<div class="table-content">
 <a class="careers-link" href="/apply/1">Apply</a>
 </div>"""
 
-ASTELLAS_PAGE1 = b'<h3 class="article__header__text__title"><a href="/careers/j1">Director QA</a></h3>'
-ASTELLAS_EMPTY = b"<div></div>"
 
 
 def test_apc_parses_jobs():
@@ -132,15 +130,6 @@ def test_vle():
     assert jobs[0].title == "Scientist"
     assert jobs[0].url == "https://www.vletherapeutics.com/apply/1"
     assert jobs[0].closing_date is None or jobs[0].closing_date == "N/A"
-
-
-def test_astellas_paginates_by_offset():
-    base = "https://astellas.avature.net/en_GB/careers/SearchJobs/?1329=%5B180801%5D&1329_format=1348&listFilterMode=1&jobOffset="
-    fake = FakeSession({base + "0": FakeResponse(ASTELLAS_PAGE1),
-                        base + "10": FakeResponse(ASTELLAS_EMPTY)})
-    jobs = scrapers.astellas(fake)
-    assert jobs[0].title == "Director QA"
-    assert jobs[0].url == "https://astellas.avature.net/careers/j1"
 
 
 def test_registry_contains_all_companies():
@@ -338,66 +327,6 @@ def test_thermo_fisher_paginates_by_offset():
 
 def test_thermo_fisher_in_registry():
     assert "Thermo Fisher" in scrapers.SCRAPERS
-
-
-JNJ_PAGE1 = b"""<section id="results">
-<h2 class="job-count">Displaying <strong>1</strong> to <strong>1</strong> of <strong>2</strong> matching jobs</h2>
-<ul class="PageList-items" id="js-job-search-results" data-results="2">
-<li class="PageList-items-item card-job" data-id="r-087474">
-    <div class="PagePromo">
-        <div class="PagePromo-content">
-            <h3 class="PagePromo-title">
-                <a class="stretched-link Link js-view-job" href="/en/jobs/r-087474/director-surgical-vision/">Director, Surgical Vision Equipment Portfolio</a>
-            </h3>
-            <address class="PagePromo-location">Dublin Ireland</address>
-        </div>
-    </div>
-</li>
-</ul>
-<nav aria-label="Pagination">
-<ul class="pagination"><li class="page-item next"><a aria-label="Next page" class="page-link" href="https://www.careers.jnj.com/en/jobs/?page=2&amp;country=Ireland#results" rel="next nofollow">2</a></li></ul>
-</nav>
-</section>"""
-
-JNJ_PAGE2 = b"""<section id="results">
-<ul class="PageList-items" id="js-job-search-results" data-results="2">
-<li class="PageList-items-item card-job" data-id="r-083581">
-    <div class="PagePromo">
-        <div class="PagePromo-content">
-            <h3 class="PagePromo-title">
-                <a class="stretched-link Link js-view-job" href="/en/jobs/r-083581/senior-manager-ra/">Senior Manager, RA &amp; R&amp;D Data Office</a>
-            </h3>
-            <address class="PagePromo-location">Cork Ireland</address>
-        </div>
-    </div>
-</li>
-</ul>
-<nav aria-label="Pagination">
-<ul class="pagination"><li class="disabled next page-item"><span class="page-link">2</span></li></ul>
-</nav>
-</section>"""
-
-
-def test_jnj_paginates_server_rendered_search():
-    # More-specific route (page=2) listed first: FakeSession._lookup matches
-    # by prefix, and neither URL is a prefix of the other here since the
-    # query strings diverge at "page=2" vs "country=Ireland" -- but keep the
-    # brief's convention anyway for consistency with the other fixtures.
-    fake = FakeSession({
-        "https://www.careers.jnj.com/en/jobs/?page=2&country=Ireland": FakeResponse(JNJ_PAGE2),
-        "https://www.careers.jnj.com/en/jobs/?country=Ireland": FakeResponse(JNJ_PAGE1),
-    })
-    jobs = scrapers.johnson_and_johnson(fake)
-    assert [j.title for j in jobs] == [
-        "Director, Surgical Vision Equipment Portfolio",
-        "Senior Manager, RA & R&D Data Office",
-    ]
-    assert jobs[0].url == "https://www.careers.jnj.com/en/jobs/r-087474/director-surgical-vision/"
-    assert jobs[0].portal_url == scrapers.JNJ_URL
-
-
-def test_jnj_in_registry():
-    assert "Johnson & Johnson" in scrapers.SCRAPERS
 
 
 def test_regeneron_parses_and_paginates_workday_api():
@@ -689,3 +618,36 @@ def test_icon_in_registry():
 
 def test_batch_c_registry_contains_all_companies():
     assert {"Alkermes", "Teva", "Viatris", "Grifols", "Leo Pharma", "ICON"} <= set(scrapers.SCRAPERS)
+
+
+def test_johnson_and_johnson_is_retired():
+    # careers.jnj.com sits behind a Cloudflare JS challenge since 2026-08-06
+    # (confirmed live: "Just a moment..." page, HTTP 403). Not scrapeable
+    # over plain HTTP, so it must not be in the registry any more.
+    assert "Johnson & Johnson" not in scrapers.SCRAPERS
+    assert not hasattr(scrapers, "johnson_and_johnson")
+
+
+ASTELLAS_SF_PAGE = b"""<span class="paginationLabel">Results <b>1 \xe2\x80\x93 2</b> of <b>2</b></span>
+<table><tr class="data-row"><td><a class="jobTitle-link" href="/job/QC-Systems-Engineer/1428911300/">QC Systems Engineer</a></td></tr>
+<tr class="data-row"><td><a class="jobTitle-link" href="/job/Co_-Kerry-Management-Accountant/1429037700/">Management Accountant</a></td></tr></table>"""
+
+
+def test_astellas_parses_successfactors_site():
+    # astellas.avature.net went 404 on 2026-08-21; careers.astellas.com is
+    # now a SuccessFactors job2web site (same platform as AIB/EY/Leo Pharma).
+    fake = FakeSession({
+        "https://careers.astellas.com/search/?q=&locationsearch=Ireland&startrow=0": FakeResponse(ASTELLAS_SF_PAGE),
+    })
+    jobs = scrapers.astellas(fake)
+    assert [j.title for j in jobs] == ["QC Systems Engineer", "Management Accountant"]
+    assert jobs[0].url == "https://careers.astellas.com/job/QC-Systems-Engineer/1428911300/"
+    assert jobs[0].company == "Astellas"
+    assert jobs[0].portal_url == scrapers.ASTELLAS_PORTAL
+
+
+def test_astellas_returns_empty_when_no_ireland_postings():
+    fake = FakeSession({
+        "https://careers.astellas.com/search/?q=&locationsearch=Ireland&startrow=0": FakeResponse(b"<div>no rows</div>"),
+    })
+    assert scrapers.astellas(fake) == []
