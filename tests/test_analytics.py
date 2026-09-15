@@ -283,8 +283,20 @@ def test_compute_movers_splits_and_ranks():
         {"company": "D", "active": 1, "new_in_window": 9, "new_previous_window": 1},
     ]
     movers = analytics.compute_movers(rows, n=1)
-    assert movers == {"up": [{"company": "D", "delta": 8}], "down": [{"company": "B", "delta": -4}]}
-    assert analytics.compute_movers([{"company": "A", "active": 1, "new_in_window": 5, "new_previous_window": None}]) == {"up": [], "down": []}
+    assert movers == {"up": [{"company": "D", "delta": 8}], "down": [{"company": "B", "delta": -4}],
+                      "comparable": True}
+    assert analytics.compute_movers([{"company": "A", "active": 1, "new_in_window": 5, "new_previous_window": None}]) == {"up": [], "down": [], "comparable": False}
+
+
+def test_compute_movers_not_comparable_when_previous_window_is_empty():
+    """When the previous window predates the earliest record, every row's
+    new_previous_window is 0 and ranking by raw totals would be misleading
+    (e.g. crediting a retired company with a huge "rise")."""
+    rows = [
+        {"company": "A", "active": 1, "new_in_window": 5, "new_previous_window": 0},
+        {"company": "B", "active": 1, "new_in_window": 3, "new_previous_window": 0},
+    ]
+    assert analytics.compute_movers(rows) == {"up": [], "down": [], "comparable": False}
 
 
 def test_skill_trend_is_dense_and_uses_enriched_totals(tmp_path):

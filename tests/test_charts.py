@@ -136,6 +136,8 @@ def test_skill_trend_is_a_share_heatmap_with_complete_axes(tmp_path):
     assert option["tooltip"]["trigger"] == "item"
     assert option["visualMap"]["min"] == 0 and option["visualMap"]["max"] == 100.0
     assert option["visualMap"]["inRange"]["color"] == charts.PALETTE["sequential"]
+    assert option["xAxis"]["axisLabel"]["interval"] == 0     # show every weekly label, not just the ends
+    assert option["xAxis"]["axisLabel"]["rotate"] == 45
     cells = {(x, y): v for x, y, v in option["series"][0]["data"]}
     assert cells[(3, 2)] == 100.0   # GMP, week of 7 Sep: 2 of 2 enriched jobs
     assert cells[(4, 2)] == 0.0     # GMP, week of 14 Sep: 0 of 1 (zero cells stay on the axis)
@@ -175,6 +177,7 @@ def test_company_categories_is_a_share_heatmap_over_all_nine_categories(tmp_path
     assert option["xAxis"]["data"] == categories
     assert option["yAxis"]["data"] == ["MSD"]
     assert option["xAxis"]["axisLabel"]["rotate"] == 30
+    assert option["xAxis"]["axisLabel"]["interval"] == 0     # show every category label
     assert option["visualMap"]["min"] == 0 and option["visualMap"]["max"] == 100
     cells = {(x, y): v for x, y, v in option["series"][0]["data"]}
     assert cells[(categories.index("Quality"), 0)] == 100.0

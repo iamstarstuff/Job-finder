@@ -3,15 +3,17 @@
   <div>
     <h4>Rising</h4>
     <ul>
-      {% for m in movers.up %}<li><span>{{ m.company }}</span><span class="delta up">▲ {{ m.delta }}</span></li>
-      {% else %}<li class="note">No company posted more than in the previous window</li>{% endfor %}
+      {% if not movers.comparable %}<li class="note">Not enough history to compare with the previous window yet</li>
+      {% else %}{% for m in movers.up %}<li><span>{{ m.company }}</span><span class="delta up">▲ {{ m.delta }}</span></li>
+      {% else %}<li class="note">No company posted more than in the previous window</li>{% endfor %}{% endif %}
     </ul>
   </div>
   <div>
     <h4>Falling</h4>
     <ul>
-      {% for m in movers.down %}<li><span>{{ m.company }}</span><span class="delta down">▼ {{ -m.delta }}</span></li>
-      {% else %}<li class="note">No company posted fewer than in the previous window</li>{% endfor %}
+      {% if not movers.comparable %}<li class="note">Not enough history to compare with the previous window yet</li>
+      {% else %}{% for m in movers.down %}<li><span>{{ m.company }}</span><span class="delta down">▼ {{ -m.delta }}</span></li>
+      {% else %}<li class="note">No company posted fewer than in the previous window</li>{% endfor %}{% endif %}
     </ul>
   </div>
 </div>

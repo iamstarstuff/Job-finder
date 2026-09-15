@@ -169,6 +169,7 @@ def skill_trend(conn, sector: Optional[str], weeks: int, now: Optional[datetime]
     fig = _figure(height=height, trigger="item")
     fig.heatmap(df, x="Week", y="Skill", value="Share", in_range_colors=PALETTE["sequential"],
                 label_show=False, visual_min=0, visual_max=float(max(df["Share"].max(), 1.0)))
+    fig.xticks(interval=0, rotate=45)
     table = [[r["week"], r["skill"], r["count"], r["total"], _share(r["count"], r["total"])] for r in rows]
     return ChartPayload(fig.to_option(), columns, table, drilldown, height)
 
@@ -227,7 +228,7 @@ def company_categories(conn, sector: Optional[str], weeks: int, now: Optional[da
     fig = _figure(height=height, trigger="item")
     fig.heatmap(df, x="Category", y="Company", value="Share", in_range_colors=PALETTE["sequential"],
                 label_show=False, visual_min=0, visual_max=100)
-    fig.xticks(rotate=30)
+    fig.xticks(interval=0, rotate=30)
     table = [[c, cat, by[c][cat], _share(by[c][cat], totals[c])]
              for c in companies for cat in categories if by[c][cat]]
     return ChartPayload(fig.to_option(), columns, table, drilldown, height)

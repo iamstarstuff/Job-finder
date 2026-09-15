@@ -82,13 +82,21 @@ def company_velocity(conn, sector: Optional[str] = None, weeks: int = 12,
 
 
 def compute_movers(rows: List[dict], n: int = 3) -> dict:
-    """Top-n risers and fallers by (new_in_window - new_previous_window)."""
+    """Top-n risers and fallers by (new_in_window - new_previous_window).
+
+    "comparable" is False when no row has any new_previous_window data (e.g.
+    the previous window predates the earliest record) -- ranking by raw
+    totals in that case would misleadingly credit every company as "rising"."""
+    comparable = any((r["new_previous_window"] or 0) > 0 for r in rows)
+    if not comparable:
+        return {"up": [], "down": [], "comparable": False}
     deltas = [(r["company"], r["new_in_window"] - r["new_previous_window"])
               for r in rows if r["new_previous_window"] is not None]
     up = sorted((d for d in deltas if d[1] > 0), key=lambda d: (-d[1], d[0]))[:n]
     down = sorted((d for d in deltas if d[1] < 0), key=lambda d: (d[1], d[0]))[:n]
     return {"up": [{"company": c, "delta": v} for c, v in up],
-            "down": [{"company": c, "delta": v} for c, v in down]}
+            "down": [{"company": c, "delta": v} for c, v in down],
+            "comparable": True}
 
 
 def _week_range(cutoff: Optional[str], seen: Iterable[str], now: datetime) -> List[str]:
