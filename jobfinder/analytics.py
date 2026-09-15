@@ -133,7 +133,7 @@ def overview(conn, sector: Optional[str] = None, now: Optional[datetime] = None)
     week_ago = (now - timedelta(days=7)).isoformat(timespec="seconds")
     two_weeks_ago = (now - timedelta(days=14)).isoformat(timespec="seconds")
     where = " WHERE sector = ?" if sector else ""
-    and_sector = " AND sector = ?" if sector else ""
+    and_sector = _sector_clause(sector, "sector")
     p = [sector] if sector else []
 
     def count(sql, params):
@@ -142,7 +142,7 @@ def overview(conn, sector: Optional[str] = None, now: Optional[datetime] = None)
     total = count("SELECT COUNT(*) c FROM jobs" + where, p)
     enriched = count(
         "SELECT COUNT(*) c FROM job_details JOIN jobs ON jobs.id = job_details.job_id"
-        " WHERE job_details.enrichment_failed = 0" + and_sector.replace("sector", "jobs.sector"), p)
+        " WHERE job_details.enrichment_failed = 0" + _sector_clause(sector, "jobs.sector"), p)
     last_run = conn.execute(
         "SELECT * FROM runs" + where + " ORDER BY id DESC LIMIT 1", p).fetchone()
     return {
