@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dashboard import charts
 from jobfinder import storage
@@ -145,6 +145,23 @@ def test_skill_trend_is_a_share_heatmap_with_complete_axes(tmp_path):
     assert payload.columns == ["Week", "Skill", "Jobs mentioning", "Enriched jobs that week", "Share %"]
     assert ["2026-09-07", "GMP", 2, 2, 100.0] in payload.rows
     assert payload.drilldown == {"dimension": "skill", "key": "row"}
+
+
+def test_skill_trend_thins_x_axis_labels_beyond_fourteen_columns(tmp_path):
+    conn = _seeded(tmp_path)
+    # One extra enriched job, dated 27 weeks before NOW, so the 26-week
+    # window (cutoff-driven, not data-driven) spans 27 weekly columns.
+    old_date = (NOW - timedelta(weeks=27)).isoformat(timespec="seconds")
+    storage.record_company_snapshot(conn, "Pfizer", [
+        Job("Pfizer", "Old Role", "https://p/1", "p"),
+    ], old_date)
+    old_id = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://p/1",)).fetchone()["id"]
+    storage.save_enrichment(conn, old_id, "Old desc", None, [("Old", "Misc")], old_date)
+
+    payload = charts.skill_trend(conn, None, 26, now=NOW)
+    option = payload.option
+    assert len(option["xAxis"]["data"]) == 27
+    assert option["xAxis"]["axisLabel"]["interval"] == 1
 
 
 def test_part_one_builders_are_registered():

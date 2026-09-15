@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 import pytest
 
 from jobfinder import storage
@@ -378,10 +380,22 @@ def test_home_shows_movers_for_windows_but_not_all_time(client):
     assert "Rising" not in client.get("/?weeks=0").data.decode()
 
 
-def test_home_movers_note_when_previous_window_has_no_data(client):
-    # client's only job is dated 2026-07-05, so the 12-week window's previous
-    # window (weeks 13-24 ago) predates every record: nothing to compare.
-    html = client.get("/?weeks=12").data.decode()
+def test_home_movers_note_when_previous_window_has_no_data(tmp_path):
+    # Seed the single job relative to the real clock (not a fixed calendar
+    # date) so it always falls inside the current 12-week window and the
+    # previous window (weeks 13-24 ago) is always empty: nothing to compare.
+    conn = storage.connect(tmp_path / "movers.db")
+    seeded_at = (datetime.now() - timedelta(days=10)).isoformat(timespec="seconds")
+    storage.record_company_snapshot(conn, "APC", [
+        Job("APC", "QC Analyst", "https://a/1", "p"),
+    ], seeded_at)
+    conn.close()
+    from dashboard.app import create_app
+    app = create_app(db_path=tmp_path / "movers.db")
+    app.config["TESTING"] = True
+    movers_client = app.test_client()
+
+    html = movers_client.get("/?weeks=12").data.decode()
     assert "Not enough history to compare with the previous window yet" in html
     assert "▲" not in html
 

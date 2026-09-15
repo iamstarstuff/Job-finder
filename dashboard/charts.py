@@ -169,7 +169,9 @@ def skill_trend(conn, sector: Optional[str], weeks: int, now: Optional[datetime]
     fig = _figure(height=height, trigger="item")
     fig.heatmap(df, x="Week", y="Skill", value="Share", in_range_colors=PALETTE["sequential"],
                 label_show=False, visual_min=0, visual_max=float(max(df["Share"].max(), 1.0)))
-    fig.xticks(interval=0, rotate=45)
+    week_labels = list(dict.fromkeys(r["week"] for r in rows))
+    step = max(0, len(week_labels) // 14)
+    fig.xticks(interval=step, rotate=45)
     table = [[r["week"], r["skill"], r["count"], r["total"], _share(r["count"], r["total"])] for r in rows]
     return ChartPayload(fig.to_option(), columns, table, drilldown, height)
 

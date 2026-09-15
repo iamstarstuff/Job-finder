@@ -39,6 +39,16 @@
     panel.replaceChildren();
   }
 
+  function showDrilldownError(panel) {
+    panel.replaceChildren();
+    const close = el("button", "drilldown-close", "Close");
+    close.type = "button";
+    close.addEventListener("click", () => closePanel(panel));
+    panel.appendChild(close);
+    panel.appendChild(el("p", "empty-note", "Could not load the roles behind this value."));
+    panel.hidden = false;
+  }
+
   function renderDrilldown(panel, value, jobs) {
     panel.replaceChildren();
     const close = el("button", "drilldown-close", "Close");
@@ -85,24 +95,12 @@
     try {
       const resp = await fetch("/api/drilldown/" + encodeURIComponent(dimension) + "?" + params.toString());
       if (!resp.ok) {
-        panel.replaceChildren();
-        const close = el("button", "drilldown-close", "Close");
-        close.type = "button";
-        close.addEventListener("click", () => closePanel(panel));
-        panel.appendChild(close);
-        panel.appendChild(el("p", "empty-note", "Could not load the roles behind this value."));
-        panel.hidden = false;
+        showDrilldownError(panel);
         return;
       }
       renderDrilldown(panel, value, await resp.json());
     } catch (err) {
-      panel.replaceChildren();
-      const close = el("button", "drilldown-close", "Close");
-      close.type = "button";
-      close.addEventListener("click", () => closePanel(panel));
-      panel.appendChild(close);
-      panel.appendChild(el("p", "empty-note", "Could not load the roles behind this value."));
-      panel.hidden = false;
+      showDrilldownError(panel);
     }
   }
 
@@ -137,7 +135,7 @@
         chart.on("click", (params) => {
           const value = clickValue(params, payload.drilldown, payload.option);
           if (value === undefined || value === null) return;
-          if (open === value) {
+          if (!panel.hidden && open === value) {
             closePanel(panel);
             open = null;
             return;

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import statistics
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import date, datetime, timedelta
 from typing import Dict, Iterable, List, Optional
 
