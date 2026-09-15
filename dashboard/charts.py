@@ -17,9 +17,13 @@ echartsy rules learned during design (spec §3.2):
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Callable, Dict, List, Optional
 
 import echartsy as ec
+import pandas as pd
+
+from jobfinder import analytics
 
 # Validated against the cream surface #FAF7F2 with the dataviz palette validator
 # (spec §7). base.html carries the same hex values as CSS custom properties;
@@ -70,4 +74,109 @@ def _figure(height: str = "360px", trigger: str = "axis", pointer: str = "shadow
     return fig
 
 
+def _bar_style() -> ec.ItemStyle:
+    """Rounded data end only; square at the baseline (mark spec)."""
+    return ec.ItemStyle(border_radius=[0, 4, 4, 0])
+
+
+def _line_style() -> ec.LineStyle:
+    return ec.LineStyle(width=2, cap="round", join="round")
+
+
+def skills_in_demand(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.top_skills(conn, limit=15, sector=sector, weeks=weeks, now=now)
+    columns = ["Skill", "Category", "Jobs"]
+    drilldown = {"dimension": "skill", "key": "name"}
+    if not rows:
+        return _empty(columns, drilldown)
+    # ECharts draws a category axis bottom-up: reverse so the biggest bar is on top.
+    df = pd.DataFrame({"Skill": [r["skill"] for r in rows], "Jobs": [r["count"] for r in rows]})[::-1]
+    height = "420px"
+    fig = _figure(height=height)
+    fig.barh(df, x="Skill", y="Jobs", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
+    fig.legend(show=False)
+    return ChartPayload(fig.to_option(), columns,
+                        [[r["skill"], r["category"], r["count"]] for r in rows], drilldown, height)
+
+
+def hiring_velocity(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    fig = _figure(pointer="line")
+    if sector:
+        rows = analytics.new_jobs_per_week(conn, weeks=weeks, sector=sector, now=now)
+        columns = ["Week", "New jobs"]
+        if not rows:
+            return _empty(columns)
+        df = pd.DataFrame({"Week": [analytics.week_label(r["week"]) for r in rows],
+                           "New jobs": [r["count"] for r in rows]})
+        fig.plot(df, x="Week", y="New jobs", color=PALETTE["bar"], area=True, area_opacity=0.10,
+                 symbol_size=8, line_style=_line_style())
+        fig.legend(show=False)
+        return ChartPayload(fig.to_option(), columns, [[r["week"], r["count"]] for r in rows])
+    pharma = {r["week"]: r["count"] for r in analytics.new_jobs_per_week(conn, weeks=weeks, sector="pharma", now=now)}
+    tech = {r["week"]: r["count"] for r in analytics.new_jobs_per_week(conn, weeks=weeks, sector="tech", now=now)}
+    all_weeks = sorted(set(pharma) | set(tech))
+    columns = ["Week", "Pharma", "Tech"]
+    if not all_weeks:
+        return _empty(columns)
+    df = pd.DataFrame({"Week": [analytics.week_label(w) for w in all_weeks],
+                       "Pharma": [pharma.get(w, 0) for w in all_weeks],
+                       "Tech": [tech.get(w, 0) for w in all_weeks]})
+    for name, color in (("Pharma", PALETTE["pharma"]), ("Tech", PALETTE["tech"])):
+        fig.plot(df, x="Week", y=name, color=color, symbol_size=8, line_style=_line_style(),
+                 end_label=ec.EndLabelStyle(show=True, formatter="{a}", color=PALETTE["ink"]))
+    fig.legend(show=True, left="left", top=0)
+    return ChartPayload(fig.to_option(), columns,
+                        [[w, pharma.get(w, 0), tech.get(w, 0)] for w in all_weeks])
+
+
+def who_is_hiring(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.company_velocity(conn, sector=sector, weeks=weeks, now=now)
+    columns = ["Company", "Open roles", "New in window", "New in previous window"]
+    drilldown = {"dimension": "company", "key": "name"}
+    top = [r for r in rows if r["active"] > 0][:15]
+    if not top:
+        return _empty(columns, drilldown)
+    df = pd.DataFrame({"Company": [r["company"] for r in top],
+                       "Open roles": [r["active"] for r in top]})[::-1]
+    height = f"{24 * len(top) + 80}px"
+    fig = _figure(height=height)
+    fig.barh(df, x="Company", y="Open roles", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
+    fig.legend(show=False)
+    table = [[r["company"], r["active"], r["new_in_window"],
+              "" if r["new_previous_window"] is None else r["new_previous_window"]] for r in rows]
+    return ChartPayload(fig.to_option(), columns, table, drilldown, height)
+
+
+def _share(count: int, total: int) -> float:
+    return round(100.0 * count / total, 1) if total else 0.0
+
+
+def skill_trend(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.skill_trend(conn, sector=sector, weeks=weeks, limit=12, now=now)
+    columns = ["Week", "Skill", "Jobs mentioning", "Enriched jobs that week", "Share %"]
+    drilldown = {"dimension": "skill", "key": "row"}
+    if not rows:
+        return _empty(columns, drilldown)
+    skills = list(dict.fromkeys(r["skill"] for r in rows))       # top-first, as analytics returns them
+    by_skill = {s: [r for r in rows if r["skill"] == s] for s in skills}
+    # Build skill-major with the top skill LAST so it renders at the top of the y axis;
+    # zero cells are 0.0 (not None) so echartsy keeps both axes complete (see module docstring).
+    cells = [{"Week": analytics.week_label(r["week"]), "Skill": s, "Share": _share(r["count"], r["total"])}
+             for s in reversed(skills) for r in by_skill[s]]
+    df = pd.DataFrame(cells)
+    height = f"{28 * len(skills) + 90}px"
+    fig = _figure(height=height, trigger="item")
+    fig.heatmap(df, x="Week", y="Skill", value="Share", in_range_colors=PALETTE["sequential"],
+                label_show=False, visual_min=0, visual_max=float(max(df["Share"].max(), 1.0)))
+    table = [[r["week"], r["skill"], r["count"], r["total"], _share(r["count"], r["total"])] for r in rows]
+    return ChartPayload(fig.to_option(), columns, table, drilldown, height)
+
+
 CHARTS: Dict[str, Callable] = {}
+
+CHARTS.update({
+    "skills-in-demand": skills_in_demand,
+    "hiring-velocity": hiring_velocity,
+    "who-is-hiring": who_is_hiring,
+    "skill-trend": skill_trend,
+})
