@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from logging.handlers import TimedRotatingFileHandler
 from typing import Dict, List
 
@@ -23,11 +23,16 @@ class RunResult:
     total_jobs: int = 0
 
 
-def _had_active_jobs(conn, company: str) -> bool:
-    row = conn.execute(
-        "SELECT COUNT(*) c FROM jobs WHERE company = ? AND is_active = 1", (company,)
-    ).fetchone()
-    return row["c"] > 0
+def zero_result_is_suspicious(conn, company: str, now: str) -> bool:
+    """True when a company still has active jobs that were sighted within
+    the grace window -- an empty scrape then looks like a broken scraper,
+    not a genuine zero, and must not close those jobs. Once every active
+    job has gone unseen for ZERO_RESULT_GRACE_DAYS, the zero is accepted."""
+    last_seen = storage.latest_active_last_seen(conn, company)
+    if last_seen is None:
+        return False
+    cutoff = datetime.fromisoformat(now) - timedelta(days=config.ZERO_RESULT_GRACE_DAYS)
+    return datetime.fromisoformat(last_seen) >= cutoff
 
 
 def run_scrape(conn, session, now: str) -> RunResult:
@@ -39,7 +44,7 @@ def run_scrape(conn, session, now: str) -> RunResult:
             log.error("Scraper failed for %s: %s", company, exc)
             result.failures[company] = str(exc)
             continue  # do NOT snapshot: failure must not deactivate existing jobs
-        if not jobs and _had_active_jobs(conn, company):
+        if not jobs and zero_result_is_suspicious(conn, company, now):
             log.warning("%s returned 0 jobs but previously had active jobs "
                         "- possible layout change", company)
             result.zero_warnings.append(company)

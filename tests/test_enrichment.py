@@ -193,13 +193,13 @@ def test_run_only_processes_scoped_companies(tmp_path):
     storage.record_company_snapshot(conn, "Abbvie", [
         Job("Abbvie", "SAP Engineer", "https://example.com/abbvie/1", "https://example.com/careers"),
     ], "2026-07-16T10:00:00")
-    storage.record_company_snapshot(conn, "Astellas", [
-        Job("Astellas", "QC Analyst", "https://example.com/astellas/1", "https://example.com/careers"),
+    storage.record_company_snapshot(conn, "Alkermes", [
+        Job("Alkermes", "QC Analyst", "https://example.com/alkermes/1", "https://example.com/careers"),
     ], "2026-07-16T10:00:00")
 
     session = FakeSession({
         "https://example.com/abbvie/1": FakeResponse(content=BMS_STYLE_HTML),
-        # No route for astellas/1 -- if run() ever requests it, FakeSession
+        # No route for alkermes/1 -- if run() ever requests it, FakeSession
         # returns a 404 stub rather than raising, so we must assert on
         # session.calls to prove the out-of-scope company was never touched.
     })
@@ -209,13 +209,13 @@ def test_run_only_processes_scoped_companies(tmp_path):
     assert result.enriched == 1
     assert result.failed == 0
     called_urls = {url for _, url, _ in session.calls}
-    assert "https://example.com/astellas/1" not in called_urls
+    assert "https://example.com/alkermes/1" not in called_urls
 
-    astellas_job_id = conn.execute(
-        "SELECT id FROM jobs WHERE url=?", ("https://example.com/astellas/1",)
+    alkermes_job_id = conn.execute(
+        "SELECT id FROM jobs WHERE url=?", ("https://example.com/alkermes/1",)
     ).fetchone()["id"]
     assert conn.execute(
-        "SELECT COUNT(*) c FROM job_details WHERE job_id=?", (astellas_job_id,)
+        "SELECT COUNT(*) c FROM job_details WHERE job_id=?", (alkermes_job_id,)
     ).fetchone()["c"] == 0
 
 
@@ -478,3 +478,44 @@ def test_company_fetchers_routes_tech_companies_correctly():
     # entry here -- they fall through to the generic fetch_description
     # via COMPANY_FETCHERS.get(company, fetch_description) in run().
     assert "Mastercard" not in enrichment.COMPANY_FETCHERS
+
+
+def test_extract_skills_spark_ignores_the_english_word():
+    # MSD's boilerplate "the spark that fuels innovation" appeared in 160
+    # job descriptions and made Spark the #3 skill overall. Only the
+    # product names should count.
+    assert ("Spark", "Data Engineering") not in enrichment.extract_skills(
+        "The difference between potential and achievement lies in the spark that fuels innovation."
+    )
+    assert ("Spark", "Data Engineering") in enrichment.extract_skills("Experience with Apache Spark required.")
+    assert ("Spark", "Data Engineering") in enrichment.extract_skills("Build pipelines in PySpark and Airflow.")
+
+
+def test_astellas_is_enriched_via_successfactors_fetcher():
+    # careers.astellas.com job pages render the description in
+    # class="jobdescription" (confirmed live 2026-09-15), exactly like AIB/EY.
+    assert "Astellas" in enrichment.ENRICHMENT_COMPANIES
+    assert enrichment.COMPANY_FETCHERS["Astellas"] is enrichment.fetch_successfactors_description
+
+
+def test_reextract_skills_rebuilds_links_from_current_vocabulary(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "MSD", [
+        Job("MSD", "Engineer", "https://example.com/msd/1", "https://example.com/careers"),
+        Job("MSD", "Broken", "https://example.com/msd/2", "https://example.com/careers"),
+    ], "2026-07-16T10:00:00")
+    ok_id = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://example.com/msd/1",)).fetchone()["id"]
+    bad_id = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://example.com/msd/2",)).fetchone()["id"]
+    # Saved under the old vocabulary: a bogus Spark link, and no GMP link
+    # even though the text plainly says GMP.
+    storage.save_enrichment(conn, ok_id, "the spark that fuels innovation; GMP experience required",
+                            "Senior", [("Spark", "Data Engineering")], "2026-07-16T11:00:00")
+    storage.save_enrichment(conn, bad_id, "", None, [], "2026-07-16T11:00:00", failed=True)
+
+    reprocessed = enrichment.reextract_skills(conn)
+
+    assert reprocessed == 1  # failed rows have no description and are skipped
+    names = {r["name"] for r in conn.execute(
+        "SELECT skills.name FROM job_skills JOIN skills ON skills.id = job_skills.skill_id WHERE job_id = ?", (ok_id,))}
+    assert names == {"GMP"}
+    assert conn.execute("SELECT seniority FROM job_details WHERE job_id=?", (ok_id,)).fetchone()["seniority"] == "Senior"

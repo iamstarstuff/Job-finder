@@ -36,13 +36,13 @@ GOOGLE_PAGE2 = b"""<script>AF_initDataCallback({key: 'ds:1', hash: '1', data:[[[
 , sideChannel: {}});</script>"""
 
 
-def test_google_paginates_using_total_count_and_filters_roles():
+def test_google_paginates_using_total_count_and_returns_all_ireland_roles():
     fake = FakeSession({
         "https://careers.google.com/jobs/results/?location=Ireland&page=1": FakeResponse(GOOGLE_PAGE1),
         "https://careers.google.com/jobs/results/?location=Ireland&page=2": FakeResponse(GOOGLE_PAGE2),
     })
     jobs = tech_scrapers.google(fake)
-    assert [j.title for j in jobs] == ["Senior SRE, Cloud Storage", "Data Scientist, Ads"]
+    assert [j.title for j in jobs] == ["Senior SRE, Cloud Storage", "Sales Rep", "Data Scientist, Ads"]
     assert jobs[0].sector == "tech"
     assert jobs[0].url == "https://google.com/apply?jobId=1001"
     assert jobs[0].company == "Google"
@@ -62,19 +62,19 @@ AIB_PAGE_HTML = b"""
 """
 
 
-def test_aib_filters_roles_and_builds_absolute_urls():
+def test_aib_returns_all_roles_and_builds_absolute_urls():
     fake = FakeSession({
         "https://jobs.aib.ie/aib/go/SearchAllJobs/9605800/?startrow=0": FakeResponse(AIB_PAGE_HTML),
     })
     jobs = tech_scrapers.aib(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Fraud Data Scientist', 'Homes Advisor, Dundalk']
     assert jobs[0].title == "Fraud Data Scientist"
     assert jobs[0].url == "https://jobs.aib.ie/aib/job/Dublin-Fraud-Data-Scientist-IE/1366746757/"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "AIB"
 
 
-def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
+def test_microsoft_parses_live_verified_pcsx_api_and_returns_all_roles():
     fake = FakeSession({
         "https://apply.careers.microsoft.com/api/pcsx/search": FakeResponse(json_data={
             "status": 200,
@@ -88,7 +88,7 @@ def test_microsoft_parses_live_verified_pcsx_api_and_filters_roles():
         }),
     })
     jobs = tech_scrapers.microsoft(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Senior DevOps Engineer', 'Retail Store Associate']
     assert jobs[0].title == "Senior DevOps Engineer"
     assert jobs[0].url == "https://apply.careers.microsoft.com/careers/job/1700000001"
     assert jobs[0].sector == "tech"
@@ -117,19 +117,19 @@ INFOSYS_PAGE_HTML = b"""
 """
 
 
-def test_infosys_filters_by_role():
+def test_infosys_returns_all_roles():
     fake = FakeSession({
         "https://digitalcareers.infosys.com/infosys/global-careers?location=Ireland": FakeResponse(INFOSYS_PAGE_HTML),
     })
     jobs = tech_scrapers.infosys(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Practice Lead - Data Science_ ML', 'HR Lead - Dublin']
     assert jobs[0].title == "Practice Lead - Data Science_ ML"
     assert jobs[0].url == "https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148920BR"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "Infosys"
 
 
-def test_salesforce_filters_roles_and_paginates():
+def test_salesforce_returns_all_roles_and_paginates():
     fake = FakeSession({
         "https://salesforce.wd12.myworkdayjobs.com/wday/cxs/salesforce/External_Career_Site/jobs": FakeResponse(json_data={
             "total": 1,
@@ -140,14 +140,14 @@ def test_salesforce_filters_roles_and_paginates():
         }),
     })
     jobs = tech_scrapers.salesforce(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Forward Deployed Engineer, Data Science', 'Account Executive, SMB']
     assert jobs[0].title == "Forward Deployed Engineer, Data Science"
     assert jobs[0].url == "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site/job/Ireland---Dublin/FDE_JR1"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "Salesforce"
 
 
-def test_jpmorganchase_filters_roles_and_paginates():
+def test_jpmorganchase_returns_all_roles_and_paginates():
     fake = FakeSession({
         "https://jpmc.fa.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions": FakeResponse(json_data={
             "items": [{
@@ -160,7 +160,7 @@ def test_jpmorganchase_filters_roles_and_paginates():
         }),
     })
     jobs = tech_scrapers.jpmorganchase(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Senior Manager of SRE', 'Lead Software Engineer-Front End React/Web']
     assert jobs[0].title == "Senior Manager of SRE"
     assert jobs[0].url == "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210708545"
     assert jobs[0].sector == "tech"
@@ -200,12 +200,12 @@ STRIPE_PAGE_HTML = b"""
 """
 
 
-def test_stripe_filters_by_role_and_dublin_location():
+def test_stripe_filters_by_dublin_location_only():
     fake = FakeSession({
         "https://stripe.com/jobs/search": FakeResponse(STRIPE_PAGE_HTML),
     })
     jobs = tech_scrapers.stripe(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Data Scientist, Payments', 'Account Executive']
     assert jobs[0].title == "Data Scientist, Payments"
     assert jobs[0].url == "https://stripe.com/jobs/listing/data-scientist-payments/8018297"
     assert jobs[0].sector == "tech"
@@ -241,17 +241,16 @@ class _AmazonSeq:
         return next(self._responses)
 
 
-def test_amazon_filters_roles_excludes_aws_category():
+def test_amazon_returns_all_roles_excluding_aws_category():
     fake = _AmazonSeq([FakeResponse(json_data=AMAZON_PAGE1), FakeResponse(json_data=AMAZON_PAGE2)])
     jobs = tech_scrapers.amazon(fake)
-    assert len(jobs) == 1
-    assert jobs[0].title == "Senior Data Scientist, Supply Chain"
-    assert jobs[0].url == "https://www.amazon.jobs/en/jobs/1003/ds"
+    assert [j.title for j in jobs] == ["Retail Store Lead", "Senior Data Scientist, Supply Chain"]
+    assert jobs[1].url == "https://www.amazon.jobs/en/jobs/1003/ds"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "Amazon"
 
 
-def test_aws_filters_roles_includes_only_aws_category():
+def test_aws_returns_all_roles_in_aws_category():
     fake = _AmazonSeq([FakeResponse(json_data=AMAZON_PAGE1), FakeResponse(json_data=AMAZON_PAGE2)])
     jobs = tech_scrapers.aws(fake)
     assert len(jobs) == 1
@@ -261,7 +260,7 @@ def test_aws_filters_roles_includes_only_aws_category():
     assert jobs[0].company == "AWS"
 
 
-def test_mastercard_filters_roles_and_paginates():
+def test_mastercard_returns_all_roles_and_paginates():
     fake = FakeSession({
         "https://mastercard.wd1.myworkdayjobs.com/wday/cxs/mastercard/CorporateCareers/jobs": FakeResponse(json_data={
             "total": 1,
@@ -272,14 +271,14 @@ def test_mastercard_filters_roles_and_paginates():
         }),
     })
     jobs = tech_scrapers.mastercard(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Senior Site Reliability Engineer', 'Retail Branch Associate']
     assert jobs[0].title == "Senior Site Reliability Engineer"
     assert jobs[0].url == "https://mastercard.wd1.myworkdayjobs.com/en-US/CorporateCareers/job/Dublin/SRE_R1"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "Mastercard"
 
 
-def test_accenture_filters_roles():
+def test_accenture_returns_all_roles():
     fake = FakeSession({
         "https://accenture.wd103.myworkdayjobs.com/wday/cxs/accenture/AccentureCareers/jobs": FakeResponse(json_data={
             "total": 1,
@@ -290,13 +289,13 @@ def test_accenture_filters_roles():
         }),
     })
     jobs = tech_scrapers.accenture(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Cloud Platform Architect', 'Junior Copywriter']
     assert jobs[0].title == "Cloud Platform Architect"
     assert jobs[0].url == "https://accenture.wd103.myworkdayjobs.com/en-US/AccentureCareers/job/Dublin/Cloud_R1"
     assert jobs[0].company == "Accenture"
 
 
-def test_citibank_filters_roles_and_paginates():
+def test_citibank_returns_all_roles_and_paginates():
     fake = FakeSession({
         "https://citi.eightfold.ai/api/pcsx/search": FakeResponse(json_data={
             "status": 200,
@@ -310,14 +309,14 @@ def test_citibank_filters_roles_and_paginates():
         }),
     })
     jobs = tech_scrapers.citibank(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Cloud Infrastructure Engineer, VP', 'CitiService Financial Institution Head']
     assert jobs[0].title == "Cloud Infrastructure Engineer, VP"
     assert jobs[0].url == "https://citi.eightfold.ai/careers/job/859000001"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "Citibank"
 
 
-def test_allianz_partners_filters_by_entity_and_role():
+def test_allianz_partners_filters_by_entity_only():
     fake = FakeSession({
         "https://careers.allianz.com/widgets": FakeResponse(json_data={
             "refineSearch": {"data": {"jobs": [
@@ -331,7 +330,7 @@ def test_allianz_partners_filters_by_entity_and_role():
         }),
     })
     jobs = tech_scrapers.allianz_partners(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Data Scientist', 'Broker Consultant']
     assert jobs[0].title == "Data Scientist"
     assert jobs[0].url == "https://career5.successfactors.eu/careers?career_job_req_id=1"
     assert jobs[0].sector == "tech"
@@ -345,19 +344,19 @@ EY_PAGE_HTML = b"""
 """
 
 
-def test_ey_filters_roles_and_builds_absolute_urls():
+def test_ey_returns_all_roles_and_builds_absolute_urls():
     fake = FakeSession({
         "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locationsearch=Ireland&startrow=0": FakeResponse(EY_PAGE_HTML),
     })
     jobs = tech_scrapers.ey(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['Cloud Infrastructure Consultant', 'Tax Advisor']
     assert jobs[0].title == "Cloud Infrastructure Consultant"
     assert jobs[0].url == "https://careers.ey.com/ey/job/Dublin-Cloud-Security-Consultant-IE/1400000001/"
     assert jobs[0].sector == "tech"
     assert jobs[0].company == "EY"
 
 
-def test_intel_filters_roles():
+def test_intel_returns_all_roles():
     fake = FakeSession({
         "https://intel.wd1.myworkdayjobs.com/wday/cxs/intel/External/jobs": FakeResponse(json_data={
             "total": 1,
@@ -368,6 +367,14 @@ def test_intel_filters_roles():
         }),
     })
     jobs = tech_scrapers.intel(fake)
-    assert len(jobs) == 1
+    assert [j.title for j in jobs] == ['AI Framework DevOps Engineer', 'Manufacturing Technician']
     assert jobs[0].title == "AI Framework DevOps Engineer"
     assert jobs[0].company == "Intel"
+
+
+def test_matches_target_role_bi_does_not_match_hyphenated_prefix():
+    # "Bi-Lingual" was stored twice as a tech job because \bbi\b treats the
+    # hyphen as a word boundary. BI the discipline still has to match.
+    assert not tech_scrapers.matches_target_role("Bi-Lingual Support Engineering Operations Manager")
+    assert tech_scrapers.matches_target_role("BI Developer")
+    assert tech_scrapers.matches_target_role("Senior BI/Analytics Engineer")

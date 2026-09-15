@@ -20,6 +20,14 @@ TECH_ALERT_RECIPIENTS = ["barvepratik96@gmail.com"]
 
 REQUEST_TIMEOUT = 20  # seconds
 
+# A scraper that returns zero jobs for a company that previously had active
+# ones is normally treated as a possible layout change and NOT snapshotted
+# (so a broken scraper can't silently close every job). But a company can
+# genuinely drop to zero Ireland postings; once none of its active jobs
+# have been sighted for this many days, the zero is accepted and the stale
+# jobs are closed.
+ZERO_RESULT_GRACE_DAYS = 7
+
 
 def get_smtp_password() -> str:
     env = os.environ.get("SMTP_PASSWORD")

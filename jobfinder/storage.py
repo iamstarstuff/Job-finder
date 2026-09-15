@@ -122,6 +122,15 @@ def record_company_snapshot(conn, company: str, jobs: List[Job], now: str) -> Li
     return new_jobs
 
 
+def latest_active_last_seen(conn, company: str) -> Optional[str]:
+    """ISO timestamp of the most recent sighting among a company's active
+    jobs, or None if it has no active jobs."""
+    row = conn.execute(
+        "SELECT MAX(last_seen) ts FROM jobs WHERE company = ? AND is_active = 1", (company,)
+    ).fetchone()
+    return row["ts"]
+
+
 def start_run(conn, started_at: str, sector: str) -> int:
     cur = conn.execute("INSERT INTO runs (started_at, sector) VALUES (?, ?)", (started_at, sector))
     conn.commit()
@@ -214,6 +223,24 @@ def migrate_legacy_json(conn, json_path, now: str) -> int:
                 count += 1
     conn.commit()
     return count
+
+
+def find_enriched_descriptions(conn) -> List[sqlite3.Row]:
+    """Every successfully enriched job with its stored description -- the
+    input to a vocabulary-driven skill re-extraction."""
+    return conn.execute(
+        "SELECT job_id, description FROM job_details WHERE enrichment_failed = 0 AND description != ''"
+    ).fetchall()
+
+
+def replace_job_skills(conn, job_id: int, skills: List[Tuple[str, str]]) -> None:
+    conn.execute("DELETE FROM job_skills WHERE job_id = ?", (job_id,))
+    for name, category in skills:
+        skill_id = _get_or_create_skill(conn, name, category)
+        conn.execute(
+            "INSERT OR IGNORE INTO job_skills (job_id, skill_id) VALUES (?, ?)",
+            (job_id, skill_id),
+        )
 
 
 def find_unenriched_jobs(conn, companies: Optional[List[str]] = None) -> List[sqlite3.Row]:

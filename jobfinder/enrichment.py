@@ -79,7 +79,10 @@ SKILL_KEYWORDS: List[Tuple[str, str, List[str]]] = [
     ("Airflow", "Data Engineering", ["airflow"]),
     ("Snowflake", "Data Engineering", ["snowflake"]),
     ("dbt", "Data Engineering", ["dbt"]),
-    ("Spark", "Data Engineering", ["apache spark", " spark "]),
+    # Bare "spark" is deliberately NOT a keyword: MSD's boilerplate "the
+    # spark that fuels innovation" appeared in 160 descriptions and made
+    # Spark the #3 skill overall before this was tightened (2026-09-15).
+    ("Spark", "Data Engineering", ["apache spark", "pyspark"]),
     ("Kafka", "Data Engineering", ["kafka"]),
     # Analytics/BI
     ("Tableau", "Analytics", ["tableau"]),
@@ -378,6 +381,9 @@ COMPANY_FETCHERS = {
     "AWS": fetch_amazon_description,
     "AIB": fetch_successfactors_description,
     "EY": fetch_successfactors_description,
+    # Astellas moved to a SuccessFactors site (2026-09), whose job pages
+    # render the description in class="jobdescription" just like AIB/EY.
+    "Astellas": fetch_successfactors_description,
     "Stripe": fetch_stripe_description,
     "JPMorganChase": fetch_jpmorganchase_description,
 }
@@ -393,16 +399,18 @@ class EnrichmentResult:
 # (confirmed live during rollout planning) plus Amgen (via its own
 # dedicated fetcher — see COMPANY_FETCHERS below). This intentionally
 # excludes 7 of the 21 scraped companies:
-#   - APC, Vle therapeutics, Johnson & Johnson: confirmed Cloudflare
-#     bot-management (403 even with full realistic browser headers, or a
-#     JS challenge page) — same unsolvable-without-headless-browser class
-#     as Eli Lilly, already excluded from job-finder entirely. Settled,
-#     not pending.
-#   - Astellas, Alkermes, Grifols, Leo Pharma: JS-rendered SPAs with no
-#     server-side description anywhere (no JSON-LD, no populated meta/og
-#     description, no content-bearing markup). Each needs its platform's
-#     internal API reverse-engineered — deferred as separate follow-up
-#     work, not attempted here.
+#   - APC, Vle therapeutics: confirmed Cloudflare bot-management (403 even
+#     with full realistic browser headers, or a JS challenge page) — same
+#     unsolvable-without-headless-browser class as Eli Lilly, already
+#     excluded from job-finder entirely. Settled, not pending. (Johnson &
+#     Johnson was in this bucket too, and has since been retired from
+#     scraping altogether -- see scrapers.py.)
+#   - Alkermes, Grifols, Leo Pharma: JS-rendered SPAs with no server-side
+#     description anywhere (no JSON-LD, no populated meta/og description,
+#     no content-bearing markup). Each needs its platform's internal API
+#     reverse-engineered — deferred as separate follow-up work, not
+#     attempted here. (Astellas used to be here; its new SuccessFactors
+#     site is enrichable via fetch_successfactors_description.)
 # If run() weren't scoped to this list, enriching an excluded company's
 # jobs would write a permanent job_details row with enrichment_failed=1 —
 # and since find_unenriched_jobs excludes any job with an existing
@@ -411,7 +419,7 @@ class EnrichmentResult:
 ENRICHMENT_COMPANIES = [
     "Abbvie", "BMS", "Astrazeneca", "Takeda", "Pfizer", "MSD", "Gilead",
     "Jazz Pharmaceuticals", "Thermo Fisher", "Regeneron", "Teva", "Viatris",
-    "ICON", "Amgen",
+    "ICON", "Amgen", "Astellas",
     # Tech sector (Round 3) -- Mastercard/Accenture/Intel/Citibank/Microsoft
     # have JSON-LD detail pages and need no dedicated fetcher (they fall
     # through to the generic fetch_description). Allianz Partners is
@@ -426,6 +434,21 @@ ENRICHMENT_COMPANIES = [
     # during design; same class of dead end as Allianz Partners.
     "Stripe", "JPMorganChase", "Salesforce",
 ]
+
+
+def reextract_skills(conn) -> int:
+    """Re-run extract_skills over every stored description and rewrite the
+    job_skills links to match the *current* SKILL_KEYWORDS vocabulary.
+    Descriptions and seniority are left untouched. Returns the number of
+    jobs reprocessed. Run this after editing SKILL_KEYWORDS so historical
+    jobs don't keep stale (or miss new) skill links."""
+    from jobfinder import storage
+
+    rows = storage.find_enriched_descriptions(conn)
+    for row in rows:
+        storage.replace_job_skills(conn, row["job_id"], extract_skills(row["description"]))
+    conn.commit()
+    return len(rows)
 
 
 def run(conn, session, now: str) -> EnrichmentResult:

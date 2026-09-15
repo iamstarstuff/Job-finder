@@ -8,13 +8,16 @@ from urllib.parse import urljoin
 
 from jobfinder.http_client import fetch
 from jobfinder.models import Job
-from jobfinder.scrapers import _sf_pagination_total
+from jobfinder.scrapers import _scrape_successfactors
 
-# Role-keyword filter, applied before any job is returned from a tech
-# scraper. Short/ambiguous tokens (ml, sre, bi) use \b word boundaries so
-# they don't match as substrings inside unrelated words (e.g. "html"
-# contains "ml", "Responsible" contains "bi") -- verified against both
-# real target titles and known false-positive traps during design.
+# Role-keyword filter. Tech scrapers return EVERY Ireland/remote posting;
+# tech_runner applies this filter afterwards, so it can tell "the listing
+# is empty" (possible layout change) apart from "nothing matched" (a
+# genuine zero that must close the company's old matching jobs).
+# Short/ambiguous tokens (ml, sre, bi) use \b word boundaries so they
+# don't match as substrings inside unrelated words (e.g. "html" contains
+# "ml", "Responsible" contains "bi") -- verified against both real target
+# titles and known false-positive traps during design.
 _ROLE_PATTERNS = [
     r"data scien",
     r"machine learning",
@@ -27,7 +30,7 @@ _ROLE_PATTERNS = [
     r"analytics",
     r"data analyst",
     r"business intelligence",
-    r"\bbi\b",
+    r"\bbi\b(?!-)",  # "BI Analyst" yes, "Bi-Lingual" no
 ]
 _ROLE_RE = re.compile("|".join(_ROLE_PATTERNS), re.IGNORECASE)
 
@@ -106,8 +109,7 @@ def google(session) -> List[Job]:
             break
         for entry in batch:
             job_id, title, apply_url = entry[0], entry[1], entry[2]
-            if matches_target_role(title):
-                jobs.append(Job("Google", title, apply_url, GOOGLE_PORTAL, sector="tech"))
+            jobs.append(Job("Google", title, apply_url, GOOGLE_PORTAL, sector="tech"))
         fetched += len(batch)
         total = payload[2] if len(payload) > 2 and isinstance(payload[2], int) else None
         page += 1
@@ -129,31 +131,7 @@ AIB_PORTAL = "https://jobs.aib.ie/aib/go/SearchAllJobs/9605800/"
 
 
 def aib(session) -> List[Job]:
-    jobs = []
-    offset = 0
-    total = None
-    while total is None or offset < total:
-        resp = fetch(session, f"{AIB_SEARCH}{offset}")
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(resp.content, "lxml")
-        rows = soup.find_all("tr", class_="data-row")
-        if not rows:
-            break
-        for row in rows:
-            link = row.find("a", class_="jobTitle-link")
-            if not link:
-                continue
-            title = link.get_text(strip=True)
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "AIB", title, urljoin(AIB_BASE, link["href"]), AIB_PORTAL,
-                    sector="tech",
-                ))
-        label = soup.find("span", class_="paginationLabel")
-        parsed_total = _sf_pagination_total(label, offset)
-        total = parsed_total if parsed_total is not None else len(rows)
-        offset += len(rows)
-    return jobs
+    return _scrape_successfactors(session, "AIB", AIB_SEARCH, AIB_BASE, AIB_PORTAL, sector="tech")
 
 
 # Live-verified (2026-07-18): jobs.careers.microsoft.com now redirects to
@@ -184,8 +162,6 @@ def microsoft(session) -> List[Job]:
         positions = data.get("positions", [])
         for pos in positions:
             title = pos.get("name", "").strip()
-            if not matches_target_role(title):
-                continue
             jobs.append(Job(
                 "Microsoft", title,
                 urljoin(MSFT_BASE, pos.get("positionUrl", "")),
@@ -221,12 +197,11 @@ def mastercard(session) -> List[Job]:
         postings = data.get("jobPostings", [])
         for posting in postings:
             title = posting.get("title", "")
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "Mastercard", title,
-                    MASTERCARD_BASE + posting.get("externalPath", ""), MASTERCARD_BASE,
-                    sector="tech",
-                ))
+            jobs.append(Job(
+                "Mastercard", title,
+                MASTERCARD_BASE + posting.get("externalPath", ""), MASTERCARD_BASE,
+                sector="tech",
+            ))
         offset += len(postings)
         if not postings or offset >= data.get("total", 0):
             break
@@ -258,12 +233,11 @@ def accenture(session) -> List[Job]:
         postings = data.get("jobPostings", [])
         for posting in postings:
             title = posting.get("title", "")
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "Accenture", title,
-                    ACCENTURE_BASE + posting.get("externalPath", ""), ACCENTURE_BASE,
-                    sector="tech",
-                ))
+            jobs.append(Job(
+                "Accenture", title,
+                ACCENTURE_BASE + posting.get("externalPath", ""), ACCENTURE_BASE,
+                sector="tech",
+            ))
         offset += len(postings)
         if not postings or offset >= data.get("total", 0):
             break
@@ -289,12 +263,11 @@ def intel(session) -> List[Job]:
         postings = data.get("jobPostings", [])
         for posting in postings:
             title = posting.get("title", "")
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "Intel", title,
-                    INTEL_BASE + posting.get("externalPath", ""), INTEL_BASE,
-                    sector="tech",
-                ))
+            jobs.append(Job(
+                "Intel", title,
+                INTEL_BASE + posting.get("externalPath", ""), INTEL_BASE,
+                sector="tech",
+            ))
         offset += len(postings)
         if not postings or offset >= data.get("total", 0):
             break
@@ -325,12 +298,11 @@ def citibank(session) -> List[Job]:
         positions = data.get("positions", [])
         for pos in positions:
             title = pos.get("name", "").strip()
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "Citibank", title,
-                    urljoin(CITIBANK_BASE, pos.get("positionUrl", "")),
-                    CITIBANK_PORTAL, sector="tech",
-                ))
+            jobs.append(Job(
+                "Citibank", title,
+                urljoin(CITIBANK_BASE, pos.get("positionUrl", "")),
+                CITIBANK_PORTAL, sector="tech",
+            ))
         start += len(positions)
         if not positions or start >= data.get("count", 0):
             break
@@ -378,7 +350,7 @@ def allianz_partners(session) -> List[Job]:
         batch = payload.get("data", {}).get("jobs", [])
         for item in batch:
             title = item.get("title", "").strip()
-            if matches_target_role(title) and _is_allianz_partners_entity(item.get("employingEntity")):
+            if _is_allianz_partners_entity(item.get("employingEntity")):
                 jobs.append(Job(
                     "Allianz Partners", title, item.get("applyUrl", ""),
                     ALLIANZ_API, sector="tech",
@@ -400,31 +372,7 @@ EY_PORTAL = "https://careers.ey.com/ey/search/?createNewAlert=false&q=&locations
 
 
 def ey(session) -> List[Job]:
-    jobs = []
-    offset = 0
-    total = None
-    while total is None or offset < total:
-        resp = fetch(session, f"{EY_SEARCH}{offset}")
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(resp.content, "lxml")
-        rows = soup.find_all("tr", class_="data-row")
-        if not rows:
-            break
-        for row in rows:
-            link = row.find("a", class_="jobTitle-link")
-            if not link:
-                continue
-            title = link.get_text(strip=True)
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "EY", title, urljoin(EY_BASE, link["href"]), EY_PORTAL,
-                    sector="tech",
-                ))
-        label = soup.find("span", class_="paginationLabel")
-        parsed_total = _sf_pagination_total(label, offset)
-        total = parsed_total if parsed_total is not None else len(rows)
-        offset += len(rows)
-    return jobs
+    return _scrape_successfactors(session, "EY", EY_SEARCH, EY_BASE, EY_PORTAL, sector="tech")
 
 
 # Amazon runs its own JSON search API -- not a third-party ATS. The
@@ -455,8 +403,6 @@ def _amazon_search(session, want_aws: bool) -> List[Job]:
             break
         for posting in postings:
             title = posting.get("title", "")
-            if not matches_target_role(title):
-                continue
             is_aws = posting.get("business_category") == "aws"
             if is_aws != want_aws:
                 continue
@@ -505,8 +451,6 @@ def stripe(session) -> List[Job]:
         if "Dublin" not in location_text and "Ireland" not in location_text:
             continue
         title = link.get_text(strip=True)
-        if not matches_target_role(title):
-            continue
         jobs.append(Job(
             "Stripe", title, urljoin(STRIPE_BASE, link["href"]), STRIPE_SEARCH,
             sector="tech",
@@ -549,7 +493,7 @@ def jpmorganchase(session) -> List[Job]:
         reqs = item.get("requisitionList") or []
         for req in reqs:
             title = (req.get("Title") or "").strip()
-            if title and matches_target_role(title):
+            if title:
                 jobs.append(Job(
                     "JPMorganChase", title,
                     f"{JPMORGANCHASE_JOB_BASE}/{req['Id']}", JPMORGANCHASE_PORTAL,
@@ -593,12 +537,11 @@ def salesforce(session) -> List[Job]:
         postings = data.get("jobPostings", [])
         for posting in postings:
             title = posting.get("title", "")
-            if matches_target_role(title):
-                jobs.append(Job(
-                    "Salesforce", title,
-                    SALESFORCE_BASE + posting.get("externalPath", ""), SALESFORCE_BASE,
-                    sector="tech",
-                ))
+            jobs.append(Job(
+                "Salesforce", title,
+                SALESFORCE_BASE + posting.get("externalPath", ""), SALESFORCE_BASE,
+                sector="tech",
+            ))
         offset += len(postings)
         if not postings or offset >= data.get("total", 0):
             break
@@ -628,8 +571,6 @@ def infosys(session) -> List[Job]:
         if not title_div or not url:
             continue
         title = title_div.get("data-title") or title_div.get_text(strip=True)
-        if not matches_target_role(title):
-            continue
         jobs.append(Job("Infosys", title, url, INFOSYS_SEARCH, sector="tech"))
     return jobs
 

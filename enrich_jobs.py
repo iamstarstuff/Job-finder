@@ -3,6 +3,7 @@ Deliberately separate from jobscraper.py / jobfinder.runner — this pipeline
 must never share a failure path with the hourly alert scraper."""
 from __future__ import annotations
 
+import argparse
 import logging
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
@@ -23,11 +24,26 @@ def setup_logging() -> None:
     )
 
 
-def main() -> None:
+def parse_args(argv=None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--reextract", action="store_true",
+        help="Skip fetching; re-run skill extraction over every stored description "
+             "so job_skills matches the current SKILL_KEYWORDS vocabulary.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None) -> None:
+    args = parse_args(argv)
     setup_logging()
     try:
-        now = datetime.now().isoformat(timespec="seconds")
         conn = storage.connect(config.DB_PATH)
+        if args.reextract:
+            count = enrichment.reextract_skills(conn)
+            log.info("Skill re-extraction complete: %d jobs reprocessed", count)
+            return
+        now = datetime.now().isoformat(timespec="seconds")
         session = build_session()
         result = enrichment.run(conn, session, now)
         log.info("Enrichment complete: %d enriched, %d failed", result.enriched, result.failed)

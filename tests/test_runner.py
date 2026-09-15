@@ -40,3 +40,16 @@ def test_failed_company_jobs_are_not_deactivated(tmp_path, monkeypatch):
     runner.run_scrape(conn, session=None, now="2026-07-05T11:00:00")
     row = conn.execute("SELECT is_active FROM jobs WHERE company='Good Co'").fetchone()
     assert row["is_active"] == 1  # failure must not mark jobs as vanished
+
+
+def test_zero_jobs_is_accepted_after_grace_period(tmp_path, monkeypatch):
+    # Leo Pharma genuinely dropped to zero Ireland postings, but its last job
+    # stayed "active" forever because a zero result is never snapshotted.
+    # After ZERO_RESULT_GRACE_DAYS without a sighting, accept the zero.
+    conn = storage.connect(tmp_path / "t.db")
+    monkeypatch.setattr(runner, "SCRAPERS", {"Good Co": good_scraper})
+    runner.run_scrape(conn, session=None, now="2026-07-05T10:00:00")
+    monkeypatch.setattr(runner, "SCRAPERS", {"Good Co": empty_scraper})
+    result = runner.run_scrape(conn, session=None, now="2026-07-13T10:00:00")  # 8 days later
+    assert result.zero_warnings == []
+    assert conn.execute("SELECT is_active FROM jobs WHERE company='Good Co'").fetchone()["is_active"] == 0

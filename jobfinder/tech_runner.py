@@ -9,7 +9,8 @@ from typing import Dict, List
 from jobfinder import config, storage
 from jobfinder.http_client import build_session
 from jobfinder.models import Job
-from jobfinder.tech_scrapers import TECH_SCRAPERS
+from jobfinder.runner import zero_result_is_suspicious
+from jobfinder.tech_scrapers import TECH_SCRAPERS, matches_target_role
 
 log = logging.getLogger(__name__)
 
@@ -23,27 +24,25 @@ class RunResult:
     total_jobs: int = 0
 
 
-def _had_active_jobs(conn, company: str) -> bool:
-    row = conn.execute(
-        "SELECT COUNT(*) c FROM jobs WHERE company = ? AND is_active = 1", (company,)
-    ).fetchone()
-    return row["c"] > 0
-
-
 def run_scrape(conn, session, now: str) -> RunResult:
     result = RunResult(run_id=storage.start_run(conn, now, "tech"))
     for company, scraper in TECH_SCRAPERS.items():
         try:
-            jobs = scraper(session)
+            listing = scraper(session)  # every Ireland/remote posting, unfiltered
         except Exception as exc:  # captured per company, reported, never swallowed
             log.error("Tech scraper failed for %s: %s", company, exc)
             result.failures[company] = str(exc)
             continue  # do NOT snapshot: failure must not deactivate existing jobs
-        if not jobs and _had_active_jobs(conn, company):
+        # The zero-result check runs on the raw listing, not the filtered
+        # one: a company with plenty of postings but no target roles is a
+        # genuine zero, and its old matching jobs must be closed -- not left
+        # "active" forever under a layout-change alarm.
+        if not listing and zero_result_is_suspicious(conn, company, now):
             log.warning("%s returned 0 jobs but previously had active jobs "
                         "- possible layout change", company)
             result.zero_warnings.append(company)
             continue  # treat like a failure for snapshot purposes
+        jobs = [job for job in listing if matches_target_role(job.title)]
         result.total_jobs += len(jobs)
         new = storage.record_company_snapshot(conn, company, jobs, now)
         if new:
