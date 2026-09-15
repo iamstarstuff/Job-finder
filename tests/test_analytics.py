@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from jobfinder import analytics, storage
 from jobfinder.models import Job
 
@@ -198,3 +200,87 @@ def test_sector_none_preserves_existing_unfiltered_behavior(tmp_path):
     conn = seeded_mixed_sector_conn(tmp_path)
     assert len(analytics.jobs_per_company(conn)) == 2
     assert analytics.overview(conn)["companies"] == 2
+
+
+def test_week_start_returns_the_monday():
+    assert analytics.week_start("2026-09-15T16:00:00") == "2026-09-14"  # Tuesday
+    assert analytics.week_start("2026-09-14T00:00:01") == "2026-09-14"  # Monday stays
+    assert analytics.week_start("2026-09-13T23:59:59") == "2026-09-07"  # Sunday
+
+
+def test_week_label_is_day_and_short_month():
+    assert analytics.week_label("2026-09-07") == "7 Sep"
+    assert analytics.week_label("2026-12-28") == "28 Dec"
+
+
+def test_window_cutoff():
+    now = datetime(2026, 9, 15, 12, 0, 0)
+    assert analytics.window_cutoff(0, now) is None
+    assert analytics.window_cutoff(4, now) == "2026-08-18T12:00:00"
+
+
+def _seed_two_weeks(tmp_path):
+    """now is 2026-09-15 12:00 (Tuesday). Timeline:
+    09-03 Old first seen (APC)        -> previous week
+    09-05 Last week first seen (Amgen) -> previous week
+    09-10 Old sighted again           -> last_seen inside the last 7 days
+    09-14 New A, New B first seen; Old vanishes -> closed within the last 7 days
+    """
+    conn = storage.connect(tmp_path / "w.db")
+    storage.record_company_snapshot(conn, "APC", [
+        Job("APC", "Old", "https://a/0", "p"),
+    ], "2026-09-03T10:00:00")
+    storage.record_company_snapshot(conn, "Amgen", [
+        Job("Amgen", "Last week", "https://b/1", "p"),
+    ], "2026-09-05T10:00:00")
+    storage.record_company_snapshot(conn, "APC", [
+        Job("APC", "Old", "https://a/0", "p"),
+    ], "2026-09-10T10:00:00")
+    storage.record_company_snapshot(conn, "APC", [
+        Job("APC", "New A", "https://a/1", "p"),
+        Job("APC", "New B", "https://a/2", "p"),
+    ], "2026-09-14T10:00:00")
+    return conn
+
+
+def test_overview_reports_week_deltas_and_enrichment(tmp_path):
+    conn = _seed_two_weeks(tmp_path)
+    now = datetime(2026, 9, 15, 12, 0, 0)
+    data = analytics.overview(conn, now=now)
+    assert data["new_this_week"] == 2          # New A, New B
+    assert data["new_previous_week"] == 2      # Old, Last week
+    assert data["closed_last_7d"] == 1         # Old: last seen 09-10, gone on 09-14
+    assert data["companies_failing"] == 0
+    assert data["enriched_count"] == 0 and data["enriched_pct"] == 0
+    job_id = conn.execute("SELECT id FROM jobs WHERE url='https://a/1'").fetchone()["id"]
+    storage.save_enrichment(conn, job_id, "GMP work", None, [("GMP", "Regulatory")], "2026-09-14T11:00:00")
+    storage.sync_company_failures(conn, "pharma", {"Amgen": "boom"})
+    data = analytics.overview(conn, now=now)
+    assert data["enriched_count"] == 1 and data["enriched_pct"] == 25  # 1 of 4 jobs
+    assert data["companies_failing"] == 1
+    assert analytics.overview(conn, sector="tech", now=now)["companies_failing"] == 0
+
+
+def test_top_skills_respects_window(tmp_path):
+    conn = _seed_two_weeks(tmp_path)
+    now = datetime(2026, 9, 15, 12, 0, 0)
+    old_id = conn.execute("SELECT id FROM jobs WHERE url='https://b/1'").fetchone()["id"]
+    new_id = conn.execute("SELECT id FROM jobs WHERE url='https://a/1'").fetchone()["id"]
+    storage.save_enrichment(conn, old_id, "SAP", None, [("SAP", "Software")], "2026-09-05T11:00:00")
+    storage.save_enrichment(conn, new_id, "GMP", None, [("GMP", "Regulatory")], "2026-09-14T11:00:00")
+    assert {r["skill"] for r in analytics.top_skills(conn, now=now)} == {"SAP", "GMP"}
+    assert {r["skill"] for r in analytics.top_skills(conn, weeks=1, now=now)} == {"GMP"}
+
+
+def test_new_jobs_per_week_is_continuous_and_monday_dated(tmp_path):
+    conn = _seed_two_weeks(tmp_path)
+    now = datetime(2026, 9, 15, 12, 0, 0)
+    rows = analytics.new_jobs_per_week(conn, weeks=4, now=now)
+    assert [r["week"] for r in rows] == ["2026-08-17", "2026-08-24", "2026-08-31", "2026-09-07", "2026-09-14"]
+    assert [r["count"] for r in rows] == [0, 0, 2, 0, 2]
+    assert analytics.new_jobs_per_week(conn, weeks=0, now=now)[0]["week"] == "2026-08-31"
+
+
+def test_new_jobs_per_week_empty_db_returns_no_rows(tmp_path):
+    conn = storage.connect(tmp_path / "empty.db")
+    assert analytics.new_jobs_per_week(conn, weeks=0) == []
