@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Job history</h2>
+<h2>Jobs</h2>
 <form class="filters" method="get" action="/jobs">
   <select name="sector" onchange="this.form.submit()">
     <option value="">All sectors</option>
@@ -16,7 +16,7 @@
   <input type="text" name="q" placeholder="Search titles…" value="{{ q }}">
   <input type="text" name="skill" class="skill-search" placeholder="Search skill e.g. Airflow…" value="{{ skill }}">
   <label><input type="checkbox" name="active" value="1" {{ "checked" if active == "1" }}> Active only</label>
-  <button type="submit">Search</button>
+  <button type="submit">Filter</button>
 </form>
 
 {% from "_macros.html" import job_row %}

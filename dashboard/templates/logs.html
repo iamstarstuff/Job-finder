@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Log tail (last 300 lines)</h2>
+<h2>Logs</h2>
+<p class="note" style="margin:-10px 0 16px">Last 300 lines.</p>
 <div class="filters" style="margin-bottom:16px;">
   <a href="/logs?log=pharma" class="btn {{ 'off' if selected_log != 'pharma' }}">Pharma</a>
   <a href="/logs?log=tech" class="btn {{ 'off' if selected_log != 'tech' }}">Tech</a>

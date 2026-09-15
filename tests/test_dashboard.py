@@ -422,3 +422,14 @@ def test_health_page_renders_every_status_runs_and_email_stats(tmp_path):
     assert "Johnson &amp; Johnson" in html
     assert html.index("Astellas") < html.index("Pfizer")   # problems first
     assert "21 s" in html and "1/1" in html and "alert delivered" in html
+
+
+def test_emails_page_uses_tiles_and_sentence_case(client):
+    html = client.get("/emails").data.decode()
+    assert "<h2>Emails</h2>" in html
+    assert 'class="cards"' not in html
+
+
+def test_jobs_and_logs_headings_are_sentence_case(client):
+    assert "<h2>Jobs</h2>" in client.get("/jobs").data.decode()
+    assert "<h2>Logs</h2>" in client.get("/logs").data.decode()

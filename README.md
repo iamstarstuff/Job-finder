@@ -1,139 +1,97 @@
 # Job Finder
 
-A Python automation tool that scrapes job postings from pharma/biotech company
-career pages, stores them in a local SQLite database, and emails an alert when
-new jobs appear. It also ships a small Flask dashboard for browsing jobs and
-reviewing scrape/email history. Designed to run on a schedule (e.g. hourly)
-for continuous monitoring.
+A Python tool that watches company career pages for Ireland-based roles,
+stores every posting in a local SQLite database, emails an alert when new
+roles appear, enriches each role with its full description and the skills
+it mentions, and serves a Flask dashboard that answers *what is in demand,
+who is hiring, and what should I learn next*.
 
-## Features
+## What runs, and when
 
-- Scrapes job postings from **10 companies**: APC, Abbvie, Astrazeneca, Takeda,
-  Amgen, Vle Therapeutics, Astellas, Pfizer, BMS, and MSD (see `SCRAPERS` in
-  `jobfinder/scrapers.py`). Pfizer, BMS, MSD, and Amgen use their sites'
-  JSON APIs since those career pages render with JavaScript.
-- Stores all job data in a local SQLite database (`jobfinder.db`) instead of
-  a flat JSON file, tracking first/last-seen timestamps and active status per
-  job.
-- Sends HTML email alerts when new jobs are detected, and a separate error
-  digest when a company scrape fails or unexpectedly returns zero jobs.
-  Every send attempt (success or failure) is logged to an `emails` table.
-- A Flask dashboard (`dashboard/app.py`) for browsing jobs, an overview of
-  scrape stats, an **analytics** page with Chart.js charts (jobs per company,
-  new jobs per week, category breakdown per company), an **email stats**
-  page showing delivery history, and a **log tail** viewer.
-- Logs activity and errors to `jobscraper.log` for easy troubleshooting.
+| Pipeline | Entry point | Cadence (cron) | What it does |
+|---|---|---|---|
+| Pharma scraper | `run_job.sh` → `jobscraper.py` | hourly | Scrapes 20 pharma/biotech companies, emails new roles |
+| Tech scraper | `run_tech_job.sh` → `tech_jobs.py` | daily 08:00 | Scrapes 15 tech companies for data, SRE, DevOps, cloud and analytics roles |
+| Enrichment | `enrich_job.sh` → `enrich_jobs.py` | every 4 hours | Fetches full descriptions, extracts skills and seniority |
 
-## Project layout
+The three pipelines are deliberately independent: a failure in enrichment
+can never delay or break an alert email.
 
+## Dashboard
+
+```bash
+python dashboard/app.py          # http://127.0.0.1:5050  (PORT=5051 to pick another port)
 ```
-jobfinder/            # core package
-  config.py           # paths, SMTP settings, get_smtp_password()
-  models.py           # Job dataclass
-  http_client.py       # requests session with retries/timeouts
-  scrapers.py          # one function per company + SCRAPERS registry
-  storage.py            # SQLite schema, snapshot/diff logic, migration
-  runner.py             # orchestrates a scrape run end-to-end
-  emailer.py            # HTML rendering + sending + logging of emails
-  analytics.py          # queries backing the dashboard/API endpoints
-dashboard/
-  app.py               # Flask app factory (create_app) + routes
-  templates/           # Jinja templates (base, index, jobs, analytics, emails, logs)
-tests/                 # pytest suite (unit + dashboard integration tests)
-jobscraper.py          # thin wrapper: `python jobscraper.py` -> jobfinder.runner.main()
-run_job.sh             # cron entry point, unchanged from v1
-jobfinder.db           # SQLite database (created on first run)
-jobs.json              # legacy v1 data file — see "Migrating from v1" below
-```
+
+Pages:
+
+- **Home** — a plain-language brief for the week, four headline tiles, and
+  four charts: skills in demand, hiring velocity, who is hiring (with the
+  biggest movers), and a skill-trend heatmap. A time-window selector (last 4,
+  12, 26 weeks or all time) and a sector toggle scope everything on the page.
+- **Pharma / Tech** — the same view for one sector, plus seniority mix by
+  company, what each company posts, days to close, and the ten most recent
+  roles.
+- **Jobs** — every role ever seen, with company, title, skill and
+  description search and expandable descriptions.
+- **Health** — scraper status per company (OK, empty listing, failing,
+  retired), recent runs and email delivery.
+- **Emails** and **Logs** — delivery history and the tail of each log file.
+
+Charts are built server-side with [echartsy](https://pypi.org/project/echartsy/)
+and rendered with Apache ECharts; every chart has a "Show data" table and
+click-to-drilldown into the roles behind a bar, row or segment. The JSON
+behind any chart is at `/api/charts/<name>?sector=&weeks=`.
 
 ## Setup
 
-### 1. Clone the repository
-
 ```bash
-git clone https://github.com/yourusername/Job-finder.git
+git clone https://github.com/iamstarstuff/Job-finder.git
 cd Job-finder
-```
-
-### 2. Install dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure email credentials
+SMTP settings live in `jobfinder/config.py`. The password comes from the
+`SMTP_PASSWORD` environment variable, or from a `smtp_password.txt` file in
+the project root (gitignored).
 
-SMTP settings (server, port, username, recipients) live in
-`jobfinder/config.py`. The password is resolved by `config.get_smtp_password()`:
-
-- Preferred: set the `SMTP_PASSWORD` environment variable.
-- Fallback: create a file named `smtp_password.txt` in the project root
-  containing just the password (no quotes). This file is already listed in
-  `.gitignore` so it won't be committed.
-
-### 4. Run the scraper
+Run once by hand to create `jobfinder.db`:
 
 ```bash
 python jobscraper.py
+python enrich_jobs.py
 ```
 
-This is a thin wrapper around `jobfinder.runner.main()` — it scrapes every
-company in the `SCRAPERS` registry, snapshots results into `jobfinder.db`,
-sends a new-jobs email if anything changed, and sends an error digest if any
-company failed or unexpectedly returned zero jobs.
+Then schedule the three shell scripts with `crontab -e` at the cadences above.
 
-### 5. Schedule the scraper (cron, unchanged)
+## Maintenance
 
-`run_job.sh` is the existing cron entry point and did not change in the v2
-rewrite — it still just activates the environment and calls
-`python jobscraper.py`:
+- `python enrich_jobs.py --reextract` rebuilds every role's skill links from
+  the current `SKILL_KEYWORDS` vocabulary in `jobfinder/enrichment.py`. Run it
+  after editing the vocabulary.
+- A company that returns zero roles while it still has open ones is treated
+  as a possible layout change and left untouched for
+  `ZERO_RESULT_GRACE_DAYS` (7); after that the zero is accepted and its roles
+  are closed. Genuine scraper failures never close roles.
+- Companies that cannot be scraped over plain HTTP (Cloudflare or similar
+  challenges) are not in the registries; see the comments in
+  `jobfinder/scrapers.py` and `jobfinder/tech_scrapers.py`.
 
-```bash
-crontab -e
-```
-```
-0 * * * * /path/to/Job-finder/run_job.sh
-```
-
-### 6. Run the dashboard
-
-```bash
-python dashboard/app.py
-```
-
-`python -m dashboard.app` also works if you prefer running it as a module.
-
-Then open http://127.0.0.1:5050. Pages:
-
-- `/` — overview stats (active jobs, jobs per company, median days active).
-- `/jobs` — full job list with company/keyword/active filters.
-- `/analytics` — Chart.js charts backed by `/api/jobs-per-company`,
-  `/api/new-per-week`, and `/api/categories`.
-- `/emails` — email send history and per-kind delivery stats, from the
-  `emails` table.
-- `/logs` — tail of the last 300 lines of `jobscraper.log`.
-
-### 7. Run the tests
+## Tests
 
 ```bash
 python -m pytest tests/
 ```
 
-## Migrating from v1 (`jobs.json`)
+## Project layout
 
-`jobs.json` is **legacy**: v2 stores everything in `jobfinder.db` (SQLite).
-`jobfinder/storage.py`'s `migrate_legacy_json()` is a one-time import used to
-seed the database from the old JSON file. Once `jobfinder.db` exists and
-contains your historical data, `jobs.json` is no longer read by any code path
-and is safe to delete.
-
-## Notes
-
-- All logs are saved to `jobscraper.log`, rotated weekly with 4 backups kept
-  (`TimedRotatingFileHandler` in `jobfinder/runner.py`).
-- Make sure your email provider allows SMTP access for the account used in
-  `jobfinder/config.py`.
+```
+jobfinder/            core package: config, http client, scrapers, storage, runners, emailer, enrichment, analytics
+dashboard/            Flask app (app.py), chart builders (charts.py), the weekly brief (brief.py), templates, static/charts.js
+tests/                pytest suite
+jobscraper.py, tech_jobs.py, enrich_jobs.py   thin entry points used by the cron scripts
+```
 
 ## License
 
-MIT License
+MIT
