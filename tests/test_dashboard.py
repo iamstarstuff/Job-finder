@@ -2,6 +2,7 @@ import pytest
 
 from jobfinder import storage
 from jobfinder.models import Job
+from dashboard import charts
 
 
 @pytest.fixture
@@ -38,12 +39,6 @@ def test_api_endpoints_return_json(client):
         resp = client.get(path)
         assert resp.status_code == 200
         assert resp.is_json
-
-
-def test_analytics_page(client):
-    resp = client.get("/analytics")
-    assert resp.status_code == 200
-    assert b"chart" in resp.data.lower()
 
 
 def test_emails_page(client):
@@ -134,12 +129,6 @@ def test_jobs_page_sector_filter(client):
     assert b"QC Analyst" not in resp.data
     resp = client.get("/jobs?sector=pharma")
     assert b"QC Analyst" in resp.data
-
-
-def test_analytics_page_has_sector_filter_form(client):
-    resp = client.get("/analytics?sector=tech")
-    assert resp.status_code == 200
-    assert b'value="tech"' in resp.data or b'"tech"' in resp.data
 
 
 def test_landing_page_links_to_both_sector_pages(client):
@@ -292,3 +281,41 @@ def test_api_top_skills_accepts_sector_param_without_erroring(client):
     resp = client.get("/api/top-skills?sector=tech")
     assert resp.status_code == 200
     assert resp.get_json() == []
+
+
+def test_api_chart_returns_the_contract(client):
+    resp = client.get("/api/charts/skills-in-demand")
+    assert resp.status_code == 200 and resp.is_json
+    body = resp.get_json()
+    assert set(body) == {"option", "columns", "rows", "drilldown", "height"}
+    assert body["columns"] == ["Skill", "Category", "Jobs"]
+
+
+def test_api_chart_unknown_name_is_404(client):
+    assert client.get("/api/charts/nope").status_code == 404
+
+
+def test_api_chart_rejects_windows_outside_the_spec(client):
+    assert client.get("/api/charts/skills-in-demand?weeks=5").status_code == 400
+    assert client.get("/api/charts/skills-in-demand?weeks=abc").status_code == 400
+    for weeks in (0, 4, 12, 26):
+        assert client.get(f"/api/charts/skills-in-demand?weeks={weeks}").status_code == 200
+
+
+def test_api_chart_threads_sector_and_weeks_to_the_builder(client, monkeypatch):
+    calls = []
+
+    def fake(conn, sector, weeks, now=None):
+        calls.append((sector, weeks))
+        return charts._empty(["A"])
+
+    monkeypatch.setitem(charts.CHARTS, "skills-in-demand", fake)
+    client.get("/api/charts/skills-in-demand?sector=tech&weeks=4")
+    client.get("/api/charts/skills-in-demand?sector=bogus")
+    assert calls == [("tech", 4), (None, 12)]
+
+
+def test_analytics_redirects_home(client):
+    resp = client.get("/analytics")
+    assert resp.status_code == 302
+    assert resp.headers["Location"] in ("/", "http://localhost/")

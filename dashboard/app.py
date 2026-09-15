@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -7,10 +8,33 @@ from pathlib import Path
 # allow running as a script: python dashboard/app.py
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from flask import Flask, g, jsonify, render_template, request
+from flask import Flask, abort, g, jsonify, redirect, render_template, request, url_for
 from markupsafe import Markup, escape
 
+from dashboard import charts
 from jobfinder import analytics, config, storage
+
+WINDOWS = (0, 4, 12, 26)
+WINDOW_OPTIONS = [(4, "Last 4 weeks"), (12, "Last 12 weeks"), (26, "Last 26 weeks"), (0, "All time")]
+WINDOW_LABELS = {4: "over the last 4 weeks", 12: "over the last 12 weeks",
+                 26: "over the last 26 weeks", 0: "across everything tracked"}
+
+
+def _window_arg() -> int:
+    """?weeks= as an int from WINDOWS; default 12; anything else is a 400."""
+    raw = request.args.get("weeks", "12")
+    try:
+        weeks = int(raw)
+    except ValueError:
+        abort(400)
+    if weeks not in WINDOWS:
+        abort(400)
+    return weeks
+
+
+def _sector_arg() -> str:
+    sector = request.args.get("sector", "")
+    return sector if sector in ("pharma", "tech") else ""
 
 
 def highlight(text, term):
@@ -203,9 +227,17 @@ def create_app(db_path=None) -> Flask:
             for r in rows
         ])
 
+    @app.route("/api/charts/<name>")
+    def api_chart(name):
+        builder = charts.CHARTS.get(name)
+        if builder is None:
+            abort(404)
+        payload = builder(get_conn(), _sector_arg() or None, _window_arg())
+        return jsonify(payload.to_dict())
+
     @app.route("/analytics")
     def analytics_page():
-        return render_template("analytics.html", sector=request.args.get("sector", ""))
+        return redirect(url_for("index"), code=302)
 
     @app.route("/emails")
     def emails_page():
@@ -233,4 +265,4 @@ def create_app(db_path=None) -> Flask:
 
 
 if __name__ == "__main__":
-    create_app().run(host="0.0.0.0", port=5050, debug=False)
+    create_app().run(host="0.0.0.0", port=int(os.environ.get("PORT", "5050")), debug=False)
