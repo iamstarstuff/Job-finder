@@ -342,11 +342,10 @@ def scraper_health(conn, registries: Dict[str, Iterable[str]]) -> List[dict]:
     rows = conn.execute(
         "SELECT sector, company, SUM(is_active) active, MAX(last_seen) last_seen"
         " FROM jobs GROUP BY sector, company").fetchall()
+    db = {(r["sector"], r["company"]): r for r in rows}
     out = []
-    seen = set()
-    for r in rows:
-        key = (r["sector"], r["company"])
-        seen.add(key)
+    for key in set(db) | scraped:
+        r = db.get(key)
         error = failures.get(key)
         if key not in scraped:
             status = "retired"
@@ -357,10 +356,8 @@ def scraper_health(conn, registries: Dict[str, Iterable[str]]) -> List[dict]:
         else:
             status = "failing"
         out.append({"sector": key[0], "company": key[1], "status": status,
-                    "active": r["active"] or 0, "last_seen": r["last_seen"], "error": error})
-    for sector, company in scraped - seen:
-        out.append({"sector": sector, "company": company, "status": "ok",
-                    "active": 0, "last_seen": None, "error": None})
+                    "active": (r["active"] or 0) if r else 0,
+                    "last_seen": r["last_seen"] if r else None, "error": error})
     return sorted(out, key=lambda x: (_STATUS_ORDER[x["status"]], x["sector"], x["company"]))
 
 

@@ -413,3 +413,35 @@ def test_run_history_computes_duration_and_failed_names(tmp_path):
                        "new_jobs": 0, "failed": ["Astellas", "Leo"]}
     assert len(analytics.run_history(conn, "tech")) == 1
     assert len(analytics.run_history(conn, "pharma", limit=1)) == 1
+
+
+def test_scraper_health_reports_failures_for_registry_only_companies(tmp_path):
+    """Registry companies with no job rows but failure entries should show failing/empty status."""
+    conn = storage.connect(tmp_path / "h2.db")
+    # Create one company with jobs
+    storage.record_company_snapshot(conn, "Pfizer", [
+        Job("Pfizer", "Role", "https://pfizer/1", "p", sector="pharma"),
+    ], "2026-09-14T10:00:00")
+
+    # Add failures for registry-only companies (no job rows)
+    storage.sync_company_failures(conn, "pharma", {
+        "NewCo": "ConnectionError: could not reach site",
+        "AnotherNew": "returned 0 jobs but previously had active listings",
+    })
+
+    registries = {"pharma": ["Pfizer", "NewCo", "AnotherNew"]}
+    rows = analytics.scraper_health(conn, registries)
+    status = {r["company"]: r["status"] for r in rows}
+
+    # NewCo should be "failing" (has error message that doesn't start with "returned 0 jobs")
+    # AnotherNew should be "empty" (has "returned 0 jobs" message)
+    assert status == {"NewCo": "failing", "AnotherNew": "empty", "Pfizer": "ok"}
+
+    new_co = next(r for r in rows if r["company"] == "NewCo")
+    assert new_co["error"] == "ConnectionError: could not reach site"
+    assert new_co["active"] == 0
+    assert new_co["last_seen"] is None
+
+    another = next(r for r in rows if r["company"] == "AnotherNew")
+    assert another["error"] == "returned 0 jobs but previously had active listings"
+    assert another["status"] == "empty"
