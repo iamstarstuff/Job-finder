@@ -208,3 +208,13 @@ def test_registry_matches_the_spec_inventory():
     }
     for builder in charts.CHARTS.values():
         assert callable(builder)
+
+
+from pathlib import Path
+
+
+def test_palette_matches_base_html():
+    html = (Path(__file__).resolve().parent.parent / "dashboard" / "templates" / "base.html").read_text()
+    for value in charts.PALETTE.values():
+        for hex_value in (value if isinstance(value, list) else [value]):
+            assert hex_value in html, f"{hex_value} missing from base.html tokens"

@@ -1,0 +1,15 @@
+{% macro chart_card(name, title, subtitle, span, sector, weeks) %}
+<section class="chart-card span-{{ span }}" data-chart="{{ name }}" data-sector="{{ sector }}" data-weeks="{{ weeks }}">
+  <header>
+    <h3>{{ title }}</h3>
+    {% if subtitle %}<p class="subtitle">{{ subtitle }}</p>{% endif %}
+  </header>
+  <div class="chart"></div>
+  <div class="drilldown" hidden></div>
+  {% if caller is defined %}{{ caller() }}{% endif %}
+  <details class="chart-data">
+    <summary>Show data</summary>
+    <div class="chart-table table-scroll"></div>
+  </details>
+</section>
+{% endmacro %}

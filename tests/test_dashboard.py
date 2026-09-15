@@ -319,3 +319,38 @@ def test_analytics_redirects_home(client):
     resp = client.get("/analytics")
     assert resp.status_code == 302
     assert resp.headers["Location"] in ("/", "http://localhost/")
+
+
+def test_base_layout_has_wordmark_font_and_new_nav(client):
+    html = client.get("/").data.decode()
+    assert "Bricolage+Grotesque" in html
+    assert '<a class="wordmark" href="/">Job Finder</a>' in html
+    for href in ("/sector/pharma", "/sector/tech", "/jobs", "/health", "/emails", "/logs"):
+        assert f'href="{href}"' in html
+    assert ">Analytics<" not in html
+    assert "chart.js" not in html
+
+
+def test_charts_js_is_served_and_never_uses_innerhtml(client):
+    resp = client.get("/static/charts.js")
+    assert resp.status_code == 200
+    js = resp.data.decode()
+    assert "echarts.init" in js
+    assert "textContent" in js
+    assert "innerHTML" not in js
+
+
+def test_chart_card_macro_renders_the_mount_points(client):
+    from flask import render_template_string
+    app = client.application
+    with app.app_context():
+        html = render_template_string(
+            '{% from "_charts.html" import chart_card %}'
+            '{% call chart_card("who-is-hiring", "Who is hiring", "Companies by open roles", 6, "pharma", 12) %}'
+            '<p class="movers-test">extra</p>{% endcall %}')
+    assert 'data-chart="who-is-hiring"' in html and 'data-sector="pharma"' in html and 'data-weeks="12"' in html
+    assert 'class="chart-card span-6"' in html
+    assert "<h3>Who is hiring</h3>" in html and "Companies by open roles" in html
+    assert 'class="chart"' in html and 'class="drilldown" hidden' in html
+    assert "<summary>Show data</summary>" in html and 'class="chart-table table-scroll"' in html
+    assert '<p class="movers-test">extra</p>' in html
