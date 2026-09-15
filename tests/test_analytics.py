@@ -284,3 +284,93 @@ def test_new_jobs_per_week_is_continuous_and_monday_dated(tmp_path):
 def test_new_jobs_per_week_empty_db_returns_no_rows(tmp_path):
     conn = storage.connect(tmp_path / "empty.db")
     assert analytics.new_jobs_per_week(conn, weeks=0) == []
+
+
+def _seed_enriched_window(tmp_path):
+    """now = 2026-09-15 12:00. Two companies, four enriched jobs across three weeks,
+    one failed enrichment, one closed job."""
+    conn = storage.connect(tmp_path / "v.db")
+    storage.record_company_snapshot(conn, "MSD", [
+        Job("MSD", "Senior QC Analyst", "https://m/1", "p"),      # week of 08-24
+    ], "2026-08-26T10:00:00")
+    storage.record_company_snapshot(conn, "MSD", [
+        Job("MSD", "Senior QC Analyst", "https://m/1", "p"),
+        Job("MSD", "Director of Quality", "https://m/2", "p"),   # week of 09-07
+        Job("MSD", "Broken", "https://m/3", "p"),
+    ], "2026-09-09T10:00:00")
+    storage.record_company_snapshot(conn, "BMS", [
+        Job("BMS", "Process Engineer", "https://b/1", "p"),      # week of 09-07
+    ], "2026-09-09T10:00:00")
+    storage.record_company_snapshot(conn, "BMS", [
+        Job("BMS", "Data Scientist", "https://b/2", "p"),        # week of 09-14; Process Engineer closes (last seen 09-09)
+    ], "2026-09-14T10:00:00")
+    ids = {u: conn.execute("SELECT id FROM jobs WHERE url=?", (u,)).fetchone()["id"]
+           for u in ("https://m/1", "https://m/2", "https://m/3", "https://b/1", "https://b/2")}
+    storage.save_enrichment(conn, ids["https://m/1"], "GMP and SAP", "Senior", [("GMP", "Regulatory"), ("SAP", "Software")], "2026-08-26T11:00:00")
+    storage.save_enrichment(conn, ids["https://m/2"], "GMP", "Director", [("GMP", "Regulatory")], "2026-09-09T11:00:00")
+    storage.save_enrichment(conn, ids["https://m/3"], "", None, [], "2026-09-09T11:00:00", failed=True)
+    storage.save_enrichment(conn, ids["https://b/1"], "GMP", None, [("GMP", "Regulatory")], "2026-09-09T11:00:00")
+    storage.save_enrichment(conn, ids["https://b/2"], "Python", None, [("Python", "Software")], "2026-09-14T11:00:00")
+    return conn
+
+
+NOW = datetime(2026, 9, 15, 12, 0, 0)
+
+
+def test_company_velocity_counts_active_and_window_deltas(tmp_path):
+    conn = _seed_enriched_window(tmp_path)
+    rows = {r["company"]: r for r in analytics.company_velocity(conn, weeks=1, now=NOW)}
+    assert rows["MSD"] == {"company": "MSD", "active": 3, "new_in_window": 2, "new_previous_window": 0}
+    assert rows["BMS"] == {"company": "BMS", "active": 1, "new_in_window": 2, "new_previous_window": 0}
+    all_time = {r["company"]: r for r in analytics.company_velocity(conn, weeks=0, now=NOW)}
+    assert all_time["MSD"]["new_in_window"] == 3 and all_time["MSD"]["new_previous_window"] is None
+    assert [r["company"] for r in analytics.company_velocity(conn, now=NOW)] == ["MSD", "BMS"]  # active desc
+
+
+def test_compute_movers_splits_and_ranks():
+    rows = [
+        {"company": "A", "active": 1, "new_in_window": 5, "new_previous_window": 1},
+        {"company": "B", "active": 1, "new_in_window": 0, "new_previous_window": 4},
+        {"company": "C", "active": 1, "new_in_window": 2, "new_previous_window": 2},
+        {"company": "D", "active": 1, "new_in_window": 9, "new_previous_window": 1},
+    ]
+    movers = analytics.compute_movers(rows, n=1)
+    assert movers == {"up": [{"company": "D", "delta": 8}], "down": [{"company": "B", "delta": -4}]}
+    assert analytics.compute_movers([{"company": "A", "active": 1, "new_in_window": 5, "new_previous_window": None}]) == {"up": [], "down": []}
+
+
+def test_skill_trend_is_dense_and_uses_enriched_totals(tmp_path):
+    conn = _seed_enriched_window(tmp_path)
+    rows = analytics.skill_trend(conn, weeks=4, limit=3, now=NOW)
+    weeks = ["2026-08-17", "2026-08-24", "2026-08-31", "2026-09-07", "2026-09-14"]
+    assert [r["week"] for r in rows][:5] == weeks                       # skill-major, week-minor
+    assert [r["skill"] for r in rows][::5] == ["GMP", "Python", "SAP"]  # GMP 3, then the 1-count ties by name
+    by = {(r["skill"], r["week"]): (r["count"], r["total"]) for r in rows}
+    assert by[("GMP", "2026-09-07")] == (2, 2)   # MSD Director + BMS Process Engineer; "Broken" excluded from total
+    assert by[("GMP", "2026-09-14")] == (0, 1)   # Data Scientist is enriched but mentions Python only
+    assert by[("SAP", "2026-08-24")] == (1, 1)
+    assert analytics.skill_trend(conn, sector="tech", now=NOW) == []
+
+
+def test_seniority_by_company_labels_null_and_respects_window(tmp_path):
+    conn = _seed_enriched_window(tmp_path)
+    rows = {(r["company"], r["seniority"]): r["count"] for r in analytics.seniority_by_company(conn, weeks=0, now=NOW)}
+    assert rows == {("MSD", "Senior"): 1, ("MSD", "Director"): 1, ("BMS", "Unspecified"): 2}
+    recent = {(r["company"], r["seniority"]) for r in analytics.seniority_by_company(conn, weeks=1, now=NOW)}
+    assert recent == {("MSD", "Director"), ("BMS", "Unspecified")}
+
+
+def test_category_breakdown_respects_window(tmp_path):
+    conn = _seed_enriched_window(tmp_path)
+    all_rows = {(r["company"], r["category"]): r["count"] for r in analytics.category_breakdown(conn, now=NOW)}
+    assert all_rows[("MSD", "Quality")] == 2
+    recent = {(r["company"], r["category"]): r["count"] for r in analytics.category_breakdown(conn, weeks=1, now=NOW)}
+    assert recent[("MSD", "Quality")] == 1
+
+
+def test_median_days_active_window_and_min_closed(tmp_path):
+    conn = _seed_enriched_window(tmp_path)
+    rows = analytics.median_days_active(conn, now=NOW)
+    assert rows == [{"company": "BMS", "median_days": 0.0, "closed": 1}]  # Process Engineer: seen once, 09-09
+    assert analytics.median_days_active(conn, min_closed=3, now=NOW) == []
+    assert analytics.median_days_active(conn, weeks=4, now=NOW)[0]["company"] == "BMS"
