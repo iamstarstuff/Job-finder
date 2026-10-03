@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Activate the conda environment
-source /Users/pratik/opt/miniconda3/etc/profile.d/conda.sh
-cd /Users/pratik/Github/Job-finder
-conda activate base
-python /Users/pratik/Github/Job-finder/enrich_jobs.py
-conda deactivate
+# Run the enrichment pipeline in the project's uv environment.
+# cron's PATH has no Homebrew, so put uv on it explicitly.
+export PATH="/opt/homebrew/bin:$PATH"
+cd "$(dirname "$0")"
+exec uv run python enrich_jobs.py
