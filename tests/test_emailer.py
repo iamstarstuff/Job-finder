@@ -142,3 +142,21 @@ def test_send_tech_digest_uses_tech_recipients_and_kind(tmp_path, monkeypatch):
     assert sent["recipients"] == config.TECH_ALERT_RECIPIENTS
     row = conn.execute("SELECT kind FROM emails ORDER BY id DESC LIMIT 1").fetchone()
     assert row["kind"] == "tech_alert"
+
+
+def test_dry_run_send_email_never_opens_smtp(monkeypatch):
+    monkeypatch.setenv("JOBFINDER_DRY_RUN", "1")
+    def no_smtp(*args, **kwargs):
+        raise AssertionError("SMTP must not be used in a dry run")
+    monkeypatch.setattr(emailer.smtplib, "SMTP_SSL", no_smtp)
+    emailer.send_email("Subject", "<p>hi</p>", ["someone@example.com"])
+
+
+def test_dry_run_notifications_are_not_sent_or_recorded(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    monkeypatch.setenv("JOBFINDER_DRY_RUN", "1")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
+    emailer.send_run_notifications(conn, RunResult(run_id=1, new_jobs=NEW, failures={"Amgen": "boom"}))
+    assert sent == []
+    assert conn.execute("SELECT COUNT(*) c FROM emails").fetchone()["c"] == 0

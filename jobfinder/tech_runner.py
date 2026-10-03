@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -56,6 +57,25 @@ def run_scrape(conn, session, now: str) -> RunResult:
     return result
 
 
+def is_due(conn, now: datetime) -> bool:
+    """True when it is TECH_DAILY_HOUR or later and no tech run has started
+    today. cron starts the scraper hourly, so a day the Mac slept through
+    that hour is caught up at the next hour it is awake."""
+    if now.hour < config.TECH_DAILY_HOUR:
+        return False
+    last = storage.last_run_started(conn, "tech")
+    return last is None or last[:10] < now.date().isoformat()
+
+
+def parse_args(argv=None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Scrape tech roles, once a day.")
+    parser.add_argument(
+        "--force", action="store_true",
+        help="Run now, even before the daily hour or when today's run has already happened.",
+    )
+    return parser.parse_args(argv)
+
+
 def setup_logging() -> None:
     logging.basicConfig(
         level=logging.INFO,
@@ -66,11 +86,15 @@ def setup_logging() -> None:
     )
 
 
-def main() -> None:
+def main(argv=None) -> None:
+    args = parse_args(argv)
     setup_logging()
     try:
-        now = datetime.now().isoformat(timespec="seconds")
+        started = datetime.now()
         conn = storage.connect(config.DB_PATH)
+        if not args.force and not is_due(conn, started):
+            return  # cron starts this hourly; only the day's first run from TECH_DAILY_HOUR scrapes
+        now = started.isoformat(timespec="seconds")
         session = build_session()
         result = run_scrape(conn, session, now)
         from jobfinder import emailer  # local import, mirrors runner.py's own pattern

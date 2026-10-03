@@ -131,6 +131,13 @@ def latest_active_last_seen(conn, company: str) -> Optional[str]:
     return row["ts"]
 
 
+def last_run_started(conn, sector: str) -> Optional[str]:
+    """ISO start time of the sector's most recent run, or None if it has
+    never run."""
+    row = conn.execute("SELECT MAX(started_at) ts FROM runs WHERE sector = ?", (sector,)).fetchone()
+    return row["ts"]
+
+
 def start_run(conn, started_at: str, sector: str) -> int:
     cur = conn.execute("INSERT INTO runs (started_at, sector) VALUES (?, ?)", (started_at, sector))
     conn.commit()
