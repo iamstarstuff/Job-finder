@@ -21,3 +21,15 @@ def test_password_falls_back_to_file(monkeypatch, tmp_path):
     pw_file.write_text("filepass\n")
     monkeypatch.setattr(config, "SMTP_PASSWORD_FILE", pw_file)
     assert config.get_smtp_password() == "filepass"
+
+
+def test_dry_run_is_off_by_default():
+    from jobfinder import config
+    assert config.email_dry_run() is False
+
+
+def test_dry_run_env_var(monkeypatch):
+    from jobfinder import config
+    for value, expected in [("1", True), ("true", True), ("YES", True), ("0", False), ("", False)]:
+        monkeypatch.setenv("JOBFINDER_DRY_RUN", value)
+        assert config.email_dry_run() is expected

@@ -28,9 +28,20 @@ REQUEST_TIMEOUT = 20  # seconds
 # jobs are closed.
 ZERO_RESULT_GRACE_DAYS = 7
 
+# The tech scraper runs once a day, on the first cron run at or after this
+# hour. cron starts it hourly, so a day the Mac sleeps through this hour is
+# caught up when it wakes instead of being skipped.
+TECH_DAILY_HOUR = 8
+
 
 def get_smtp_password() -> str:
     env = os.environ.get("SMTP_PASSWORD")
     if env:
         return env.strip()
     return SMTP_PASSWORD_FILE.read_text().strip()
+
+
+def email_dry_run() -> bool:
+    """JOBFINDER_DRY_RUN=1 turns every email into a log line. Set it on a
+    development machine so test runs never reach the alert recipients."""
+    return os.environ.get("JOBFINDER_DRY_RUN", "").strip().lower() in {"1", "true", "yes"}

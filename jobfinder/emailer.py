@@ -97,6 +97,9 @@ def render_error_html(
 
 
 def send_email(subject: str, html: str, recipients: List[str]) -> None:
+    if config.email_dry_run():
+        log.info("Dry run, email not sent: %s -> %s", subject, recipients)
+        return
     msg = MIMEMultipart()
     msg["From"] = config.FROM_EMAIL
     msg["To"] = ", ".join(recipients)
@@ -109,6 +112,10 @@ def send_email(subject: str, html: str, recipients: List[str]) -> None:
 
 
 def _send_and_log(conn, kind: str, subject: str, html: str, recipients: List[str]) -> None:
+    if config.email_dry_run():
+        # Nothing is sent, so nothing goes in the emails table either.
+        log.info("Dry run, %s email not sent: %s -> %s", kind, subject, recipients)
+        return
     now = datetime.now().isoformat(timespec="seconds")
     try:
         send_email(subject, html, recipients)

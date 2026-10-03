@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _no_dry_run_from_shell(monkeypatch):
+    # A development shell may export JOBFINDER_DRY_RUN; tests opt in explicitly.
+    monkeypatch.delenv("JOBFINDER_DRY_RUN", raising=False)
+
 
 class FakeResponse:
     def __init__(self, content=b"", json_data=None, status_code=200):
