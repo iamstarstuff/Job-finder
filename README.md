@@ -10,12 +10,19 @@ who is hiring, and what should I learn next*.
 
 | Pipeline | Entry point | Cadence (cron) | What it does |
 |---|---|---|---|
-| Pharma scraper | `run_job.sh` → `jobscraper.py` | hourly | Scrapes 20 pharma/biotech companies, emails new roles |
-| Tech scraper | `run_tech_job.sh` → `tech_jobs.py` | daily 08:00 | Scrapes 15 tech companies for data, SRE, DevOps, cloud and analytics roles |
-| Enrichment | `enrich_job.sh` → `enrich_jobs.py` | every 4 hours | Fetches full descriptions, extracts skills and seniority |
+| Pharma scraper | `run_job.sh` → `jobscraper.py` | hourly, at :00 | Scrapes 20 pharma/biotech companies, emails new roles |
+| Tech scraper | `run_tech_job.sh` → `tech_jobs.py` | hourly, at :20; scrapes once a day from 08:00 | Scrapes 15 tech companies for data, SRE, DevOps, cloud and analytics roles |
+| Enrichment | `enrich_job.sh` → `enrich_jobs.py` | hourly, at :40 | Fetches full descriptions, extracts skills and seniority |
 
 The three pipelines are deliberately independent: a failure in enrichment
 can never delay or break an alert email.
+
+cron skips any run the Mac sleeps through, so every pipeline is started
+hourly and catches up at the next hour the Mac is awake. The tech scraper
+checks the `runs` table and scrapes only on the day's first run at or after
+`TECH_DAILY_HOUR` (08:00); `uv run python tech_jobs.py --force` runs it
+regardless. Enrichment only fetches roles that have no description yet, so
+an hourly run with nothing new makes no requests.
 
 ## Dashboard
 
@@ -67,9 +74,37 @@ uv run python jobscraper.py
 uv run python enrich_jobs.py
 ```
 
-Then schedule the three shell scripts with `crontab -e` at the cadences above.
+Then schedule the three shell scripts with `crontab -e` (adjust the paths):
+
+```
+0 * * * * $HOME/Github/Job-finder/run_job.sh >> $HOME/Github/Job-finder/logs.log 2>&1
+20 * * * * $HOME/Github/Job-finder/run_tech_job.sh >> $HOME/Github/Job-finder/tech_scraper_cron.log 2>&1
+40 * * * * $HOME/Github/Job-finder/enrich_job.sh >> $HOME/Github/Job-finder/enrichment_cron.log 2>&1
+```
+
 Each one runs its entry point with `uv run`, so cron needs no activated
 environment.
+
+## Developing on one Mac, running on another
+
+The cron jobs, the database and the dashboard live on one always-on Mac;
+development happens on another. The scripts in `ops/` assume an ssh host
+alias `oldmac` for the always-on Mac and the repo at `~/Github/Job-finder`
+there (override with `DEPLOY_HOST` and `DEPLOY_DIR`).
+
+- `ops/deploy.sh` deploys `origin/main`: it runs the tests locally, then on
+  the always-on Mac pulls, runs `uv sync --locked`, smoke-tests the imports
+  and restarts the dashboard. The cron jobs pick up the new code on their
+  next run.
+- `ops/pull_db.sh` replaces the local `jobfinder.db` with a consistent
+  snapshot of the live one, so the local dashboard shows real data. Nothing
+  is ever copied back.
+- `ops/install_dashboard_agent.sh`, run once on the always-on Mac, installs
+  a launchd agent that starts the dashboard at login and restarts it if it
+  exits. Its output goes to `dashboard_server.log`.
+- Set `JOBFINDER_DRY_RUN=1` on the development Mac. Every email then becomes
+  a log line ("Dry run, email not sent: …") and nothing is written to the
+  `emails` table, so a test scrape never reaches the alert recipients.
 
 ## Maintenance
 
@@ -97,6 +132,7 @@ jobfinder/            core package: config, http client, scrapers, storage, runn
 dashboard/            Flask app (app.py), chart builders (charts.py), the weekly brief (brief.py), templates, static/charts.js
 tests/                pytest suite
 jobscraper.py, tech_jobs.py, enrich_jobs.py   thin entry points used by the cron scripts
+ops/                  deploy.sh, pull_db.sh, install_dashboard_agent.sh for the two-Mac setup
 ```
 
 ## License

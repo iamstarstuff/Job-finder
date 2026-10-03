@@ -14,3 +14,5 @@ __pycache__/
 .claude/
 .superpowers/
 .venv/
+enrichment_cron.log
+dashboard_server.log
