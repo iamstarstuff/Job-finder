@@ -20,7 +20,7 @@ can never delay or break an alert email.
 ## Dashboard
 
 ```bash
-python dashboard/app.py          # http://127.0.0.1:5050  (PORT=5051 to pick another port)
+uv run python dashboard/app.py   # http://127.0.0.1:5050  (PORT=5051 to pick another port)
 ```
 
 Pages:
@@ -48,8 +48,13 @@ behind any chart is at `/api/charts/<name>?sector=&weeks=`.
 ```bash
 git clone https://github.com/iamstarstuff/Job-finder.git
 cd Job-finder
-pip install -r requirements.txt
+uv sync
 ```
+
+Dependencies and the Python version (3.13) are managed with
+[uv](https://docs.astral.sh/uv/): `pyproject.toml`, `uv.lock` and
+`.python-version`. `uv sync` creates `.venv/` with everything, including
+pytest.
 
 SMTP settings live in `jobfinder/config.py`. The password comes from the
 `SMTP_PASSWORD` environment variable, or from a `smtp_password.txt` file in
@@ -58,15 +63,17 @@ the project root (gitignored).
 Run once by hand to create `jobfinder.db`:
 
 ```bash
-python jobscraper.py
-python enrich_jobs.py
+uv run python jobscraper.py
+uv run python enrich_jobs.py
 ```
 
 Then schedule the three shell scripts with `crontab -e` at the cadences above.
+Each one runs its entry point with `uv run`, so cron needs no activated
+environment.
 
 ## Maintenance
 
-- `python enrich_jobs.py --reextract` rebuilds every role's skill links from
+- `uv run python enrich_jobs.py --reextract` rebuilds every role's skill links from
   the current `SKILL_KEYWORDS` vocabulary in `jobfinder/enrichment.py`. Run it
   after editing the vocabulary.
 - A company that returns zero roles while it still has open ones is treated
@@ -80,7 +87,7 @@ Then schedule the three shell scripts with `crontab -e` at the cadences above.
 ## Tests
 
 ```bash
-python -m pytest tests/
+uv run pytest
 ```
 
 ## Project layout

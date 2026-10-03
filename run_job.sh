@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Activate the conda environment
-source /Users/pratik/opt/miniconda3/etc/profile.d/conda.sh
-cd /Users/pratik/Github/Job-finder
-conda activate base
-python /Users/pratik/Github/Job-finder/jobscraper.py
-conda deactivate
+# Run the pharma scraper in the project's uv environment.
+# cron's PATH has neither Homebrew (/opt/homebrew on Apple Silicon, /usr/local
+# on Intel) nor ~/.local/bin (uv's standalone installer), so add all three.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
+cd "$(dirname "$0")"
+exec uv run python jobscraper.py

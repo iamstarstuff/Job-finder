@@ -133,8 +133,9 @@ def test_category_breakdown_filters_by_sector(tmp_path):
 
 def test_new_jobs_per_week_filters_by_sector(tmp_path):
     conn = seeded_mixed_sector_conn(tmp_path)
-    total_all = sum(r["count"] for r in analytics.new_jobs_per_week(conn))
-    total_pharma = sum(r["count"] for r in analytics.new_jobs_per_week(conn, sector="pharma"))
+    now = datetime(2026, 7, 15)  # keep the July 1 seed inside the default 12-week window
+    total_all = sum(r["count"] for r in analytics.new_jobs_per_week(conn, now=now))
+    total_pharma = sum(r["count"] for r in analytics.new_jobs_per_week(conn, sector="pharma", now=now))
     assert total_all == 2
     assert total_pharma == 1
 
