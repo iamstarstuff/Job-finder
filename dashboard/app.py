@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from flask import Flask, abort, g, jsonify, redirect, render_template, request, url_for
 from markupsafe import Markup, escape
 
-from dashboard import brief, charts
+from dashboard import brief, charts, job_search
 from jobfinder import analytics, config, storage
 from jobfinder.scrapers import SCRAPERS
 from jobfinder.tech_scrapers import TECH_SCRAPERS
@@ -84,10 +84,17 @@ def highlight(text, term):
     return Markup(pattern.sub(lambda m: f"<mark>{m.group(0)}</mark>", escaped_text))
 
 
+def short_date(iso_ts: str) -> str:
+    """'2026-10-03T08:20:00' -> '3 Oct'."""
+    return analytics.week_label(iso_ts[:10])
+
+
 def create_app(db_path=None) -> Flask:
     app = Flask(__name__)
     app.config["DB_PATH"] = str(db_path or config.DB_PATH)
     app.jinja_env.filters["highlight"] = highlight
+    app.jinja_env.filters["short_date"] = short_date
+    app.jinja_env.globals["card_facts"] = job_search.card_facts
 
     def get_conn():
         if "conn" not in g:
@@ -110,76 +117,16 @@ def create_app(db_path=None) -> Flask:
             return "Unknown sector", 404
         conn = get_conn()
         weeks = _window_arg()
-        sql = """SELECT jobs.*, job_details.description, job_details.seniority,
-                         job_details.enrichment_failed
-                  FROM jobs LEFT JOIN job_details ON job_details.job_id = jobs.id
-                  WHERE jobs.sector = ?
-                  ORDER BY jobs.first_seen DESC LIMIT 10"""
-        rows = conn.execute(sql, (name,)).fetchall()
-        job_ids = [r["id"] for r in rows]
-        skills_by_job = {}
-        if job_ids:
-            placeholders = ", ".join("?" for _ in job_ids)
-            skill_rows = conn.execute(
-                f"""SELECT job_skills.job_id, skills.name
-                    FROM job_skills JOIN skills ON skills.id = job_skills.skill_id
-                    WHERE job_skills.job_id IN ({placeholders})""",
-                job_ids,
-            ).fetchall()
-            for r in skill_rows:
-                skills_by_job.setdefault(r["job_id"], []).append(r["name"])
-        return render_template("sector.html", recent_jobs=rows, skills_by_job=skills_by_job,
+        recent = analytics.job_records(conn, sector=name)[:10]
+        return render_template("sector.html", recent_jobs=recent,
                                families=analytics.families_in(conn, name), levels=analytics.SENIORITY_LEVELS,
                                **_page_context(conn, name, weeks))
 
     @app.route("/jobs")
     def jobs():
-        conn = get_conn()
-        company = request.args.get("company", "")
-        query = request.args.get("q", "")
-        skill_query = request.args.get("skill", "")
-        active = request.args.get("active", "")
-        sector = request.args.get("sector", "")
-        sql = """SELECT jobs.*, job_details.description, job_details.seniority,
-                         job_details.enrichment_failed
-                  FROM jobs LEFT JOIN job_details ON job_details.job_id = jobs.id
-                  WHERE 1=1"""
-        params = []
-        if sector:
-            sql += " AND jobs.sector = ?"
-            params.append(sector)
-        if company:
-            sql += " AND jobs.company = ?"
-            params.append(company)
-        if query:
-            sql += " AND jobs.title LIKE ?"
-            params.append(f"%{query}%")
-        if skill_query:
-            sql += " AND job_details.description LIKE ?"
-            params.append(f"%{skill_query}%")
-        if active == "1":
-            sql += " AND jobs.is_active = 1"
-        sql += " ORDER BY jobs.first_seen DESC LIMIT 500"
-        rows = conn.execute(sql, params).fetchall()
-
-        job_ids = [r["id"] for r in rows]
-        skills_by_job = {}
-        if job_ids:
-            placeholders = ", ".join("?" for _ in job_ids)
-            skill_rows = conn.execute(
-                f"""SELECT job_skills.job_id, skills.name
-                    FROM job_skills JOIN skills ON skills.id = job_skills.skill_id
-                    WHERE job_skills.job_id IN ({placeholders})""",
-                job_ids,
-            ).fetchall()
-            for r in skill_rows:
-                skills_by_job.setdefault(r["job_id"], []).append(r["name"])
-
-        companies = [r["company"] for r in conn.execute(
-            "SELECT DISTINCT company FROM jobs ORDER BY company")]
-        return render_template("jobs.html", jobs=rows, companies=companies,
-                               company=company, q=query, skill=skill_query, active=active,
-                               sector=sector, skills_by_job=skills_by_job)
+        records = analytics.job_records(get_conn())
+        result = job_search.search(records, job_search.Filters.from_args(request.args))
+        return render_template("jobs.html", result=result)
 
     @app.route("/api/drilldown/<dimension>")
     def api_drilldown(dimension):

@@ -179,53 +179,6 @@ def test_drilldown_company_respects_row_cap(tmp_path):
     assert len(resp.get_json()) == 100
 
 
-@pytest.fixture
-def jobs_search_client(tmp_path):
-    conn = storage.connect(tmp_path / "s.db")
-    storage.record_company_snapshot(conn, "BMS", [
-        Job("BMS", "Data Platform Engineer", "https://a/1", "p"),
-        Job("BMS", "QC Analyst", "https://a/2", "p"),
-    ], "2026-07-17T10:00:00")
-    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
-    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/2",)).fetchone()["id"]
-    storage.save_enrichment(
-        conn, id1, "Experience orchestrating pipelines with Airflow and dbt. SQL required.",
-        "Senior", [("SQL", "Software")], "2026-07-17T11:00:00",
-    )
-    storage.save_enrichment(conn, id2, "QC role, GMP required.", None, [], "2026-07-17T11:00:00")
-    conn.close()
-    from dashboard.app import create_app
-    app = create_app(db_path=tmp_path / "s.db")
-    app.config["TESTING"] = True
-    return app.test_client()
-
-
-def test_jobs_page_skill_search_filters_by_description(jobs_search_client):
-    resp = jobs_search_client.get("/jobs?skill=airflow")
-    assert b"Data Platform Engineer" in resp.data
-    assert b"QC Analyst" not in resp.data
-
-
-def test_jobs_page_skill_search_combines_with_company_filter(jobs_search_client):
-    resp = jobs_search_client.get("/jobs?skill=airflow&company=BMS")
-    assert b"Data Platform Engineer" in resp.data
-    resp2 = jobs_search_client.get("/jobs?skill=airflow&company=Astellas")
-    assert b"Data Platform Engineer" not in resp2.data
-
-
-def test_jobs_page_skill_search_excludes_unenriched_jobs(tmp_path):
-    conn = storage.connect(tmp_path / "n.db")
-    storage.record_company_snapshot(conn, "APC", [
-        Job("APC", "Warehouse Lead", "https://a/1", "p"),
-    ], "2026-07-17T10:00:00")
-    conn.close()
-    from dashboard.app import create_app
-    app = create_app(db_path=tmp_path / "n.db")
-    app.config["TESTING"] = True
-    resp = app.test_client().get("/jobs?skill=airflow")
-    assert b"Warehouse Lead" not in resp.data
-
-
 def test_highlight_escapes_html_and_wraps_match():
     from dashboard.app import highlight
     result = highlight("Needs <b>Airflow</b> experience", "airflow")
@@ -238,31 +191,6 @@ def test_highlight_returns_escaped_text_when_no_term():
     from dashboard.app import highlight
     result = highlight("Needs <b>Airflow</b>", "")
     assert str(result) == "Needs &lt;b&gt;Airflow&lt;/b&gt;"
-
-
-def test_jobs_page_shows_description_and_skills(jobs_search_client):
-    resp = jobs_search_client.get("/jobs")
-    assert b"Airflow" in resp.data
-    assert b"SQL" in resp.data
-
-
-def test_jobs_page_shows_placeholder_for_unenriched_job(tmp_path):
-    conn = storage.connect(tmp_path / "u.db")
-    storage.record_company_snapshot(conn, "APC", [
-        Job("APC", "Warehouse Lead", "https://a/1", "p"),
-    ], "2026-07-17T10:00:00")
-    conn.close()
-    from dashboard.app import create_app
-    app = create_app(db_path=tmp_path / "u.db")
-    app.config["TESTING"] = True
-    resp = app.test_client().get("/jobs")
-    assert b"Description not available yet" in resp.data
-
-
-def test_jobs_page_row_markup_unchanged_after_macro_extraction(client):
-    resp = client.get("/jobs")
-    assert b'class="job-row"' in resp.data
-    assert b'class="job-row-summary"' in resp.data
 
 
 def test_api_chart_returns_the_contract(client):
@@ -514,3 +442,80 @@ def test_sector_page_what_to_learn_card_offers_families_and_levels(enriched_clie
     assert 'data-chart="what-to-learn"' in html
     assert '<select data-param="family" multiple' in html and '<option value="Quality">' in html
     assert '<select data-param="level" multiple' in html and '<option value="Director+">' in html
+
+
+@pytest.fixture
+def cards_client(tmp_path):
+    conn = storage.connect(tmp_path / "cards.db")
+    ds = Job("Google", "Data Scientist", "https://g/1", "p", sector="tech")
+    qa = Job("MSD", "QA Director", "https://m/1", "p")
+    unread = Job("APC", "Warehouse Lead", "https://a/1", "p")
+    old = Job("Amgen", "Old Role", "https://b/1", "p")
+    storage.record_company_snapshot(conn, "Google", [ds], "2026-10-03T08:20:00")
+    storage.record_company_snapshot(conn, "MSD", [qa], "2026-10-04T08:20:00")
+    storage.record_company_snapshot(conn, "APC", [unread], "2026-10-05T08:20:00")
+    storage.record_company_snapshot(conn, "Amgen", [old], "2026-09-01T08:20:00")
+    storage.record_company_snapshot(conn, "Amgen", [], "2026-09-08T08:20:00")  # Old Role closes
+    gid = conn.execute("SELECT id FROM jobs WHERE url='https://g/1'").fetchone()["id"]
+    storage.save_enrichment(conn, gid, "Builds pipelines with Airflow.", None, [], "2026-10-03T09:00:00")
+    save_reading(conn, ds, role_family="Data Science", seniority="Mid", min_years_experience=3,
+                 work_mode="hybrid", contract_type="permanent", salary_min=90000.0, salary_max=92000.0,
+                 salary_currency="EUR", salary_period="year", skills=["Python", "Airflow", "SQL"],
+                 reason="Data science role building pipelines.")
+    save_reading(conn, qa, role_family="Quality", seniority="Director+", salary_min=190800.0,
+                 salary_max=300300.0, salary_currency="USD", salary_period="year",
+                 required_languages=["German"], skills=["GMP"], reason="should not be shown")
+    conn.close()
+    from dashboard.app import create_app
+    app = create_app(db_path=tmp_path / "cards.db")
+    app.config["TESTING"] = True
+    return app.test_client()
+
+
+def test_jobs_page_cards_show_only_stated_facts(cards_client):
+    html = cards_client.get("/jobs").data.decode()
+    assert 'class="job-card"' in html
+    assert '<span class="family-chip">Data Science</span>Mid · 3+ yrs · Hybrid · Permanent · €90–92k a year' in html
+    assert "Data science role building pipelines." in html          # tech reason shown
+    assert "Google · new 3 Oct" in html
+    assert "Director+ · USD 191–300k a year" in html
+    assert "Needs German" in html
+    assert "should not be shown" not in html                        # pharma reasons are never shown
+    assert "Builds pipelines with Airflow." in html                 # description behind the toggle
+    assert "Not read by Claude (no description)" in html            # APC card
+
+
+def test_jobs_page_is_active_only_by_default(cards_client):
+    assert "Old Role" not in cards_client.get("/jobs").data.decode()
+    assert "Old Role" in cards_client.get("/jobs?all=1").data.decode()
+
+
+def test_jobs_page_filters_show_counts_and_summary(cards_client):
+    html = cards_client.get("/jobs?family=Data+Science").data.decode()
+    assert "Data Scientist" in html and "QA Director" not in html and "Warehouse Lead" not in html
+    assert "Filters (1)" in html
+    assert 'value="Quality"' in html                                # other families still offered
+    assert "1 job" in html
+
+
+def test_jobs_page_search_covers_skills_and_the_old_skill_param(cards_client):
+    for url in ("/jobs?q=airflow", "/jobs?skill=airflow"):
+        html = cards_client.get(url).data.decode()
+        assert "Data Scientist" in html and "QA Director" not in html
+    assert "<mark>Airflow</mark>" in cards_client.get("/jobs?q=airflow").data.decode()
+
+
+def test_jobs_page_pager_keeps_the_filters(tmp_path):
+    conn = storage.connect(tmp_path / "many.db")
+    jobs = [Job("Google", f"Role {i}", f"https://g/{i}", "p", sector="tech") for i in range(51)]
+    storage.record_company_snapshot(conn, "Google", jobs, "2026-10-01T08:00:00")
+    conn.close()
+    from dashboard.app import create_app
+    html = create_app(db_path=tmp_path / "many.db").test_client().get("/jobs?sector=tech").data.decode()
+    assert "page 1 of 2" in html
+    assert 'href="/jobs?sector=tech&amp;page=2"' in html
+
+
+def test_sector_page_recent_roles_use_job_cards(cards_client):
+    html = cards_client.get("/sector/pharma").data.decode()
+    assert 'class="job-card"' in html and "QA Director" in html

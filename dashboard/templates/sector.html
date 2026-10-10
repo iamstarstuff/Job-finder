@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "_charts.html" import chart_card %}
-{% from "_macros.html" import job_row %}
+{% from "_macros.html" import job_card %}
 {% block title %}{{ sector | capitalize }} · Job Finder{% endblock %}
 {% block content %}
 <form class="filters" method="get" action="/sector/{{ sector }}">
@@ -46,12 +46,9 @@
 
 <h3 style="margin-top:32px">Recent roles</h3>
 {% if recent_jobs %}
-<div class="job-row-header" style="margin-top:10px">
-  <span></span><span>Company</span><span>Title</span><span>Seniority</span><span>Status</span><span></span>
+<div style="margin-top:10px">
+{% for job in recent_jobs %}{{ job_card(job, "") }}{% endfor %}
 </div>
-{% for job in recent_jobs %}
-{{ job_row(job, "", skills_by_job) }}
-{% endfor %}
 <p class="note" style="margin-top:8px"><a href="/jobs?sector={{ sector }}">See all {{ overview.total_jobs_seen }} jobs</a></p>
 {% else %}
 <p class="note">No roles yet.</p>

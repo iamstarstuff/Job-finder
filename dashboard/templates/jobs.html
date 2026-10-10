@@ -1,33 +1,57 @@
 {% extends "base.html" %}
+{% from "_macros.html" import job_card %}
+{% block title %}Jobs · Job Finder{% endblock %}
 {% block content %}
 <h2>Jobs</h2>
-<form class="filters" method="get" action="/jobs">
-  <select name="sector" onchange="this.form.submit()">
-    <option value="">All sectors</option>
-    <option value="pharma" {{ "selected" if sector == "pharma" }}>Pharma</option>
-    <option value="tech" {{ "selected" if sector == "tech" }}>Tech</option>
-  </select>
-  <select name="company" onchange="this.form.submit()">
-    <option value="">All companies</option>
-    {% for c in companies %}
-    <option value="{{ c }}" {{ "selected" if c == company }}>{{ c }}</option>
-    {% endfor %}
-  </select>
-  <input type="text" name="q" placeholder="Search titles…" value="{{ q }}">
-  <input type="text" name="skill" class="skill-search" placeholder="Search skill e.g. Airflow…" value="{{ skill }}">
-  <label><input type="checkbox" name="active" value="1" {{ "checked" if active == "1" }}> Active only</label>
-  <button type="submit">Filter</button>
-</form>
-
-{% from "_macros.html" import job_row %}
-{% if jobs %}
-<div class="job-row-header">
-  <span></span><span>Company</span><span>Title</span><span>Seniority</span><span>Status</span><span></span>
+{% set f = result.filters %}
+<div class="job-search">
+  <form method="get" action="/jobs">
+    <details class="filters-panel" id="filters">
+      <summary>Filters{% if f.active_count %} ({{ f.active_count }}){% endif %}</summary>
+      <fieldset class="facet">
+        <legend>Search</legend>
+        <input type="search" name="q" value="{{ f.q }}" placeholder="Titles or skills, e.g. Kubernetes" aria-label="Search titles or skills">
+      </fieldset>
+      <fieldset class="facet">
+        <legend>Sector</legend>
+        {% for c in result.facets.sector %}
+        <label><span><input type="radio" name="sector" value="{{ c.value }}"{{ " checked" if c.selected }} onchange="this.form.submit()"> {{ c.label }}</span><span class="count">{{ c.count }}</span></label>
+        {% endfor %}
+      </fieldset>
+      {% for group, title, kind in [("family", "Role family", "checkbox"), ("seniority", "Seniority", "checkbox"), ("years", "Years asked", "radio"), ("mode", "Work mode", "checkbox"), ("contract", "Contract", "checkbox")] %}
+      {% if result.facets[group] %}
+      <fieldset class="facet">
+        <legend>{{ title }}</legend>
+        {% for c in result.facets[group] %}
+        <label><span><input type="{{ kind }}" name="{{ group }}" value="{{ c.value }}"{{ " checked" if c.selected }} onchange="this.form.submit()"> {{ c.label }}</span><span class="count">{{ c.count }}</span></label>
+        {% endfor %}
+      </fieldset>
+      {% endif %}
+      {% endfor %}
+      <fieldset class="facet">
+        <legend>Company</legend>
+        <select name="company" onchange="this.form.submit()" aria-label="Company">
+          <option value="">All companies</option>
+          {% for c in result.companies %}<option value="{{ c.value }}"{{ " selected" if c.selected }}>{{ c.label }} ({{ c.count }})</option>{% endfor %}
+        </select>
+      </fieldset>
+      <fieldset class="facet">
+        <label><span><input type="checkbox" name="all" value="1"{{ " checked" if f.include_closed }} onchange="this.form.submit()"> Include closed jobs</span></label>
+      </fieldset>
+      <noscript><button type="submit">Apply filters</button></noscript>
+    </details>
+  </form>
+  <section class="results">
+    <p class="results-summary">{{ result.total }} job{{ "" if result.total == 1 else "s" }}{% if result.pages > 1 %} · page {{ result.page }} of {{ result.pages }}{% endif %}</p>
+    {% for job in result.cards %}{{ job_card(job, f.q) }}{% else %}<p class="note">No jobs match these filters.</p>{% endfor %}
+    {% if result.pages > 1 %}
+    <div class="pager">
+      {% if result.page > 1 %}<a href="/jobs?{{ f.query(page=result.page - 1) }}">← Previous</a>{% else %}<span></span>{% endif %}
+      <span>Page {{ result.page }} of {{ result.pages }}</span>
+      {% if result.page < result.pages %}<a href="/jobs?{{ f.query(page=result.page + 1) }}">Next →</a>{% else %}<span></span>{% endif %}
+    </div>
+    {% endif %}
+  </section>
 </div>
-{% for job in jobs %}
-{{ job_row(job, skill, skills_by_job) }}
-{% endfor %}
-{% else %}
-<p>No jobs match.</p>
-{% endif %}
+<script>if (window.innerWidth >= 768) document.getElementById("filters").open = true;</script>
 {% endblock %}

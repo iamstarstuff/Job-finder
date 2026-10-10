@@ -36,18 +36,22 @@ Pages:
   four charts: skills in demand, hiring velocity, who is hiring (with the
   biggest movers), and a skill-trend heatmap. A time-window selector (last 4,
   12, 26 weeks or all time) and a sector toggle scope everything on the page.
-- **Pharma / Tech** — the same view for one sector, plus seniority mix by
-  company, what each company posts, days to close, and the ten most recent
-  roles.
-- **Jobs** — every role ever seen, with company, title, skill and
-  description search and expandable descriptions.
+- **Pharma / Tech** — the same view for one sector, plus seniority mix and
+  role families by company, what to learn for a chosen role family and
+  level, experience asked, openings by role family, days to close, and the
+  ten most recent roles.
+- **Jobs** — every open role (tick "Include closed jobs" for the rest) as
+  cards with Claude's role family, level, years, work mode, contract, salary
+  when stated, required languages, reason (tech) and skills. A sidebar
+  filters by sector, role family, seniority, years asked, work mode,
+  contract and company, with live counts; search covers titles and skills.
 - **Health** — scraper status per company (OK, empty listing, failing,
   retired), recent runs and email delivery.
 - **Emails** and **Logs** — delivery history and the tail of each log file.
 
 Charts are built server-side with [echartsy](https://pypi.org/project/echartsy/)
 and rendered with Apache ECharts; every chart has a "Show data" table and
-click-to-drilldown into the roles behind a bar, row or segment. The JSON
+click-to-drilldown into the roles behind a bar, cell, line or segment. The JSON
 behind any chart is at `/api/charts/<name>?sector=&weeks=`.
 
 ## Setup
