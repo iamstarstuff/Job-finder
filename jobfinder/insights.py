@@ -344,3 +344,41 @@ class InsightRunner:
         if self.config_error is not None:
             return True, self.config_error
         return self.billed > 0, None
+
+
+def batch_params(job: Job, description: Optional[str], sector: str) -> Dict[str, Any]:
+    """analyse()'s request for the Message Batches API: the same prompt and
+    schema (as raw JSON schema), but no refusal fallback -- batches reject it,
+    so refused batch items are left for the realtime passes to retry."""
+    return {
+        "model": MODEL,
+        "max_tokens": MAX_TOKENS,
+        "output_config": {
+            "effort": EFFORT,
+            "format": {"type": "json_schema", "schema": anthropic.transform_schema(Insight)},
+        },
+        "system": _system(),
+        "messages": [{"role": "user", "content": user_content(job, description, sector)}],
+    }
+
+
+def parse_batch_message(message, sector: str, title_only: bool) -> AnalysisResult:
+    """A succeeded batch item's message as an AnalysisResult, costed at batch prices."""
+    insight = None
+    if message.stop_reason not in ("refusal", "max_tokens"):
+        text = next((block.text for block in message.content if block.type == "text"), "")
+        try:
+            insight = Insight.model_validate_json(text)
+        except ValueError:
+            insight = None
+    return _result_from(message.model, message.stop_reason, getattr(message, "stop_details", None),
+                        message.usage, insight, sector, title_only, batch=True)
+
+
+def estimate_cost(contents: List[str], batch: bool = True, output_tokens: int = 500) -> float:
+    """Rough USD cost of one request per user message, at about four characters a token."""
+    system_tokens = len(SYSTEM_PROMPT) // 4
+    input_tokens = sum(system_tokens + len(content) // 4 for content in contents)
+    price_in, price_out, _, _ = PRICES[MODEL]
+    cost = (input_tokens * price_in + len(contents) * output_tokens * price_out) / 1_000_000
+    return cost * (BATCH_DISCOUNT if batch else 1.0)

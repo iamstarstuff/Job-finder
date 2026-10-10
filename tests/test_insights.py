@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import anthropic
 import httpx2
 import pytest
@@ -193,3 +195,38 @@ def test_alert_reports_recovery_once_a_call_goes_through(tmp_path):
     runner = insights.InsightRunner(_conn(tmp_path), FakeClaude(fake_response(make_insight())), NOW)
     runner.classify(JOB, "desc", "tech")
     assert runner.alert() == (True, None)
+
+
+def _batch_message(insight=None, stop_reason="end_turn", text=None):
+    return SimpleNamespace(
+        model="claude-sonnet-5-5", stop_reason=stop_reason, stop_details=None,
+        usage=fake_response().usage,  # 1000 in, 200 out
+        content=[SimpleNamespace(type="text", text=text if text is not None else insight.model_dump_json())],
+    )
+
+
+def test_batch_params_use_a_json_schema_and_no_fallback():
+    params = insights.batch_params(JOB, "desc", "tech")
+    assert params["model"] == "claude-sonnet-5-5" and params["output_config"]["effort"] == "low"
+    assert params["output_config"]["format"]["type"] == "json_schema"
+    assert "role_family" in params["output_config"]["format"]["schema"]["properties"]
+    assert "fallbacks" not in params and "betas" not in params
+    assert params["system"] == insights._system()
+
+
+def test_parse_batch_message_costs_half_price():
+    result = insights.parse_batch_message(_batch_message(make_insight()), "tech", title_only=False)
+    assert result.insight.relevant is True
+    assert result.usage.cost_usd == pytest.approx(0.002)
+
+
+def test_parse_batch_message_failures():
+    with pytest.raises(insights.InsightRefused):
+        insights.parse_batch_message(_batch_message(stop_reason="refusal", text=""), "tech", False)
+    with pytest.raises(insights.InsightBadOutput):
+        insights.parse_batch_message(_batch_message(text="{not json"), "tech", False)
+
+
+def test_estimate_cost_grows_with_content():
+    small = insights.estimate_cost(["x" * 400])
+    assert 0 < small < insights.estimate_cost(["x" * 40000])
