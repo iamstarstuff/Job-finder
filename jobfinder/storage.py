@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from jobfinder.models import Job
 
@@ -63,6 +63,35 @@ CREATE TABLE IF NOT EXISTS company_failures (
     last_error TEXT NOT NULL,
     PRIMARY KEY (sector, company)
 );
+CREATE TABLE IF NOT EXISTS job_insights (
+    job_key TEXT PRIMARY KEY,
+    sector TEXT NOT NULL,
+    company TEXT NOT NULL,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL,
+    relevant INTEGER,
+    reason TEXT,
+    role_family TEXT,
+    seniority TEXT,
+    min_years_experience INTEGER,
+    skills TEXT,
+    required_languages TEXT,
+    work_mode TEXT,
+    contract_type TEXT,
+    salary_min REAL,
+    salary_max REAL,
+    salary_currency TEXT,
+    salary_period TEXT,
+    title_only INTEGER NOT NULL DEFAULT 0,
+    model TEXT NOT NULL,
+    prompt_version INTEGER NOT NULL,
+    input_tokens INTEGER NOT NULL,
+    output_tokens INTEGER NOT NULL,
+    cost_usd REAL NOT NULL,
+    via_batch INTEGER NOT NULL DEFAULT 0,
+    classified_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_job_insights_classified ON job_insights(classified_at);
 """
 
 
@@ -284,3 +313,71 @@ def save_enrichment(conn, job_id: int, description: str, seniority: Optional[str
             (job_id, skill_id),
         )
     conn.commit()
+
+
+# job_insights holds one Claude reading per posting, keyed by Job.key (the
+# same key jobs uses), so a rejected tech posting keeps its decision without
+# ever getting a jobs row. status: 'ok', 'refused', or 'failed' (billed
+# output that hit max_tokens or didn't parse). Every billed call writes one
+# row, so refused/failed postings aren't paid for again at the same version.
+INSIGHT_COLUMNS = (
+    "job_key", "sector", "company", "title", "status", "relevant", "reason", "role_family",
+    "seniority", "min_years_experience", "skills", "required_languages", "work_mode",
+    "contract_type", "salary_min", "salary_max", "salary_currency", "salary_period",
+    "title_only", "model", "prompt_version", "input_tokens", "output_tokens", "cost_usd",
+    "via_batch", "classified_at",
+)
+
+
+def get_insight(conn, job_key: str, prompt_version: int) -> Optional[sqlite3.Row]:
+    return conn.execute(
+        "SELECT * FROM job_insights WHERE job_key = ? AND prompt_version = ?",
+        (job_key, prompt_version),
+    ).fetchone()
+
+
+def save_insight(conn, row: Dict[str, Any]) -> None:
+    """Insert or replace one reading; `row` has a value for every INSIGHT_COLUMNS name."""
+    columns = ", ".join(INSIGHT_COLUMNS)
+    values = ", ".join(f":{c}" for c in INSIGHT_COLUMNS)
+    conn.execute(f"INSERT OR REPLACE INTO job_insights ({columns}) VALUES ({values})", row)
+    conn.commit()
+
+
+def insight_calls_on(conn, day: str) -> int:
+    """Realtime Claude calls billed on `day` (YYYY-MM-DD) -- the daily cap's
+    count. Batch backfill rows don't count against it."""
+    return conn.execute(
+        "SELECT COUNT(*) c FROM job_insights WHERE via_batch = 0 AND substr(classified_at, 1, 10) = ?",
+        (day,),
+    ).fetchone()["c"]
+
+
+def insight_spend(conn, since: str) -> float:
+    row = conn.execute(
+        "SELECT COALESCE(SUM(cost_usd), 0) total FROM job_insights WHERE classified_at >= ?", (since,),
+    ).fetchone()
+    return float(row["total"])
+
+
+def insight_status_counts(conn) -> Dict[str, int]:
+    rows = conn.execute("SELECT status, COUNT(*) c FROM job_insights GROUP BY status").fetchall()
+    return {r["status"]: r["c"] for r in rows}
+
+
+def find_jobs_needing_insights(conn, prompt_version: int, limit: Optional[int] = None,
+                               active_only: bool = True) -> List[sqlite3.Row]:
+    """Jobs with a stored description but no reading at `prompt_version`,
+    newest first. A reading at an older version counts as missing."""
+    query = """SELECT jobs.company, jobs.title, jobs.url, jobs.portal_url, jobs.closing_date,
+                      jobs.sector, job_details.description
+               FROM jobs
+               JOIN job_details ON job_details.job_id = jobs.id
+               LEFT JOIN job_insights ON job_insights.job_key = jobs.job_key
+                                     AND job_insights.prompt_version = ?
+               WHERE job_details.enrichment_failed = 0 AND job_details.description != ''
+                 AND job_insights.job_key IS NULL"""
+    if active_only:
+        query += " AND jobs.is_active = 1"
+    query += " ORDER BY jobs.first_seen DESC LIMIT ?"
+    return conn.execute(query, (prompt_version, -1 if limit is None else limit)).fetchall()
