@@ -150,8 +150,8 @@ def test_runner_saves_refused_and_failed_rows_with_their_cost(tmp_path):
         fake_response(None, stop_reason="refusal"), fake_response(None, stop_reason="max_tokens")), NOW)
     runner.classify(JOB, "desc", "tech")
     runner.classify(other, None, "tech")
-    assert storage.get_insight(conn, JOB.key, 1)["status"] == "refused"
-    failed = storage.get_insight(conn, other.key, 1)
+    assert storage.get_insight(conn, JOB.key, insights.PROMPT_VERSION)["status"] == "refused"
+    failed = storage.get_insight(conn, other.key, insights.PROMPT_VERSION)
     assert failed["status"] == "failed" and failed["title_only"] == 1 and failed["cost_usd"] > 0
     assert runner.billed == 2
 

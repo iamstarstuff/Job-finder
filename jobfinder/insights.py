@@ -23,7 +23,8 @@ log = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-5-5"  # the user's choice (2026-10-10)
 EFFORT = "low"               # extraction work; the rollout spot check confirms it against "medium"
-PROMPT_VERSION = 1           # bump when SYSTEM_PROMPT or Insight changes: every posting is read again
+PROMPT_VERSION = 2           # bump when SYSTEM_PROMPT or Insight changes: every posting is read again
+                             # 2 (2026-10-10): cloud solution architects and cloud-infrastructure SDEs count
 MAX_TOKENS = 4000
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
@@ -93,9 +94,15 @@ The reader is looking for roles whose main work is in one of these areas:
 
 Judge by the work the posting describes, not by words in the title: an "Applied Scientist" building ML models fits; a title that mentions cloud or AI but describes selling fits no area.
 
+Two kinds of role count as Cloud/Platform:
+- cloud solution architects, who design cloud architectures with customers (for example Azure, AWS or Google Cloud solution architects), even when the role is customer-facing
+- software engineers who build a cloud provider's infrastructure services, such as compute, serverless, containers, databases, storage, networking or load balancing (for example "Software Development Engineer, AWS Lambda Control Plane")
+
+General application or full-stack software engineering is not cloud/platform engineering.
+
 Set relevant to false when any of these holds:
 - the role requires a language other than English
-- it is a sales, pre-sales, solution-sales or account role, even when it is about cloud or AI products
+- it is a sales, pre-sales, solution-sales, solution-engineering or account role whose main work is selling (pipeline, quota, revenue), even when it is about cloud or AI products; cloud solution architects are the exception above
 - its main work is outside the areas above
 
 reason: one sentence. For a relevant role, name the area; for a rejected one, say why.
