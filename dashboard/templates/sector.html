@@ -19,6 +19,28 @@
   {{ chart_card("skill-trend", "Skill trend", "Share of each week's roles read by Claude that need the skill", 6, sector, weeks) }}
   {{ chart_card("seniority-mix", "Seniority mix by company", "Share of each company's roles read by Claude, by level", 12, sector, weeks) }}
   {{ chart_card("company-families", "Role families by company", "Share of each company's roles read by Claude, by role family", 12, sector, weeks) }}
+  <section class="chart-card span-12" data-chart="what-to-learn" data-sector="{{ sector }}" data-weeks="{{ weeks }}">
+    <header>
+      <h3>What to learn</h3>
+      <p class="subtitle">The skills most needed by roles read by Claude, for the role families and levels you pick (nothing picked means all)</p>
+      <div class="chart-controls">
+        <select data-param="family" multiple size="4" aria-label="Role families">
+          {% for f in families %}<option value="{{ f }}">{{ f }}</option>{% endfor %}
+        </select>
+        <select data-param="level" multiple size="4" aria-label="Levels">
+          {% for level in levels %}<option value="{{ level }}">{{ level }}</option>{% endfor %}
+        </select>
+      </div>
+    </header>
+    <div class="chart"></div>
+    <div class="drilldown" hidden></div>
+    <details class="chart-data">
+      <summary>Show data</summary>
+      <div class="chart-table table-scroll"></div>
+    </details>
+  </section>
+  {{ chart_card("experience-by-family", "Experience asked", "Median minimum years asked, among roles read by Claude that state them", 6, sector, weeks) }}
+  {{ chart_card("openings-by-family", "Openings by role family", "New roles per week for the five largest role families", 6, sector, weeks) }}
   {{ chart_card("days-to-close", "Days to close", "Median days a role stayed open; companies with fewer than three closed roles are left out", 6, sector, weeks) }}
 </div>
 

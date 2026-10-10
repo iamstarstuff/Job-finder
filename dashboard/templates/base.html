@@ -17,6 +17,7 @@
     --ordinal-1:#81B19B; --ordinal-2:#6E9D88; --ordinal-3:#5A8974; --ordinal-4:#487662;
     --ordinal-5:#356350; --ordinal-6:#23513E; --ordinal-7:#0F3F2E;
     --seq-1:#DCE9E1; --seq-2:#B5D0C2; --seq-3:#8AB5A0; --seq-4:#5F977F; --seq-5:#3F7A63; --seq-6:#2F5D50;
+    --cat-2:#7A5BC0; --cat-4:#2A6FC9; --cat-5:#B8407A;
     --good:#2A6B4F; --warn:#9A5A12; --critical:#A23B36;
     --good-bg:#E7F2EC; --warn-bg:#F7ECD9; --critical-bg:#F6E1DF; --neutral-bg:#EEE9E0;
     --font:"Bricolage Grotesque", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -90,6 +91,8 @@
   .empty-note { color:var(--muted); font-size:13px; padding:8px 0; }
   .chart-note { color:var(--muted); font-size:13px; margin-top:6px; }
   .chart-note:empty { display:none; }
+  .chart-controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .chart-controls select { min-width:180px; font-size:13px; padding:4px 8px; }
   .movers { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; padding-top:10px;
             border-top:1px solid var(--grid); font-size:13px; }
   .movers h4 { color:var(--muted); font-weight:500; margin-bottom:4px; }

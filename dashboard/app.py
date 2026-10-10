@@ -129,6 +129,7 @@ def create_app(db_path=None) -> Flask:
             for r in skill_rows:
                 skills_by_job.setdefault(r["job_id"], []).append(r["name"])
         return render_template("sector.html", recent_jobs=rows, skills_by_job=skills_by_job,
+                               families=analytics.families_in(conn, name), levels=analytics.SENIORITY_LEVELS,
                                **_page_context(conn, name, weeks))
 
     @app.route("/jobs")
@@ -207,7 +208,11 @@ def create_app(db_path=None) -> Flask:
         builder = charts.CHARTS.get(name)
         if builder is None:
             abort(404)
-        payload = builder(get_conn(), _sector_arg() or None, _window_arg())
+        extra = {}
+        if name in charts.TAKES_ROLE_FILTERS:
+            extra = {"families": tuple(request.args.getlist("family")),
+                     "levels": tuple(request.args.getlist("level"))}
+        payload = builder(get_conn(), _sector_arg() or None, _window_arg(), **extra)
         return jsonify(payload.to_dict())
 
     @app.route("/analytics")

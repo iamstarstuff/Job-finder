@@ -269,7 +269,7 @@ def test_api_chart_returns_the_contract(client):
     resp = client.get("/api/charts/skills-in-demand")
     assert resp.status_code == 200 and resp.is_json
     body = resp.get_json()
-    assert set(body) == {"option", "columns", "rows", "drilldown", "height"}
+    assert set(body) == {"option", "columns", "rows", "drilldown", "height", "note"}
     assert body["columns"] == ["Skill", "Roles"]
 
 
@@ -410,7 +410,8 @@ def test_home_movers_note_when_previous_window_has_no_data(tmp_path):
 def test_sector_page_has_the_extra_charts_recent_jobs_and_no_sector_select(client):
     html = client.get("/sector/pharma").data.decode()
     for name in ("skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend",
-                 "seniority-mix", "company-families", "days-to-close"):
+                 "seniority-mix", "company-families", "days-to-close",
+                 "what-to-learn", "experience-by-family", "openings-by-family"):
         assert f'data-chart="{name}"' in html
     assert "This week in Irish pharma hiring" in html
     assert 'data-sector="pharma"' in html
@@ -494,3 +495,22 @@ def test_charts_js_supports_cell_drilldowns_card_params_and_notes(client):
     assert "select[data-param]" in js
     assert "payload.note" in js
     assert 'params.set("weeks"' in js or "weeks:" in js
+
+
+def test_api_chart_forwards_role_filters_only_to_what_to_learn(client, monkeypatch):
+    calls = []
+
+    def fake(conn, sector, weeks, now=None, families=(), levels=()):
+        calls.append((families, levels))
+        return charts._empty(["A"])
+
+    monkeypatch.setitem(charts.CHARTS, "what-to-learn", fake)
+    client.get("/api/charts/what-to-learn?sector=tech&family=ML/AI&family=Data+Science&level=Senior")
+    assert calls == [(("ML/AI", "Data Science"), ("Senior",))]
+
+
+def test_sector_page_what_to_learn_card_offers_families_and_levels(enriched_client):
+    html = enriched_client.get("/sector/pharma").data.decode()
+    assert 'data-chart="what-to-learn"' in html
+    assert '<select data-param="family" multiple' in html and '<option value="Quality">' in html
+    assert '<select data-param="level" multiple' in html and '<option value="Director+">' in html

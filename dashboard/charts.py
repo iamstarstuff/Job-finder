@@ -37,6 +37,9 @@ PALETTE = {
     # surface (dataviz validate_palette.js --ordinal, 2026-10-10)
     "ordinal": ["#81B19B", "#6E9D88", "#5A8974", "#487662", "#356350", "#23513E", "#0F3F2E"],
     "neutral": "#CFC6B8",        # "Not stated" seniority
+    # Openings by role family. Validated with the dataviz validate_palette.js on the
+    # cream surface (worst adjacent CVD dE 13.0, normal 23.4); assign in this order.
+    "categorical": ["#1F7F5C", "#7A5BC0", "#C46A1E", "#2A6FC9", "#B8407A"],
     "sequential": ["#DCE9E1", "#B5D0C2", "#8AB5A0", "#5F977F", "#3F7A63", "#2F5D50"],
     "grid": "#EFE9DF",           # hairline gridlines, one step off the surface
     "ink": "#22392F",
@@ -54,10 +57,11 @@ class ChartPayload:
     rows: List[list]
     drilldown: Optional[dict] = None
     height: str = "360px"   # only the builder knows the row count, so it sizes the plot
+    note: Optional[str] = None  # a line under the chart, or the empty-state text when there is no plot
 
     def to_dict(self) -> dict:
         return {"option": self.option, "columns": self.columns, "rows": self.rows,
-                "drilldown": self.drilldown, "height": self.height}
+                "drilldown": self.drilldown, "height": self.height, "note": self.note}
 
 
 def _empty(columns: List[str], drilldown: Optional[dict] = None) -> ChartPayload:
@@ -256,6 +260,76 @@ def days_to_close(conn, sector: Optional[str], weeks: int, now: Optional[datetim
                         [[r["company"], r["median_days"], r["closed"]] for r in rows], drilldown, height)
 
 
+def what_to_learn(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None,
+                  families=(), levels=()) -> ChartPayload:
+    data = analytics.skills_for_roles(conn, sector=sector, weeks=weeks, families=families,
+                                      levels=levels, limit=10, now=now)
+    n = data["roles"]
+    columns = ["Skill", "Roles", "Of"]
+    drilldown = {"dimension": "skill", "key": "name"}
+    if n < analytics.MIN_ROLES_FOR_SKILLS or not data["skills"]:
+        return ChartPayload(option={}, columns=columns, rows=[], drilldown=drilldown,
+                            note=f"Too few roles ({n}) for these choices.")
+    rows = data["skills"]
+    df = pd.DataFrame({"Skill": [r["skill"] for r in rows], "Roles": [r["count"] for r in rows]})[::-1]
+    height = f"{24 * len(rows) + 80}px"
+    fig = _figure(height=height)
+    fig.barh(df, x="Skill", y="Roles", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
+    fig.legend(show=False)
+    fig.extra(xAxis={"type": "value", "min": 0, "max": n})
+    option = fig.to_option()
+    option["series"][0]["label"] = {"show": True, "position": "right", "formatter": f"{{c}} of {n}",
+                                     "color": PALETTE["muted"]}
+    return ChartPayload(option, columns, [[r["skill"], r["count"], n] for r in rows], drilldown, height,
+                        note=f"Based on {n} roles.")
+
+
+def experience_asked(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.experience_by_family(conn, sector=sector, weeks=weeks, now=now)
+    columns = ["Role family", "Median years", "Stated", "Roles"]
+    drilldown = {"dimension": "role_family", "key": "name"}
+    table = [[r["family"], "" if r["median"] is None else r["median"], r["stated"], r["total"]] for r in rows]
+    thin = [r["family"] for r in rows if r["median"] is None]
+    note = f"Too few stated: {', '.join(thin)}." if thin else None
+    shown = [r for r in rows if r["median"] is not None]
+    if not shown:
+        return ChartPayload(option={}, columns=columns, rows=table, drilldown=drilldown, note=note)
+    bottom_up = shown[::-1]
+    df = pd.DataFrame({"Role family": [r["family"] for r in bottom_up],
+                       "Median years": [r["median"] for r in bottom_up]})
+    height = f"{24 * len(shown) + 80}px"
+    fig = _figure(height=height)
+    fig.barh(df, x="Role family", y="Median years", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
+    fig.legend(show=False)
+    option = fig.to_option()
+    # Each bar says how many roles its median rests on.
+    option["series"][0]["data"] = [
+        {"value": r["median"], "label": {"show": True, "position": "right", "color": PALETTE["muted"],
+                                         "formatter": f"stated in {r['stated']} of {r['total']}"}}
+        for r in bottom_up]
+    return ChartPayload(option, columns, table, drilldown, height, note=note)
+
+
+def openings_by_family(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.openings_by_family(conn, sector=sector, weeks=weeks, now=now)
+    families = list(dict.fromkeys(r["family"] for r in rows))
+    columns = ["Week"] + families
+    drilldown = {"dimension": "role_family", "key": "seriesName"}
+    if not rows:
+        return _empty(columns, drilldown)
+    weeks_out = list(dict.fromkeys(r["week"] for r in rows))
+    counts = {(r["family"], r["week"]): r["count"] for r in rows}
+    df = pd.DataFrame({"Week": [analytics.week_label(w) for w in weeks_out]})
+    for family in families:
+        df[family] = [counts[(family, w)] for w in weeks_out]
+    fig = _figure(pointer="line")
+    for family, color in zip(families, PALETTE["categorical"]):
+        fig.plot(df, x="Week", y=family, color=color, symbol_size=8, line_style=_line_style())
+    fig.legend(show=True, left="left", top=0)
+    table = [[w] + [counts[(f, w)] for f in families] for w in weeks_out]
+    return ChartPayload(fig.to_option(), columns, table, drilldown)
+
+
 CHARTS: Dict[str, Callable] = {}
 
 CHARTS.update({
@@ -270,3 +344,13 @@ CHARTS.update({
     "company-families": company_families,
     "days-to-close": days_to_close,
 })
+
+CHARTS.update({
+    "what-to-learn": what_to_learn,
+    "experience-by-family": experience_asked,
+    "openings-by-family": openings_by_family,
+})
+
+# Builders that also take the card's role-family and level choices (charts.js
+# sends them as repeatable ?family= and ?level=).
+TAKES_ROLE_FILTERS = {"what-to-learn"}

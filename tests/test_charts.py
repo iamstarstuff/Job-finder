@@ -9,9 +9,10 @@ from tests.conftest import save_reading
 
 def test_palette_has_every_role_from_the_spec():
     assert set(charts.PALETTE) == {
-        "bar", "pharma", "tech", "ordinal", "neutral", "sequential",
+        "bar", "pharma", "tech", "ordinal", "neutral", "categorical", "sequential",
         "grid", "ink", "muted", "border",
     }
+    assert charts.PALETTE["categorical"] == ["#1F7F5C", "#7A5BC0", "#C46A1E", "#2A6FC9", "#B8407A"]
     assert charts.PALETTE["ordinal"] == ["#81B19B", "#6E9D88", "#5A8974", "#487662", "#356350", "#23513E", "#0F3F2E"]
     assert len(charts.PALETTE["sequential"]) == 6
     assert charts.SENIORITY_ORDER == ["Intern/Graduate", "Junior", "Mid", "Senior", "Lead/Principal",
@@ -39,7 +40,8 @@ def test_chart_payload_serialises_to_the_api_contract():
     payload = charts.ChartPayload(option={"series": []}, columns=["A"], rows=[[1]],
                                   drilldown={"dimension": "skill", "key": "name"})
     assert payload.to_dict() == {"option": {"series": []}, "columns": ["A"], "rows": [[1]],
-                                 "drilldown": {"dimension": "skill", "key": "name"}, "height": "360px"}
+                                 "drilldown": {"dimension": "skill", "key": "name"}, "height": "360px",
+                                 "note": None}
     empty = charts._empty(["A"], {"dimension": "skill", "key": "name"})
     assert empty.rows == [] and empty.option == {} and empty.drilldown["dimension"] == "skill"
 
@@ -218,6 +220,7 @@ def test_registry_matches_the_spec_inventory():
     assert set(charts.CHARTS) == {
         "skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend",
         "seniority-mix", "company-families", "days-to-close",
+        "what-to-learn", "experience-by-family", "openings-by-family",
     }
     for builder in charts.CHARTS.values():
         assert callable(builder)
@@ -231,3 +234,58 @@ def test_palette_matches_base_html():
     for value in charts.PALETTE.values():
         for hex_value in (value if isinstance(value, list) else [value]):
             assert hex_value in html, f"{hex_value} missing from base.html tokens"
+
+
+def _learn_seeded(tmp_path):
+    """Six Google tech roles first seen 09-10: five ML/AI (three Senior, two
+    Mid), one Cloud/Platform; Python in all, PyTorch in two; years 3,5,7,-,4 / 6."""
+    conn = storage.connect(tmp_path / "learn.db")
+    jobs = [Job("Google", f"Role {i}", f"https://g/{i}", "p", sector="tech") for i in range(6)]
+    storage.record_company_snapshot(conn, "Google", jobs, "2026-09-10T10:00:00")
+    for i, job in enumerate(jobs):
+        save_reading(conn, job, role_family="ML/AI" if i < 5 else "Cloud/Platform",
+                     seniority="Senior" if i < 3 else "Mid",
+                     skills=["Python", "PyTorch"] if i < 2 else ["Python"],
+                     min_years_experience=[3, 5, 7, None, 4, 6][i])
+    return conn
+
+
+def test_what_to_learn_shows_x_of_n_and_refuses_tiny_samples(tmp_path):
+    conn = _learn_seeded(tmp_path)
+    payload = charts.what_to_learn(conn, "tech", 0, now=NOW)
+    assert payload.option["yAxis"]["data"] == ["PyTorch", "Python"]
+    assert payload.option["xAxis"]["max"] == 6
+    assert payload.option["series"][0]["label"]["formatter"] == "{c} of 6"
+    assert payload.columns == ["Skill", "Roles", "Of"]
+    assert payload.rows == [["Python", 6, 6], ["PyTorch", 2, 6]]
+    assert payload.note == "Based on 6 roles."
+    assert payload.drilldown == {"dimension": "skill", "key": "name"}
+    assert charts.what_to_learn(conn, "tech", 0, now=NOW, families=("ML/AI",)).rows[0] == ["Python", 5, 5]
+    tiny = charts.what_to_learn(conn, "tech", 0, now=NOW, families=("ML/AI",), levels=("Senior",))
+    assert tiny.option == {} and tiny.rows == []
+    assert tiny.note == "Too few roles (3) for these choices."
+
+
+def test_experience_asked_labels_stated_counts_and_lists_thin_families(tmp_path):
+    payload = charts.experience_asked(_learn_seeded(tmp_path), "tech", 0, now=NOW)
+    option = payload.option
+    assert option["yAxis"]["data"] == ["ML/AI"]
+    datum = option["series"][0]["data"][0]
+    assert datum["value"] == 4.5 and datum["label"]["formatter"] == "stated in 4 of 5"
+    assert payload.columns == ["Role family", "Median years", "Stated", "Roles"]
+    assert payload.rows == [["ML/AI", 4.5, 4, 5], ["Cloud/Platform", "", 1, 1]]
+    assert payload.note == "Too few stated: Cloud/Platform."
+    assert payload.drilldown == {"dimension": "role_family", "key": "name"}
+
+
+def test_openings_by_family_is_one_coloured_line_per_family(tmp_path):
+    payload = charts.openings_by_family(_learn_seeded(tmp_path), "tech", 4, now=NOW)
+    option = payload.option
+    assert option["xAxis"]["data"] == ["17 Aug", "24 Aug", "31 Aug", "7 Sep", "14 Sep"]
+    assert [s["name"] for s in option["series"]] == ["ML/AI", "Cloud/Platform"]
+    assert [s["itemStyle"]["color"] for s in option["series"]] == charts.PALETTE["categorical"][:2]
+    assert option["series"][0]["data"] == [0, 0, 0, 5, 0]
+    assert payload.columns == ["Week", "ML/AI", "Cloud/Platform"]
+    assert payload.rows[3] == ["2026-09-07", 5, 1]
+    assert payload.drilldown == {"dimension": "role_family", "key": "seriesName"}
+    assert charts.openings_by_family(_learn_seeded(tmp_path), "pharma", 4, now=NOW).option == {}
