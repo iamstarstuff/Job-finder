@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import pytest
 
 
@@ -52,3 +54,42 @@ class FakeSession:
     def post(self, url, **kwargs):
         self.calls.append(("post", url, kwargs))
         return self._lookup(url)
+
+
+class FakeClaude:
+    """Stands in for anthropic.Anthropic: beta.messages.parse() records each
+    call's kwargs and returns -- or raises -- the next queued outcome. An
+    unexpected extra call fails loudly with IndexError."""
+
+    def __init__(self, *outcomes):
+        self.outcomes = list(outcomes)
+        self.calls = []
+        self.beta = SimpleNamespace(messages=SimpleNamespace(parse=self._parse))
+
+    def _parse(self, **kwargs):
+        self.calls.append(kwargs)
+        outcome = self.outcomes.pop(0)
+        if isinstance(outcome, BaseException):
+            raise outcome
+        return outcome
+
+
+def fake_response(parsed=None, stop_reason="end_turn", model="claude-sonnet-5-5",
+                  input_tokens=1000, output_tokens=200, cache_write=0, cache_read=0, category=None):
+    """The shape of a beta.messages.parse() response that insights.analyse() reads."""
+    return SimpleNamespace(
+        parsed_output=parsed, stop_reason=stop_reason, model=model,
+        stop_details=SimpleNamespace(category=category) if stop_reason == "refusal" else None,
+        usage=SimpleNamespace(input_tokens=input_tokens, output_tokens=output_tokens,
+                              cache_creation_input_tokens=cache_write,
+                              cache_read_input_tokens=cache_read),
+    )
+
+
+def make_insight(**overrides):
+    from jobfinder.insights import Insight
+    fields = dict(relevant=True, reason="Machine learning engineering role.", role_family="ML/AI",
+                  seniority="Senior", min_years_experience=5, skills=["Python", "PyTorch"],
+                  required_languages=[], work_mode="hybrid", contract_type="permanent", salary=None)
+    fields.update(overrides)
+    return Insight(**fields)
