@@ -11,14 +11,14 @@
 {% include "_brief.html" %}
 {% include "_tiles.html" %}
 <div class="grid">
-  {{ chart_card("skills-in-demand", "Skills in demand", "Roles with full descriptions that mention each skill", 6, sector, weeks) }}
+  {{ chart_card("skills-in-demand", "Skills in demand", "Roles read by Claude that need each skill; spelling variants merged", 6, sector, weeks) }}
   {{ chart_card("hiring-velocity", "Hiring velocity", "New roles per week", 6, sector, weeks) }}
   {% call chart_card("who-is-hiring", "Who is hiring", "Companies by open roles", 6, sector, weeks) %}
     {% include "_movers.html" %}
   {% endcall %}
-  {{ chart_card("skill-trend", "Skill trend", "Share of each week's new roles mentioning the skill, based on roles with full descriptions", 6, sector, weeks) }}
-  {{ chart_card("seniority-mix", "Seniority mix by company", "Share of each company's roles with full descriptions, by level", 12, sector, weeks) }}
-  {{ chart_card("company-categories", "What each company posts", "Share of each company's roles by title category", 12, sector, weeks) }}
+  {{ chart_card("skill-trend", "Skill trend", "Share of each week's roles read by Claude that need the skill", 6, sector, weeks) }}
+  {{ chart_card("seniority-mix", "Seniority mix by company", "Share of each company's roles read by Claude, by level", 12, sector, weeks) }}
+  {{ chart_card("company-families", "Role families by company", "Share of each company's roles read by Claude, by role family", 12, sector, weeks) }}
   {{ chart_card("days-to-close", "Days to close", "Median days a role stayed open; companies with fewer than three closed roles are left out", 6, sector, weeks) }}
 </div>
 

@@ -33,8 +33,10 @@ PALETTE = {
     "bar": "#2F5D50",            # single-hue magnitude bars
     "pharma": "#1F7F5C",         # categorical slot 1 (Home velocity line)
     "tech": "#C46A1E",           # categorical slot 2
-    "ordinal": ["#8FB5A2", "#659A84", "#417C66", "#2F5D50"],  # Junior -> Director
-    "neutral": "#CFC6B8",        # Unspecified seniority
+    # Intern/Graduate -> Director+: one green hue, monotone lightness; light end 2.26:1 on the
+    # surface (dataviz validate_palette.js --ordinal, 2026-10-10)
+    "ordinal": ["#81B19B", "#6E9D88", "#5A8974", "#487662", "#356350", "#23513E", "#0F3F2E"],
+    "neutral": "#CFC6B8",        # "Not stated" seniority
     "sequential": ["#DCE9E1", "#B5D0C2", "#8AB5A0", "#5F977F", "#3F7A63", "#2F5D50"],
     "grid": "#EFE9DF",           # hairline gridlines, one step off the surface
     "ink": "#22392F",
@@ -42,7 +44,7 @@ PALETTE = {
     "border": "#E8E0D4",
 }
 
-SENIORITY_ORDER = ["Junior", "Senior", "Lead", "Director", "Unspecified"]
+SENIORITY_ORDER = analytics.SENIORITY_LEVELS   # Claude's levels; "Not stated" last, in the neutral colour
 
 
 @dataclass
@@ -85,19 +87,18 @@ def _line_style() -> ec.LineStyle:
 
 
 def skills_in_demand(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
-    rows = analytics.top_skills(conn, limit=15, sector=sector, weeks=weeks, now=now)
-    columns = ["Skill", "Category", "Jobs"]
+    rows = analytics.skill_demand(conn, sector=sector, weeks=weeks, limit=15, now=now)
+    columns = ["Skill", "Roles"]
     drilldown = {"dimension": "skill", "key": "name"}
     if not rows:
         return _empty(columns, drilldown)
     # ECharts draws a category axis bottom-up: reverse so the biggest bar is on top.
-    df = pd.DataFrame({"Skill": [r["skill"] for r in rows], "Jobs": [r["count"] for r in rows]})[::-1]
+    df = pd.DataFrame({"Skill": [r["skill"] for r in rows], "Roles": [r["count"] for r in rows]})[::-1]
     height = "420px"
     fig = _figure(height=height)
-    fig.barh(df, x="Skill", y="Jobs", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
+    fig.barh(df, x="Skill", y="Roles", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
     fig.legend(show=False)
-    return ChartPayload(fig.to_option(), columns,
-                        [[r["skill"], r["category"], r["count"]] for r in rows], drilldown, height)
+    return ChartPayload(fig.to_option(), columns, [[r["skill"], r["count"]] for r in rows], drilldown, height)
 
 
 def hiring_velocity(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
@@ -153,8 +154,8 @@ def _share(count: int, total: int) -> float:
 
 
 def skill_trend(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
-    rows = analytics.skill_trend(conn, sector=sector, weeks=weeks, limit=12, now=now)
-    columns = ["Week", "Skill", "Jobs mentioning", "Enriched jobs that week", "Share %"]
+    rows = analytics.skill_shares_by_week(conn, sector=sector, weeks=weeks, limit=12, now=now)
+    columns = ["Week", "Skill", "Roles needing it", "Roles read that week", "Share %"]
     drilldown = {"dimension": "skill", "key": "row"}
     if not rows:
         return _empty(columns, drilldown)
@@ -182,8 +183,8 @@ def _company_order(totals: Counter) -> List[str]:
 
 
 def seniority_mix(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
-    rows = analytics.seniority_by_company(conn, sector=sector, weeks=weeks, now=now)
-    columns = ["Company"] + SENIORITY_ORDER + ["Enriched jobs"]
+    rows = analytics.seniority_counts(conn, sector=sector, weeks=weeks, now=now)
+    columns = ["Company"] + SENIORITY_ORDER + ["Roles read"]
     drilldown = {"dimension": "seniority", "key": "seriesName"}
     if not rows:
         return _empty(columns, drilldown)
@@ -210,29 +211,31 @@ def seniority_mix(conn, sector: Optional[str], weeks: int, now: Optional[datetim
     return ChartPayload(fig.to_option(), columns, table, drilldown, height)
 
 
-def company_categories(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
-    rows = analytics.category_breakdown(conn, sector=sector, weeks=weeks, now=now)
-    columns = ["Company", "Category", "Jobs", "Share %"]
-    drilldown = {"dimension": "company", "key": "row"}
+def company_families(conn, sector: Optional[str], weeks: int, now: Optional[datetime] = None) -> ChartPayload:
+    rows = analytics.family_counts(conn, sector=sector, weeks=weeks, now=now)
+    columns = ["Company", "Role family", "Roles", "Share %"]
+    drilldown = {"dimension": "company_family", "key": "cell"}
     if not rows:
         return _empty(columns, drilldown)
-    categories = [c for c, _ in analytics.CATEGORY_KEYWORDS] + ["Other"]
     by: Dict[str, Counter] = defaultdict(Counter)
     totals: Counter = Counter()
+    family_totals: Counter = Counter()
     for r in rows:
-        by[r["company"]][r["category"]] += r["count"]
+        by[r["company"]][r["family"]] += r["count"]
         totals[r["company"]] += r["count"]
+        family_totals[r["family"]] += r["count"]
     companies = _company_order(totals)
-    cells = [{"Category": cat, "Company": c, "Share": _share(by[c][cat], totals[c])}
-             for c in companies[::-1] for cat in categories]
+    families = _company_order(family_totals)   # same rule: largest first, then name
+    cells = [{"Role family": f, "Company": c, "Share": _share(by[c][f], totals[c])}
+             for c in companies[::-1] for f in families]
     df = pd.DataFrame(cells)
     height = f"{28 * len(companies) + 90}px"
     fig = _figure(height=height, trigger="item")
-    fig.heatmap(df, x="Category", y="Company", value="Share", in_range_colors=PALETTE["sequential"],
+    fig.heatmap(df, x="Role family", y="Company", value="Share", in_range_colors=PALETTE["sequential"],
                 label_show=False, visual_min=0, visual_max=100)
     fig.xticks(interval=0, rotate=30)
-    table = [[c, cat, by[c][cat], _share(by[c][cat], totals[c])]
-             for c in companies for cat in categories if by[c][cat]]
+    table = [[c, f, by[c][f], _share(by[c][f], totals[c])]
+             for c in companies for f in families if by[c][f]]
     return ChartPayload(fig.to_option(), columns, table, drilldown, height)
 
 
@@ -264,6 +267,6 @@ CHARTS.update({
 
 CHARTS.update({
     "seniority-mix": seniority_mix,
-    "company-categories": company_categories,
+    "company-families": company_families,
     "days-to-close": days_to_close,
 })

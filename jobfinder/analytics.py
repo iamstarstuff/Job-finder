@@ -7,32 +7,6 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from typing import Dict, Iterable, List, Optional, Tuple
 
-# Order matters: first match wins.
-CATEGORY_KEYWORDS = [
-    ("Quality", ["qa", "qc", "quality", "validation", "compliance"]),
-    ("Regulatory", ["regulatory", "pharmacovigilance", "medical affairs"]),
-    ("R&D / Science", ["scientist", "research", "r&d", "laboratory", "biolog",
-                       "chemist", "analytical"]),
-    ("Engineering", ["engineer", "engineering", "maintenance", "automation",
-                     "technician", "utilities"]),
-    ("Manufacturing / Ops", ["manufacturing", "production", "operator",
-                             "operations", "warehouse", "supply chain",
-                             "logistics", "packaging"]),
-    ("IT / Digital", [" it ", "digital", "data", "software", "system"]),
-    ("Commercial", ["sales", "marketing", "commercial", " account ",
-                    "business development", "product specialist"]),
-    ("HR / Finance / Admin", [" hr ", "human resources", "finance", "accountant",
-                              "administrat", "payroll", "legal"]),
-]
-
-
-def categorize(title: str) -> str:
-    lowered = f" {title.lower()} "
-    for category, keywords in CATEGORY_KEYWORDS:
-        if any(kw in lowered for kw in keywords):
-            return category
-    return "Other"
-
 
 def week_start(iso_ts: str) -> str:
     """Monday (YYYY-MM-DD) of the ISO week containing the timestamp."""
@@ -212,58 +186,6 @@ def _week_range(cutoff: Optional[str], seen: Iterable[str], now: datetime) -> Li
     return out
 
 
-def skill_trend(conn, sector: Optional[str] = None, weeks: int = 12, limit: int = 12,
-                now: Optional[datetime] = None) -> List[dict]:
-    """For the top `limit` skills in the window: jobs per week mentioning the
-    skill (`count`) and enriched jobs first seen that week (`total`, the share
-    denominator). Dense: one row per (skill, week), skill-major."""
-    now = now or datetime.now()
-    cutoff = window_cutoff(weeks, now)
-    top = [r["skill"] for r in top_skills(conn, limit=limit, sector=sector, weeks=weeks, now=now)]
-    if not top:
-        return []
-    window_sql = (" AND jobs.first_seen >= ?" if cutoff else "") + (" AND jobs.sector = ?" if sector else "")
-    window_params: list = ([cutoff] if cutoff else []) + ([sector] if sector else [])
-    totals = Counter(
-        week_start(r["first_seen"]) for r in conn.execute(
-            "SELECT jobs.first_seen FROM job_details JOIN jobs ON jobs.id = job_details.job_id"
-            " WHERE job_details.enrichment_failed = 0" + window_sql, window_params))
-    placeholders = ", ".join("?" for _ in top)
-    per: Counter = Counter()
-    for r in conn.execute(
-        "SELECT jobs.first_seen AS first_seen, skills.name AS name"
-        " FROM job_skills JOIN skills ON skills.id = job_skills.skill_id"
-        " JOIN job_details ON job_details.job_id = job_skills.job_id"
-        " JOIN jobs ON jobs.id = job_skills.job_id"
-        " WHERE job_details.enrichment_failed = 0" + window_sql +
-        f" AND skills.name IN ({placeholders})",
-        window_params + top,
-    ):
-        per[(r["name"], week_start(r["first_seen"]))] += 1
-    weeks_out = _week_range(cutoff, totals.keys(), now)
-    return [{"week": w, "skill": s, "count": per.get((s, w), 0), "total": totals.get(w, 0)}
-            for s in top for w in weeks_out]
-
-
-def seniority_by_company(conn, sector: Optional[str] = None, weeks: int = 12,
-                         now: Optional[datetime] = None) -> List[dict]:
-    cutoff = window_cutoff(weeks, now)
-    sql = """SELECT jobs.company AS company, COALESCE(job_details.seniority, 'Unspecified') AS seniority,
-                    COUNT(*) AS count
-             FROM job_details JOIN jobs ON jobs.id = job_details.job_id
-             WHERE job_details.enrichment_failed = 0"""
-    params: list = []
-    if cutoff:
-        sql += " AND jobs.first_seen >= ?"
-        params.append(cutoff)
-    if sector:
-        sql += " AND jobs.sector = ?"
-        params.append(sector)
-    sql += " GROUP BY jobs.company, seniority ORDER BY jobs.company, seniority"
-    return [{"company": r["company"], "seniority": r["seniority"], "count": r["count"]}
-            for r in conn.execute(sql, params)]
-
-
 def new_jobs_per_week(conn, weeks: int = 12, sector: Optional[str] = None,
                       now: Optional[datetime] = None) -> List[dict]:
     """New jobs per ISO week as a continuous, zero-filled series ending this
@@ -290,23 +212,6 @@ def new_jobs_per_week(conn, weeks: int = 12, sector: Optional[str] = None,
         out.append({"week": d.isoformat(), "count": counts.get(d.isoformat(), 0)})
         d += timedelta(days=7)
     return out
-
-
-def category_breakdown(conn, sector: Optional[str] = None, weeks: int = 0,
-                       now: Optional[datetime] = None) -> List[dict]:
-    cutoff = window_cutoff(weeks, now)
-    sql, params = "SELECT company, title FROM jobs WHERE 1=1", []
-    if cutoff:
-        sql += " AND first_seen >= ?"
-        params.append(cutoff)
-    if sector:
-        sql += " AND sector = ?"
-        params.append(sector)
-    counts: Dict[tuple, int] = {}
-    for r in conn.execute(sql, params):
-        key = (r["company"], categorize(r["title"]))
-        counts[key] = counts.get(key, 0) + 1
-    return [{"company": c, "category": cat, "count": n} for (c, cat), n in sorted(counts.items())]
 
 
 def median_days_active(conn, sector: Optional[str] = None, weeks: int = 0,
@@ -363,28 +268,6 @@ def overview(conn, sector: Optional[str] = None, now: Optional[datetime] = None)
         "emails_sent": count("SELECT COUNT(*) c FROM emails WHERE success = 1", []),
         "emails_failed": count("SELECT COUNT(*) c FROM emails WHERE success = 0", []),
     }
-
-
-def top_skills(conn, limit: int = 15, sector: Optional[str] = None, weeks: int = 0,
-               now: Optional[datetime] = None) -> List[dict]:
-    cutoff = window_cutoff(weeks, now)
-    sql = """SELECT skills.name AS skill, skills.category AS category, COUNT(*) AS count
-             FROM job_skills
-             JOIN skills ON skills.id = job_skills.skill_id
-             JOIN job_details ON job_details.job_id = job_skills.job_id
-             JOIN jobs ON jobs.id = job_skills.job_id
-             WHERE job_details.enrichment_failed = 0"""
-    params: list = []
-    if cutoff:
-        sql += " AND jobs.first_seen >= ?"
-        params.append(cutoff)
-    if sector:
-        sql += " AND jobs.sector = ?"
-        params.append(sector)
-    sql += " GROUP BY skills.id ORDER BY count DESC, skills.name LIMIT ?"
-    params.append(limit)
-    rows = conn.execute(sql, params).fetchall()
-    return [{"skill": r["skill"], "category": r["category"], "count": r["count"]} for r in rows]
 
 
 _STATUS_ORDER = {"failing": 0, "empty": 1, "retired": 2, "ok": 3}

@@ -28,46 +28,6 @@ def seeded_conn(tmp_path):
     return conn
 
 
-def seeded_enriched_conn(tmp_path):
-    conn = storage.connect(tmp_path / "e.db")
-    storage.record_company_snapshot(conn, "Abbvie", [
-        Job("Abbvie", "SAP Engineer", "https://a/1", "p"),
-        Job("Abbvie", "QC Analyst", "https://a/2", "p"),
-        Job("Abbvie", "Broken Enrichment", "https://a/3", "p"),
-    ], "2026-07-17T10:00:00")
-    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
-    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/2",)).fetchone()["id"]
-    id3 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/3",)).fetchone()["id"]
-    storage.save_enrichment(conn, id1, "Needs SAP and GMP.", "Senior",
-                             [("SAP", "Software"), ("GMP", "Regulatory")], "2026-07-17T11:00:00")
-    storage.save_enrichment(conn, id2, "QC role, GMP required.", None,
-                             [("GMP", "Regulatory")], "2026-07-17T11:00:00")
-    storage.save_enrichment(conn, id3, "", None, [], "2026-07-17T11:00:00", failed=True)
-    return conn
-
-
-def test_categorize_titles():
-    assert analytics.categorize("QC Analyst II") == "Quality"
-    assert analytics.categorize("Process Engineer") == "Engineering"
-    assert analytics.categorize("Senior Research Scientist") == "R&D / Science"
-    assert analytics.categorize("Regulatory Affairs Manager") == "Regulatory"
-    assert analytics.categorize("Something Odd") == "Other"
-    # Regression: word-boundary fixes for "it", "hr", "account"
-    assert analytics.categorize("Credit Analyst") == "Other"
-    assert analytics.categorize("Unit Manager") == "Other"
-    assert analytics.categorize("Accountant") == "HR / Finance / Admin"
-    assert analytics.categorize("IT Support Engineer") == "Engineering"
-    assert analytics.categorize("IT Support Specialist") == "IT / Digital"
-    assert analytics.categorize("HR Business Partner") == "HR / Finance / Admin"
-
-
-def test_category_breakdown(tmp_path):
-    conn = seeded_conn(tmp_path)
-    rows = analytics.category_breakdown(conn)
-    assert {"company": "APC", "category": "Quality", "count": 1} in rows
-    assert {"company": "APC", "category": "Engineering", "count": 1} in rows
-
-
 def test_median_days_active(tmp_path):
     conn = seeded_conn(tmp_path)
     rows = {r["company"]: r["median_days"] for r in analytics.median_days_active(conn)}
@@ -80,20 +40,6 @@ def test_overview_smoke(tmp_path):
     assert data["total_jobs_seen"] == 3
     assert data["active_jobs"] == 2
     assert data["companies"] == 2
-
-
-def test_top_skills_counts_across_jobs(tmp_path):
-    conn = seeded_enriched_conn(tmp_path)
-    by_skill = {r["skill"]: r["count"] for r in analytics.top_skills(conn)}
-    assert by_skill["GMP"] == 2
-    assert by_skill["SAP"] == 1
-
-
-def test_top_skills_respects_limit(tmp_path):
-    conn = seeded_enriched_conn(tmp_path)
-    rows = analytics.top_skills(conn, limit=1)
-    assert len(rows) == 1
-    assert rows[0]["skill"] == "GMP"
 
 
 def seeded_mixed_sector_conn(tmp_path):
@@ -117,20 +63,6 @@ def test_overview_filters_by_sector(tmp_path):
     assert analytics.overview(conn, sector="pharma")["total_jobs_seen"] == 1
     assert analytics.overview(conn, sector="tech")["total_jobs_seen"] == 1
     assert analytics.overview(conn, sector="tech")["companies"] == 1
-
-
-def test_top_skills_filters_by_sector(tmp_path):
-    conn = seeded_mixed_sector_conn(tmp_path)
-    pharma_skills = {r["skill"] for r in analytics.top_skills(conn, sector="pharma")}
-    tech_skills = {r["skill"] for r in analytics.top_skills(conn, sector="tech")}
-    assert pharma_skills == {"SAP"}
-    assert tech_skills == {"Kubernetes"}
-
-
-def test_category_breakdown_filters_by_sector(tmp_path):
-    conn = seeded_mixed_sector_conn(tmp_path)
-    tech_rows = analytics.category_breakdown(conn, sector="tech")
-    assert all(r["company"] == "Google" for r in tech_rows)
 
 
 def test_new_jobs_per_week_filters_by_sector(tmp_path):
@@ -212,17 +144,6 @@ def test_overview_reports_week_deltas_and_enrichment(tmp_path):
     assert analytics.overview(conn, sector="tech", now=now)["companies_failing"] == 0
 
 
-def test_top_skills_respects_window(tmp_path):
-    conn = _seed_two_weeks(tmp_path)
-    now = datetime(2026, 9, 15, 12, 0, 0)
-    old_id = conn.execute("SELECT id FROM jobs WHERE url='https://b/1'").fetchone()["id"]
-    new_id = conn.execute("SELECT id FROM jobs WHERE url='https://a/1'").fetchone()["id"]
-    storage.save_enrichment(conn, old_id, "SAP", None, [("SAP", "Software")], "2026-09-05T11:00:00")
-    storage.save_enrichment(conn, new_id, "GMP", None, [("GMP", "Regulatory")], "2026-09-14T11:00:00")
-    assert {r["skill"] for r in analytics.top_skills(conn, now=now)} == {"SAP", "GMP"}
-    assert {r["skill"] for r in analytics.top_skills(conn, weeks=1, now=now)} == {"GMP"}
-
-
 def test_new_jobs_per_week_is_continuous_and_monday_dated(tmp_path):
     conn = _seed_two_weeks(tmp_path)
     now = datetime(2026, 9, 15, 12, 0, 0)
@@ -300,35 +221,6 @@ def test_compute_movers_not_comparable_when_previous_window_is_empty():
         {"company": "B", "active": 1, "new_in_window": 3, "new_previous_window": 0},
     ]
     assert analytics.compute_movers(rows) == {"up": [], "down": [], "comparable": False}
-
-
-def test_skill_trend_is_dense_and_uses_enriched_totals(tmp_path):
-    conn = _seed_enriched_window(tmp_path)
-    rows = analytics.skill_trend(conn, weeks=4, limit=3, now=NOW)
-    weeks = ["2026-08-17", "2026-08-24", "2026-08-31", "2026-09-07", "2026-09-14"]
-    assert [r["week"] for r in rows][:5] == weeks                       # skill-major, week-minor
-    assert [r["skill"] for r in rows][::5] == ["GMP", "Python", "SAP"]  # GMP 3, then the 1-count ties by name
-    by = {(r["skill"], r["week"]): (r["count"], r["total"]) for r in rows}
-    assert by[("GMP", "2026-09-07")] == (2, 2)   # MSD Director + BMS Process Engineer; "Broken" excluded from total
-    assert by[("GMP", "2026-09-14")] == (0, 1)   # Data Scientist is enriched but mentions Python only
-    assert by[("SAP", "2026-08-24")] == (1, 1)
-    assert analytics.skill_trend(conn, sector="tech", now=NOW) == []
-
-
-def test_seniority_by_company_labels_null_and_respects_window(tmp_path):
-    conn = _seed_enriched_window(tmp_path)
-    rows = {(r["company"], r["seniority"]): r["count"] for r in analytics.seniority_by_company(conn, weeks=0, now=NOW)}
-    assert rows == {("MSD", "Senior"): 1, ("MSD", "Director"): 1, ("BMS", "Unspecified"): 2}
-    recent = {(r["company"], r["seniority"]) for r in analytics.seniority_by_company(conn, weeks=1, now=NOW)}
-    assert recent == {("MSD", "Director"), ("BMS", "Unspecified")}
-
-
-def test_category_breakdown_respects_window(tmp_path):
-    conn = _seed_enriched_window(tmp_path)
-    all_rows = {(r["company"], r["category"]): r["count"] for r in analytics.category_breakdown(conn, now=NOW)}
-    assert all_rows[("MSD", "Quality")] == 2
-    recent = {(r["company"], r["category"]): r["count"] for r in analytics.category_breakdown(conn, weeks=1, now=NOW)}
-    assert recent[("MSD", "Quality")] == 1
 
 
 def test_median_days_active_window_and_min_closed(tmp_path):
@@ -411,7 +303,9 @@ def test_scraper_health_reports_failures_for_registry_only_companies(tmp_path):
 
 
 def test_removed_analytics_functions_are_gone():
-    for name in ("jobs_per_company", "seniority_breakdown", "skills_by_category"):
+    for name in ("jobs_per_company", "seniority_breakdown", "skills_by_category", "top_skills",
+                 "skill_trend", "seniority_by_company", "category_breakdown", "categorize",
+                 "CATEGORY_KEYWORDS"):
         assert not hasattr(analytics, name), name
 
 

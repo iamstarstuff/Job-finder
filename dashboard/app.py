@@ -39,7 +39,7 @@ def _page_context(conn, sector: str, weeks: int) -> dict:
         "overview": overview,
         "kicker": f"This week in Irish {SECTOR_NAMES[sector]} hiring",
         "brief": brief.compose_brief(
-            overview, analytics.top_skills(conn, limit=3, sector=scoped, weeks=weeks),
+            overview, analytics.skill_demand(conn, sector=scoped, weeks=weeks, limit=3),
             this_week, WINDOW_LABELS[weeks]),
         "movers": analytics.compute_movers(velocity) if weeks else None,
     }
@@ -60,6 +60,14 @@ def _window_arg() -> int:
 def _sector_arg() -> str:
     sector = request.args.get("sector", "")
     return sector if sector in ("pharma", "tech") else ""
+
+
+def _drilldown_weeks() -> int:
+    """?weeks= for drilldowns: validated like _window_arg, but all time when
+    absent, so drilldown links without it keep listing every role."""
+    if "weeks" not in request.args:
+        return 0
+    return _window_arg()
 
 
 def highlight(text, term):
@@ -184,46 +192,15 @@ def create_app(db_path=None) -> Flask:
                 sql += " AND sector = ?"
                 params.append(sector)
             sql += " ORDER BY first_seen DESC LIMIT 100"
-            rows = conn.execute(sql, params).fetchall()
-        elif dimension == "skill":
-            sql = """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
-                     FROM jobs
-                     JOIN job_skills ON job_skills.job_id = jobs.id
-                     JOIN skills ON skills.id = job_skills.skill_id
-                     WHERE skills.name = ?"""
-            params = [value]
-            if sector:
-                sql += " AND jobs.sector = ?"
-                params.append(sector)
-            sql += " ORDER BY jobs.first_seen DESC LIMIT 100"
-            rows = conn.execute(sql, params).fetchall()
-        elif dimension == "seniority":
-            seniority_value = None if value == "Unspecified" else value
-            sql = """SELECT jobs.title, jobs.company, jobs.url, jobs.first_seen
-                     FROM jobs
-                     JOIN job_details ON job_details.job_id = jobs.id
-                     WHERE job_details.seniority IS ? AND job_details.enrichment_failed = 0"""
-            params = [seniority_value]
-            if sector:
-                sql += " AND jobs.sector = ?"
-                params.append(sector)
-            sql += " ORDER BY jobs.first_seen DESC LIMIT 100"
-            rows = conn.execute(sql, params).fetchall()
-        elif dimension == "category":
-            sql = "SELECT title, company, url, first_seen FROM jobs"
-            params = []
-            if sector:
-                sql += " WHERE sector = ?"
-                params.append(sector)
-            sql += " ORDER BY first_seen DESC"
-            all_jobs = conn.execute(sql, params).fetchall()
-            rows = [r for r in all_jobs if analytics.categorize(r["title"]) == value][:100]
+            rows = [{"title": r["title"], "company": r["company"], "url": r["url"],
+                     "first_seen": r["first_seen"]} for r in conn.execute(sql, params)]
         else:
-            return jsonify({"error": "unknown dimension"}), 400
-        return jsonify([
-            {"title": r["title"], "company": r["company"], "url": r["url"], "first_seen": r["first_seen"]}
-            for r in rows
-        ])
+            rows = analytics.claude_drilldown(
+                conn, dimension, value, sector=sector, weeks=_drilldown_weeks(),
+                families=request.args.getlist("family"), levels=request.args.getlist("level"))
+            if rows is None:
+                return jsonify({"error": "unknown dimension"}), 400
+        return jsonify(rows)
 
     @app.route("/api/charts/<name>")
     def api_chart(name):

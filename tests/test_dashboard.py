@@ -5,6 +5,7 @@ import pytest
 from jobfinder import storage
 from jobfinder.models import Job
 from dashboard import charts
+from tests.conftest import save_reading
 
 
 @pytest.fixture
@@ -49,14 +50,11 @@ def test_logs_page_missing_file_is_handled(client):
 @pytest.fixture
 def enriched_client(tmp_path):
     conn = storage.connect(tmp_path / "e.db")
-    storage.record_company_snapshot(conn, "Abbvie", [
-        Job("Abbvie", "SAP Engineer", "https://a/1", "p"),
-        Job("Abbvie", "QC Analyst", "https://a/2", "p"),
-    ], "2026-07-17T10:00:00")
-    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
-    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/2",)).fetchone()["id"]
-    storage.save_enrichment(conn, id1, "Needs SAP.", "Senior", [("SAP", "Software")], "2026-07-17T11:00:00")
-    storage.save_enrichment(conn, id2, "QC role.", None, [], "2026-07-17T11:00:00")
+    sap = Job("Abbvie", "SAP Engineer", "https://a/1", "p")
+    qc = Job("Abbvie", "QC Analyst", "https://a/2", "p")
+    storage.record_company_snapshot(conn, "Abbvie", [sap, qc], "2026-07-17T10:00:00")
+    save_reading(conn, sap, role_family="Engineering", seniority="Senior", skills=["SAP"])
+    save_reading(conn, qc, role_family="Quality", skills=["GMP"])
     conn.close()
     from dashboard.app import create_app
     app = create_app(db_path=tmp_path / "e.db")
@@ -64,30 +62,39 @@ def enriched_client(tmp_path):
     return app.test_client()
 
 
-def test_drilldown_by_company(enriched_client):
-    resp = enriched_client.get("/api/drilldown/company?value=Abbvie")
-    assert resp.status_code == 200
-    titles = {r["title"] for r in resp.get_json()}
-    assert titles == {"SAP Engineer", "QC Analyst"}
-
-
-def test_drilldown_by_skill(enriched_client):
-    resp = enriched_client.get("/api/drilldown/skill?value=SAP")
-    titles = {r["title"] for r in resp.get_json()}
-    assert titles == {"SAP Engineer"}
+def test_drilldown_by_skill_is_case_insensitive(enriched_client):
+    resp = enriched_client.get("/api/drilldown/skill?value=sap")
+    assert {r["title"] for r in resp.get_json()} == {"SAP Engineer"}
 
 
 def test_drilldown_by_seniority(enriched_client):
     resp = enriched_client.get("/api/drilldown/seniority?value=Senior")
     assert {r["title"] for r in resp.get_json()} == {"SAP Engineer"}
+    resp = enriched_client.get("/api/drilldown/seniority?value=Not+stated")
+    assert {r["title"] for r in resp.get_json()} == {"QC Analyst"}
 
-    resp_unspecified = enriched_client.get("/api/drilldown/seniority?value=Unspecified")
-    assert {r["title"] for r in resp_unspecified.get_json()} == {"QC Analyst"}
+
+def test_drilldown_by_role_family_and_company_family(enriched_client):
+    resp = enriched_client.get("/api/drilldown/role_family?value=Quality")
+    assert {r["title"] for r in resp.get_json()} == {"QC Analyst"}
+    resp = enriched_client.get("/api/drilldown/company_family?value=Abbvie::Engineering")
+    assert {r["title"] for r in resp.get_json()} == {"SAP Engineer"}
 
 
-def test_drilldown_by_category(enriched_client):
-    resp = enriched_client.get("/api/drilldown/category?value=Quality")
-    assert "QC Analyst" in {r["title"] for r in resp.get_json()}
+def test_drilldown_respects_weeks_and_rejects_bad_windows(enriched_client):
+    assert enriched_client.get("/api/drilldown/skill?value=SAP&weeks=4").get_json() == []  # July is long gone
+    assert enriched_client.get("/api/drilldown/skill?value=SAP&weeks=5").status_code == 400
+
+
+def test_drilldown_by_category_is_gone(enriched_client):
+    assert enriched_client.get("/api/drilldown/category?value=Quality").status_code == 400
+
+
+def test_drilldown_by_company(enriched_client):
+    resp = enriched_client.get("/api/drilldown/company?value=Abbvie")
+    assert resp.status_code == 200
+    titles = {r["title"] for r in resp.get_json()}
+    assert titles == {"SAP Engineer", "QC Analyst"}
 
 
 def test_drilldown_unknown_dimension_returns_400(enriched_client):
@@ -263,7 +270,7 @@ def test_api_chart_returns_the_contract(client):
     assert resp.status_code == 200 and resp.is_json
     body = resp.get_json()
     assert set(body) == {"option", "columns", "rows", "drilldown", "height"}
-    assert body["columns"] == ["Skill", "Category", "Jobs"]
+    assert body["columns"] == ["Skill", "Roles"]
 
 
 def test_api_chart_unknown_name_is_404(client):
@@ -403,7 +410,7 @@ def test_home_movers_note_when_previous_window_has_no_data(tmp_path):
 def test_sector_page_has_the_extra_charts_recent_jobs_and_no_sector_select(client):
     html = client.get("/sector/pharma").data.decode()
     for name in ("skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend",
-                 "seniority-mix", "company-categories", "days-to-close"):
+                 "seniority-mix", "company-families", "days-to-close"):
         assert f'data-chart="{name}"' in html
     assert "This week in Irish pharma hiring" in html
     assert 'data-sector="pharma"' in html
@@ -479,3 +486,11 @@ def test_health_page_claude_panel_without_data(tmp_path):
     from dashboard.app import create_app
     html = create_app(db_path=tmp_path / "e.db").test_client().get("/health").data.decode()
     assert "Claude API" in html and "$0.00" in html and "0/200" in html
+
+
+def test_charts_js_supports_cell_drilldowns_card_params_and_notes(client):
+    js = client.get("/static/charts.js").data.decode()
+    assert 'drilldown.key === "cell"' in js
+    assert "select[data-param]" in js
+    assert "payload.note" in js
+    assert 'params.set("weeks"' in js or "weeks:" in js

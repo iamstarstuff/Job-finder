@@ -14,7 +14,8 @@
     --bg:#FAF7F2; --card:#FFFFFF; --border:#E8E0D4; --grid:#EFE9DF;
     --ink:#22392F; --muted:#8A7F6E; --accent:#2F5D50; --amber:#D98E4A;
     --series-pharma:#1F7F5C; --series-tech:#C46A1E; --neutral:#CFC6B8;
-    --ordinal-1:#8FB5A2; --ordinal-2:#659A84; --ordinal-3:#417C66; --ordinal-4:#2F5D50;
+    --ordinal-1:#81B19B; --ordinal-2:#6E9D88; --ordinal-3:#5A8974; --ordinal-4:#487662;
+    --ordinal-5:#356350; --ordinal-6:#23513E; --ordinal-7:#0F3F2E;
     --seq-1:#DCE9E1; --seq-2:#B5D0C2; --seq-3:#8AB5A0; --seq-4:#5F977F; --seq-5:#3F7A63; --seq-6:#2F5D50;
     --good:#2A6B4F; --warn:#9A5A12; --critical:#A23B36;
     --good-bg:#E7F2EC; --warn-bg:#F7ECD9; --critical-bg:#F6E1DF; --neutral-bg:#EEE9E0;
@@ -87,6 +88,8 @@
   details.chart-data summary::before { content:"+"; display:inline-block; width:14px; color:var(--accent); }
   details.chart-data[open] summary::before { content:"–"; }
   .empty-note { color:var(--muted); font-size:13px; padding:8px 0; }
+  .chart-note { color:var(--muted); font-size:13px; margin-top:6px; }
+  .chart-note:empty { display:none; }
   .movers { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; padding-top:10px;
             border-top:1px solid var(--grid); font-size:13px; }
   .movers h4 { color:var(--muted); font-weight:500; margin-bottom:4px; }

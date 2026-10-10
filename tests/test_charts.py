@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from dashboard import charts
 from jobfinder import storage
 from jobfinder.models import Job
+from tests.conftest import save_reading
 
 
 def test_palette_has_every_role_from_the_spec():
@@ -11,9 +12,10 @@ def test_palette_has_every_role_from_the_spec():
         "bar", "pharma", "tech", "ordinal", "neutral", "sequential",
         "grid", "ink", "muted", "border",
     }
-    assert charts.PALETTE["ordinal"] == ["#8FB5A2", "#659A84", "#417C66", "#2F5D50"]
+    assert charts.PALETTE["ordinal"] == ["#81B19B", "#6E9D88", "#5A8974", "#487662", "#356350", "#23513E", "#0F3F2E"]
     assert len(charts.PALETTE["sequential"]) == 6
-    assert charts.SENIORITY_ORDER == ["Junior", "Senior", "Lead", "Director", "Unspecified"]
+    assert charts.SENIORITY_ORDER == ["Intern/Graduate", "Junior", "Mid", "Senior", "Lead/Principal",
+                                      "Manager", "Director+", "Not stated"]
 
 
 def test_figure_applies_chart_chrome_and_no_title():
@@ -47,26 +49,20 @@ NOW = datetime(2026, 9, 15, 12, 0, 0)
 _seeded_counter = 0
 
 def _seeded(tmp_path):
-    """MSD (pharma): GMP+SAP Senior on 09-09, GMP Director on 09-09.
-    Google (tech): Python, no seniority, on 09-14. Nothing older than 4 weeks."""
+    """MSD (pharma): Senior QC Analyst (GMP+SAP, Senior) and Director of Quality
+    (GMP, Director+) on 09-09, both Quality. Google (tech): Data Scientist
+    (Python, seniority not stated, Data Science) on 09-14."""
     global _seeded_counter
     _seeded_counter += 1
     conn = storage.connect(tmp_path / f"c{_seeded_counter}.db")
-    storage.record_company_snapshot(conn, "MSD", [
-        Job("MSD", "Senior QC Analyst", "https://m/1", "p"),
-        Job("MSD", "Director of Quality", "https://m/2", "p"),
-    ], "2026-09-09T10:00:00")
-    storage.record_company_snapshot(conn, "Google", [
-        Job("Google", "Data Scientist", "https://g/1", "p", sector="tech"),
-    ], "2026-09-14T10:00:00")
-    ids = {u: conn.execute("SELECT id FROM jobs WHERE url=?", (u,)).fetchone()["id"]
-           for u in ("https://m/1", "https://m/2", "https://g/1")}
-    storage.save_enrichment(conn, ids["https://m/1"], "GMP and SAP", "Senior",
-                            [("GMP", "Regulatory"), ("SAP", "Software")], "2026-09-09T11:00:00")
-    storage.save_enrichment(conn, ids["https://m/2"], "GMP", "Director",
-                            [("GMP", "Regulatory")], "2026-09-09T11:00:00")
-    storage.save_enrichment(conn, ids["https://g/1"], "Python", None,
-                            [("Python", "Software")], "2026-09-14T11:00:00")
+    qc = Job("MSD", "Senior QC Analyst", "https://m/1", "p")
+    director = Job("MSD", "Director of Quality", "https://m/2", "p")
+    ds = Job("Google", "Data Scientist", "https://g/1", "p", sector="tech")
+    storage.record_company_snapshot(conn, "MSD", [qc, director], "2026-09-09T10:00:00")
+    storage.record_company_snapshot(conn, "Google", [ds], "2026-09-14T10:00:00")
+    save_reading(conn, qc, role_family="Quality", seniority="Senior", skills=["GMP", "SAP"])
+    save_reading(conn, director, role_family="Quality", seniority="Director+", skills=["GMP"])
+    save_reading(conn, ds, role_family="Data Science", skills=["Python"])
     return conn
 
 
@@ -75,19 +71,19 @@ def test_skills_in_demand_builds_sorted_single_hue_bars(tmp_path):
     option = payload.option
     assert option["yAxis"]["data"] == ["SAP", "Python", "GMP"]  # reversed so GMP renders on top
     series = option["series"][0]
-    assert series["name"] == "Jobs" and series["data"] == [1, 1, 2]
+    assert series["name"] == "Roles" and series["data"] == [1, 1, 2]
     assert series["itemStyle"] == {"borderRadius": [0, 4, 4, 0], "color": charts.PALETTE["bar"]}
     assert series["barMaxWidth"] == 20
     assert option["legend"]["show"] is False
-    assert payload.columns == ["Skill", "Category", "Jobs"]
-    assert payload.rows == [["GMP", "Regulatory", 2], ["Python", "Software", 1], ["SAP", "Software", 1]]
+    assert payload.columns == ["Skill", "Roles"]
+    assert payload.rows == [["GMP", 2], ["Python", 1], ["SAP", 1]]
     assert payload.drilldown == {"dimension": "skill", "key": "name"}
     assert payload.height == "420px"
 
 
 def test_skills_in_demand_scopes_by_sector_and_is_empty_outside_window(tmp_path):
     conn = _seeded(tmp_path)
-    assert charts.skills_in_demand(conn, "tech", 0, now=NOW).rows == [["Python", "Software", 1]]
+    assert charts.skills_in_demand(conn, "tech", 0, now=NOW).rows == [["Python", 1]]
     late = datetime(2027, 1, 1, 12, 0, 0)
     empty = charts.skills_in_demand(conn, None, 4, now=late)
     assert empty.rows == [] and empty.option == {} and empty.drilldown["dimension"] == "skill"
@@ -142,7 +138,7 @@ def test_skill_trend_is_a_share_heatmap_with_complete_axes(tmp_path):
     assert cells[(3, 2)] == 100.0   # GMP, week of 7 Sep: 2 of 2 enriched jobs
     assert cells[(4, 2)] == 0.0     # GMP, week of 14 Sep: 0 of 1 (zero cells stay on the axis)
     assert cells[(4, 1)] == 100.0   # Python, week of 14 Sep
-    assert payload.columns == ["Week", "Skill", "Jobs mentioning", "Enriched jobs that week", "Share %"]
+    assert payload.columns == ["Week", "Skill", "Roles needing it", "Roles read that week", "Share %"]
     assert ["2026-09-07", "GMP", 2, 2, 100.0] in payload.rows
     assert payload.drilldown == {"dimension": "skill", "key": "row"}
 
@@ -155,8 +151,7 @@ def test_skill_trend_thins_x_axis_labels_beyond_fourteen_columns(tmp_path):
     storage.record_company_snapshot(conn, "Pfizer", [
         Job("Pfizer", "Old Role", "https://p/1", "p"),
     ], old_date)
-    old_id = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://p/1",)).fetchone()["id"]
-    storage.save_enrichment(conn, old_id, "Old desc", None, [("Old", "Misc")], old_date)
+    save_reading(conn, Job("Pfizer", "Old Role", "https://p/1", "p"), skills=["Old"])
 
     payload = charts.skill_trend(conn, None, 26, now=NOW)
     option = payload.option
@@ -171,36 +166,34 @@ def test_part_one_builders_are_registered():
 def test_seniority_mix_is_a_100_percent_stack_in_fixed_tier_order(tmp_path):
     payload = charts.seniority_mix(_seeded(tmp_path), None, 4, now=NOW)
     option = payload.option
-    assert option["yAxis"]["data"] == ["Google", "MSD"]  # MSD has 2 enriched jobs: on top
+    assert option["yAxis"]["data"] == ["Google", "MSD"]  # MSD has 2 roles read: on top
     assert [s["name"] for s in option["series"]] == charts.SENIORITY_ORDER
     assert [s["itemStyle"]["color"] for s in option["series"]] == charts.PALETTE["ordinal"] + [charts.PALETTE["neutral"]]
     assert all(s["stack"] == "total" for s in option["series"])
-    assert all(s["itemStyle"]["borderColor"] == "#FFFFFF" and s["itemStyle"]["borderWidth"] == 2 for s in option["series"])
     by_name = {s["name"]: s["data"] for s in option["series"]}
-    assert by_name["Senior"] == [0.0, 50.0] and by_name["Director"] == [0.0, 50.0]
-    assert by_name["Unspecified"] == [100.0, 0.0]
+    assert by_name["Senior"] == [0.0, 50.0] and by_name["Director+"] == [0.0, 50.0]
+    assert by_name["Not stated"] == [100.0, 0.0]
     assert option["xAxis"]["max"] == 100 and option["xAxis"]["axisLabel"]["formatter"] == "{value}%"
-    assert option["legend"]["show"] is True
-    assert payload.columns == ["Company"] + charts.SENIORITY_ORDER + ["Enriched jobs"]
-    assert payload.rows == [["MSD", 0, 1, 0, 1, 0, 2], ["Google", 0, 0, 0, 0, 1, 1]]
+    assert payload.columns == ["Company"] + charts.SENIORITY_ORDER + ["Roles read"]
+    assert payload.rows == [["MSD", 0, 0, 0, 1, 0, 0, 1, 0, 2], ["Google", 0, 0, 0, 0, 0, 0, 0, 1, 1]]
     assert payload.drilldown == {"dimension": "seniority", "key": "seriesName"}
-    assert payload.height == "128px"  # 24px per company row + 80px axis band
+    assert payload.height == "128px"
 
 
-def test_company_categories_is_a_share_heatmap_over_all_nine_categories(tmp_path):
-    payload = charts.company_categories(_seeded(tmp_path), "pharma", 0, now=NOW)
+def test_company_families_is_a_share_heatmap_of_claude_role_families(tmp_path):
+    conn = _seeded(tmp_path)
+    payload = charts.company_families(conn, "pharma", 0, now=NOW)
     option = payload.option
-    categories = [c for c, _ in charts.analytics.CATEGORY_KEYWORDS] + ["Other"]
-    assert option["xAxis"]["data"] == categories
-    assert option["yAxis"]["data"] == ["MSD"]
-    assert option["xAxis"]["axisLabel"]["rotate"] == 30
-    assert option["xAxis"]["axisLabel"]["interval"] == 0     # show every category label
+    assert option["xAxis"]["data"] == ["Quality"] and option["yAxis"]["data"] == ["MSD"]
+    assert option["xAxis"]["axisLabel"]["rotate"] == 30 and option["xAxis"]["axisLabel"]["interval"] == 0
     assert option["visualMap"]["min"] == 0 and option["visualMap"]["max"] == 100
-    cells = {(x, y): v for x, y, v in option["series"][0]["data"]}
-    assert cells[(categories.index("Quality"), 0)] == 100.0
-    assert cells[(categories.index("Other"), 0)] == 0.0
-    assert payload.rows == [["MSD", "Quality", 2, 100.0]]  # only non-zero cells in the table
-    assert payload.drilldown == {"dimension": "company", "key": "row"}
+    assert {(x, y): v for x, y, v in option["series"][0]["data"]} == {(0, 0): 100.0}
+    assert payload.columns == ["Company", "Role family", "Roles", "Share %"]
+    assert payload.rows == [["MSD", "Quality", 2, 100.0]]
+    assert payload.drilldown == {"dimension": "company_family", "key": "cell"}
+    both = charts.company_families(conn, None, 0, now=NOW).option
+    assert both["xAxis"]["data"] == ["Quality", "Data Science"]  # largest family first
+    assert both["yAxis"]["data"] == ["Google", "MSD"]            # MSD (2) renders on top
 
 
 def test_days_to_close_uses_min_closed_three_and_sorts_longest_first(tmp_path):
@@ -224,7 +217,7 @@ def test_days_to_close_uses_min_closed_three_and_sorts_longest_first(tmp_path):
 def test_registry_matches_the_spec_inventory():
     assert set(charts.CHARTS) == {
         "skills-in-demand", "hiring-velocity", "who-is-hiring", "skill-trend",
-        "seniority-mix", "company-categories", "days-to-close",
+        "seniority-mix", "company-families", "days-to-close",
     }
     for builder in charts.CHARTS.values():
         assert callable(builder)
