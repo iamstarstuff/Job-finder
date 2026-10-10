@@ -289,3 +289,19 @@ def test_openings_by_family_is_one_coloured_line_per_family(tmp_path):
     assert payload.rows[3] == ["2026-09-07", 5, 1]
     assert payload.drilldown == {"dimension": "role_family", "key": "seriesName"}
     assert charts.openings_by_family(_learn_seeded(tmp_path), "pharma", 4, now=NOW).option == {}
+
+
+def test_what_to_learn_hides_the_max_tick_so_n_never_overlaps_the_last_round_tick(tmp_path):
+    option = charts.what_to_learn(_learn_seeded(tmp_path), "tech", 0, now=NOW).option
+    assert option["xAxis"]["axisLabel"]["showMaxLabel"] is False  # "Based on n roles" carries n
+
+
+def test_openings_by_family_leaves_room_for_a_wrapping_legend(tmp_path):
+    option = charts.openings_by_family(_learn_seeded(tmp_path), "tech", 4, now=NOW).option
+    assert option["grid"]["top"] >= 56  # five family names wrap to two legend rows in a half-width card
+
+
+def test_bar_end_labels_get_room_on_the_right(tmp_path):
+    conn = _learn_seeded(tmp_path)
+    assert charts.experience_asked(conn, "tech", 0, now=NOW).option["grid"]["right"] >= 110  # "stated in 15 of 16"
+    assert charts.what_to_learn(conn, "tech", 0, now=NOW).option["grid"]["right"] >= 64      # "6 of 6" at the axis end

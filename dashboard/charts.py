@@ -274,9 +274,12 @@ def what_to_learn(conn, sector: Optional[str], weeks: int, now: Optional[datetim
     df = pd.DataFrame({"Skill": [r["skill"] for r in rows], "Roles": [r["count"] for r in rows]})[::-1]
     height = f"{24 * len(rows) + 80}px"
     fig = _figure(height=height)
+    fig.margins(left=8, right=64, top=12, bottom=8)  # room for an "n of n" label at the axis end
     fig.barh(df, x="Skill", y="Roles", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
     fig.legend(show=False)
-    fig.extra(xAxis={"type": "value", "min": 0, "max": n})
+    # The axis runs to n; its own "n" tick would collide with the last round tick, and
+    # the note already says "Based on n roles".
+    fig.extra(xAxis={"type": "value", "min": 0, "max": n, "axisLabel": {"showMaxLabel": False}})
     option = fig.to_option()
     option["series"][0]["label"] = {"show": True, "position": "right", "formatter": f"{{c}} of {n}",
                                      "color": PALETTE["muted"]}
@@ -299,6 +302,7 @@ def experience_asked(conn, sector: Optional[str], weeks: int, now: Optional[date
                        "Median years": [r["median"] for r in bottom_up]})
     height = f"{24 * len(shown) + 80}px"
     fig = _figure(height=height)
+    fig.margins(left=8, right=110, top=12, bottom=8)  # room for "stated in 15 of 16" past the longest bar
     fig.barh(df, x="Role family", y="Median years", color=PALETTE["bar"], barMaxWidth=20, item_style=_bar_style())
     fig.legend(show=False)
     option = fig.to_option()
@@ -323,6 +327,7 @@ def openings_by_family(conn, sector: Optional[str], weeks: int, now: Optional[da
     for family in families:
         df[family] = [counts[(family, w)] for w in weeks_out]
     fig = _figure(pointer="line")
+    fig.margins(left=8, right=16, top=60, bottom=8)  # up to five legend names wrap to two rows
     for family, color in zip(families, PALETTE["categorical"]):
         fig.plot(df, x="Week", y=family, color=color, symbol_size=8, line_style=_line_style())
     fig.legend(show=True, left="left", top=0)
