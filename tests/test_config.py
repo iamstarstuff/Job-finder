@@ -33,3 +33,30 @@ def test_dry_run_env_var(monkeypatch):
     for value, expected in [("1", True), ("true", True), ("YES", True), ("0", False), ("", False)]:
         monkeypatch.setenv("JOBFINDER_DRY_RUN", value)
         assert config.email_dry_run() is expected
+
+
+def test_anthropic_key_prefers_env_var(monkeypatch):
+    from jobfinder import config
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "  sk-env \n")
+    assert config.get_anthropic_api_key() == "sk-env"
+
+
+def test_anthropic_key_falls_back_to_file(monkeypatch, tmp_path):
+    from jobfinder import config
+    key_file = tmp_path / "anthropic_api_key.txt"
+    key_file.write_text("sk-file\n")
+    monkeypatch.setattr(config, "ANTHROPIC_API_KEY_FILE", key_file)
+    assert config.get_anthropic_api_key() == "sk-file"
+
+
+def test_anthropic_key_is_none_without_env_or_file():
+    from jobfinder import config
+    assert config.get_anthropic_api_key() is None  # conftest removes both
+
+
+def test_anthropic_key_is_none_for_an_empty_file(monkeypatch, tmp_path):
+    from jobfinder import config
+    key_file = tmp_path / "anthropic_api_key.txt"
+    key_file.write_text("\n")
+    monkeypatch.setattr(config, "ANTHROPIC_API_KEY_FILE", key_file)
+    assert config.get_anthropic_api_key() is None

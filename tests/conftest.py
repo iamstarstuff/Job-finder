@@ -9,6 +9,15 @@ def _no_dry_run_from_shell(monkeypatch):
     monkeypatch.delenv("JOBFINDER_DRY_RUN", raising=False)
 
 
+@pytest.fixture(autouse=True)
+def _no_claude_api(monkeypatch, tmp_path):
+    # No test may ever reach the real Claude API: drop any key the shell
+    # exports and point the key file at a path that doesn't exist.
+    from jobfinder import config
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setattr(config, "ANTHROPIC_API_KEY_FILE", tmp_path / "no_anthropic_api_key.txt")
+
+
 class FakeResponse:
     def __init__(self, content=b"", json_data=None, status_code=200):
         self.content = content

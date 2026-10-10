@@ -16,3 +16,5 @@ __pycache__/
 .venv/
 enrichment_cron.log
 dashboard_server.log
+anthropic_api_key.txt
+backfill_batch.json
