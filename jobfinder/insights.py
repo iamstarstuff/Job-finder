@@ -242,3 +242,105 @@ def analyse(client, job: Job, description: Optional[str], sector: str) -> Analys
         raise InsightBadOutput(f"unparseable output: {exc}", MODEL, Usage(0, 0, 0.0)) from exc
     return _result_from(response.model, response.stop_reason, response.stop_details, response.usage,
                         response.parsed_output, sector, title_only=description is None, batch=False)
+
+
+MAX_CONSECUTIVE_OUTAGES = 3
+
+
+def _base_row(job: Job, sector: str, status: str, model: str, usage: Usage, title_only: bool,
+              now: str, via_batch: bool) -> Dict[str, Any]:
+    row: Dict[str, Any] = dict.fromkeys(storage.INSIGHT_COLUMNS)
+    row.update(
+        job_key=job.key, sector=sector, company=job.company, title=job.title, status=status,
+        title_only=int(title_only), model=model, prompt_version=PROMPT_VERSION,
+        input_tokens=usage.input_tokens, output_tokens=usage.output_tokens,
+        cost_usd=usage.cost_usd, via_batch=int(via_batch), classified_at=now,
+    )
+    return row
+
+
+def result_row(job: Job, sector: str, result: AnalysisResult, now: str,
+               via_batch: bool = False) -> Dict[str, Any]:
+    """The job_insights row for a successful reading."""
+    insight = result.insight
+    salary = insight.salary
+    row = _base_row(job, sector, "ok", result.model, result.usage, result.title_only, now, via_batch)
+    row.update(
+        relevant=None if insight.relevant is None else int(insight.relevant),
+        reason=insight.reason,
+        role_family=insight.role_family,
+        seniority=insight.seniority,
+        min_years_experience=insight.min_years_experience,
+        skills=json.dumps(insight.skills[:10]),
+        required_languages=json.dumps(insight.required_languages),
+        work_mode=insight.work_mode,
+        contract_type=insight.contract_type,
+        salary_min=salary.min if salary else None,
+        salary_max=salary.max if salary else None,
+        salary_currency=salary.currency if salary else None,
+        salary_period=salary.period if salary else None,
+    )
+    return row
+
+
+def failure_row(job: Job, sector: str, failure: InsightBilledFailure, now: str, title_only: bool,
+                via_batch: bool = False) -> Dict[str, Any]:
+    """The job_insights row for a billed call that gave no insight (refused or failed)."""
+    return _base_row(job, sector, failure.status, failure.model, failure.usage, title_only, now, via_batch)
+
+
+class InsightRunner:
+    """analyse() for one pipeline run. Saves every billed result, keeps to
+    the daily cap of realtime calls, and stops calling Claude for the rest
+    of the run after a config error or MAX_CONSECUTIVE_OUTAGES in a row --
+    callers then fall back to their non-Claude behaviour."""
+
+    def __init__(self, conn, client, now: str, daily_limit: Optional[int] = None):
+        self.conn = conn
+        self.client = client
+        self.now = now
+        limit = config.INSIGHTS_DAILY_CALL_LIMIT if daily_limit is None else daily_limit
+        self.remaining = max(0, limit - storage.insight_calls_on(conn, now[:10]))
+        self.outages = 0  # consecutive InsightUnavailable
+        self.billed = 0   # calls that reached the API and were charged
+        self.spent = 0.0
+        self.config_error: Optional[str] = None
+
+    @property
+    def active(self) -> bool:
+        return (self.client is not None and self.config_error is None
+                and self.outages < MAX_CONSECUTIVE_OUTAGES and self.remaining > 0)
+
+    def classify(self, job: Job, description: Optional[str], sector: str) -> Optional[Dict[str, Any]]:
+        """The saved job_insights row, or None when Claude couldn't be used."""
+        if not self.active:
+            return None
+        try:
+            result = analyse(self.client, job, description, sector)
+        except InsightUnavailable as exc:
+            self.outages += 1
+            log.warning("Claude unavailable for %s / %s: %s", job.company, job.title, exc)
+            return None
+        except InsightConfigError as exc:
+            self.config_error = str(exc)
+            log.error("Claude API rejected the request, no more Claude calls this run: %s", exc)
+            return None
+        except InsightBilledFailure as exc:
+            log.warning("Claude gave no usable insight for %s / %s: %s", job.company, job.title, exc)
+            row = failure_row(job, sector, exc, self.now, title_only=description is None)
+        else:
+            row = result_row(job, sector, result, self.now)
+        self.outages = 0
+        self.billed += 1
+        self.remaining -= 1
+        self.spent += row["cost_usd"]
+        storage.save_insight(self.conn, row)
+        return row
+
+    def alert(self) -> Tuple[bool, Optional[str]]:
+        """(report, error) for emailer.send_insights_status: report a config
+        error, or recovery once a call has gone through. A run that never
+        reached the API reports nothing, so an idle hour isn't "recovered"."""
+        if self.config_error is not None:
+            return True, self.config_error
+        return self.billed > 0, None
