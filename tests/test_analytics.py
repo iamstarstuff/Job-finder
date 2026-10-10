@@ -1,7 +1,9 @@
+from collections import Counter
 from datetime import datetime
 
 from jobfinder import analytics, storage
 from jobfinder.models import Job
+from tests.conftest import save_reading
 
 
 def seeded_conn(tmp_path):
@@ -26,46 +28,6 @@ def seeded_conn(tmp_path):
     return conn
 
 
-def seeded_enriched_conn(tmp_path):
-    conn = storage.connect(tmp_path / "e.db")
-    storage.record_company_snapshot(conn, "Abbvie", [
-        Job("Abbvie", "SAP Engineer", "https://a/1", "p"),
-        Job("Abbvie", "QC Analyst", "https://a/2", "p"),
-        Job("Abbvie", "Broken Enrichment", "https://a/3", "p"),
-    ], "2026-07-17T10:00:00")
-    id1 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/1",)).fetchone()["id"]
-    id2 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/2",)).fetchone()["id"]
-    id3 = conn.execute("SELECT id FROM jobs WHERE url=?", ("https://a/3",)).fetchone()["id"]
-    storage.save_enrichment(conn, id1, "Needs SAP and GMP.", "Senior",
-                             [("SAP", "Software"), ("GMP", "Regulatory")], "2026-07-17T11:00:00")
-    storage.save_enrichment(conn, id2, "QC role, GMP required.", None,
-                             [("GMP", "Regulatory")], "2026-07-17T11:00:00")
-    storage.save_enrichment(conn, id3, "", None, [], "2026-07-17T11:00:00", failed=True)
-    return conn
-
-
-def test_categorize_titles():
-    assert analytics.categorize("QC Analyst II") == "Quality"
-    assert analytics.categorize("Process Engineer") == "Engineering"
-    assert analytics.categorize("Senior Research Scientist") == "R&D / Science"
-    assert analytics.categorize("Regulatory Affairs Manager") == "Regulatory"
-    assert analytics.categorize("Something Odd") == "Other"
-    # Regression: word-boundary fixes for "it", "hr", "account"
-    assert analytics.categorize("Credit Analyst") == "Other"
-    assert analytics.categorize("Unit Manager") == "Other"
-    assert analytics.categorize("Accountant") == "HR / Finance / Admin"
-    assert analytics.categorize("IT Support Engineer") == "Engineering"
-    assert analytics.categorize("IT Support Specialist") == "IT / Digital"
-    assert analytics.categorize("HR Business Partner") == "HR / Finance / Admin"
-
-
-def test_category_breakdown(tmp_path):
-    conn = seeded_conn(tmp_path)
-    rows = analytics.category_breakdown(conn)
-    assert {"company": "APC", "category": "Quality", "count": 1} in rows
-    assert {"company": "APC", "category": "Engineering", "count": 1} in rows
-
-
 def test_median_days_active(tmp_path):
     conn = seeded_conn(tmp_path)
     rows = {r["company"]: r["median_days"] for r in analytics.median_days_active(conn)}
@@ -78,20 +40,6 @@ def test_overview_smoke(tmp_path):
     assert data["total_jobs_seen"] == 3
     assert data["active_jobs"] == 2
     assert data["companies"] == 2
-
-
-def test_top_skills_counts_across_jobs(tmp_path):
-    conn = seeded_enriched_conn(tmp_path)
-    by_skill = {r["skill"]: r["count"] for r in analytics.top_skills(conn)}
-    assert by_skill["GMP"] == 2
-    assert by_skill["SAP"] == 1
-
-
-def test_top_skills_respects_limit(tmp_path):
-    conn = seeded_enriched_conn(tmp_path)
-    rows = analytics.top_skills(conn, limit=1)
-    assert len(rows) == 1
-    assert rows[0]["skill"] == "GMP"
 
 
 def seeded_mixed_sector_conn(tmp_path):
@@ -115,20 +63,6 @@ def test_overview_filters_by_sector(tmp_path):
     assert analytics.overview(conn, sector="pharma")["total_jobs_seen"] == 1
     assert analytics.overview(conn, sector="tech")["total_jobs_seen"] == 1
     assert analytics.overview(conn, sector="tech")["companies"] == 1
-
-
-def test_top_skills_filters_by_sector(tmp_path):
-    conn = seeded_mixed_sector_conn(tmp_path)
-    pharma_skills = {r["skill"] for r in analytics.top_skills(conn, sector="pharma")}
-    tech_skills = {r["skill"] for r in analytics.top_skills(conn, sector="tech")}
-    assert pharma_skills == {"SAP"}
-    assert tech_skills == {"Kubernetes"}
-
-
-def test_category_breakdown_filters_by_sector(tmp_path):
-    conn = seeded_mixed_sector_conn(tmp_path)
-    tech_rows = analytics.category_breakdown(conn, sector="tech")
-    assert all(r["company"] == "Google" for r in tech_rows)
 
 
 def test_new_jobs_per_week_filters_by_sector(tmp_path):
@@ -210,17 +144,6 @@ def test_overview_reports_week_deltas_and_enrichment(tmp_path):
     assert analytics.overview(conn, sector="tech", now=now)["companies_failing"] == 0
 
 
-def test_top_skills_respects_window(tmp_path):
-    conn = _seed_two_weeks(tmp_path)
-    now = datetime(2026, 9, 15, 12, 0, 0)
-    old_id = conn.execute("SELECT id FROM jobs WHERE url='https://b/1'").fetchone()["id"]
-    new_id = conn.execute("SELECT id FROM jobs WHERE url='https://a/1'").fetchone()["id"]
-    storage.save_enrichment(conn, old_id, "SAP", None, [("SAP", "Software")], "2026-09-05T11:00:00")
-    storage.save_enrichment(conn, new_id, "GMP", None, [("GMP", "Regulatory")], "2026-09-14T11:00:00")
-    assert {r["skill"] for r in analytics.top_skills(conn, now=now)} == {"SAP", "GMP"}
-    assert {r["skill"] for r in analytics.top_skills(conn, weeks=1, now=now)} == {"GMP"}
-
-
 def test_new_jobs_per_week_is_continuous_and_monday_dated(tmp_path):
     conn = _seed_two_weeks(tmp_path)
     now = datetime(2026, 9, 15, 12, 0, 0)
@@ -298,35 +221,6 @@ def test_compute_movers_not_comparable_when_previous_window_is_empty():
         {"company": "B", "active": 1, "new_in_window": 3, "new_previous_window": 0},
     ]
     assert analytics.compute_movers(rows) == {"up": [], "down": [], "comparable": False}
-
-
-def test_skill_trend_is_dense_and_uses_enriched_totals(tmp_path):
-    conn = _seed_enriched_window(tmp_path)
-    rows = analytics.skill_trend(conn, weeks=4, limit=3, now=NOW)
-    weeks = ["2026-08-17", "2026-08-24", "2026-08-31", "2026-09-07", "2026-09-14"]
-    assert [r["week"] for r in rows][:5] == weeks                       # skill-major, week-minor
-    assert [r["skill"] for r in rows][::5] == ["GMP", "Python", "SAP"]  # GMP 3, then the 1-count ties by name
-    by = {(r["skill"], r["week"]): (r["count"], r["total"]) for r in rows}
-    assert by[("GMP", "2026-09-07")] == (2, 2)   # MSD Director + BMS Process Engineer; "Broken" excluded from total
-    assert by[("GMP", "2026-09-14")] == (0, 1)   # Data Scientist is enriched but mentions Python only
-    assert by[("SAP", "2026-08-24")] == (1, 1)
-    assert analytics.skill_trend(conn, sector="tech", now=NOW) == []
-
-
-def test_seniority_by_company_labels_null_and_respects_window(tmp_path):
-    conn = _seed_enriched_window(tmp_path)
-    rows = {(r["company"], r["seniority"]): r["count"] for r in analytics.seniority_by_company(conn, weeks=0, now=NOW)}
-    assert rows == {("MSD", "Senior"): 1, ("MSD", "Director"): 1, ("BMS", "Unspecified"): 2}
-    recent = {(r["company"], r["seniority"]) for r in analytics.seniority_by_company(conn, weeks=1, now=NOW)}
-    assert recent == {("MSD", "Director"), ("BMS", "Unspecified")}
-
-
-def test_category_breakdown_respects_window(tmp_path):
-    conn = _seed_enriched_window(tmp_path)
-    all_rows = {(r["company"], r["category"]): r["count"] for r in analytics.category_breakdown(conn, now=NOW)}
-    assert all_rows[("MSD", "Quality")] == 2
-    recent = {(r["company"], r["category"]): r["count"] for r in analytics.category_breakdown(conn, weeks=1, now=NOW)}
-    assert recent[("MSD", "Quality")] == 1
 
 
 def test_median_days_active_window_and_min_closed(tmp_path):
@@ -409,5 +303,190 @@ def test_scraper_health_reports_failures_for_registry_only_companies(tmp_path):
 
 
 def test_removed_analytics_functions_are_gone():
-    for name in ("jobs_per_company", "seniority_breakdown", "skills_by_category"):
+    for name in ("jobs_per_company", "seniority_breakdown", "skills_by_category", "top_skills",
+                 "skill_trend", "seniority_by_company", "category_breakdown", "categorize",
+                 "CATEGORY_KEYWORDS"):
         assert not hasattr(analytics, name), name
+
+
+def _records_conn(tmp_path):
+    conn = storage.connect(tmp_path / "records.db")
+    read = Job("Google", "Data Scientist", "https://g/1", "p", sector="tech")
+    refused = Job("Google", "Sales Lead", "https://g/2", "p", sector="tech")
+    unread = Job("APC", "Warehouse Lead", "https://a/1", "p")
+    storage.record_company_snapshot(conn, "Google", [read, refused], "2026-09-01T10:00:00")
+    storage.record_company_snapshot(conn, "APC", [unread], "2026-10-08T10:00:00")
+    gid = conn.execute("SELECT id FROM jobs WHERE url='https://g/1'").fetchone()["id"]
+    storage.save_enrichment(conn, gid, "Builds models in Python.", None, [], "2026-09-01T11:00:00")
+    save_reading(conn, read, role_family="Data Science", seniority="Mid", min_years_experience=3,
+                 skills=["Python", "SQL"], required_languages=["German"], salary_min=90000.0,
+                 salary_max=92000.0, salary_currency="EUR", salary_period="year",
+                 work_mode="hybrid", contract_type="permanent", reason="Data science role.")
+    save_reading(conn, refused, status="refused")
+    return conn
+
+
+def test_job_records_join_jobs_descriptions_and_ok_readings(tmp_path):
+    records = {r.title: r for r in analytics.job_records(_records_conn(tmp_path))}
+    ds = records["Data Scientist"]
+    assert ds.read_by_claude and ds.description == "Builds models in Python."
+    assert ds.skills == ("Python", "SQL") and ds.languages == ("German",)
+    assert (ds.role_family, ds.seniority, ds.min_years) == ("Data Science", "Mid", 3)
+    assert (ds.work_mode, ds.contract_type, ds.reason) == ("hybrid", "permanent", "Data science role.")
+    assert (ds.salary_min, ds.salary_max, ds.salary_currency, ds.salary_period) == (90000.0, 92000.0, "EUR", "year")
+    assert ds.is_active and ds.sector == "tech" and ds.url == "https://g/1"
+    refused = records["Sales Lead"]
+    assert not refused.read_by_claude and refused.skills == () and refused.role_family is None
+    unread = records["Warehouse Lead"]
+    assert not unread.read_by_claude and unread.description is None
+
+
+def test_job_records_are_newest_first_and_scoped_by_sector_and_window(tmp_path):
+    conn = _records_conn(tmp_path)
+    assert [r.title for r in analytics.job_records(conn)][0] == "Warehouse Lead"
+    assert {r.title for r in analytics.job_records(conn, sector="tech")} == {"Data Scientist", "Sales Lead"}
+    now = datetime(2026, 10, 10, 12, 0, 0)
+    assert [r.title for r in analytics.job_records(conn, weeks=1, now=now)] == ["Warehouse Lead"]
+    assert [r.title for r in analytics._read_records(conn, None, 0, now)] == ["Data Scientist"]
+
+
+def test_skill_key_folds_case_and_surrounding_space():
+    assert analytics.skill_key("  Distributed Systems ") == analytics.skill_key("distributed systems")
+
+
+def test_merge_skill_names_keeps_the_most_common_spelling():
+    names = analytics.merge_skill_names(Counter({
+        "Distributed systems": 18, "Distributed Systems": 19, "SQL": 21, "sql": 2, "Gmp": 1, "GMP": 1,
+    }))
+    assert names == {"distributed systems": "Distributed Systems", "sql": "SQL", "gmp": "GMP"}
+
+
+READ_NOW = datetime(2026, 10, 10, 12, 0, 0)
+
+
+def _readings_conn(tmp_path):
+    """Tech: Data Scientist (10-07, DS/Mid, Python+SQL), ML Engineer (09-28,
+    ML/AI/Senior, python+PyTorch), SDE RDS (AWS 10-07, Cloud/Platform, Python+AWS),
+    a refused AWS Sales Specialist. Pharma: QC Analyst (Pfizer 10-08, Quality/
+    Junior, GMP) and an unread Warehouse Lead (APC 10-08)."""
+    conn = storage.connect(tmp_path / "readings.db")
+    ds = Job("Google", "Data Scientist", "https://g/1", "p", sector="tech")
+    ml = Job("Google", "ML Engineer", "https://g/2", "p", sector="tech")
+    sde = Job("AWS", "SDE, RDS", "https://a/1", "p", sector="tech")
+    sales = Job("AWS", "Sales Specialist", "https://a/2", "p", sector="tech")
+    qc = Job("Pfizer", "QC Analyst", "https://p/1", "p")
+    wh = Job("APC", "Warehouse Lead", "https://x/1", "p")
+    storage.record_company_snapshot(conn, "Google", [ml], "2026-09-28T10:00:00")
+    storage.record_company_snapshot(conn, "Google", [ml, ds], "2026-10-07T10:00:00")
+    storage.record_company_snapshot(conn, "AWS", [sde, sales], "2026-10-07T10:00:00")
+    storage.record_company_snapshot(conn, "Pfizer", [qc], "2026-10-08T10:00:00")
+    storage.record_company_snapshot(conn, "APC", [wh], "2026-10-08T10:00:00")
+    save_reading(conn, ds, role_family="Data Science", seniority="Mid", skills=["Python", "SQL"])
+    save_reading(conn, ml, role_family="ML/AI", seniority="Senior", skills=["python", "PyTorch"])
+    save_reading(conn, sde, role_family="Cloud/Platform", skills=["Python", "AWS"])
+    save_reading(conn, sales, status="refused")
+    save_reading(conn, qc, role_family="Quality", seniority="Junior", skills=["GMP"])
+    return conn
+
+
+def test_skill_demand_merges_spellings_and_counts_roles(tmp_path):
+    conn = _readings_conn(tmp_path)
+    assert analytics.skill_demand(conn, sector="tech", now=READ_NOW) == [
+        {"skill": "Python", "count": 3}, {"skill": "AWS", "count": 1},
+        {"skill": "PyTorch", "count": 1}, {"skill": "SQL", "count": 1}]
+    assert [r["skill"] for r in analytics.skill_demand(conn, limit=2, now=READ_NOW)] == ["Python", "AWS"]
+    recent = {r["skill"]: r["count"] for r in analytics.skill_demand(conn, weeks=1, now=READ_NOW)}
+    assert recent == {"Python": 2, "AWS": 1, "SQL": 1, "GMP": 1}  # the ML Engineer is older than a week
+
+
+def test_skill_shares_by_week_is_dense_over_roles_read(tmp_path):
+    rows = analytics.skill_shares_by_week(_readings_conn(tmp_path), sector="tech", weeks=4, limit=2, now=READ_NOW)
+    weeks = ["2026-09-07", "2026-09-14", "2026-09-21", "2026-09-28", "2026-10-05"]
+    assert [r["week"] for r in rows] == weeks * 2 and [r["skill"] for r in rows][::5] == ["Python", "AWS"]
+    by = {(r["skill"], r["week"]): (r["count"], r["total"]) for r in rows}
+    assert by[("Python", "2026-09-28")] == (1, 1)
+    assert by[("Python", "2026-10-05")] == (2, 2)
+    assert by[("AWS", "2026-10-05")] == (1, 2)
+    assert by[("AWS", "2026-09-07")] == (0, 0)
+    assert analytics.skill_shares_by_week(_readings_conn(tmp_path), sector="tech", weeks=4, now=datetime(2027, 6, 1)) == []
+
+
+def test_seniority_and_family_counts_use_claude_fields(tmp_path):
+    conn = _readings_conn(tmp_path)
+    seniority = {(r["company"], r["seniority"]): r["count"]
+                 for r in analytics.seniority_counts(conn, sector="tech", weeks=0, now=READ_NOW)}
+    assert seniority == {("AWS", "Not stated"): 1, ("Google", "Mid"): 1, ("Google", "Senior"): 1}
+    families = {(r["company"], r["family"]): r["count"] for r in analytics.family_counts(conn, now=READ_NOW)}
+    assert families == {("AWS", "Cloud/Platform"): 1, ("Google", "Data Science"): 1,
+                        ("Google", "ML/AI"): 1, ("Pfizer", "Quality"): 1}
+
+
+def test_claude_drilldown_lists_the_roles_behind_each_value(tmp_path):
+    conn = _readings_conn(tmp_path)
+
+    def titles(dimension, value, **kw):
+        return {r["title"] for r in analytics.claude_drilldown(conn, dimension, value, now=READ_NOW, **kw)}
+
+    assert titles("skill", "PYTHON", sector="tech") == {"Data Scientist", "ML Engineer", "SDE, RDS"}
+    assert titles("skill", "python", families=("ML/AI",)) == {"ML Engineer"}
+    assert titles("skill", "python", levels=("Mid",)) == {"Data Scientist"}
+    assert titles("skill", "python", weeks=1) == {"Data Scientist", "SDE, RDS"}
+    assert titles("seniority", "Not stated") == {"SDE, RDS"}
+    assert titles("role_family", "Quality") == {"QC Analyst"}
+    assert titles("company_family", "Google::ML/AI") == {"ML Engineer"}
+    row = analytics.claude_drilldown(conn, "role_family", "Quality", now=READ_NOW)[0]
+    assert set(row) == {"title", "company", "url", "first_seen"}
+    assert analytics.claude_drilldown(conn, "category", "Quality", now=READ_NOW) is None
+
+
+LEARN_NOW = datetime(2026, 9, 15, 12, 0, 0)
+
+
+def _roles_conn(tmp_path):
+    """Six Google tech roles first seen 09-10: five ML/AI (three Senior, two
+    Mid) and one Cloud/Platform (Mid). Python in all, PyTorch in the first two.
+    Years: 3, 5, 7, unstated, 4 (ML/AI) and 6 (Cloud/Platform)."""
+    conn = storage.connect(tmp_path / "roles.db")
+    jobs = [Job("Google", f"Role {i}", f"https://g/{i}", "p", sector="tech") for i in range(6)]
+    storage.record_company_snapshot(conn, "Google", jobs, "2026-09-10T10:00:00")
+    for i, job in enumerate(jobs):
+        save_reading(conn, job, role_family="ML/AI" if i < 5 else "Cloud/Platform",
+                     seniority="Senior" if i < 3 else "Mid",
+                     skills=["Python", "PyTorch"] if i < 2 else ["Python"],
+                     min_years_experience=[3, 5, 7, None, 4, 6][i])
+    return conn
+
+
+def test_skills_for_roles_counts_x_of_n_within_the_chosen_roles(tmp_path):
+    conn = _roles_conn(tmp_path)
+    assert analytics.skills_for_roles(conn, now=LEARN_NOW) == {
+        "roles": 6, "skills": [{"skill": "Python", "count": 6}, {"skill": "PyTorch", "count": 2}]}
+    ml = analytics.skills_for_roles(conn, families=("ML/AI",), now=LEARN_NOW)
+    assert ml["roles"] == 5
+    senior = analytics.skills_for_roles(conn, families=("ML/AI",), levels=("Senior",), now=LEARN_NOW)
+    assert senior["roles"] == 3 and senior["skills"][0] == {"skill": "Python", "count": 3}
+    assert analytics.MIN_ROLES_FOR_SKILLS == 5
+
+
+def test_experience_by_family_takes_the_median_of_stated_years(tmp_path):
+    rows = analytics.experience_by_family(_roles_conn(tmp_path), now=LEARN_NOW)
+    assert rows == [
+        {"family": "ML/AI", "median": 4.5, "stated": 4, "total": 5},
+        {"family": "Cloud/Platform", "median": None, "stated": 1, "total": 1},  # fewer than 3 stated
+    ]
+
+
+def test_openings_by_family_is_dense_for_the_largest_families(tmp_path):
+    rows = analytics.openings_by_family(_roles_conn(tmp_path), weeks=4, now=LEARN_NOW)
+    weeks = ["2026-08-17", "2026-08-24", "2026-08-31", "2026-09-07", "2026-09-14"]
+    assert [r["week"] for r in rows] == weeks * 2
+    assert [r["family"] for r in rows][::5] == ["ML/AI", "Cloud/Platform"]
+    assert [r["count"] for r in rows] == [0, 0, 0, 5, 0, 0, 0, 0, 1, 0]
+    assert analytics.openings_by_family(_roles_conn(tmp_path), weeks=4, top=1, now=LEARN_NOW)[0]["family"] == "ML/AI"
+    assert len(analytics.openings_by_family(_roles_conn(tmp_path), weeks=4, top=1, now=LEARN_NOW)) == 5
+
+
+def test_families_in_lists_role_families_largest_first(tmp_path):
+    conn = _roles_conn(tmp_path)
+    assert analytics.families_in(conn, "tech") == ["ML/AI", "Cloud/Platform"]
+    assert analytics.families_in(conn, "pharma") == []

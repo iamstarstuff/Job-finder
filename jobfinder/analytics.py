@@ -2,35 +2,10 @@ from __future__ import annotations
 
 import json
 import statistics
-from collections import Counter
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from typing import Dict, Iterable, List, Optional
-
-# Order matters: first match wins.
-CATEGORY_KEYWORDS = [
-    ("Quality", ["qa", "qc", "quality", "validation", "compliance"]),
-    ("Regulatory", ["regulatory", "pharmacovigilance", "medical affairs"]),
-    ("R&D / Science", ["scientist", "research", "r&d", "laboratory", "biolog",
-                       "chemist", "analytical"]),
-    ("Engineering", ["engineer", "engineering", "maintenance", "automation",
-                     "technician", "utilities"]),
-    ("Manufacturing / Ops", ["manufacturing", "production", "operator",
-                             "operations", "warehouse", "supply chain",
-                             "logistics", "packaging"]),
-    ("IT / Digital", [" it ", "digital", "data", "software", "system"]),
-    ("Commercial", ["sales", "marketing", "commercial", " account ",
-                    "business development", "product specialist"]),
-    ("HR / Finance / Admin", [" hr ", "human resources", "finance", "accountant",
-                              "administrat", "payroll", "legal"]),
-]
-
-
-def categorize(title: str) -> str:
-    lowered = f" {title.lower()} "
-    for category, keywords in CATEGORY_KEYWORDS:
-        if any(kw in lowered for kw in keywords):
-            return category
-    return "Other"
+from typing import Dict, Iterable, List, Optional, Tuple
 
 
 def week_start(iso_ts: str) -> str:
@@ -55,6 +30,100 @@ def window_cutoff(weeks: int, now: Optional[datetime] = None) -> Optional[str]:
 
 def _sector_clause(sector: Optional[str], column: str = "jobs.sector") -> str:
     return f" AND {column} = ?" if sector else ""
+
+
+SENIORITY_LEVELS = ["Intern/Graduate", "Junior", "Mid", "Senior", "Lead/Principal", "Manager",
+                    "Director+", "Not stated"]
+
+
+@dataclass(frozen=True)
+class JobRecord:
+    """One job with its description and Claude's reading, as the dashboard
+    shows it. Claude fields are None (lists empty) without an 'ok' reading."""
+    id: int
+    company: str
+    title: str
+    url: Optional[str]
+    sector: str
+    first_seen: str
+    is_active: bool
+    description: Optional[str]
+    read_by_claude: bool
+    role_family: Optional[str]
+    seniority: Optional[str]
+    min_years: Optional[int]
+    work_mode: Optional[str]
+    contract_type: Optional[str]
+    salary_min: Optional[float]
+    salary_max: Optional[float]
+    salary_currency: Optional[str]
+    salary_period: Optional[str]
+    reason: Optional[str]
+    skills: Tuple[str, ...]
+    languages: Tuple[str, ...]
+
+
+_RECORD_SQL = """
+SELECT jobs.id, jobs.company, jobs.title, jobs.url, jobs.sector, jobs.first_seen, jobs.is_active,
+       CASE WHEN job_details.enrichment_failed = 0 AND job_details.description != ''
+            THEN job_details.description END AS description,
+       job_insights.job_key IS NOT NULL AS read_by_claude,
+       job_insights.role_family, job_insights.seniority, job_insights.min_years_experience,
+       job_insights.work_mode, job_insights.contract_type, job_insights.salary_min,
+       job_insights.salary_max, job_insights.salary_currency, job_insights.salary_period,
+       job_insights.reason, job_insights.skills, job_insights.required_languages
+FROM jobs
+LEFT JOIN job_details ON job_details.job_id = jobs.id
+LEFT JOIN job_insights ON job_insights.job_key = jobs.job_key AND job_insights.status = 'ok'
+WHERE 1=1"""
+
+
+def _json_tuple(text: Optional[str]) -> Tuple[str, ...]:
+    return tuple(json.loads(text)) if text else ()
+
+
+def job_records(conn, sector: Optional[str] = None, weeks: int = 0,
+                now: Optional[datetime] = None) -> List[JobRecord]:
+    """Every job, newest first, with its description and Claude's reading --
+    the one query behind the Jobs page and every Claude-based chart. Scoped
+    like the charts: a sector, and jobs first seen inside the window."""
+    cutoff = window_cutoff(weeks, now)
+    sql, params = _RECORD_SQL, []
+    if cutoff:
+        sql += " AND jobs.first_seen >= ?"
+        params.append(cutoff)
+    if sector:
+        sql += " AND jobs.sector = ?"
+        params.append(sector)
+    sql += " ORDER BY jobs.first_seen DESC, jobs.id DESC"
+    return [JobRecord(
+        id=r["id"], company=r["company"], title=r["title"], url=r["url"], sector=r["sector"],
+        first_seen=r["first_seen"], is_active=bool(r["is_active"]), description=r["description"],
+        read_by_claude=bool(r["read_by_claude"]), role_family=r["role_family"],
+        seniority=r["seniority"], min_years=r["min_years_experience"], work_mode=r["work_mode"],
+        contract_type=r["contract_type"], salary_min=r["salary_min"], salary_max=r["salary_max"],
+        salary_currency=r["salary_currency"], salary_period=r["salary_period"], reason=r["reason"],
+        skills=_json_tuple(r["skills"]), languages=_json_tuple(r["required_languages"]),
+    ) for r in conn.execute(sql, params)]
+
+
+def _read_records(conn, sector: Optional[str], weeks: int, now: Optional[datetime]) -> List[JobRecord]:
+    """The jobs Claude has read -- the base of every Claude-based chart."""
+    return [r for r in job_records(conn, sector=sector, weeks=weeks, now=now) if r.read_by_claude]
+
+
+def skill_key(name: str) -> str:
+    """Claude spells the same skill several ways ("Distributed Systems" /
+    "Distributed systems"); counting by this key merges them."""
+    return name.strip().casefold()
+
+
+def merge_skill_names(spellings: Counter) -> Dict[str, str]:
+    """skill_key -> the spelling to show: the most frequent, ties alphabetical."""
+    by_key: Dict[str, List[Tuple[str, int]]] = defaultdict(list)
+    for name, count in spellings.items():
+        by_key[skill_key(name)].append((name.strip(), count))
+    return {key: sorted(variants, key=lambda nc: (-nc[1], nc[0]))[0][0] for key, variants in by_key.items()}
 
 
 def company_velocity(conn, sector: Optional[str] = None, weeks: int = 12,
@@ -117,58 +186,6 @@ def _week_range(cutoff: Optional[str], seen: Iterable[str], now: datetime) -> Li
     return out
 
 
-def skill_trend(conn, sector: Optional[str] = None, weeks: int = 12, limit: int = 12,
-                now: Optional[datetime] = None) -> List[dict]:
-    """For the top `limit` skills in the window: jobs per week mentioning the
-    skill (`count`) and enriched jobs first seen that week (`total`, the share
-    denominator). Dense: one row per (skill, week), skill-major."""
-    now = now or datetime.now()
-    cutoff = window_cutoff(weeks, now)
-    top = [r["skill"] for r in top_skills(conn, limit=limit, sector=sector, weeks=weeks, now=now)]
-    if not top:
-        return []
-    window_sql = (" AND jobs.first_seen >= ?" if cutoff else "") + (" AND jobs.sector = ?" if sector else "")
-    window_params: list = ([cutoff] if cutoff else []) + ([sector] if sector else [])
-    totals = Counter(
-        week_start(r["first_seen"]) for r in conn.execute(
-            "SELECT jobs.first_seen FROM job_details JOIN jobs ON jobs.id = job_details.job_id"
-            " WHERE job_details.enrichment_failed = 0" + window_sql, window_params))
-    placeholders = ", ".join("?" for _ in top)
-    per: Counter = Counter()
-    for r in conn.execute(
-        "SELECT jobs.first_seen AS first_seen, skills.name AS name"
-        " FROM job_skills JOIN skills ON skills.id = job_skills.skill_id"
-        " JOIN job_details ON job_details.job_id = job_skills.job_id"
-        " JOIN jobs ON jobs.id = job_skills.job_id"
-        " WHERE job_details.enrichment_failed = 0" + window_sql +
-        f" AND skills.name IN ({placeholders})",
-        window_params + top,
-    ):
-        per[(r["name"], week_start(r["first_seen"]))] += 1
-    weeks_out = _week_range(cutoff, totals.keys(), now)
-    return [{"week": w, "skill": s, "count": per.get((s, w), 0), "total": totals.get(w, 0)}
-            for s in top for w in weeks_out]
-
-
-def seniority_by_company(conn, sector: Optional[str] = None, weeks: int = 12,
-                         now: Optional[datetime] = None) -> List[dict]:
-    cutoff = window_cutoff(weeks, now)
-    sql = """SELECT jobs.company AS company, COALESCE(job_details.seniority, 'Unspecified') AS seniority,
-                    COUNT(*) AS count
-             FROM job_details JOIN jobs ON jobs.id = job_details.job_id
-             WHERE job_details.enrichment_failed = 0"""
-    params: list = []
-    if cutoff:
-        sql += " AND jobs.first_seen >= ?"
-        params.append(cutoff)
-    if sector:
-        sql += " AND jobs.sector = ?"
-        params.append(sector)
-    sql += " GROUP BY jobs.company, seniority ORDER BY jobs.company, seniority"
-    return [{"company": r["company"], "seniority": r["seniority"], "count": r["count"]}
-            for r in conn.execute(sql, params)]
-
-
 def new_jobs_per_week(conn, weeks: int = 12, sector: Optional[str] = None,
                       now: Optional[datetime] = None) -> List[dict]:
     """New jobs per ISO week as a continuous, zero-filled series ending this
@@ -195,23 +212,6 @@ def new_jobs_per_week(conn, weeks: int = 12, sector: Optional[str] = None,
         out.append({"week": d.isoformat(), "count": counts.get(d.isoformat(), 0)})
         d += timedelta(days=7)
     return out
-
-
-def category_breakdown(conn, sector: Optional[str] = None, weeks: int = 0,
-                       now: Optional[datetime] = None) -> List[dict]:
-    cutoff = window_cutoff(weeks, now)
-    sql, params = "SELECT company, title FROM jobs WHERE 1=1", []
-    if cutoff:
-        sql += " AND first_seen >= ?"
-        params.append(cutoff)
-    if sector:
-        sql += " AND sector = ?"
-        params.append(sector)
-    counts: Dict[tuple, int] = {}
-    for r in conn.execute(sql, params):
-        key = (r["company"], categorize(r["title"]))
-        counts[key] = counts.get(key, 0) + 1
-    return [{"company": c, "category": cat, "count": n} for (c, cat), n in sorted(counts.items())]
 
 
 def median_days_active(conn, sector: Optional[str] = None, weeks: int = 0,
@@ -268,28 +268,6 @@ def overview(conn, sector: Optional[str] = None, now: Optional[datetime] = None)
         "emails_sent": count("SELECT COUNT(*) c FROM emails WHERE success = 1", []),
         "emails_failed": count("SELECT COUNT(*) c FROM emails WHERE success = 0", []),
     }
-
-
-def top_skills(conn, limit: int = 15, sector: Optional[str] = None, weeks: int = 0,
-               now: Optional[datetime] = None) -> List[dict]:
-    cutoff = window_cutoff(weeks, now)
-    sql = """SELECT skills.name AS skill, skills.category AS category, COUNT(*) AS count
-             FROM job_skills
-             JOIN skills ON skills.id = job_skills.skill_id
-             JOIN job_details ON job_details.job_id = job_skills.job_id
-             JOIN jobs ON jobs.id = job_skills.job_id
-             WHERE job_details.enrichment_failed = 0"""
-    params: list = []
-    if cutoff:
-        sql += " AND jobs.first_seen >= ?"
-        params.append(cutoff)
-    if sector:
-        sql += " AND jobs.sector = ?"
-        params.append(sector)
-    sql += " GROUP BY skills.id ORDER BY count DESC, skills.name LIMIT ?"
-    params.append(limit)
-    rows = conn.execute(sql, params).fetchall()
-    return [{"skill": r["skill"], "category": r["category"], "count": r["count"]} for r in rows]
 
 
 _STATUS_ORDER = {"failing": 0, "empty": 1, "retired": 2, "ok": 3}
@@ -355,3 +333,154 @@ def claude_usage(conn, today: date) -> dict:
         "error": storage.get_failing_companies(conn, config.INSIGHTS_ALERT_SECTOR)
                         .get(config.INSIGHTS_ALERT_NAME),
     }
+
+
+def _ranked_skills(records: List[JobRecord], limit: int) -> List[Tuple[str, str, int]]:
+    """(key, display name, roles) for the `limit` skills most roles need. A
+    role counts once per merged skill; ties go to the alphabetically first."""
+    spellings: Counter = Counter()
+    per_key: Counter = Counter()
+    for r in records:
+        keys = set()
+        for name in r.skills:
+            spellings[name] += 1
+            keys.add(skill_key(name))
+        per_key.update(keys)
+    names = merge_skill_names(spellings)
+    ranked = sorted(per_key.items(), key=lambda kv: (-kv[1], names[kv[0]]))[:limit]
+    return [(key, names[key], count) for key, count in ranked]
+
+
+def _in_roles(r: JobRecord, families: Iterable[str], levels: Iterable[str]) -> bool:
+    """Is the role in the chosen role families and levels? Nothing chosen = all."""
+    families, levels = tuple(families), tuple(levels)
+    return ((not families or r.role_family in families)
+            and (not levels or (r.seniority or "Not stated") in levels))
+
+
+def skill_demand(conn, sector: Optional[str] = None, weeks: int = 0, limit: int = 15,
+                 now: Optional[datetime] = None) -> List[dict]:
+    """The skills most roles need, among roles Claude read in the window."""
+    records = _read_records(conn, sector, weeks, now)
+    return [{"skill": name, "count": count} for _, name, count in _ranked_skills(records, limit)]
+
+
+def skill_shares_by_week(conn, sector: Optional[str] = None, weeks: int = 12, limit: int = 12,
+                         now: Optional[datetime] = None) -> List[dict]:
+    """For the top `limit` skills: roles needing the skill per week (`count`)
+    and roles Claude read that week (`total`, the share denominator). Dense:
+    one row per (skill, week), skill-major."""
+    now = now or datetime.now()
+    records = _read_records(conn, sector, weeks, now)
+    ranked = _ranked_skills(records, limit)
+    if not ranked:
+        return []
+    totals = Counter(week_start(r.first_seen) for r in records)
+    per: Counter = Counter()
+    for r in records:
+        week = week_start(r.first_seen)
+        for key in {skill_key(name) for name in r.skills}:
+            per[(key, week)] += 1
+    weeks_out = _week_range(window_cutoff(weeks, now), totals.keys(), now)
+    return [{"week": w, "skill": name, "count": per.get((key, w), 0), "total": totals.get(w, 0)}
+            for key, name, _ in ranked for w in weeks_out]
+
+
+def seniority_counts(conn, sector: Optional[str] = None, weeks: int = 12,
+                     now: Optional[datetime] = None) -> List[dict]:
+    counts = Counter((r.company, r.seniority or "Not stated") for r in _read_records(conn, sector, weeks, now))
+    return [{"company": c, "seniority": s, "count": n} for (c, s), n in sorted(counts.items())]
+
+
+def family_counts(conn, sector: Optional[str] = None, weeks: int = 0,
+                  now: Optional[datetime] = None) -> List[dict]:
+    counts = Counter((r.company, r.role_family) for r in _read_records(conn, sector, weeks, now)
+                     if r.role_family)
+    return [{"company": c, "family": f, "count": n} for (c, f), n in sorted(counts.items())]
+
+
+DRILLDOWN_LIMIT = 100
+
+
+def claude_drilldown(conn, dimension: str, value: str, sector: Optional[str] = None, weeks: int = 0,
+                     families: Iterable[str] = (), levels: Iterable[str] = (),
+                     now: Optional[datetime] = None) -> Optional[List[dict]]:
+    """The roles Claude read behind a chart value, newest first (at most
+    DRILLDOWN_LIMIT). None when this function doesn't handle `dimension`."""
+    if dimension == "skill":
+        key = skill_key(value)
+
+        def match(r):
+            return key in {skill_key(name) for name in r.skills} and _in_roles(r, families, levels)
+    elif dimension == "seniority":
+        def match(r):
+            return (r.seniority or "Not stated") == value
+    elif dimension == "role_family":
+        def match(r):
+            return r.role_family == value
+    elif dimension == "company_family":
+        company, _, family = value.partition("::")
+
+        def match(r):
+            return r.company == company and r.role_family == family
+    else:
+        return None
+    return [{"title": r.title, "company": r.company, "url": r.url, "first_seen": r.first_seen}
+            for r in _read_records(conn, sector, weeks, now) if match(r)][:DRILLDOWN_LIMIT]
+
+
+MIN_ROLES_FOR_SKILLS = 5   # What to learn: fewer matching roles is too small a sample to chart
+MIN_STATED_YEARS = 3       # Experience asked: fewer stated values gives no median
+
+
+def _by_size(counts: Counter) -> List[str]:
+    """Keys largest first, then by name."""
+    return [k for k, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))]
+
+
+def skills_for_roles(conn, sector: Optional[str] = None, weeks: int = 0, families: Iterable[str] = (),
+                     levels: Iterable[str] = (), limit: int = 10, now: Optional[datetime] = None) -> dict:
+    """What to learn: among the roles Claude read in scope -- optionally only
+    these role families and levels -- how many there are and which skills
+    most of them need."""
+    records = [r for r in _read_records(conn, sector, weeks, now) if _in_roles(r, families, levels)]
+    return {"roles": len(records),
+            "skills": [{"skill": name, "count": count} for _, name, count in _ranked_skills(records, limit)]}
+
+
+def experience_by_family(conn, sector: Optional[str] = None, weeks: int = 0,
+                         now: Optional[datetime] = None) -> List[dict]:
+    """Median minimum years asked per role family, largest family first; the
+    median is None when fewer than MIN_STATED_YEARS roles state years."""
+    years: Dict[str, List[int]] = defaultdict(list)
+    totals: Counter = Counter()
+    for r in _read_records(conn, sector, weeks, now):
+        if not r.role_family:
+            continue
+        totals[r.role_family] += 1
+        if r.min_years is not None:
+            years[r.role_family].append(r.min_years)
+    return [{"family": family,
+             "median": statistics.median(years[family]) if len(years[family]) >= MIN_STATED_YEARS else None,
+             "stated": len(years[family]), "total": totals[family]}
+            for family in _by_size(totals)]
+
+
+def openings_by_family(conn, sector: Optional[str] = None, weeks: int = 12, top: int = 5,
+                       now: Optional[datetime] = None) -> List[dict]:
+    """New roles per week for the `top` largest role families in the window,
+    zero-filled like new_jobs_per_week; family-major, largest first."""
+    now = now or datetime.now()
+    records = [r for r in _read_records(conn, sector, weeks, now) if r.role_family]
+    families = _by_size(Counter(r.role_family for r in records))[:top]
+    if not families:
+        return []
+    per = Counter((r.role_family, week_start(r.first_seen)) for r in records)
+    weeks_out = _week_range(window_cutoff(weeks, now), [week_start(r.first_seen) for r in records], now)
+    return [{"week": w, "family": f, "count": per.get((f, w), 0)} for f in families for w in weeks_out]
+
+
+def families_in(conn, sector: Optional[str] = None) -> List[str]:
+    """Role families among every role Claude has read in the sector, largest
+    first -- What to learn's choices."""
+    return _by_size(Counter(r.role_family for r in _read_records(conn, sector, 0, None) if r.role_family))

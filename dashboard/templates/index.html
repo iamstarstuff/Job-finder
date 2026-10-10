@@ -14,12 +14,12 @@
 {% include "_brief.html" %}
 {% include "_tiles.html" %}
 <div class="grid">
-  {{ chart_card("skills-in-demand", "Skills in demand", "Roles with full descriptions that mention each skill", 6, sector, weeks) }}
+  {{ chart_card("skills-in-demand", "Skills in demand", "Roles read by Claude that need each skill; spelling variants merged", 6, sector, weeks) }}
   {{ chart_card("hiring-velocity", "Hiring velocity", "New roles per week", 6, sector, weeks) }}
   {% call chart_card("who-is-hiring", "Who is hiring", "Companies by open roles", 6, sector, weeks) %}
     {% include "_movers.html" %}
   {% endcall %}
-  {{ chart_card("skill-trend", "Skill trend", "Share of each week's new roles mentioning the skill, based on roles with full descriptions", 6, sector, weeks) }}
+  {{ chart_card("skill-trend", "Skill trend", "Share of each week's roles read by Claude that need the skill", 6, sector, weeks) }}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <script src="{{ url_for('static', filename='charts.js') }}"></script>

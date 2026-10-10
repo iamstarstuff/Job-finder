@@ -1,26 +1,21 @@
-{% macro job_row(job, skill, skills_by_job) %}
-<details class="job-row">
-  <summary class="job-row-summary">
-    <span></span>
-    <span>{{ job.company }}</span>
-    <span>{{ job.title }}</span>
-    <span>{{ job.seniority or "—" }}</span>
-    <span><span class="pill {{ 'on' if job.is_active else 'off' }}">
-        {{ "active" if job.is_active else "closed" }}</span></span>
-    <span>{% if job.url %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Apply</a>{% endif %}</span>
-  </summary>
-  <div class="job-detail">
-    {% if job.enrichment_failed or not job.description %}
-      Description not available yet.
-    {% else %}
-      {{ job.description | highlight(skill) }}
-      {% set tags = skills_by_job.get(job.id) %}
-      {% if tags %}
-      <div style="margin-top:8px;">
-        {% for s in tags %}<span class="skill-tag">{{ s }}</span>{% endfor %}
-      </div>
-      {% endif %}
-    {% endif %}
+{% macro job_card(job, term) %}
+<article class="job-card">
+  <h3>{% if job.url and job.url.startswith("http") %}<a href="{{ job.url }}" target="_blank" rel="noopener">{{ job.title }}</a>{% else %}{{ job.title }}{% endif %}</h3>
+  <p class="meta">{{ job.company }} · new {{ job.first_seen | short_date }}{% if not job.is_active %} · <span class="pill off">closed</span>{% endif %}</p>
+  {% if job.read_by_claude %}
+    {% set facts = card_facts(job) %}
+    {% if job.role_family or facts %}<p class="facts">{% if job.role_family %}<span class="family-chip">{{ job.role_family }}</span>{% endif %}{{ facts | join(" · ") }}</p>{% endif %}
+    {% if job.languages %}<p class="languages">Needs {{ job.languages | join(", ") }}</p>{% endif %}
+    {% if job.sector == "tech" and job.reason %}<p class="reason">{{ job.reason }}</p>{% endif %}
+  {% else %}
+    <p class="unread">Not read by Claude (no description)</p>
+  {% endif %}
+  <div class="foot">
+    {% for skill in job.skills[:6] %}<span class="skill-tag">{{ skill }}</span>{% endfor %}
+    {% if job.url and job.url.startswith("http") %}<a class="btn" href="{{ job.url }}" target="_blank" rel="noopener">Apply</a>{% endif %}
   </div>
-</details>
+  {% if job.description %}
+  <details><summary>Description</summary><div class="job-detail">{{ job.description | highlight(term) }}</div></details>
+  {% endif %}
+</article>
 {% endmacro %}

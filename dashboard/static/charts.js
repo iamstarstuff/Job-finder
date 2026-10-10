@@ -1,6 +1,7 @@
 // Mounts every [data-chart] card on the page: fetches its ECharts option from
-// /api/charts/<name>?sector=&weeks=, renders it with echarts (SVG), fills the
-// "Show data" table, and wires click-to-drilldown through /api/drilldown/<dimension>.
+// /api/charts/<name>?sector=&weeks= (plus the card's own select[data-param]
+// choices), renders it with echarts (SVG), fills the "Show data" table, shows
+// the payload's note, and wires click-to-drilldown through /api/drilldown/<dimension>.
 // Every string from the API reaches the DOM through textContent -- no markup concatenation.
 (function () {
   "use strict";
@@ -55,12 +56,13 @@
     close.type = "button";
     close.addEventListener("click", () => closePanel(panel));
     panel.appendChild(close);
+    const label = value.replace("::", " · ");
     if (!jobs.length) {
-      panel.appendChild(el("p", "empty-note", "No jobs found for " + value + "."));
+      panel.appendChild(el("p", "empty-note", "No jobs found for " + label + "."));
       panel.hidden = false;
       return;
     }
-    panel.appendChild(el("h4", null, jobs.length + (jobs.length === 1 ? " job" : " jobs") + " for " + value));
+    panel.appendChild(el("h4", null, jobs.length + (jobs.length === 1 ? " job" : " jobs") + " for " + label));
     const wrap = el("div", "table-scroll");
     const table = el("table");
     const head = el("tr");
@@ -87,11 +89,23 @@
     panel.hidden = false;
   }
 
-  async function loadDrilldown(panel, dimension, value, sector) {
+  // The card's own choices (e.g. What to learn's role families and levels) as
+  // repeatable query parameters; they scope both the chart and its drilldowns.
+  function cardParams(card) {
+    const params = [];
+    card.querySelectorAll("select[data-param]").forEach((select) => {
+      Array.from(select.selectedOptions).forEach((option) => params.push([select.dataset.param, option.value]));
+    });
+    return params;
+  }
+
+  async function loadDrilldown(panel, dimension, value, card) {
     panel.hidden = false;
     panel.replaceChildren(el("p", "empty-note", "Loading…"));
     const params = new URLSearchParams({ value: value });
-    if (sector) params.set("sector", sector);
+    params.set("weeks", card.dataset.weeks || "12");
+    if (card.dataset.sector) params.set("sector", card.dataset.sector);
+    cardParams(card).forEach(([name, v]) => params.append(name, v));
     try {
       const resp = await fetch("/api/drilldown/" + encodeURIComponent(dimension) + "?" + params.toString());
       if (!resp.ok) {
@@ -104,30 +118,52 @@
     }
   }
 
-  // Which field of the ECharts click event carries the drilldown value (spec §3.1 + "row" for heatmaps).
+  // Which field of the ECharts click event carries the drilldown value (spec §3.1;
+  // "row" is a heatmap's y-category, "cell" its "row::column" pair).
   function clickValue(params, drilldown, option) {
     if (drilldown.key === "seriesName") return params.seriesName;
     if (drilldown.key === "row") return option.yAxis.data[params.value[1]];
+    if (drilldown.key === "cell") return option.yAxis.data[params.value[1]] + "::" + option.xAxis.data[params.value[0]];
     return params.name;
+  }
+
+  function showEmpty(plot, text) {
+    plot.style.height = "";
+    plot.replaceChildren(el("p", "empty", text));
   }
 
   async function mount(card) {
     const plot = card.querySelector(".chart");
+    let note = card.querySelector(".chart-note");
+    if (!note) {
+      note = el("p", "chart-note");
+      plot.after(note);
+    }
+    note.textContent = "";
+    if (card._chart) {
+      card._chart.dispose();
+      card._chart = null;
+    }
+    closePanel(card.querySelector(".drilldown"));
     const query = new URLSearchParams({ sector: card.dataset.sector || "", weeks: card.dataset.weeks || "12" });
+    cardParams(card).forEach(([name, v]) => query.append(name, v));
     try {
       const resp = await fetch("/api/charts/" + encodeURIComponent(card.dataset.chart) + "?" + query.toString());
       if (!resp.ok) {
-        plot.replaceChildren(el("p", "empty", "This chart could not be loaded."));
+        showEmpty(plot, "This chart could not be loaded.");
         return;
       }
       const payload = await resp.json();
       renderTable(card.querySelector(".chart-table"), payload.columns, payload.rows);
-      if (!payload.rows.length) {
-        plot.replaceChildren(el("p", "empty", "No data for this window."));
+      if (!payload.option || !Object.keys(payload.option).length) {
+        showEmpty(plot, payload.note || "No data for this window.");
         return;
       }
+      note.textContent = payload.note || "";
+      plot.replaceChildren();
       plot.style.height = payload.height;
       const chart = echarts.init(plot, null, { renderer: "svg" });
+      card._chart = chart;
       chart.setOption(payload.option);
       if (payload.drilldown) {
         const panel = card.querySelector(".drilldown");
@@ -141,14 +177,22 @@
             return;
           }
           open = value;
-          loadDrilldown(panel, payload.drilldown.dimension, value, card.dataset.sector);
+          loadDrilldown(panel, payload.drilldown.dimension, value, card);
         });
       }
-      new ResizeObserver(() => chart.resize()).observe(plot);
+      if (!card._resizeObserved) {
+        new ResizeObserver(() => card._chart && card._chart.resize()).observe(plot);
+        card._resizeObserved = true;
+      }
     } catch (err) {
-      plot.replaceChildren(el("p", "empty", "This chart could not be loaded."));
+      showEmpty(plot, "This chart could not be loaded.");
     }
   }
 
-  document.querySelectorAll("[data-chart]").forEach(mount);
+  document.querySelectorAll("[data-chart]").forEach((card) => {
+    mount(card);
+    card.querySelectorAll("select[data-param]").forEach((select) => {
+      select.addEventListener("change", () => mount(card));
+    });
+  });
 })();

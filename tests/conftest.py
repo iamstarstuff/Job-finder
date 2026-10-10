@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 
 import pytest
@@ -93,3 +94,26 @@ def make_insight(**overrides):
                   required_languages=[], work_mode="hybrid", contract_type="permanent", salary=None)
     fields.update(overrides)
     return Insight(**fields)
+
+
+def save_reading(conn, job, **fields):
+    """Save a status-'ok' Claude reading for `job` (already in `jobs`) with
+    sensible defaults; tests pass only the fields they care about, using
+    job_insights column names. skills/required_languages take Python lists."""
+    from jobfinder import insights, storage
+    row = dict.fromkeys(storage.INSIGHT_COLUMNS)
+    row.update(
+        job_key=job.key, sector=job.sector, company=job.company, title=job.title, status="ok",
+        relevant=1 if job.sector == "tech" else None,
+        reason="Fits the target areas." if job.sector == "tech" else None,
+        role_family="ML/AI" if job.sector == "tech" else "Quality",
+        seniority="Not stated", skills=[], required_languages=[],
+        work_mode="not_stated", contract_type="not_stated", title_only=0,
+        model="claude-sonnet-5-5", prompt_version=insights.PROMPT_VERSION,
+        input_tokens=1000, output_tokens=200, cost_usd=0.004, via_batch=0,
+        classified_at="2026-10-10T08:00:00",
+    )
+    row.update(fields)
+    row["skills"] = json.dumps(list(row["skills"]))
+    row["required_languages"] = json.dumps(list(row["required_languages"]))
+    storage.save_insight(conn, row)
