@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import json
 import statistics
-from collections import Counter
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
 # Order matters: first match wins.
 CATEGORY_KEYWORDS = [
@@ -55,6 +56,100 @@ def window_cutoff(weeks: int, now: Optional[datetime] = None) -> Optional[str]:
 
 def _sector_clause(sector: Optional[str], column: str = "jobs.sector") -> str:
     return f" AND {column} = ?" if sector else ""
+
+
+SENIORITY_LEVELS = ["Intern/Graduate", "Junior", "Mid", "Senior", "Lead/Principal", "Manager",
+                    "Director+", "Not stated"]
+
+
+@dataclass(frozen=True)
+class JobRecord:
+    """One job with its description and Claude's reading, as the dashboard
+    shows it. Claude fields are None (lists empty) without an 'ok' reading."""
+    id: int
+    company: str
+    title: str
+    url: Optional[str]
+    sector: str
+    first_seen: str
+    is_active: bool
+    description: Optional[str]
+    read_by_claude: bool
+    role_family: Optional[str]
+    seniority: Optional[str]
+    min_years: Optional[int]
+    work_mode: Optional[str]
+    contract_type: Optional[str]
+    salary_min: Optional[float]
+    salary_max: Optional[float]
+    salary_currency: Optional[str]
+    salary_period: Optional[str]
+    reason: Optional[str]
+    skills: Tuple[str, ...]
+    languages: Tuple[str, ...]
+
+
+_RECORD_SQL = """
+SELECT jobs.id, jobs.company, jobs.title, jobs.url, jobs.sector, jobs.first_seen, jobs.is_active,
+       CASE WHEN job_details.enrichment_failed = 0 AND job_details.description != ''
+            THEN job_details.description END AS description,
+       job_insights.job_key IS NOT NULL AS read_by_claude,
+       job_insights.role_family, job_insights.seniority, job_insights.min_years_experience,
+       job_insights.work_mode, job_insights.contract_type, job_insights.salary_min,
+       job_insights.salary_max, job_insights.salary_currency, job_insights.salary_period,
+       job_insights.reason, job_insights.skills, job_insights.required_languages
+FROM jobs
+LEFT JOIN job_details ON job_details.job_id = jobs.id
+LEFT JOIN job_insights ON job_insights.job_key = jobs.job_key AND job_insights.status = 'ok'
+WHERE 1=1"""
+
+
+def _json_tuple(text: Optional[str]) -> Tuple[str, ...]:
+    return tuple(json.loads(text)) if text else ()
+
+
+def job_records(conn, sector: Optional[str] = None, weeks: int = 0,
+                now: Optional[datetime] = None) -> List[JobRecord]:
+    """Every job, newest first, with its description and Claude's reading --
+    the one query behind the Jobs page and every Claude-based chart. Scoped
+    like the charts: a sector, and jobs first seen inside the window."""
+    cutoff = window_cutoff(weeks, now)
+    sql, params = _RECORD_SQL, []
+    if cutoff:
+        sql += " AND jobs.first_seen >= ?"
+        params.append(cutoff)
+    if sector:
+        sql += " AND jobs.sector = ?"
+        params.append(sector)
+    sql += " ORDER BY jobs.first_seen DESC, jobs.id DESC"
+    return [JobRecord(
+        id=r["id"], company=r["company"], title=r["title"], url=r["url"], sector=r["sector"],
+        first_seen=r["first_seen"], is_active=bool(r["is_active"]), description=r["description"],
+        read_by_claude=bool(r["read_by_claude"]), role_family=r["role_family"],
+        seniority=r["seniority"], min_years=r["min_years_experience"], work_mode=r["work_mode"],
+        contract_type=r["contract_type"], salary_min=r["salary_min"], salary_max=r["salary_max"],
+        salary_currency=r["salary_currency"], salary_period=r["salary_period"], reason=r["reason"],
+        skills=_json_tuple(r["skills"]), languages=_json_tuple(r["required_languages"]),
+    ) for r in conn.execute(sql, params)]
+
+
+def _read_records(conn, sector: Optional[str], weeks: int, now: Optional[datetime]) -> List[JobRecord]:
+    """The jobs Claude has read -- the base of every Claude-based chart."""
+    return [r for r in job_records(conn, sector=sector, weeks=weeks, now=now) if r.read_by_claude]
+
+
+def skill_key(name: str) -> str:
+    """Claude spells the same skill several ways ("Distributed Systems" /
+    "Distributed systems"); counting by this key merges them."""
+    return name.strip().casefold()
+
+
+def merge_skill_names(spellings: Counter) -> Dict[str, str]:
+    """skill_key -> the spelling to show: the most frequent, ties alphabetical."""
+    by_key: Dict[str, List[Tuple[str, int]]] = defaultdict(list)
+    for name, count in spellings.items():
+        by_key[skill_key(name)].append((name.strip(), count))
+    return {key: sorted(variants, key=lambda nc: (-nc[1], nc[0]))[0][0] for key, variants in by_key.items()}
 
 
 def company_velocity(conn, sector: Optional[str] = None, weeks: int = 12,

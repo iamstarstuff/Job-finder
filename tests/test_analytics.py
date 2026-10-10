@@ -1,7 +1,9 @@
+from collections import Counter
 from datetime import datetime
 
 from jobfinder import analytics, storage
 from jobfinder.models import Job
+from tests.conftest import save_reading
 
 
 def seeded_conn(tmp_path):
@@ -411,3 +413,55 @@ def test_scraper_health_reports_failures_for_registry_only_companies(tmp_path):
 def test_removed_analytics_functions_are_gone():
     for name in ("jobs_per_company", "seniority_breakdown", "skills_by_category"):
         assert not hasattr(analytics, name), name
+
+
+def _records_conn(tmp_path):
+    conn = storage.connect(tmp_path / "records.db")
+    read = Job("Google", "Data Scientist", "https://g/1", "p", sector="tech")
+    refused = Job("Google", "Sales Lead", "https://g/2", "p", sector="tech")
+    unread = Job("APC", "Warehouse Lead", "https://a/1", "p")
+    storage.record_company_snapshot(conn, "Google", [read, refused], "2026-09-01T10:00:00")
+    storage.record_company_snapshot(conn, "APC", [unread], "2026-10-08T10:00:00")
+    gid = conn.execute("SELECT id FROM jobs WHERE url='https://g/1'").fetchone()["id"]
+    storage.save_enrichment(conn, gid, "Builds models in Python.", None, [], "2026-09-01T11:00:00")
+    save_reading(conn, read, role_family="Data Science", seniority="Mid", min_years_experience=3,
+                 skills=["Python", "SQL"], required_languages=["German"], salary_min=90000.0,
+                 salary_max=92000.0, salary_currency="EUR", salary_period="year",
+                 work_mode="hybrid", contract_type="permanent", reason="Data science role.")
+    save_reading(conn, refused, status="refused")
+    return conn
+
+
+def test_job_records_join_jobs_descriptions_and_ok_readings(tmp_path):
+    records = {r.title: r for r in analytics.job_records(_records_conn(tmp_path))}
+    ds = records["Data Scientist"]
+    assert ds.read_by_claude and ds.description == "Builds models in Python."
+    assert ds.skills == ("Python", "SQL") and ds.languages == ("German",)
+    assert (ds.role_family, ds.seniority, ds.min_years) == ("Data Science", "Mid", 3)
+    assert (ds.work_mode, ds.contract_type, ds.reason) == ("hybrid", "permanent", "Data science role.")
+    assert (ds.salary_min, ds.salary_max, ds.salary_currency, ds.salary_period) == (90000.0, 92000.0, "EUR", "year")
+    assert ds.is_active and ds.sector == "tech" and ds.url == "https://g/1"
+    refused = records["Sales Lead"]
+    assert not refused.read_by_claude and refused.skills == () and refused.role_family is None
+    unread = records["Warehouse Lead"]
+    assert not unread.read_by_claude and unread.description is None
+
+
+def test_job_records_are_newest_first_and_scoped_by_sector_and_window(tmp_path):
+    conn = _records_conn(tmp_path)
+    assert [r.title for r in analytics.job_records(conn)][0] == "Warehouse Lead"
+    assert {r.title for r in analytics.job_records(conn, sector="tech")} == {"Data Scientist", "Sales Lead"}
+    now = datetime(2026, 10, 10, 12, 0, 0)
+    assert [r.title for r in analytics.job_records(conn, weeks=1, now=now)] == ["Warehouse Lead"]
+    assert [r.title for r in analytics._read_records(conn, None, 0, now)] == ["Data Scientist"]
+
+
+def test_skill_key_folds_case_and_surrounding_space():
+    assert analytics.skill_key("  Distributed Systems ") == analytics.skill_key("distributed systems")
+
+
+def test_merge_skill_names_keeps_the_most_common_spelling():
+    names = analytics.merge_skill_names(Counter({
+        "Distributed systems": 18, "Distributed Systems": 19, "SQL": 21, "sql": 2, "Gmp": 1, "GMP": 1,
+    }))
+    assert names == {"distributed systems": "Distributed Systems", "sql": "SQL", "gmp": "GMP"}
