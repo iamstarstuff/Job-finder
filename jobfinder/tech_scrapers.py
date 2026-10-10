@@ -4,7 +4,7 @@ import json
 import re
 from collections import OrderedDict
 from typing import List
-from urllib.parse import urljoin
+from urllib.parse import urlencode, urljoin
 
 from jobfinder.http_client import fetch
 from jobfinder.models import Job
@@ -425,35 +425,38 @@ def aws(session) -> List[Job]:
     return _amazon_search(session, want_aws=True)
 
 
-# Stripe's careers page (stripe.com/jobs/search) is fully server-rendered
-# with the complete global job table embedded directly in the initial
-# HTML -- confirmed live during design: 101 real postings, each row
-# carrying title, department, and a real location string (e.g. "Dublin
-# HQ"). No auth, no JS, no pagination needed -- the `?office_locations=`
-# query param does NOT actually filter server-side (confirmed by
-# comparing filtered vs unfiltered fetches), so filtering is done here
-# client-side against the location text instead.
+# Stripe rebuilt its careers site (by 2026-10): stripe.com/jobs/search now
+# redirects to stripe.com/careers/search, a Next.js page whose old
+# table markup is gone -- the previous scraper silently returned zero.
+# The page embeds the complete global job index as JSON in __NEXT_DATA__
+# (confirmed live 2026-10-10: 682 postings, 82 in Ireland), so no JS or
+# pagination is needed. Each listing points at locations by index into
+# filters.locations; the Irish ones are the countryCode "IE" entries that
+# have a parentLocationIndex ("Ireland", "Remote in Ireland", "Dublin
+# HQ"). The parentless "Europe" region oddly also carries countryCode IE
+# and must not count. A missing __NEXT_DATA__ raises rather than
+# returning [], so a future layout change shows up as a failing scraper.
 STRIPE_BASE = "https://stripe.com"
-STRIPE_SEARCH = "https://stripe.com/jobs/search"
+STRIPE_SEARCH = "https://stripe.com/careers/search"
+_NEXT_DATA_RE = re.compile(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', re.S)
 
 
 def stripe(session) -> List[Job]:
-    from bs4 import BeautifulSoup
     resp = fetch(session, STRIPE_SEARCH)
-    soup = BeautifulSoup(resp.content, "lxml")
+    match = _NEXT_DATA_RE.search(resp.content.decode("utf-8", errors="replace"))
+    if not match:
+        raise ValueError("Stripe careers page has no __NEXT_DATA__ job index (layout changed?)")
+    index = json.loads(match.group(1))["props"]["pageProps"]["jobIndexData"]
+    irish = {i for i, location in enumerate(index["filters"]["locations"])
+             if location.get("countryCode") == "IE" and "parentLocationIndex" in location}
     jobs = []
-    for row in soup.select("tr.TableRow"):
-        link = row.select_one("a.JobsListings__link")
-        location = row.select_one("span.JobsListings__locationDisplayName")
-        if not link or not location:
+    for listing in index["listings"]:
+        if not irish & set(listing.get("locationIndices", [])):
             continue
-        location_text = location.get_text(strip=True)
-        if "Dublin" not in location_text and "Ireland" not in location_text:
-            continue
-        title = link.get_text(strip=True)
         jobs.append(Job(
-            "Stripe", title, urljoin(STRIPE_BASE, link["href"]), STRIPE_SEARCH,
-            sector="tech",
+            "Stripe", listing["title"].strip(),
+            f"{STRIPE_BASE}/careers/listing/{listing['slug']}/{listing['greenhouseId']}",
+            STRIPE_SEARCH, sector="tech",
         ))
     return jobs
 
@@ -548,30 +551,45 @@ def salesforce(session) -> List[Job]:
     return jobs
 
 
-# Infosys's careers site genuinely filters server-side on
-# `?location=Ireland` -- confirmed live during design (8 real Ireland
-# postings returned, all in a single page, no pagination markup present
-# for this small a result set). href values are already absolute URLs,
-# no urljoin needed. Note: the detail page (and even the listing
-# card's own preview snippet) only ever expose an ellipsis-truncated
-# description everywhere reachable via static HTTP -- confirmed live,
-# same class of dead end as Allianz Partners -- so Infosys is
+# Infosys's careers page (by 2026-10) renders its results in the browser
+# with Algolia InstantSearch, so the server HTML no longer carries the
+# a.job cards the previous scraper read -- it silently returned zero.
+# This queries the same Algolia index the page does, with the public
+# search-only app ID and key its own script hands to algoliasearch()
+# (assets/infosys/merged/js/...). The page's ?location= parameter maps to
+# the `country` facet. Confirmed live 2026-10-10: 1,258 postings across 31
+# countries and none in Ireland at the time, so an empty result here is
+# genuine, not a layout change. redirect_url keeps the job-page format the
+# old scraper stored, so existing job keys carry over. Note: the detail
+# page only ever exposes an ellipsis-truncated description via static
+# HTTP -- same class of dead end as Allianz Partners -- so Infosys is
 # deliberately NOT added to ENRICHMENT_COMPANIES (see enrichment.py).
 INFOSYS_SEARCH = "https://digitalcareers.infosys.com/infosys/global-careers?location=Ireland"
+INFOSYS_ALGOLIA_URL = "https://UM59DWRPA1-dsn.algolia.net/1/indexes/production_Infosys_jobs/query"
+INFOSYS_ALGOLIA_HEADERS = {
+    "X-Algolia-Application-Id": "UM59DWRPA1",
+    "X-Algolia-API-Key": "c8bffc42453b5122fd7e0aeb42761027",  # public search-only key from the page
+}
 
 
 def infosys(session) -> List[Job]:
-    from bs4 import BeautifulSoup
-    resp = fetch(session, INFOSYS_SEARCH)
-    soup = BeautifulSoup(resp.content, "lxml")
     jobs = []
-    for card in soup.select("a.job"):
-        title_div = card.select_one(".job-title")
-        url = card.get("href")
-        if not title_div or not url:
-            continue
-        title = title_div.get("data-title") or title_div.get_text(strip=True)
-        jobs.append(Job("Infosys", title, url, INFOSYS_SEARCH, sector="tech"))
+    page = 0
+    while True:
+        params = urlencode({"query": "", "hitsPerPage": 100, "page": page,
+                            "facetFilters": json.dumps([["country:Ireland"]])})
+        resp = fetch(session, INFOSYS_ALGOLIA_URL, method="post",
+                     headers=INFOSYS_ALGOLIA_HEADERS, json={"params": params})
+        data = resp.json()
+        for hit in data.get("hits", []):
+            url = hit.get("redirect_url")
+            url = url[0] if isinstance(url, list) and url else url
+            if not url:
+                continue
+            jobs.append(Job("Infosys", hit.get("title", "").strip(), url, INFOSYS_SEARCH, sector="tech"))
+        page += 1
+        if page >= data.get("nbPages", 0):
+            break
     return jobs
 
 

@@ -1,3 +1,7 @@
+import json
+
+import pytest
+
 from jobfinder import tech_scrapers
 from tests.conftest import FakeSession, FakeResponse
 
@@ -103,30 +107,40 @@ def test_tech_scrapers_registry_has_fifteen_companies():
     }
 
 
-INFOSYS_PAGE_HTML = b"""
-<a class="job" href="https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148920BR">
-  <div class="left-section">
-    <div class="job-title" data-title="Practice Lead - Data Science_ ML">Practice Lead - Data Science_ ML</div>
-  </div>
-</a>
-<a class="job" href="https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/141411BR">
-  <div class="left-section">
-    <div class="job-title" data-title="HR Lead - Dublin">HR Lead - Dublin</div>
-  </div>
-</a>
-"""
+def _infosys_hits(*reqids):
+    # One Algolia hit per posting, shaped like the live index (confirmed
+    # 2026-10-10): list-valued fields, redirect_url holding the job page.
+    return [{
+        "title": f"Data Engineer {reqid} ", "country": ["Ireland"], "work_location": ["Dublin"],
+        "reqid": [reqid], "objectID": f"Job::{reqid}",
+        "redirect_url": [f"https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/{reqid}"],
+    } for reqid in reqids]
 
 
-def test_infosys_returns_all_roles():
-    fake = FakeSession({
-        "https://digitalcareers.infosys.com/infosys/global-careers?location=Ireland": FakeResponse(INFOSYS_PAGE_HTML),
-    })
+def test_infosys_queries_algolia_for_ireland():
+    fake = FakeSession({tech_scrapers.INFOSYS_ALGOLIA_URL: FakeResponse(
+        json_data={"hits": _infosys_hits("148920BR", "141411BR"), "nbPages": 1})})
     jobs = tech_scrapers.infosys(fake)
-    assert [j.title for j in jobs] == ['Practice Lead - Data Science_ ML', 'HR Lead - Dublin']
-    assert jobs[0].title == "Practice Lead - Data Science_ ML"
+    assert [j.title for j in jobs] == ["Data Engineer 148920BR", "Data Engineer 141411BR"]
     assert jobs[0].url == "https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148920BR"
-    assert jobs[0].sector == "tech"
-    assert jobs[0].company == "Infosys"
+    assert jobs[0].sector == "tech" and jobs[0].company == "Infosys"
+    method, url, kwargs = fake.calls[0]
+    assert method == "post"
+    assert kwargs["headers"]["X-Algolia-Application-Id"] == "UM59DWRPA1"
+    assert "country%3AIreland" in kwargs["json"]["params"]
+
+
+def test_infosys_follows_algolia_pages():
+    fake = FakeSession({tech_scrapers.INFOSYS_ALGOLIA_URL: FakeResponse(
+        json_data={"hits": _infosys_hits("1BR"), "nbPages": 2})})
+    tech_scrapers.infosys(fake)
+    pages = [kwargs["json"]["params"] for _, _, kwargs in fake.calls]
+    assert len(pages) == 2 and "page=0" in pages[0] and "page=1" in pages[1]
+
+
+def test_infosys_with_no_irish_postings_returns_an_empty_list():
+    fake = FakeSession({tech_scrapers.INFOSYS_ALGOLIA_URL: FakeResponse(json_data={"hits": [], "nbPages": 0})})
+    assert tech_scrapers.infosys(fake) == []
 
 
 def test_salesforce_returns_all_roles_and_paginates():
@@ -167,49 +181,53 @@ def test_jpmorganchase_returns_all_roles_and_paginates():
     assert jobs[0].company == "JPMorganChase"
 
 
-STRIPE_PAGE_HTML = b"""
-<table>
-<tr class="TableRow">
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--title">
-    <a class="Link JobsListings__link" href="/jobs/listing/data-scientist-payments/8018297">Data Scientist, Payments</a>
-  </td>
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--departments"></td>
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--country">
-    <span class="JobsListings__locationDisplayName">Dublin HQ</span>
-  </td>
-</tr>
-<tr class="TableRow">
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--title">
-    <a class="Link JobsListings__link" href="/jobs/listing/account-executive-dublin/1112223">Account Executive</a>
-  </td>
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--departments"></td>
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--country">
-    <span class="JobsListings__locationDisplayName">Dublin HQ</span>
-  </td>
-</tr>
-<tr class="TableRow">
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--title">
-    <a class="Link JobsListings__link" href="/jobs/listing/data-scientist-sf/9998887">Data Scientist, US</a>
-  </td>
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--departments"></td>
-  <td class="TableCell JobsListings__tableCell JobsListings__tableCell--country">
-    <span class="JobsListings__locationDisplayName">South San Francisco HQ</span>
-  </td>
-</tr>
-</table>
-"""
+def _stripe_page(listings, with_data=True):
+    # The shape of stripe.com/careers/search (confirmed live 2026-10-10): every
+    # posting is embedded as JSON in __NEXT_DATA__, with locations as indices
+    # into filters.locations. "Europe" oddly carries countryCode IE but has no
+    # parentLocationIndex -- it is a region, not a place in Ireland.
+    data = {"props": {"pageProps": {"jobIndexData": {
+        "filters": {"locations": [
+            {"name": "Americas", "remote": False, "countryCode": "US"},
+            {"name": "Europe", "remote": False, "countryCode": "IE"},
+            {"parentLocationIndex": 1, "name": "Ireland", "countryCode": "IE"},
+            {"parentLocationIndex": 2, "name": "Remote in Ireland", "remote": True, "countryCode": "IE"},
+            {"parentLocationIndex": 2, "name": "Dublin HQ", "countryCode": "IE"},
+            {"parentLocationIndex": 1, "name": "London", "countryCode": "GB"},
+        ]},
+        "listings": listings,
+    }}}}
+    script = f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(data)}</script>' if with_data else ""
+    return f"<html><body><div id=\"__next\"></div>{script}</body></html>".encode()
 
 
-def test_stripe_filters_by_dublin_location_only():
-    fake = FakeSession({
-        "https://stripe.com/jobs/search": FakeResponse(STRIPE_PAGE_HTML),
-    })
+STRIPE_LISTINGS = [
+    {"greenhouseId": 8018297, "title": "Data Scientist, Payments ", "slug": "data-scientist-payments",
+     "locationIndices": [4], "teamIndices": [1]},
+    {"greenhouseId": 1112223, "title": "Account Executive", "slug": "account-executive-dublin",
+     "locationIndices": [5, 3], "teamIndices": [2]},
+    {"greenhouseId": 9998887, "title": "Data Scientist, London", "slug": "data-scientist-london",
+     "locationIndices": [5], "teamIndices": [1]},
+    {"greenhouseId": 4445556, "title": "Europe-wide Role", "slug": "europe-wide-role",
+     "locationIndices": [1], "teamIndices": [1]},
+]
+
+
+def test_stripe_reads_irish_postings_from_the_embedded_job_index():
+    fake = FakeSession({"https://stripe.com/careers/search": FakeResponse(_stripe_page(STRIPE_LISTINGS))})
     jobs = tech_scrapers.stripe(fake)
-    assert [j.title for j in jobs] == ['Data Scientist, Payments', 'Account Executive']
-    assert jobs[0].title == "Data Scientist, Payments"
-    assert jobs[0].url == "https://stripe.com/jobs/listing/data-scientist-payments/8018297"
-    assert jobs[0].sector == "tech"
-    assert jobs[0].company == "Stripe"
+    assert [j.title for j in jobs] == ["Data Scientist, Payments", "Account Executive"]
+    assert jobs[0].url == "https://stripe.com/careers/listing/data-scientist-payments/8018297"
+    assert jobs[0].portal_url == "https://stripe.com/careers/search"
+    assert jobs[0].sector == "tech" and jobs[0].company == "Stripe"
+
+
+def test_stripe_fails_loudly_when_the_job_index_is_missing():
+    # A silent empty list is how the old layout change went unnoticed; an
+    # exception makes the tech run report Stripe as failing instead.
+    fake = FakeSession({"https://stripe.com/careers/search": FakeResponse(_stripe_page([], with_data=False))})
+    with pytest.raises(ValueError):
+        tech_scrapers.stripe(fake)
 
 
 AMAZON_PAGE1 = {

@@ -406,19 +406,16 @@ def test_enrichment_companies_includes_ten_tech_companies():
     assert "Allianz Partners" not in enrichment.ENRICHMENT_COMPANIES
 
 
-STRIPE_JOB_HTML = b'<html><body><div class="ArticleMarkdown"><p>Needs <strong>SQL</strong> and Python.</p></div></body></html>'
-STRIPE_NO_DESCRIPTION_HTML = b"<html><body>No description here.</body></html>"
-
-
-def test_fetch_stripe_description_extracts_text():
-    session = FakeSession({"https://stripe.com/jobs/listing/data-scientist/1": FakeResponse(STRIPE_JOB_HTML)})
-    result = enrichment.fetch_stripe_description(session, "https://stripe.com/jobs/listing/data-scientist/1")
-    assert result == "Needs SQL and Python."
-
-
-def test_fetch_stripe_description_returns_none_when_class_absent():
-    session = FakeSession({"https://stripe.com/jobs/listing/data-scientist/2": FakeResponse(STRIPE_NO_DESCRIPTION_HTML)})
-    assert enrichment.fetch_stripe_description(session, "https://stripe.com/jobs/listing/data-scientist/2") is None
+def test_run_enriches_stripe_jobs_from_their_json_ld(tmp_path):
+    # Stripe's rebuilt detail pages (stripe.com/careers/listing/..., confirmed
+    # live 2026-10-10) carry a schema.org JobPosting block, so the generic
+    # fetcher reads them; the old div.ArticleMarkdown markup is gone.
+    conn = storage.connect(tmp_path / "t.db")
+    url = "https://stripe.com/careers/listing/data-scientist/1"
+    storage.record_company_snapshot(conn, "Stripe", [Job("Stripe", "Data Scientist", url, "p", sector="tech")],
+                                    "2026-10-10T10:00:00")
+    result = enrichment.run(conn, FakeSession({url: FakeResponse(content=BMS_STYLE_HTML)}), "2026-10-10T10:40:00")
+    assert result.enriched == 1 and result.failed == 0
 
 
 def test_fetch_jpmorganchase_description_matches_by_id():
@@ -466,7 +463,7 @@ def test_enrichment_companies_includes_round5_companies():
 
 
 def test_company_fetchers_includes_round5_dedicated_fetchers():
-    assert enrichment.COMPANY_FETCHERS["Stripe"] is enrichment.fetch_stripe_description
+    assert "Stripe" not in enrichment.COMPANY_FETCHERS  # generic JSON-LD fetcher since 2026-10-10
     assert enrichment.COMPANY_FETCHERS["JPMorganChase"] is enrichment.fetch_jpmorganchase_description
     assert "Salesforce" not in enrichment.COMPANY_FETCHERS
 

@@ -352,23 +352,15 @@ def fetch_jpmorganchase_description(session, url: str) -> Optional[str]:
             return None
 
 
-def fetch_stripe_description(session, url: str) -> Optional[str]:
-    """Stripe's job detail pages (job.url is the real detail page) render
-    the full description in a <div class="ArticleMarkdown"> element --
-    confirmed live during design, no JSON-LD present on this platform."""
-    response = fetch(session, url)
-    soup = BeautifulSoup(response.content, "lxml")
-    div = soup.find(class_="ArticleMarkdown")
-    if not div:
-        return None
-    return div.get_text(separator=" ", strip=True)
-
 
 # Per-company override for companies whose detail pages can't be handled
 # by the generic JSON-LD extractor. Companies not in this dict use
 # fetch_description (the generic path) as the default -- this correctly
 # covers Mastercard/Accenture/Intel/Citibank/Microsoft (Round 3), which
-# all have real JSON-LD detail pages, needing no override.
+# all have real JSON-LD detail pages, needing no override. Stripe joined
+# them in 2026-10: its rebuilt stripe.com/careers/listing/... pages carry
+# a JobPosting JSON-LD block and no longer the div.ArticleMarkdown its
+# dedicated fetcher used to read.
 #
 # Allianz Partners is deliberately absent from ENRICHMENT_COMPANIES
 # entirely (see that list below) rather than given a fetcher here -- its
@@ -385,7 +377,6 @@ COMPANY_FETCHERS = {
     # Astellas moved to a SuccessFactors site (2026-09), whose job pages
     # render the description in class="jobdescription" just like AIB/EY.
     "Astellas": fetch_successfactors_description,
-    "Stripe": fetch_stripe_description,
     "JPMorganChase": fetch_jpmorganchase_description,
 }
 
