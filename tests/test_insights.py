@@ -230,3 +230,9 @@ def test_parse_batch_message_failures():
 def test_estimate_cost_grows_with_content():
     small = insights.estimate_cost(["x" * 400])
     assert 0 < small < insights.estimate_cost(["x" * 40000])
+
+
+def test_data_engineering_is_a_tech_role_family_in_the_prompt_and_schema():
+    assert make_insight(role_family="Data Engineering").role_family == "Data Engineering"
+    assert "data engineering" in insights.SYSTEM_PROMPT and "Data Engineering" in insights.SYSTEM_PROMPT
+    assert insights.PROMPT_VERSION == 4

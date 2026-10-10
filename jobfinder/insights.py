@@ -23,9 +23,10 @@ log = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-5-5"  # the user's choice (2026-10-10)
 EFFORT = "low"               # extraction work; the rollout spot check confirms it against "medium"
-PROMPT_VERSION = 3           # bump when SYSTEM_PROMPT or Insight changes: every posting is read again
+PROMPT_VERSION = 4           # bump when SYSTEM_PROMPT or Insight changes: every posting is read again
                              # 2 (2026-10-10): cloud solution architects and cloud-infrastructure SDEs count
                              # 3 (2026-10-10): network engineering/operations roles don't
+                             # 4 (2026-10-10): data engineering and data platforms count (Data Engineering family)
 MAX_TOKENS = 4000
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
@@ -41,8 +42,8 @@ BATCH_DISCOUNT = 0.5
 
 RoleFamily = Literal[
     # tech
-    "Data Science", "ML/AI", "SRE/DevOps", "Cloud/Platform", "Observability", "Analytics/BI",
-    "Software Engineering", "Security", "Sales/Pre-sales", "Other",
+    "Data Science", "Data Engineering", "ML/AI", "SRE/DevOps", "Cloud/Platform", "Observability",
+    "Analytics/BI", "Software Engineering", "Security", "Sales/Pre-sales", "Other",
     # pharma
     "Quality", "Manufacturing & Operations", "Engineering", "Lab & R&D", "Clinical & Medical",
     "Regulatory", "Supply Chain", "Commercial", "Data & IT", "Corporate & Other",
@@ -92,6 +93,7 @@ The reader is looking for roles whose main work is in one of these areas:
 - cloud, platform or infrastructure engineering
 - observability or monitoring, including Splunk
 - analytics, data analysis or business intelligence
+- data engineering, including data platforms, data pipelines and data infrastructure (for example "Staff Backend Engineer, Data Platform")
 
 Judge by the work the posting describes, not by words in the title: an "Applied Scientist" building ML models fits; a title that mentions cloud or AI but describes selling fits no area.
 
@@ -112,7 +114,7 @@ For pharma postings, set relevant and reason to null.
 
 ## Fields
 
-- role_family: tech postings use Data Science, ML/AI, SRE/DevOps, Cloud/Platform, Observability, Analytics/BI, Software Engineering, Security, Sales/Pre-sales or Other. Pharma postings use Quality, Manufacturing & Operations, Engineering, Lab & R&D, Clinical & Medical, Regulatory, Supply Chain, Commercial, Data & IT or Corporate & Other.
+- role_family: tech postings use Data Science, Data Engineering, ML/AI, SRE/DevOps, Cloud/Platform, Observability, Analytics/BI, Software Engineering, Security, Sales/Pre-sales or Other. Pharma postings use Quality, Manufacturing & Operations, Engineering, Lab & R&D, Clinical & Medical, Regulatory, Supply Chain, Commercial, Data & IT or Corporate & Other.
 - seniority: from the responsibilities and the experience asked for, not the title alone. Intern/Graduate covers internships, graduate programmes and summer roles; Director+ covers director, head of, VP and above.
 - min_years_experience: the smallest number of years the posting asks for, as a whole number.
 - skills: at most 10, most important first, in their usual names ("Python", "Kubernetes", "GMP", "SAP").
