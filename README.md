@@ -11,8 +11,8 @@ who is hiring, and what should I learn next*.
 | Pipeline | Entry point | Cadence (cron) | What it does |
 |---|---|---|---|
 | Pharma scraper | `run_job.sh` → `jobscraper.py` | hourly, at :00 | Scrapes 20 pharma/biotech companies, emails new roles |
-| Tech scraper | `run_tech_job.sh` → `tech_jobs.py` | hourly, at :20; scrapes once a day from 08:00 | Scrapes 15 tech companies for data, SRE, DevOps, cloud and analytics roles |
-| Enrichment | `enrich_job.sh` → `enrich_jobs.py` | hourly, at :40 | Fetches full descriptions, extracts skills and seniority |
+| Tech scraper | `run_tech_job.sh` → `tech_jobs.py` | hourly, at :20; scrapes once a day from 08:00 | Scrapes 15 tech companies; Claude picks the data, ML, SRE, DevOps, cloud, observability and analytics roles (title keywords when Claude is off) |
+| Enrichment | `enrich_job.sh` → `enrich_jobs.py` | hourly, at :40 | Fetches full descriptions, extracts skills and seniority; Claude extracts role family, seniority, experience, skills, languages, work mode, contract and salary |
 
 The three pipelines are deliberately independent: a failure in enrichment
 can never delay or break an alert email.
@@ -85,6 +85,25 @@ Then schedule the three shell scripts with `crontab -e` (adjust the paths):
 Each one runs its entry point with `uv run`, so cron needs no activated
 environment.
 
+## Claude insights
+
+Claude (`claude-sonnet-5-5`) reads each new posting once. For tech postings it
+decides whether the role fits; for every job it extracts structured fields into
+the `job_insights` table. It needs an API key on the Mac that runs the cron jobs,
+either in `ANTHROPIC_API_KEY` or in `anthropic_api_key.txt` (git-ignored; create
+it with `umask 077` so only you can read it). Without a key, everything works as
+before: tech postings are filtered by title keywords and no fields are extracted.
+
+- **Cost:** about 1 cent per posting. Realtime calls are capped at
+  `INSIGHTS_DAILY_CALL_LIMIT` (200) a day; the health page shows this month's spend.
+- **Alerts:** a bad key, missing permission or empty credit balance emails the error
+  address once when it starts and once when it is fixed.
+- **Backfill:** `uv run python backfill_insights.py` prints what a one-off pass over the
+  stored descriptions and today's tech postings would cost; `--yes` sends it through
+  the Message Batches API at half price.
+- **Changing the profile or fields:** edit `SYSTEM_PROMPT` / `Insight` in
+  `jobfinder/insights.py` and bump `PROMPT_VERSION`; every posting is read again.
+
 ## Developing on one Mac, running on another
 
 The cron jobs, the database and the dashboard live on one always-on Mac;
@@ -128,10 +147,11 @@ uv run pytest
 ## Project layout
 
 ```
-jobfinder/            core package: config, http client, scrapers, storage, runners, emailer, enrichment, analytics
+jobfinder/            core package: config, http client, scrapers, storage, runners, emailer, enrichment, analytics, insights (Claude)
 dashboard/            Flask app (app.py), chart builders (charts.py), the weekly brief (brief.py), templates, static/charts.js
 tests/                pytest suite
 jobscraper.py, tech_jobs.py, enrich_jobs.py   thin entry points used by the cron scripts
+backfill_insights.py  one-off Claude backfill through the Message Batches API
 ops/                  deploy.sh, pull_db.sh, install_dashboard_agent.sh for the two-Mac setup
 ```
 
