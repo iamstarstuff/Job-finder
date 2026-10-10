@@ -160,3 +160,33 @@ def test_dry_run_notifications_are_not_sent_or_recorded(tmp_path, monkeypatch):
     emailer.send_run_notifications(conn, RunResult(run_id=1, new_jobs=NEW, failures={"Amgen": "boom"}))
     assert sent == []
     assert conn.execute("SELECT COUNT(*) c FROM emails").fetchone()["c"] == 0
+
+
+TECH = {"AWS": [Job("AWS", "Applied Scientist", "https://amazon.jobs/1", "https://amazon.jobs", sector="tech"),
+                Job("AWS", "Senior SRE", "https://amazon.jobs/2", "https://amazon.jobs", sector="tech")]}
+
+
+def test_digest_shows_claudes_reason_under_classified_jobs():
+    html = emailer.render_new_jobs_html(TECH, {"https://amazon.jobs/1": "Applied ML <research> role."})
+    assert "Applied ML &lt;research&gt; role." in html
+    assert html.count("font-size:12px;margin-bottom:6px") == 1  # only the classified job has a reason line
+
+
+def test_insights_status_emails_once_on_failure_and_once_on_recovery(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append((subject, html)))
+    emailer.send_insights_status(conn, "401 invalid x-api-key")
+    emailer.send_insights_status(conn, "401 invalid x-api-key")  # still failing: no repeat
+    emailer.send_insights_status(conn, None)
+    emailer.send_insights_status(conn, None)                     # still fine: nothing
+    assert [s for s, _ in sent] == ["Claude API unavailable", "Claude API working again"]
+    assert "401 invalid x-api-key" in sent[0][1]
+
+
+def test_insights_alerts_are_tracked_apart_from_scrapers(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: None)
+    emailer.send_insights_status(conn, "402 credit balance too low")
+    assert storage.get_failing_companies(conn, "insights") == {"Claude API": "402 credit balance too low"}
+    assert storage.get_failing_companies(conn, "tech") == {}

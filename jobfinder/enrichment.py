@@ -10,6 +10,7 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 from jobfinder.http_client import fetch
+from jobfinder.models import Job
 from jobfinder.scrapers import AMGEN_API
 from jobfinder.tech_scrapers import (
     AMAZON_API, AMAZON_BASE, GOOGLE_SEARCH, _extract_google_data_chunk,
@@ -393,6 +394,8 @@ COMPANY_FETCHERS = {
 class EnrichmentResult:
     enriched: int = 0
     failed: int = 0
+    insights: int = 0  # Claude calls billed this run
+    insight_alert: Tuple[bool, Optional[str]] = (False, None)
 
 
 # Companies whose detail pages carry a schema.org JobPosting JSON-LD block
@@ -451,12 +454,12 @@ def reextract_skills(conn) -> int:
     return len(rows)
 
 
-def run(conn, session, now: str) -> EnrichmentResult:
-    # Local import, not module-level: storage.py never imports enrichment.py,
-    # but keeping this import inside run() keeps enrichment.py's module-level
-    # import graph independent of storage.py, so the two can be reasoned
-    # about — and unit-tested — in isolation.
-    from jobfinder import storage
+def run(conn, session, now: str, client=None) -> EnrichmentResult:
+    # Local imports, not module-level: storage.py never imports enrichment.py,
+    # but keeping these imports inside run() keeps enrichment.py's module-level
+    # import graph independent of storage.py (insights.py imports storage), so
+    # the two can be reasoned about — and unit-tested — in isolation.
+    from jobfinder import insights, storage
 
     result = EnrichmentResult()
     for job in storage.find_unenriched_jobs(conn, companies=ENRICHMENT_COMPANIES):
@@ -482,4 +485,19 @@ def run(conn, session, now: str) -> EnrichmentResult:
                     job["company"], job["url"], recovery_exc,
                 )
             result.failed += 1
+
+    # Claude reads every stored description that has no insight yet: the
+    # ones saved just now, and any left over from earlier runs (API trouble,
+    # the daily cap, backfill leftovers). Its failures never touch the
+    # description work above.
+    gate = insights.InsightRunner(conn, client, now)
+    if gate.active:
+        for row in storage.find_jobs_needing_insights(conn, insights.PROMPT_VERSION, limit=gate.remaining):
+            if not gate.active:
+                break
+            job = Job(row["company"], row["title"], row["url"], row["portal_url"],
+                      row["closing_date"], row["sector"])
+            gate.classify(job, row["description"], row["sector"])
+    result.insights = gate.billed
+    result.insight_alert = gate.alert()
     return result

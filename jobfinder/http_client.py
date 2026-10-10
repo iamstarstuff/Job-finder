@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import warnings
 from urllib.parse import urlparse
 
@@ -57,3 +58,31 @@ def fetch(session, url: str, method: str = "get", **kwargs):
         response = getattr(session, method)(url, **kwargs)
     response.raise_for_status()
     return response
+
+
+class MemoSession:
+    """Wraps a session for one run of description fetches: identical GET/POST
+    requests (same URL and arguments) reach the network once. Several
+    fetchers re-read a whole search API for every job (Amazon, Google,
+    JPMorganChase), so a first pass over hundreds of tech postings would
+    otherwise download the same pages hundreds of times. Error responses
+    aren't kept, so fetch() still raises on them and a retry goes out."""
+
+    def __init__(self, session):
+        self._session = session
+        self._cache = {}
+
+    def _request(self, method: str, url: str, **kwargs):
+        key = (method, url, json.dumps(kwargs, sort_keys=True, default=str))
+        if key in self._cache:
+            return self._cache[key]
+        response = getattr(self._session, method)(url, **kwargs)
+        if response.status_code < 400:
+            self._cache[key] = response
+        return response
+
+    def get(self, url: str, **kwargs):
+        return self._request("get", url, **kwargs)
+
+    def post(self, url: str, **kwargs):
+        return self._request("post", url, **kwargs)

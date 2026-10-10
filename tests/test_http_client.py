@@ -50,3 +50,32 @@ def test_fetch_raises_on_http_error():
         assert False, "should have raised"
     except RuntimeError:
         pass
+
+
+def test_memo_session_sends_identical_requests_once():
+    fake = FakeSession({"https://api.example/search": FakeResponse(b"page")})
+    memo = http_client.MemoSession(fake)
+    first = http_client.fetch(memo, "https://api.example/search", params={"offset": 0})
+    second = http_client.fetch(memo, "https://api.example/search", params={"offset": 0})
+    assert first is second and len(fake.calls) == 1
+
+
+def test_memo_session_tells_different_arguments_apart():
+    fake = FakeSession({"https://api.example/search": FakeResponse(b"page")})
+    memo = http_client.MemoSession(fake)
+    http_client.fetch(memo, "https://api.example/search", params={"offset": 0})
+    http_client.fetch(memo, "https://api.example/search", params={"offset": 100})
+    http_client.fetch(memo, "https://api.example/search", method="post", json={"q": 1})
+    http_client.fetch(memo, "https://api.example/search", method="post", json={"q": 1})
+    assert len(fake.calls) == 3
+
+
+def test_memo_session_does_not_keep_error_responses():
+    fake = FakeSession({})  # every URL 404s
+    memo = http_client.MemoSession(fake)
+    for _ in range(2):
+        try:
+            http_client.fetch(memo, "https://api.example/missing")
+        except RuntimeError:
+            pass
+    assert len(fake.calls) == 2

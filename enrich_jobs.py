@@ -1,6 +1,8 @@
 """Entry point for the description/skills enrichment pipeline.
 Deliberately separate from jobscraper.py / jobfinder.runner — this pipeline
-must never share a failure path with the hourly alert scraper."""
+must never share a failure path with the hourly alert scraper. It never
+emails about its own crashes; the only email it can send is the Claude API
+key/credit alert (once when it starts, once when it ends)."""
 from __future__ import annotations
 
 import argparse
@@ -8,7 +10,7 @@ import logging
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 
-from jobfinder import config, enrichment, storage
+from jobfinder import config, enrichment, insights, storage
 from jobfinder.http_client import build_session
 
 log = logging.getLogger(__name__)
@@ -45,8 +47,13 @@ def main(argv=None) -> None:
             return
         now = datetime.now().isoformat(timespec="seconds")
         session = build_session()
-        result = enrichment.run(conn, session, now)
-        log.info("Enrichment complete: %d enriched, %d failed", result.enriched, result.failed)
+        result = enrichment.run(conn, session, now, client=insights.build_client())
+        log.info("Enrichment complete: %d enriched, %d failed, %d read by Claude",
+                 result.enriched, result.failed, result.insights)
+        report, error = result.insight_alert
+        if report:
+            from jobfinder import emailer  # local import: only needed when there is news
+            emailer.send_insights_status(conn, error)
     except Exception as exc:  # pipeline-wide safety net — this pipeline never emails on failure
         log.exception("Unhandled error in enrichment run: %s", exc)
 

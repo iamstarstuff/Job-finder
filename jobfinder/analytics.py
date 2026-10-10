@@ -340,3 +340,18 @@ def run_history(conn, sector: str, limit: int = 20) -> List[dict]:
         out.append({"started_at": r["started_at"], "duration_s": duration,
                     "total_jobs": r["total_jobs"], "new_jobs": r["new_jobs"], "failed": failed})
     return out
+
+
+def claude_usage(conn, today: date) -> dict:
+    """The health page's Claude API panel: this month's spend, today's
+    realtime calls against the daily cap, readings by status, and the
+    current key/credit problem if there is one."""
+    from jobfinder import config, storage
+    return {
+        "month_spend": storage.insight_spend(conn, today.replace(day=1).isoformat()),
+        "calls_today": storage.insight_calls_on(conn, today.isoformat()),
+        "daily_limit": config.INSIGHTS_DAILY_CALL_LIMIT,
+        "statuses": storage.insight_status_counts(conn),
+        "error": storage.get_failing_companies(conn, config.INSIGHTS_ALERT_SECTOR)
+                        .get(config.INSIGHTS_ALERT_NAME),
+    }

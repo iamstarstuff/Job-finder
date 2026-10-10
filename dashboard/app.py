@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 # allow running as a script: python dashboard/app.py
@@ -268,6 +269,7 @@ def create_app(db_path=None) -> Flask:
             companies=analytics.scraper_health(conn, {"pharma": list(SCRAPERS), "tech": list(TECH_SCRAPERS)}),
             runs={s: analytics.run_history(conn, s) for s in ("pharma", "tech")},
             stats=stats,
+            claude=analytics.claude_usage(conn, date.today()),
         )
 
     return app

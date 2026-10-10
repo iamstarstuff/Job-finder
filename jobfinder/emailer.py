@@ -32,7 +32,7 @@ _STYLE_BTN = (
 )
 
 
-def render_new_jobs_html(new_jobs: Dict[str, List[Job]]) -> str:
+def render_new_jobs_html(new_jobs: Dict[str, List[Job]], reasons: Optional[Dict[str, str]] = None) -> str:
     total = sum(len(v) for v in new_jobs.values())
     parts = [
         f'<div style="{_STYLE_WRAP}">',
@@ -53,10 +53,16 @@ def render_new_jobs_html(new_jobs: Dict[str, List[Job]]) -> str:
                 f'Closes: {escape(job.closing_date)}</div>'
                 if job.closing_date and job.closing_date != "N/A" else ""
             )
+            reason = (reasons or {}).get(job.key)
+            note = (
+                f'<div style="color:#57606a;font-size:12px;margin-bottom:6px;">{escape(reason)}</div>'
+                if reason else ""
+            )
             parts.append(
                 f'<div style="{_STYLE_ROW}">'
                 f'<div style="color:#24292f;font-size:14px;font-weight:600;'
                 f'margin-bottom:6px;">{escape(job.title)}</div>'
+                f'{note}'
                 f'{closing}'
                 f'<a href="{escape(job.url, quote=True)}" style="{_STYLE_BTN}">Apply &rarr;</a>'
                 f'</div>'
@@ -161,8 +167,45 @@ def send_tech_digest(conn, result) -> None:
         total = sum(len(v) for v in result.new_jobs.values())
         _send_and_log(
             conn, "tech_alert", f"{total} New Tech Job Posting{'s' if total != 1 else ''}",
-            render_new_jobs_html(result.new_jobs), config.TECH_ALERT_RECIPIENTS,
+            render_new_jobs_html(result.new_jobs, getattr(result, "reasons", None)),
+            config.TECH_ALERT_RECIPIENTS,
         )
     _maybe_send_error_email(
         conn, "tech", "tech_error", "Tech Job Scraper Error Notification", result,
     )
+
+
+def render_insights_alert_html(error: Optional[str]) -> str:
+    if error:
+        body = (
+            '<h2 style="color:#cf222e;margin:0 0 16px;">Claude API unavailable</h2>'
+            f'<p>Job-Finder couldn\'t use the Claude API: <b>{escape(error)}</b></p>'
+            '<p>Until this is fixed, the tech run filters postings by title keywords and new jobs '
+            'get no Claude fields. Check <code>anthropic_api_key.txt</code> on the Mac that runs '
+            'the cron jobs, and the credit balance in the Anthropic Console.</p>'
+        )
+    else:
+        body = (
+            '<h2 style="color:#1a7f37;margin:0 0 16px;">Claude API working again</h2>'
+            '<p>Job-Finder is reaching the Claude API again. Postings missed in the meantime '
+            'are read on the next runs.</p>'
+        )
+    return f'<div style="{_STYLE_WRAP}">{body}</div>'
+
+
+def send_insights_status(conn, error: Optional[str]) -> None:
+    """Email once when Claude API calls start failing on a key, permission or
+    credit problem, and once when they work again. Reuses company_failures
+    under its own sector, so an ongoing problem isn't re-reported every hour."""
+    failing = {config.INSIGHTS_ALERT_NAME: error} if error else {}
+    newly_failing, newly_recovered = storage.sync_company_failures(
+        conn, config.INSIGHTS_ALERT_SECTOR, failing,
+    )
+    if newly_failing:
+        subject = "Claude API unavailable"
+    elif newly_recovered:
+        subject = "Claude API working again"
+    else:
+        return
+    _send_and_log(conn, "insights_error", subject, render_insights_alert_html(error),
+                  config.ERROR_RECIPIENTS)

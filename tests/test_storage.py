@@ -1,6 +1,8 @@
 import json
 import sqlite3
 
+import pytest
+
 from jobfinder import storage
 from jobfinder.models import Job
 
@@ -260,3 +262,104 @@ def test_sync_company_failures_scopes_by_sector(tmp_path):
     _, tech_recovered = storage.sync_company_failures(conn, "tech", {})
     assert tech_recovered == ["Amgen"]
     assert storage.get_failing_companies(conn, "pharma") == {"Amgen": "boom"}
+
+
+def _insight_row(**overrides):
+    row = {
+        "job_key": "https://t.example/1", "sector": "tech", "company": "T", "title": "ML Engineer",
+        "status": "ok", "relevant": 1, "reason": "Machine learning engineering role.",
+        "role_family": "ML/AI", "seniority": "Senior", "min_years_experience": 5,
+        "skills": '["Python"]', "required_languages": "[]", "work_mode": "hybrid",
+        "contract_type": "permanent", "salary_min": None, "salary_max": None,
+        "salary_currency": None, "salary_period": None, "title_only": 0,
+        "model": "claude-sonnet-5-5", "prompt_version": 1, "input_tokens": 2000,
+        "output_tokens": 300, "cost_usd": 0.007, "via_batch": 0,
+        "classified_at": "2026-10-10T08:20:00",
+    }
+    row.update(overrides)
+    return row
+
+
+def test_connect_adds_job_insights_to_an_existing_database(tmp_path):
+    path = tmp_path / "old.db"
+    old = sqlite3.connect(str(path))
+    old.execute("""CREATE TABLE jobs (id INTEGER PRIMARY KEY, company TEXT NOT NULL, title TEXT NOT NULL,
+                   url TEXT, portal_url TEXT, closing_date TEXT, job_key TEXT NOT NULL UNIQUE,
+                   first_seen TEXT NOT NULL, last_seen TEXT NOT NULL, is_active INTEGER NOT NULL DEFAULT 1)""")
+    old.execute("INSERT INTO jobs (company, title, job_key, first_seen, last_seen) "
+                "VALUES ('APC', 'QC Analyst', 'k', 't', 't')")
+    old.commit()
+    old.close()
+    conn = storage.connect(path)
+    assert conn.execute("SELECT COUNT(*) c FROM jobs").fetchone()["c"] == 1
+    columns = [r["name"] for r in conn.execute("PRAGMA table_info(job_insights)")]
+    assert tuple(columns) == storage.INSIGHT_COLUMNS
+
+
+def test_save_and_get_insight_by_prompt_version(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.save_insight(conn, _insight_row())
+    row = storage.get_insight(conn, "https://t.example/1", 1)
+    assert row["relevant"] == 1 and row["role_family"] == "ML/AI"
+    assert storage.get_insight(conn, "https://t.example/1", 2) is None
+
+
+def test_save_insight_replaces_the_older_version(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.save_insight(conn, _insight_row(prompt_version=1, relevant=0))
+    storage.save_insight(conn, _insight_row(prompt_version=2, relevant=1))
+    assert conn.execute("SELECT COUNT(*) c FROM job_insights").fetchone()["c"] == 1
+    assert storage.get_insight(conn, "https://t.example/1", 2)["relevant"] == 1
+
+
+def test_insight_calls_on_counts_that_days_realtime_rows_only(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.save_insight(conn, _insight_row(job_key="a", classified_at="2026-10-10T08:20:00"))
+    storage.save_insight(conn, _insight_row(job_key="b", classified_at="2026-10-10T09:40:00"))
+    storage.save_insight(conn, _insight_row(job_key="c", classified_at="2026-10-10T10:00:00", via_batch=1))
+    storage.save_insight(conn, _insight_row(job_key="d", classified_at="2026-10-09T23:59:00"))
+    assert storage.insight_calls_on(conn, "2026-10-10") == 2
+
+
+def test_insight_spend_sums_cost_since_a_date(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.save_insight(conn, _insight_row(job_key="a", cost_usd=0.01, classified_at="2026-10-01T08:00:00"))
+    storage.save_insight(conn, _insight_row(job_key="b", cost_usd=0.02, classified_at="2026-10-10T08:00:00"))
+    storage.save_insight(conn, _insight_row(job_key="c", cost_usd=0.04, classified_at="2026-09-30T08:00:00"))
+    assert storage.insight_spend(conn, "2026-10-01") == pytest.approx(0.03)
+    assert storage.insight_spend(conn, "2027-01-01") == 0.0
+
+
+def test_insight_status_counts(tmp_path):
+    conn = make_conn(tmp_path)
+    storage.save_insight(conn, _insight_row(job_key="a"))
+    storage.save_insight(conn, _insight_row(job_key="b"))
+    storage.save_insight(conn, _insight_row(job_key="c", status="refused"))
+    assert storage.insight_status_counts(conn) == {"ok": 2, "refused": 1}
+
+
+def _described(conn, company, title, url, now="2026-10-01T10:00:00", failed=False):
+    storage.record_company_snapshot(conn, company, [Job(company, title, url, "p")], now)
+    job_id = conn.execute("SELECT id FROM jobs WHERE job_key = ?", (url,)).fetchone()["id"]
+    storage.save_enrichment(conn, job_id, "" if failed else f"About {title}", None, [], now, failed=failed)
+
+
+def test_find_jobs_needing_insights(tmp_path):
+    conn = make_conn(tmp_path)
+    _described(conn, "A", "Needs one", "https://a/1")
+    _described(conn, "B", "Has one", "https://b/1")
+    storage.save_insight(conn, _insight_row(job_key="https://b/1", prompt_version=1))
+    _described(conn, "C", "Failed fetch", "https://c/1", failed=True)
+    _described(conn, "D", "Closed", "https://d/1")
+    storage.record_company_snapshot(conn, "D", [], "2026-10-02T10:00:00")  # D's job closes
+    _described(conn, "E", "Old version", "https://e/1")
+    storage.save_insight(conn, _insight_row(job_key="https://e/1", prompt_version=0))
+
+    titles = {r["title"] for r in storage.find_jobs_needing_insights(conn, 1)}
+    assert titles == {"Needs one", "Old version"}
+    titles = {r["title"] for r in storage.find_jobs_needing_insights(conn, 1, active_only=False)}
+    assert titles == {"Needs one", "Old version", "Closed"}
+    assert len(storage.find_jobs_needing_insights(conn, 1, limit=1)) == 1
+    assert storage.find_jobs_needing_insights(conn, 1, limit=0) == []
+    row = storage.find_jobs_needing_insights(conn, 1, limit=1)[0]
+    assert row["description"].startswith("About ") and row["sector"] == "pharma"
