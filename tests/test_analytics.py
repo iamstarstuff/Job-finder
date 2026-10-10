@@ -465,3 +465,81 @@ def test_merge_skill_names_keeps_the_most_common_spelling():
         "Distributed systems": 18, "Distributed Systems": 19, "SQL": 21, "sql": 2, "Gmp": 1, "GMP": 1,
     }))
     assert names == {"distributed systems": "Distributed Systems", "sql": "SQL", "gmp": "GMP"}
+
+
+READ_NOW = datetime(2026, 10, 10, 12, 0, 0)
+
+
+def _readings_conn(tmp_path):
+    """Tech: Data Scientist (10-07, DS/Mid, Python+SQL), ML Engineer (09-28,
+    ML/AI/Senior, python+PyTorch), SDE RDS (AWS 10-07, Cloud/Platform, Python+AWS),
+    a refused AWS Sales Specialist. Pharma: QC Analyst (Pfizer 10-08, Quality/
+    Junior, GMP) and an unread Warehouse Lead (APC 10-08)."""
+    conn = storage.connect(tmp_path / "readings.db")
+    ds = Job("Google", "Data Scientist", "https://g/1", "p", sector="tech")
+    ml = Job("Google", "ML Engineer", "https://g/2", "p", sector="tech")
+    sde = Job("AWS", "SDE, RDS", "https://a/1", "p", sector="tech")
+    sales = Job("AWS", "Sales Specialist", "https://a/2", "p", sector="tech")
+    qc = Job("Pfizer", "QC Analyst", "https://p/1", "p")
+    wh = Job("APC", "Warehouse Lead", "https://x/1", "p")
+    storage.record_company_snapshot(conn, "Google", [ml], "2026-09-28T10:00:00")
+    storage.record_company_snapshot(conn, "Google", [ml, ds], "2026-10-07T10:00:00")
+    storage.record_company_snapshot(conn, "AWS", [sde, sales], "2026-10-07T10:00:00")
+    storage.record_company_snapshot(conn, "Pfizer", [qc], "2026-10-08T10:00:00")
+    storage.record_company_snapshot(conn, "APC", [wh], "2026-10-08T10:00:00")
+    save_reading(conn, ds, role_family="Data Science", seniority="Mid", skills=["Python", "SQL"])
+    save_reading(conn, ml, role_family="ML/AI", seniority="Senior", skills=["python", "PyTorch"])
+    save_reading(conn, sde, role_family="Cloud/Platform", skills=["Python", "AWS"])
+    save_reading(conn, sales, status="refused")
+    save_reading(conn, qc, role_family="Quality", seniority="Junior", skills=["GMP"])
+    return conn
+
+
+def test_skill_demand_merges_spellings_and_counts_roles(tmp_path):
+    conn = _readings_conn(tmp_path)
+    assert analytics.skill_demand(conn, sector="tech", now=READ_NOW) == [
+        {"skill": "Python", "count": 3}, {"skill": "AWS", "count": 1},
+        {"skill": "PyTorch", "count": 1}, {"skill": "SQL", "count": 1}]
+    assert [r["skill"] for r in analytics.skill_demand(conn, limit=2, now=READ_NOW)] == ["Python", "AWS"]
+    recent = {r["skill"]: r["count"] for r in analytics.skill_demand(conn, weeks=1, now=READ_NOW)}
+    assert recent == {"Python": 2, "AWS": 1, "SQL": 1, "GMP": 1}  # the ML Engineer is older than a week
+
+
+def test_skill_shares_by_week_is_dense_over_roles_read(tmp_path):
+    rows = analytics.skill_shares_by_week(_readings_conn(tmp_path), sector="tech", weeks=4, limit=2, now=READ_NOW)
+    weeks = ["2026-09-07", "2026-09-14", "2026-09-21", "2026-09-28", "2026-10-05"]
+    assert [r["week"] for r in rows] == weeks * 2 and [r["skill"] for r in rows][::5] == ["Python", "AWS"]
+    by = {(r["skill"], r["week"]): (r["count"], r["total"]) for r in rows}
+    assert by[("Python", "2026-09-28")] == (1, 1)
+    assert by[("Python", "2026-10-05")] == (2, 2)
+    assert by[("AWS", "2026-10-05")] == (1, 2)
+    assert by[("AWS", "2026-09-07")] == (0, 0)
+    assert analytics.skill_shares_by_week(_readings_conn(tmp_path), sector="tech", weeks=4, now=datetime(2027, 6, 1)) == []
+
+
+def test_seniority_and_family_counts_use_claude_fields(tmp_path):
+    conn = _readings_conn(tmp_path)
+    seniority = {(r["company"], r["seniority"]): r["count"]
+                 for r in analytics.seniority_counts(conn, sector="tech", weeks=0, now=READ_NOW)}
+    assert seniority == {("AWS", "Not stated"): 1, ("Google", "Mid"): 1, ("Google", "Senior"): 1}
+    families = {(r["company"], r["family"]): r["count"] for r in analytics.family_counts(conn, now=READ_NOW)}
+    assert families == {("AWS", "Cloud/Platform"): 1, ("Google", "Data Science"): 1,
+                        ("Google", "ML/AI"): 1, ("Pfizer", "Quality"): 1}
+
+
+def test_claude_drilldown_lists_the_roles_behind_each_value(tmp_path):
+    conn = _readings_conn(tmp_path)
+
+    def titles(dimension, value, **kw):
+        return {r["title"] for r in analytics.claude_drilldown(conn, dimension, value, now=READ_NOW, **kw)}
+
+    assert titles("skill", "PYTHON", sector="tech") == {"Data Scientist", "ML Engineer", "SDE, RDS"}
+    assert titles("skill", "python", families=("ML/AI",)) == {"ML Engineer"}
+    assert titles("skill", "python", levels=("Mid",)) == {"Data Scientist"}
+    assert titles("skill", "python", weeks=1) == {"Data Scientist", "SDE, RDS"}
+    assert titles("seniority", "Not stated") == {"SDE, RDS"}
+    assert titles("role_family", "Quality") == {"QC Analyst"}
+    assert titles("company_family", "Google::ML/AI") == {"ML Engineer"}
+    row = analytics.claude_drilldown(conn, "role_family", "Quality", now=READ_NOW)[0]
+    assert set(row) == {"title", "company", "url", "first_seen"}
+    assert analytics.claude_drilldown(conn, "category", "Quality", now=READ_NOW) is None

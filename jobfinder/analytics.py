@@ -450,3 +450,97 @@ def claude_usage(conn, today: date) -> dict:
         "error": storage.get_failing_companies(conn, config.INSIGHTS_ALERT_SECTOR)
                         .get(config.INSIGHTS_ALERT_NAME),
     }
+
+
+def _ranked_skills(records: List[JobRecord], limit: int) -> List[Tuple[str, str, int]]:
+    """(key, display name, roles) for the `limit` skills most roles need. A
+    role counts once per merged skill; ties go to the alphabetically first."""
+    spellings: Counter = Counter()
+    per_key: Counter = Counter()
+    for r in records:
+        keys = set()
+        for name in r.skills:
+            spellings[name] += 1
+            keys.add(skill_key(name))
+        per_key.update(keys)
+    names = merge_skill_names(spellings)
+    ranked = sorted(per_key.items(), key=lambda kv: (-kv[1], names[kv[0]]))[:limit]
+    return [(key, names[key], count) for key, count in ranked]
+
+
+def _in_roles(r: JobRecord, families: Iterable[str], levels: Iterable[str]) -> bool:
+    """Is the role in the chosen role families and levels? Nothing chosen = all."""
+    families, levels = tuple(families), tuple(levels)
+    return ((not families or r.role_family in families)
+            and (not levels or (r.seniority or "Not stated") in levels))
+
+
+def skill_demand(conn, sector: Optional[str] = None, weeks: int = 0, limit: int = 15,
+                 now: Optional[datetime] = None) -> List[dict]:
+    """The skills most roles need, among roles Claude read in the window."""
+    records = _read_records(conn, sector, weeks, now)
+    return [{"skill": name, "count": count} for _, name, count in _ranked_skills(records, limit)]
+
+
+def skill_shares_by_week(conn, sector: Optional[str] = None, weeks: int = 12, limit: int = 12,
+                         now: Optional[datetime] = None) -> List[dict]:
+    """For the top `limit` skills: roles needing the skill per week (`count`)
+    and roles Claude read that week (`total`, the share denominator). Dense:
+    one row per (skill, week), skill-major."""
+    now = now or datetime.now()
+    records = _read_records(conn, sector, weeks, now)
+    ranked = _ranked_skills(records, limit)
+    if not ranked:
+        return []
+    totals = Counter(week_start(r.first_seen) for r in records)
+    per: Counter = Counter()
+    for r in records:
+        week = week_start(r.first_seen)
+        for key in {skill_key(name) for name in r.skills}:
+            per[(key, week)] += 1
+    weeks_out = _week_range(window_cutoff(weeks, now), totals.keys(), now)
+    return [{"week": w, "skill": name, "count": per.get((key, w), 0), "total": totals.get(w, 0)}
+            for key, name, _ in ranked for w in weeks_out]
+
+
+def seniority_counts(conn, sector: Optional[str] = None, weeks: int = 12,
+                     now: Optional[datetime] = None) -> List[dict]:
+    counts = Counter((r.company, r.seniority or "Not stated") for r in _read_records(conn, sector, weeks, now))
+    return [{"company": c, "seniority": s, "count": n} for (c, s), n in sorted(counts.items())]
+
+
+def family_counts(conn, sector: Optional[str] = None, weeks: int = 0,
+                  now: Optional[datetime] = None) -> List[dict]:
+    counts = Counter((r.company, r.role_family) for r in _read_records(conn, sector, weeks, now)
+                     if r.role_family)
+    return [{"company": c, "family": f, "count": n} for (c, f), n in sorted(counts.items())]
+
+
+DRILLDOWN_LIMIT = 100
+
+
+def claude_drilldown(conn, dimension: str, value: str, sector: Optional[str] = None, weeks: int = 0,
+                     families: Iterable[str] = (), levels: Iterable[str] = (),
+                     now: Optional[datetime] = None) -> Optional[List[dict]]:
+    """The roles Claude read behind a chart value, newest first (at most
+    DRILLDOWN_LIMIT). None when this function doesn't handle `dimension`."""
+    if dimension == "skill":
+        key = skill_key(value)
+
+        def match(r):
+            return key in {skill_key(name) for name in r.skills} and _in_roles(r, families, levels)
+    elif dimension == "seniority":
+        def match(r):
+            return (r.seniority or "Not stated") == value
+    elif dimension == "role_family":
+        def match(r):
+            return r.role_family == value
+    elif dimension == "company_family":
+        company, _, family = value.partition("::")
+
+        def match(r):
+            return r.company == company and r.role_family == family
+    else:
+        return None
+    return [{"title": r.title, "company": r.company, "url": r.url, "first_seen": r.first_seen}
+            for r in _read_records(conn, sector, weeks, now) if match(r)][:DRILLDOWN_LIMIT]
