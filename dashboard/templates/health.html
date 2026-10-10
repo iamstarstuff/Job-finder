@@ -46,6 +46,18 @@
 {% endfor %}
 </div>
 
+<h3 style="margin-top:28px">Claude API</h3>
+{% if claude.error %}
+<p class="note"><span class="pill failing">! Failing</span> {{ claude.error }}</p>
+{% endif %}
+<div class="tiles" style="margin-top:10px">
+  <div class="tile"><div class="value">${{ "%.2f"|format(claude.month_spend) }}</div><div class="label">spent this month</div></div>
+  <div class="tile"><div class="value">{{ claude.calls_today }}/{{ claude.daily_limit }}</div><div class="label">calls today</div></div>
+  {% for status, count in claude.statuses|dictsort %}
+  <div class="tile"><div class="value">{{ count }}</div><div class="label">{{ status }} readings</div></div>
+  {% endfor %}
+</div>
+
 <h3 style="margin-top:28px">Email delivery</h3>
 <div class="tiles" style="margin-top:10px">
   {% for s in stats %}

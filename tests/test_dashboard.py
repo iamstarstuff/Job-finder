@@ -455,3 +455,27 @@ def test_emails_page_uses_tiles_and_sentence_case(client):
 def test_jobs_and_logs_headings_are_sentence_case(client):
     assert "<h2>Jobs</h2>" in client.get("/jobs").data.decode()
     assert "<h2>Logs</h2>" in client.get("/logs").data.decode()
+
+
+def test_health_page_shows_the_claude_api_panel(tmp_path):
+    conn = storage.connect(tmp_path / "c.db")
+    now = datetime.now().isoformat(timespec="seconds")
+    row = dict.fromkeys(storage.INSIGHT_COLUMNS)
+    row.update(job_key="https://t/1", sector="tech", company="T", title="ML Engineer", status="ok",
+               title_only=0, model="claude-sonnet-5-5", prompt_version=1, input_tokens=2000,
+               output_tokens=300, cost_usd=0.0123, via_batch=0, classified_at=now)
+    storage.save_insight(conn, row)
+    storage.sync_company_failures(conn, "insights", {"Claude API": "401 invalid x-api-key"})
+    conn.close()
+    from dashboard.app import create_app
+    html = create_app(db_path=tmp_path / "c.db").test_client().get("/health").data.decode()
+    assert "Claude API" in html
+    assert "$0.01" in html and "1/200" in html
+    assert "401 invalid x-api-key" in html
+
+
+def test_health_page_claude_panel_without_data(tmp_path):
+    storage.connect(tmp_path / "e.db").close()
+    from dashboard.app import create_app
+    html = create_app(db_path=tmp_path / "e.db").test_client().get("/health").data.decode()
+    assert "Claude API" in html and "$0.00" in html and "0/200" in html
