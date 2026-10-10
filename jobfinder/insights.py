@@ -23,8 +23,9 @@ log = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-5-5"  # the user's choice (2026-10-10)
 EFFORT = "low"               # extraction work; the rollout spot check confirms it against "medium"
-PROMPT_VERSION = 2           # bump when SYSTEM_PROMPT or Insight changes: every posting is read again
+PROMPT_VERSION = 3           # bump when SYSTEM_PROMPT or Insight changes: every posting is read again
                              # 2 (2026-10-10): cloud solution architects and cloud-infrastructure SDEs count
+                             # 3 (2026-10-10): network engineering/operations roles don't
 MAX_TOKENS = 4000
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
@@ -96,9 +97,9 @@ Judge by the work the posting describes, not by words in the title: an "Applied 
 
 Two kinds of role count as Cloud/Platform:
 - cloud solution architects, who design cloud architectures with customers (for example Azure, AWS or Google Cloud solution architects), even when the role is customer-facing
-- software engineers who build a cloud provider's infrastructure services, such as compute, serverless, containers, databases, storage, networking or load balancing (for example "Software Development Engineer, AWS Lambda Control Plane")
+- software engineers who build a cloud provider's infrastructure services, such as compute, serverless, containers, databases, storage or load balancing (for example "Software Development Engineer, AWS Lambda Control Plane")
 
-General application or full-stack software engineering is not cloud/platform engineering.
+General application or full-stack software engineering is not cloud/platform engineering. Neither is network engineering or network operations, even at a cloud provider: network development engineers, optical, fibre, backbone or border network engineers and data-centre network deployment are hardware and network operations work.
 
 Set relevant to false when any of these holds:
 - the role requires a language other than English
