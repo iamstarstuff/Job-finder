@@ -1,9 +1,12 @@
 import json
 
-from jobfinder import enrichment
+import anthropic
+import httpx2
+
+from jobfinder import config, enrichment, insights
 from jobfinder import storage
 from jobfinder.models import Job
-from tests.conftest import FakeSession, FakeResponse
+from tests.conftest import FakeClaude, FakeSession, FakeResponse, fake_response, make_insight
 
 
 LDJSON_HTML = """<html><head>
@@ -519,3 +522,59 @@ def test_reextract_skills_rebuilds_links_from_current_vocabulary(tmp_path):
         "SELECT skills.name FROM job_skills JOIN skills ON skills.id = job_skills.skill_id WHERE job_id = ?", (ok_id,))}
     assert names == {"GMP"}
     assert conn.execute("SELECT seniority FROM job_details WHERE job_id=?", (ok_id,)).fetchone()["seniority"] == "Senior"
+
+
+_REQ = httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
+PHARMA_INSIGHT = dict(relevant=None, reason=None, role_family="Quality", seniority="Senior")
+
+
+def test_run_adds_a_claude_insight_after_saving_the_description(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "Senior SAP Engineer", "https://example.com/job/1", "https://example.com/careers"),
+    ], "2026-10-10T10:00:00")
+    session = FakeSession({"https://example.com/job/1": FakeResponse(content=BMS_STYLE_HTML)})
+    client = FakeClaude(fake_response(make_insight(**PHARMA_INSIGHT)))
+    result = enrichment.run(conn, session, "2026-10-10T10:40:00", client=client)
+    assert result.enriched == 1 and result.insights == 1
+    row = storage.get_insight(conn, "https://example.com/job/1", insights.PROMPT_VERSION)
+    assert row["sector"] == "pharma" and row["role_family"] == "Quality" and row["relevant"] is None
+    assert "<posting>" in client.calls[0]["messages"][0]["content"]
+    assert result.insight_alert == (True, None)
+
+
+def test_claude_trouble_never_breaks_description_enrichment(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "Senior SAP Engineer", "https://example.com/job/1", "https://example.com/careers"),
+    ], "2026-10-10T10:00:00")
+    session = FakeSession({"https://example.com/job/1": FakeResponse(content=BMS_STYLE_HTML)})
+    result = enrichment.run(conn, session, "2026-10-10T10:40:00",
+                            client=FakeClaude(anthropic.APIConnectionError(request=_REQ)))
+    assert result.enriched == 1 and result.insights == 0
+    assert conn.execute("SELECT COUNT(*) c FROM job_details").fetchone()["c"] == 1
+    assert storage.insight_status_counts(conn) == {}
+
+
+def test_leftovers_are_read_within_the_remaining_cap(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    for n in (1, 2):
+        url = f"https://example.com/old/{n}"
+        storage.record_company_snapshot(conn, f"Co{n}", [Job(f"Co{n}", "QC Analyst", url, "p")],
+                                        "2026-10-01T10:00:00")
+        job_id = conn.execute("SELECT id FROM jobs WHERE job_key = ?", (url,)).fetchone()["id"]
+        storage.save_enrichment(conn, job_id, "QC analyst role, GMP.", None, [], "2026-10-01T10:40:00")
+    monkeypatch.setattr(config, "INSIGHTS_DAILY_CALL_LIMIT", 1)
+    client = FakeClaude(fake_response(make_insight(**PHARMA_INSIGHT)))
+    result = enrichment.run(conn, FakeSession({}), "2026-10-10T10:40:00", client=client)
+    assert len(client.calls) == 1 and result.insights == 1
+
+
+def test_run_without_a_client_reads_nothing_with_claude(tmp_path):
+    conn = storage.connect(tmp_path / "t.db")
+    storage.record_company_snapshot(conn, "Abbvie", [
+        Job("Abbvie", "Senior SAP Engineer", "https://example.com/job/1", "https://example.com/careers"),
+    ], "2026-10-10T10:00:00")
+    session = FakeSession({"https://example.com/job/1": FakeResponse(content=BMS_STYLE_HTML)})
+    result = enrichment.run(conn, session, "2026-10-10T10:40:00")
+    assert result.enriched == 1 and result.insights == 0 and result.insight_alert == (False, None)
