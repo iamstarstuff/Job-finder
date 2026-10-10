@@ -427,3 +427,60 @@ def claude_drilldown(conn, dimension: str, value: str, sector: Optional[str] = N
         return None
     return [{"title": r.title, "company": r.company, "url": r.url, "first_seen": r.first_seen}
             for r in _read_records(conn, sector, weeks, now) if match(r)][:DRILLDOWN_LIMIT]
+
+
+MIN_ROLES_FOR_SKILLS = 5   # What to learn: fewer matching roles is too small a sample to chart
+MIN_STATED_YEARS = 3       # Experience asked: fewer stated values gives no median
+
+
+def _by_size(counts: Counter) -> List[str]:
+    """Keys largest first, then by name."""
+    return [k for k, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))]
+
+
+def skills_for_roles(conn, sector: Optional[str] = None, weeks: int = 0, families: Iterable[str] = (),
+                     levels: Iterable[str] = (), limit: int = 10, now: Optional[datetime] = None) -> dict:
+    """What to learn: among the roles Claude read in scope -- optionally only
+    these role families and levels -- how many there are and which skills
+    most of them need."""
+    records = [r for r in _read_records(conn, sector, weeks, now) if _in_roles(r, families, levels)]
+    return {"roles": len(records),
+            "skills": [{"skill": name, "count": count} for _, name, count in _ranked_skills(records, limit)]}
+
+
+def experience_by_family(conn, sector: Optional[str] = None, weeks: int = 0,
+                         now: Optional[datetime] = None) -> List[dict]:
+    """Median minimum years asked per role family, largest family first; the
+    median is None when fewer than MIN_STATED_YEARS roles state years."""
+    years: Dict[str, List[int]] = defaultdict(list)
+    totals: Counter = Counter()
+    for r in _read_records(conn, sector, weeks, now):
+        if not r.role_family:
+            continue
+        totals[r.role_family] += 1
+        if r.min_years is not None:
+            years[r.role_family].append(r.min_years)
+    return [{"family": family,
+             "median": statistics.median(years[family]) if len(years[family]) >= MIN_STATED_YEARS else None,
+             "stated": len(years[family]), "total": totals[family]}
+            for family in _by_size(totals)]
+
+
+def openings_by_family(conn, sector: Optional[str] = None, weeks: int = 12, top: int = 5,
+                       now: Optional[datetime] = None) -> List[dict]:
+    """New roles per week for the `top` largest role families in the window,
+    zero-filled like new_jobs_per_week; family-major, largest first."""
+    now = now or datetime.now()
+    records = [r for r in _read_records(conn, sector, weeks, now) if r.role_family]
+    families = _by_size(Counter(r.role_family for r in records))[:top]
+    if not families:
+        return []
+    per = Counter((r.role_family, week_start(r.first_seen)) for r in records)
+    weeks_out = _week_range(window_cutoff(weeks, now), [week_start(r.first_seen) for r in records], now)
+    return [{"week": w, "family": f, "count": per.get((f, w), 0)} for f in families for w in weeks_out]
+
+
+def families_in(conn, sector: Optional[str] = None) -> List[str]:
+    """Role families among every role Claude has read in the sector, largest
+    first -- What to learn's choices."""
+    return _by_size(Counter(r.role_family for r in _read_records(conn, sector, 0, None) if r.role_family))

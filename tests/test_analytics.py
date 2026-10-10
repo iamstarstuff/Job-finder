@@ -437,3 +437,56 @@ def test_claude_drilldown_lists_the_roles_behind_each_value(tmp_path):
     row = analytics.claude_drilldown(conn, "role_family", "Quality", now=READ_NOW)[0]
     assert set(row) == {"title", "company", "url", "first_seen"}
     assert analytics.claude_drilldown(conn, "category", "Quality", now=READ_NOW) is None
+
+
+LEARN_NOW = datetime(2026, 9, 15, 12, 0, 0)
+
+
+def _roles_conn(tmp_path):
+    """Six Google tech roles first seen 09-10: five ML/AI (three Senior, two
+    Mid) and one Cloud/Platform (Mid). Python in all, PyTorch in the first two.
+    Years: 3, 5, 7, unstated, 4 (ML/AI) and 6 (Cloud/Platform)."""
+    conn = storage.connect(tmp_path / "roles.db")
+    jobs = [Job("Google", f"Role {i}", f"https://g/{i}", "p", sector="tech") for i in range(6)]
+    storage.record_company_snapshot(conn, "Google", jobs, "2026-09-10T10:00:00")
+    for i, job in enumerate(jobs):
+        save_reading(conn, job, role_family="ML/AI" if i < 5 else "Cloud/Platform",
+                     seniority="Senior" if i < 3 else "Mid",
+                     skills=["Python", "PyTorch"] if i < 2 else ["Python"],
+                     min_years_experience=[3, 5, 7, None, 4, 6][i])
+    return conn
+
+
+def test_skills_for_roles_counts_x_of_n_within_the_chosen_roles(tmp_path):
+    conn = _roles_conn(tmp_path)
+    assert analytics.skills_for_roles(conn, now=LEARN_NOW) == {
+        "roles": 6, "skills": [{"skill": "Python", "count": 6}, {"skill": "PyTorch", "count": 2}]}
+    ml = analytics.skills_for_roles(conn, families=("ML/AI",), now=LEARN_NOW)
+    assert ml["roles"] == 5
+    senior = analytics.skills_for_roles(conn, families=("ML/AI",), levels=("Senior",), now=LEARN_NOW)
+    assert senior["roles"] == 3 and senior["skills"][0] == {"skill": "Python", "count": 3}
+    assert analytics.MIN_ROLES_FOR_SKILLS == 5
+
+
+def test_experience_by_family_takes_the_median_of_stated_years(tmp_path):
+    rows = analytics.experience_by_family(_roles_conn(tmp_path), now=LEARN_NOW)
+    assert rows == [
+        {"family": "ML/AI", "median": 4.5, "stated": 4, "total": 5},
+        {"family": "Cloud/Platform", "median": None, "stated": 1, "total": 1},  # fewer than 3 stated
+    ]
+
+
+def test_openings_by_family_is_dense_for_the_largest_families(tmp_path):
+    rows = analytics.openings_by_family(_roles_conn(tmp_path), weeks=4, now=LEARN_NOW)
+    weeks = ["2026-08-17", "2026-08-24", "2026-08-31", "2026-09-07", "2026-09-14"]
+    assert [r["week"] for r in rows] == weeks * 2
+    assert [r["family"] for r in rows][::5] == ["ML/AI", "Cloud/Platform"]
+    assert [r["count"] for r in rows] == [0, 0, 0, 5, 0, 0, 0, 0, 1, 0]
+    assert analytics.openings_by_family(_roles_conn(tmp_path), weeks=4, top=1, now=LEARN_NOW)[0]["family"] == "ML/AI"
+    assert len(analytics.openings_by_family(_roles_conn(tmp_path), weeks=4, top=1, now=LEARN_NOW)) == 5
+
+
+def test_families_in_lists_role_families_largest_first(tmp_path):
+    conn = _roles_conn(tmp_path)
+    assert analytics.families_in(conn, "tech") == ["ML/AI", "Cloud/Platform"]
+    assert analytics.families_in(conn, "pharma") == []
