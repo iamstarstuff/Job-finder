@@ -52,7 +52,8 @@ Pages:
 Charts are built server-side with [echartsy](https://pypi.org/project/echartsy/)
 and rendered with Apache ECharts; every chart has a "Show data" table and
 click-to-drilldown into the roles behind a bar, cell, line or segment. The JSON
-behind any chart is at `/api/charts/<name>?sector=&weeks=`.
+behind any chart is at `/api/charts/<name>?sector=&weeks=`. `/api/status` is the Health page as JSON
+(scraper counts, the last run per sector, this month's Claude spend), for a phone widget.
 
 ## Setup
 

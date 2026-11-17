@@ -201,6 +201,30 @@ def create_app(db_path=None) -> Flask:
             claude=analytics.claude_usage(conn, date.today()),
         )
 
+    @app.route("/api/status")
+    def api_status():
+        """The health page as JSON, for the phone widget: scraper counts, the
+        last run per sector and this month's Claude spend."""
+        conn = get_conn()
+        companies = analytics.scraper_health(conn, {"pharma": list(SCRAPERS), "tech": list(TECH_SCRAPERS)})
+        scrapers = {status: 0 for status in ("ok", "failing", "empty", "retired")}
+        for c in companies:
+            scrapers[c["status"]] += 1
+        last_run = {}
+        for sector in ("pharma", "tech"):
+            runs = analytics.run_history(conn, sector, limit=1)
+            last_run[sector] = runs[0]["started_at"] if runs else None
+        claude = analytics.claude_usage(conn, date.today())
+        return jsonify({
+            "status": "degraded" if scrapers["failing"] or claude["error"] else "ok",
+            "scrapers": scrapers,
+            "last_run": last_run,
+            "claude": {"month_spend_usd": round(claude["month_spend"], 2),
+                       "calls_today": claude["calls_today"],
+                       "daily_limit": claude["daily_limit"],
+                       "error": claude["error"]},
+        })
+
     return app
 
 

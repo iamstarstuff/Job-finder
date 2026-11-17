@@ -417,6 +417,40 @@ def test_health_page_claude_panel_without_data(tmp_path):
     assert "Claude API" in html and "$0.00" in html and "0/200" in html
 
 
+def test_status_api_reports_scrapers_runs_and_claude_spend(tmp_path):
+    conn = storage.connect(tmp_path / "s.db")
+    for company in ("Pfizer", "Astellas"):
+        storage.record_company_snapshot(conn, company, [
+            Job(company, "Role", f"https://{company}/1", "p", sector="pharma"),
+        ], "2026-09-14T10:00:00")
+    storage.sync_company_failures(conn, "pharma", {"Astellas": "404 Client Error: Not Found"})
+    run_id = storage.start_run(conn, "2026-09-15T16:00:00", "pharma")
+    storage.finish_run(conn, run_id, "2026-09-15T16:00:21", 355, 0, {"Astellas": "404"})
+    row = dict.fromkeys(storage.INSIGHT_COLUMNS)
+    row.update(job_key="https://t/1", sector="tech", company="T", title="ML Engineer", status="ok",
+               title_only=0, model="claude-sonnet-5-5", prompt_version=1, input_tokens=2000,
+               output_tokens=300, cost_usd=0.0123, via_batch=0,
+               classified_at=datetime.now().isoformat(timespec="seconds"))
+    storage.save_insight(conn, row)
+    conn.close()
+    from dashboard.app import create_app
+    resp = create_app(db_path=tmp_path / "s.db").test_client().get("/api/status")
+    assert resp.status_code == 200
+    body = resp.get_json()
+    assert body["status"] == "degraded"
+    assert body["scrapers"]["failing"] == 1 and body["scrapers"]["ok"] >= 1
+    assert body["last_run"] == {"pharma": "2026-09-15T16:00:00", "tech": None}
+    assert body["claude"] == {"month_spend_usd": 0.01, "calls_today": 1, "daily_limit": 200, "error": None}
+
+
+def test_status_api_is_ok_on_an_empty_database(tmp_path):
+    storage.connect(tmp_path / "e.db").close()
+    from dashboard.app import create_app
+    body = create_app(db_path=tmp_path / "e.db").test_client().get("/api/status").get_json()
+    assert body["status"] == "ok" and body["scrapers"]["failing"] == 0
+    assert body["claude"]["month_spend_usd"] == 0 and body["claude"]["error"] is None
+
+
 def test_charts_js_supports_cell_drilldowns_card_params_and_notes(client):
     js = client.get("/static/charts.js").data.decode()
     assert 'drilldown.key === "cell"' in js
