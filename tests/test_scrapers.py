@@ -239,43 +239,52 @@ def test_gilead_in_registry():
     assert "Gilead" in scrapers.SCRAPERS
 
 
-JAZZ_PAGE1 = b"""<ul class="results-content" id="job-list-section">
-<li>
-    <a href="/job/1457/associate-director-financial-planning-performance-finance-ie-dublin-dublin/" rel="nofollow">
-        <h3>Associate Director, Financial Planning &amp; Performance</h3>
-    </a>
-</li>
-</ul>
-<div class="pagination">
-<a href="?page_jobs=2" class="next">next &rsaquo;&rsaquo;</a>
-</div>"""
+# Trimmed from careers.jazzpharma.com's Radancy TalentBrew location page
+# (live, 2026-11-21). The link nests the location inside itself, and every
+# page also shows a "featured jobs" widget of US roles outside the results.
+JAZZ_FEATURED = b"""<ul class="job-list__list"><li class="job-list__item"><h3 class="job-list__job-title">
+<a class="job-list__job-link" data-job-id="103574233712"
+   href="/job/philadelphia/director-medical-affairs-activation-lead/50396/103574233712">
+   Director, Medical Affairs Activation Lead </a></h3></li></ul>"""
 
-JAZZ_PAGE2 = b"""<ul class="results-content" id="job-list-section">
-<li>
-    <a href="/job/1502/senior-scientist-analytical-ie-athlone/" rel="nofollow">
-        <h3>Senior Scientist, Analytical</h3>
-    </a>
-</li>
-</ul>"""
+JAZZ_PAGE1 = b"""<section id="search-results">
+<ul id="search-results-jobs" class="search-results-list__list" data-results-count="2">
+<li class="search-results-list__item"><h2 class="search-results-list__job-title">
+<a class="search-results-list__job-link" data-job-id="102804553744"
+   href="/job/dublin/fp-and-a-data-and-analytics-manager/50396/102804553744">FP&amp;A Data &amp; Analytics Manager
+   <span class="search-results-list__job-info-list"><span class="search-results-list__job-info job-location">
+   <span><strong>Location: </strong>Dublin, Leinster [Full time]</span></span></span></a></h2></li>
+<li class="search-results-list__item"><h2 class="search-results-list__job-title">
+<a class="search-results-list__job-link" data-job-id="103519380288"
+   href="/job/london/director-ethics-and-compliance-business-partner-eur-intl/50396/103519380288">Director, Ethics and  Compliance Business Partner, Eur/Intl
+   <span class="search-results-list__job-info-list"><span class="search-results-list__job-info job-location">
+   <span><strong>Location: </strong>London, England [Full time]</span></span></span></a></h2></li>
+</ul></section>""" + JAZZ_FEATURED
+
+JAZZ_PAGE2 = b"""<section id="search-results"><ul id="search-results-jobs" data-results-count="2"></ul>
+</section>""" + JAZZ_FEATURED
 
 
-def test_jazz_paginates_until_no_next_link():
-    # Longer/more specific route listed first: FakeSession._lookup matches by
-    # prefix, and the page-1 URL is itself a prefix of the page-2 URL.
+def test_jazz_reads_talentbrew_ireland_results_and_skips_featured_jobs():
+    # Jazz moved to Radancy TalentBrew on 2026-11-19 (/jobs/ie/ now
+    # redirects to the homepage). Its Ireland location page lists the
+    # roles; the featured-jobs widget repeats US roles on every page.
+    base = "https://careers.jazzpharma.com/location/ireland-jobs/50396/2963597/2"
     fake = FakeSession({
-        "https://careers.jazzpharma.com/jobs/ie/?page_jobs=2": FakeResponse(JAZZ_PAGE2),
-        "https://careers.jazzpharma.com/jobs/ie/": FakeResponse(JAZZ_PAGE1),
+        base + "/2": FakeResponse(JAZZ_PAGE2),
+        base + "/1": FakeResponse(JAZZ_PAGE1),
     })
     jobs = scrapers.jazz(fake)
     assert [j.title for j in jobs] == [
-        "Associate Director, Financial Planning & Performance",
-        "Senior Scientist, Analytical",
+        "FP&A Data & Analytics Manager",
+        "Director, Ethics and Compliance Business Partner, Eur/Intl",
     ]
     assert jobs[0].url == (
-        "https://careers.jazzpharma.com/job/1457/"
-        "associate-director-financial-planning-performance-finance-ie-dublin-dublin/"
+        "https://careers.jazzpharma.com/job/dublin/fp-and-a-data-and-analytics-manager/50396/102804553744"
     )
-    assert jobs[0].portal_url == scrapers.URLS["Jazz Pharmaceuticals"]
+    assert jobs[0].company == "Jazz Pharmaceuticals"
+    assert jobs[0].portal_url == scrapers.URLS["Jazz Pharmaceuticals"] == base
+    assert [c[1] for c in fake.calls] == [base + "/1", base + "/2"]
 
 
 def test_jazz_in_registry():
@@ -592,24 +601,60 @@ def test_leo_pharma_in_registry():
     assert "Leo Pharma" in scrapers.SCRAPERS
 
 
-ICON_PAGE1 = b"""<a class="attrax-vacancy-tile__title" href="/job/contract-analyst-i-in-ireland-dublin-jid-52013">Contract Analyst I</a>
-<a class="attrax-vacancy-tile__title" href="/job/site-payment-analyst-in-regional-great-britain-northern-ireland-jid-51915">Site Payment Analyst</a>"""
+# Trimmed from careers.iconplc.com's Radancy TalentBrew location page (live,
+# 2026-11-21): 35 Ireland roles, 15 to a page; a page past the end is empty.
+def _icon_tile(job_id, slug, title, location):
+    return (f'<li class="search-results-list__item"><div class="search-results-list__content">'
+            f'<h2 class="search-results-list__job-title"><a class="search-results-list__job-link" '
+            f'href="/job/dublin/{slug}/3784/{job_id}" data-job-id="{job_id}" id="job-{job_id}">{title}</a>'
+            f'</h2><ul class="search-results-list__job-info-list"><li class="search-results-list__job-info '
+            f'job-location"> {location} </li></ul></div><div class="search-results-list__saved-job-container">'
+            f'<button type="button" class="js-save-job-btn" data-job-id="{job_id}" data-org-id="3784">'
+            f'Save</button></div></li>')
 
-ICON_PAGE2 = b"<div>no more results</div>"
+
+def _icon_page(*tiles):
+    return ('<p id="search-results-headline-label">35 jobs found in Ireland</p>'
+            '<ul id="search-results-jobs" class="search-results-list__list" data-results-count="35">'
+            + "".join(tiles) + "</ul>").encode()
 
 
-def test_icon_filters_out_northern_ireland_and_paginates():
-    # ICON posts globally; q=Ireland keyword search also returns Northern
-    # Ireland roles (UK) and unrelated jobs whose descriptions merely
-    # mention Ireland -- verified live. Only the URL slug's "-in-ireland-"
-    # marker reliably identifies genuine Republic-of-Ireland postings.
+ICON_PAGE1 = _icon_page(
+    _icon_tile("46757300096", "revenue-accountant", "Revenue Accountant", "Dublin, Leinster"),
+    _icon_tile("46562888704", "ai-engineer", "AI Engineer", "Dublin, Leinster + Additional Locations"),
+)
+ICON_PAGE2 = _icon_page(
+    _icon_tile("46562851776", "manager-payroll", "Manager, Payroll", "Dublin, Leinster"),
+)
+ICON_PAGE3 = _icon_page()
+
+
+def test_icon_reads_talentbrew_ireland_location_pages_until_empty():
+    # ICON moved to Radancy TalentBrew on 2026-11-16: /jobs?q=Ireland now
+    # redirects to a keyword search over all 870 roles worldwide. The
+    # Ireland location facet (GeoNames 2963597) excludes Northern Ireland.
     fake = FakeSession({
-        scrapers.ICON_SEARCH + "2": FakeResponse(ICON_PAGE2),
-        scrapers.ICON_SEARCH + "1": FakeResponse(ICON_PAGE1),
+        scrapers.ICON_URL + "/3": FakeResponse(ICON_PAGE3),
+        scrapers.ICON_URL + "/2": FakeResponse(ICON_PAGE2),
+        scrapers.ICON_URL + "/1": FakeResponse(ICON_PAGE1),
     })
     jobs = scrapers.icon(fake)
-    assert [j.title for j in jobs] == ["Contract Analyst I"]
-    assert jobs[0].url == "https://careers.iconplc.com/job/contract-analyst-i-in-ireland-dublin-jid-52013"
+    assert [j.title for j in jobs] == ["Revenue Accountant", "AI Engineer", "Manager, Payroll"]
+    assert jobs[0].url == "https://careers.iconplc.com/job/dublin/revenue-accountant/3784/46757300096"
+    assert jobs[0].portal_url == scrapers.ICON_URL
+    assert scrapers.ICON_URL == "https://careers.iconplc.com/location/ireland-jobs/3784/2963597/2"
+
+
+def test_talentbrew_stops_when_a_page_only_repeats_earlier_roles():
+    # A guard against a site that wraps back to page 1 past the end, as
+    # Viatris' Workday tenant does: no new role on a page ends the scrape.
+    fake = FakeSession({
+        scrapers.ICON_URL + "/2": FakeResponse(ICON_PAGE1),
+        scrapers.ICON_URL + "/1": FakeResponse(ICON_PAGE1),
+    })
+    jobs = scrapers.icon(fake)
+    assert [j.title for j in jobs] == ["Revenue Accountant", "AI Engineer"]
+    assert len(fake.calls) == 2
 
 
 def test_icon_in_registry():

@@ -19,7 +19,7 @@ URLS = {
     "Takeda": "https://jobs.takeda.com/search-jobs/Ireland/1113/2/2963597/53/-8/50/2",
     "Amgen": "https://www.amgen.jobs/irl/jobs/",
     "Vle therapeutics": "https://www.vletherapeutics.com/careers",
-    "Jazz Pharmaceuticals": "https://careers.jazzpharma.com/jobs/ie/",
+    "Jazz Pharmaceuticals": "https://careers.jazzpharma.com/location/ireland-jobs/50396/2963597/2",
 }
 
 log = logging.getLogger(__name__)
@@ -27,6 +27,39 @@ log = logging.getLogger(__name__)
 
 def _soup(response) -> BeautifulSoup:
     return BeautifulSoup(response.content, "lxml")
+
+
+def _scrape_talentbrew(session, company: str, location_url: str) -> List[Job]:
+    """Shared by icon() and jazz(), whose careers sites moved to Radancy
+    TalentBrew in November 2026 (AstraZeneca and Takeda use it too). A
+    location_url like ".../location/ireland-jobs/<site id>/2963597/2" lists
+    the country's roles a page at a time at "<location_url>/<page>";
+    2963597 is GeoNames' Republic of Ireland, so Northern Ireland roles are
+    not in it. Only links inside #search-results-jobs are results: Jazz's
+    pages also carry a featured-jobs widget of US roles. The scrape ends on
+    a page with no role it hasn't already seen, which covers both an empty
+    page past the end and a site that wraps back to page 1."""
+    jobs, seen = [], set()
+    page = 1
+    while True:
+        soup = _soup(fetch(session, f"{location_url}/{page}"))
+        results = soup.find(id="search-results-jobs")
+        links = results.find_all("a", attrs={"data-job-id": True}) if results else []
+        found = 0
+        for link in links:
+            url = urljoin(location_url, link["href"])
+            if url in seen:
+                continue
+            seen.add(url)
+            found += 1
+            # Jazz nests the location inside the link: keep the link's own text.
+            own_text = "".join(link.find_all(string=True, recursive=False))
+            title = " ".join((own_text.strip() or link.get_text(" ", strip=True)).split())
+            jobs.append(Job(company, title, url, location_url))
+        if not found:
+            break
+        page += 1
+    return jobs
 
 
 def _follow_next(soup, current_url):
@@ -310,33 +343,12 @@ def gilead(session) -> List[Job]:
     return jobs
 
 
-# Jazz Pharmaceuticals' careers site is NOT Workday, despite the tenant
-# domains suggested by the brief (jazzpharma.wd5 / jazz.wd1 / vhr-jazz.wd1
-# all either 404/500 or reject the cxs jobs payload with HTTP 422 — verified
-# live). Their real job search lives on careers.jazzpharma.com, a
-# server-rendered site with the same "?page_jobs=N" / "a.next" pagination
-# convention used elsewhere in this file (see _follow_next).
-
-
+# Jazz Pharmaceuticals' careers site moved to Radancy TalentBrew on
+# 2026-11-19 (its old /jobs/ie/ listing now redirects to the homepage).
+# Ireland's location page also lists roles based in London that include
+# Dublin among their locations, as the old /jobs/ie/ page did.
 def jazz(session) -> List[Job]:
-    jobs = []
-    url = URLS["Jazz Pharmaceuticals"]
-    while url:
-        soup = _soup(fetch(session, url))
-        results = soup.find("ul", class_="results-content")
-        tiles = results.find_all("li", recursive=False) if results else []
-        for tile in tiles:
-            h3 = tile.find("h3")
-            link = tile.find("a")
-            if not h3 or not link:
-                continue
-            jobs.append(Job(
-                "Jazz Pharmaceuticals", h3.text.strip(),
-                urljoin(url, link["href"]),
-                URLS["Jazz Pharmaceuticals"],
-            ))
-        url = _follow_next(soup, url)
-    return jobs
+    return _scrape_talentbrew(session, "Jazz Pharmaceuticals", URLS["Jazz Pharmaceuticals"])
 
 
 THERMO_API = "https://jobs.thermofisher.com/widgets"
@@ -638,44 +650,15 @@ def leo_pharma(session) -> List[Job]:
     return _scrape_successfactors(session, "Leo Pharma", LEO_SEARCH, LEO_BASE, LEO_PORTAL)
 
 
-# ICON plc's careers.iconplc.com is server-rendered Attrax (same platform as
-# abbvie()), "powered by SmartRecruiters" per its own footer, but the
-# geo-radius search abbvie() uses (la/lo/lr around Dublin's coordinates)
-# returns zero results here -- verified live. ICON posts globally across 53
-# countries with no Ireland entry in the default location-facet sidebar, so
-# instead this uses the site's own keyword search (?q=Ireland), which does
-# surface every Ireland posting -- but also non-Ireland noise: Northern
-# Ireland postings and unrelated jobs whose descriptions merely mention
-# "Ireland" (verified live, e.g. UK/Poland roles with no Ireland location).
-# Every genuine Republic-of-Ireland listing's own URL slug contains
-# "-in-ireland-" (e.g. ".../in-ireland-dublin-jid-..."), which Northern
-# Ireland postings (".../northern-ireland-jid-...") do not -- so results are
-# filtered on that slug marker rather than trusted keyword relevance.
-ICON_BASE = "https://careers.iconplc.com"
-ICON_SEARCH = "https://careers.iconplc.com/jobs?q=Ireland&page="
-ICON_PORTAL = "https://careers.iconplc.com/jobs?q=Ireland"
+# ICON plc's careers site moved from Attrax to Radancy TalentBrew on
+# 2026-11-16: the old /jobs?q=Ireland search now redirects to a keyword
+# search returning all ~870 roles worldwide. Its Ireland location page
+# (site id 3784) lists only the country's roles, 15 to a page.
+ICON_URL = "https://careers.iconplc.com/location/ireland-jobs/3784/2963597/2"
 
 
 def icon(session) -> List[Job]:
-    jobs = []
-    seen = set()
-    page = 1
-    while True:
-        soup = _soup(fetch(session, f"{ICON_SEARCH}{page}"))
-        tiles = soup.find_all("a", class_="attrax-vacancy-tile__title")
-        if not tiles:
-            break
-        for tile in tiles:
-            href = tile.get("href", "")
-            if "-in-ireland-" not in href.lower():
-                continue
-            url = urljoin(ICON_BASE, href)
-            if url in seen:
-                continue
-            seen.add(url)
-            jobs.append(Job("ICON", tile.get_text(strip=True), url, ICON_PORTAL))
-        page += 1
-    return jobs
+    return _scrape_talentbrew(session, "ICON", ICON_URL)
 
 
 SCRAPERS = OrderedDict([
