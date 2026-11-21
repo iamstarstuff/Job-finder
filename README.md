@@ -139,6 +139,11 @@ there (override with `DEPLOY_HOST` and `DEPLOY_DIR`).
   as a possible layout change and left untouched for
   `ZERO_RESULT_GRACE_DAYS` (7); after that the zero is accepted and its roles
   are closed. Genuine scraper failures never close roles.
+- A scraper failure (or suspicious zero) is emailed only once the company has
+  failed on every run for `SCRAPER_ALERT_AFTER_HOURS` (12), and its recovery
+  only if the failure was emailed. Sites that block the scraper for an hour or
+  two, like Workday's 429s, send no email; the Health page shows every
+  current failure.
 - Companies that cannot be scraped over plain HTTP (Cloudflare or similar
   challenges) are not in the registries; see the comments in
   `jobfinder/scrapers.py` and `jobfinder/tech_scrapers.py`.

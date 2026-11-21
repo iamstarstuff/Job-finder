@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -262,6 +263,77 @@ def test_sync_company_failures_scopes_by_sector(tmp_path):
     _, tech_recovered = storage.sync_company_failures(conn, "tech", {})
     assert tech_recovered == ["Amgen"]
     assert storage.get_failing_companies(conn, "pharma") == {"Amgen": "boom"}
+
+
+T0 = datetime(2026, 11, 20, 8, 0, 0)
+TWELVE_HOURS = timedelta(hours=12)
+
+
+def _sync_at(conn, hours, failing):
+    return storage.sync_company_failures(
+        conn, "pharma", failing, T0 + timedelta(hours=hours), TWELVE_HOURS,
+    )
+
+
+def test_sync_company_failures_alerts_only_after_failing_for_alert_after(tmp_path):
+    conn = make_conn(tmp_path)
+    for hour in range(12):  # failing on every hourly run, but for under 12 hours
+        assert _sync_at(conn, hour, {"Pfizer": "429"}) == ({}, [])
+    assert _sync_at(conn, 12, {"Pfizer": "429 again"}) == ({"Pfizer": "429 again"}, [])
+    assert _sync_at(conn, 13, {"Pfizer": "429 again"}) == ({}, [])  # alerted once only
+
+
+def test_sync_company_failures_flapping_inside_the_window_never_alerts(tmp_path):
+    # Production on 2026-11-19/20: Workday 429s made Pfizer, Gilead,
+    # Regeneron and Viatris fail on roughly every other hourly run.
+    conn = make_conn(tmp_path)
+    for hour in range(48):
+        failing = {"Pfizer": "429"} if hour % 2 else {}
+        assert _sync_at(conn, hour, failing) == ({}, [])
+
+
+def test_sync_company_failures_a_success_restarts_the_window(tmp_path):
+    conn = make_conn(tmp_path)
+    _sync_at(conn, 0, {"Pfizer": "429"})
+    _sync_at(conn, 6, {})                                      # worked: window resets
+    _sync_at(conn, 7, {"Pfizer": "429"})
+    assert _sync_at(conn, 18, {"Pfizer": "429"}) == ({}, [])   # 11h since hour 7
+    assert _sync_at(conn, 19, {"Pfizer": "429"}) == ({"Pfizer": "429"}, [])
+
+
+def test_sync_company_failures_reports_recovery_only_for_alerted_companies(tmp_path):
+    conn = make_conn(tmp_path)
+    _sync_at(conn, 0, {"Pfizer": "429", "Gilead": "429"})
+    _sync_at(conn, 12, {"Pfizer": "429"})                      # Gilead recovered unalerted
+    assert storage.get_failing_companies(conn, "pharma") == {"Pfizer": "429"}
+    assert _sync_at(conn, 13, {}) == ({}, ["Pfizer"])
+
+
+def test_get_failing_companies_alerted_only(tmp_path):
+    conn = make_conn(tmp_path)
+    _sync_at(conn, 0, {"Pfizer": "429"})
+    _sync_at(conn, 12, {"Pfizer": "429", "Gilead": "429"})
+    assert storage.get_failing_companies(conn, "pharma") == {"Pfizer": "429", "Gilead": "429"}
+    assert storage.get_failing_companies(conn, "pharma", alerted_only=True) == {"Pfizer": "429"}
+
+
+def test_connect_migrates_company_failures_rows_as_already_alerted(tmp_path):
+    # Rows written before the alert window existed were already emailed:
+    # they must not be emailed again, and their recovery must still be.
+    db_path = tmp_path / "old_failures.db"
+    old = sqlite3.connect(str(db_path))
+    old.execute("""CREATE TABLE company_failures (
+        sector TEXT NOT NULL, company TEXT NOT NULL, last_error TEXT NOT NULL,
+        PRIMARY KEY (sector, company))""")
+    old.execute("INSERT INTO company_failures VALUES ('pharma', 'ICON', 'returned 0 jobs')")
+    old.execute("INSERT INTO company_failures VALUES ('pharma', 'Viatris', '429')")
+    old.commit()
+    old.close()
+    conn = storage.connect(db_path)
+    assert _sync_at(conn, 0, {"ICON": "returned 0 jobs"}) == ({}, ["Viatris"])
+    assert storage.get_failing_companies(conn, "pharma", alerted_only=True) == {
+        "ICON": "returned 0 jobs",
+    }
 
 
 def _insight_row(**overrides):

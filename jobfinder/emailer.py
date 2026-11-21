@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import smtplib
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from html import escape
@@ -77,9 +77,17 @@ def render_new_jobs_html(new_jobs: Dict[str, List[Job]], reasons: Optional[Dict[
 
 def render_error_html(
     failures: Dict[str, str], zero_warnings: List[str], recovered: Optional[List[str]] = None,
+    alert_after_hours: Optional[int] = None,
 ) -> str:
     parts = [f'<div style="{_STYLE_WRAP}">',
              '<h2 style="color:#cf222e;margin:0 0 16px;">Job Scraper Problems</h2>']
+    if alert_after_hours:
+        parts.append(
+            f'<p style="color:#57606a;font-size:13px;">Only scrapers that have failed on every '
+            f'run for {alert_after_hours} hours or more are listed. Shorter failures, like a site '
+            f'briefly rate-limiting the scraper, aren\'t emailed; the dashboard\'s Health page '
+            f'shows every current failure.</p>'
+        )
     if recovered:
         parts.append('<h3 style="color:#1a7f37;">Recovered</h3><ul>')
         for company in sorted(recovered):
@@ -140,29 +148,38 @@ def _problem_companies(result) -> Dict[str, str]:
     return problems
 
 
-def _maybe_send_error_email(conn, sector: str, kind: str, subject: str, result) -> None:
+def _maybe_send_error_email(conn, sector: str, kind: str, subject: str, result,
+                            now: Optional[datetime] = None) -> None:
     problems = _problem_companies(result)
-    newly_failing, newly_recovered = storage.sync_company_failures(conn, sector, problems)
+    hours = config.SCRAPER_ALERT_AFTER_HOURS
+    newly_failing, newly_recovered = storage.sync_company_failures(
+        conn, sector, problems, now, timedelta(hours=hours),
+    )
     if not newly_failing and not newly_recovered:
-        return  # no change since last run -- don't re-notify for a known, ongoing problem
+        return  # nothing crossed the alert window and no alerted company recovered
+    alerted = storage.get_failing_companies(conn, sector, alerted_only=True)
     _send_and_log(
         conn, kind, subject,
-        render_error_html(result.failures, result.zero_warnings, newly_recovered),
+        render_error_html(
+            {company: error for company, error in result.failures.items() if company in alerted},
+            [company for company in result.zero_warnings if company in alerted],
+            newly_recovered, hours,
+        ),
         config.ERROR_RECIPIENTS,
     )
 
 
-def send_run_notifications(conn, result) -> None:
+def send_run_notifications(conn, result, now: Optional[datetime] = None) -> None:
     if result.new_jobs:
         total = sum(len(v) for v in result.new_jobs.values())
         _send_and_log(
             conn, "alert", f"{total} New Job Posting{'s' if total != 1 else ''}",
             render_new_jobs_html(result.new_jobs), config.ALERT_RECIPIENTS,
         )
-    _maybe_send_error_email(conn, "pharma", "error", "Job Scraper Error Notification", result)
+    _maybe_send_error_email(conn, "pharma", "error", "Job Scraper Error Notification", result, now)
 
 
-def send_tech_digest(conn, result) -> None:
+def send_tech_digest(conn, result, now: Optional[datetime] = None) -> None:
     if result.new_jobs:
         total = sum(len(v) for v in result.new_jobs.values())
         _send_and_log(
@@ -171,7 +188,7 @@ def send_tech_digest(conn, result) -> None:
             config.TECH_ALERT_RECIPIENTS,
         )
     _maybe_send_error_email(
-        conn, "tech", "tech_error", "Tech Job Scraper Error Notification", result,
+        conn, "tech", "tech_error", "Tech Job Scraper Error Notification", result, now,
     )
 
 

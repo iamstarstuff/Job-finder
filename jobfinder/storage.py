@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -61,6 +62,8 @@ CREATE TABLE IF NOT EXISTS company_failures (
     sector TEXT NOT NULL,
     company TEXT NOT NULL,
     last_error TEXT NOT NULL,
+    failing_since TEXT,
+    alerted INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (sector, company)
 );
 CREATE TABLE IF NOT EXISTS job_insights (
@@ -107,6 +110,16 @@ def _migrate_runs_sector_column(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE runs ADD COLUMN sector TEXT NOT NULL DEFAULT 'pharma'")
 
 
+def _migrate_company_failures_columns(conn: sqlite3.Connection) -> None:
+    # Rows from before the alert window were all emailed when written, so
+    # they come in as already alerted (the column default).
+    columns = [row["name"] for row in conn.execute("PRAGMA table_info(company_failures)")]
+    if "failing_since" not in columns:
+        conn.execute("ALTER TABLE company_failures ADD COLUMN failing_since TEXT")
+    if "alerted" not in columns:
+        conn.execute("ALTER TABLE company_failures ADD COLUMN alerted INTEGER NOT NULL DEFAULT 1")
+
+
 def connect(db_path) -> sqlite3.Connection:
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
@@ -114,6 +127,7 @@ def connect(db_path) -> sqlite3.Connection:
     conn.executescript(SCHEMA)
     _migrate_sector_column(conn)
     _migrate_runs_sector_column(conn)
+    _migrate_company_failures_columns(conn)
     conn.commit()
     return conn
 
@@ -182,40 +196,61 @@ def finish_run(conn, run_id: int, finished_at: str, total_jobs: int,
     conn.commit()
 
 
-def get_failing_companies(conn, sector: str) -> Dict[str, str]:
-    rows = conn.execute(
-        "SELECT company, last_error FROM company_failures WHERE sector = ?", (sector,)
-    ).fetchall()
+def get_failing_companies(conn, sector: str, alerted_only: bool = False) -> Dict[str, str]:
+    """Companies whose last run failed, with the error. `alerted_only` keeps
+    just those an alert email has gone out for (see sync_company_failures)."""
+    query = "SELECT company, last_error FROM company_failures WHERE sector = ?"
+    if alerted_only:
+        query += " AND alerted = 1"
+    rows = conn.execute(query, (sector,)).fetchall()
     return {r["company"]: r["last_error"] for r in rows}
 
 
 def sync_company_failures(
-    conn, sector: str, currently_failing: Dict[str, str]
+    conn, sector: str, currently_failing: Dict[str, str],
+    now: Optional[datetime] = None, alert_after: timedelta = timedelta(0),
 ) -> Tuple[Dict[str, str], List[str]]:
     """Persist this run's per-company failure state for `sector` and report
-    what changed since the last run: companies failing now that weren't
-    before (`newly_failing`), and companies that were failing before but
-    aren't now (`newly_recovered`). Companies that are failing in both runs
-    are neither -- only their stored error message gets refreshed."""
-    previously_failing = get_failing_companies(conn, sector)
-    newly_failing = {
-        company: error for company, error in currently_failing.items()
-        if company not in previously_failing
-    }
-    newly_recovered = [
-        company for company in previously_failing if company not in currently_failing
-    ]
-    for company, error in currently_failing.items():
-        conn.execute(
-            """INSERT INTO company_failures (sector, company, last_error) VALUES (?, ?, ?)
-               ON CONFLICT(sector, company) DO UPDATE SET last_error = excluded.last_error""",
-            (sector, company, error),
+    what to email about. A company's row appears on its first failure and
+    goes on its first success. It is reported in `newly_failing` once, when
+    it has been failing for `alert_after` with no success in between, and
+    in `newly_recovered` when it works again -- but only if it was reported
+    as failing. So a failure that clears up within `alert_after` (a site
+    briefly rate-limiting the scraper, say) is never emailed at all. The
+    default of 0 reports every new failure straight away."""
+    now = now or datetime.now()
+    stamp = now.isoformat(timespec="seconds")
+    previous = {
+        r["company"]: r for r in conn.execute(
+            "SELECT company, failing_since, alerted FROM company_failures WHERE sector = ?",
+            (sector,),
         )
-    for company in newly_recovered:
+    }
+    newly_failing = {}
+    for company, error in currently_failing.items():
+        row = previous.get(company)
+        since = (row["failing_since"] if row else None) or stamp
+        alerted = bool(row["alerted"]) if row else False
+        if not alerted and now - datetime.fromisoformat(since) >= alert_after:
+            alerted = True
+            newly_failing[company] = error
+        conn.execute(
+            """INSERT INTO company_failures (sector, company, last_error, failing_since, alerted)
+               VALUES (?, ?, ?, ?, ?)
+               ON CONFLICT(sector, company) DO UPDATE SET last_error = excluded.last_error,
+                   failing_since = excluded.failing_since, alerted = excluded.alerted""",
+            (sector, company, error, since, int(alerted)),
+        )
+    newly_recovered = []
+    for company, row in previous.items():
+        if company in currently_failing:
+            continue
         conn.execute(
             "DELETE FROM company_failures WHERE sector = ? AND company = ?",
             (sector, company),
         )
+        if row["alerted"]:
+            newly_recovered.append(company)
     conn.commit()
     return newly_failing, newly_recovered
 

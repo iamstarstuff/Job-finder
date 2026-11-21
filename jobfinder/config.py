@@ -31,6 +31,14 @@ REQUEST_TIMEOUT = 20  # seconds
 # jobs are closed.
 ZERO_RESULT_GRACE_DAYS = 7
 
+# A scraper failure is emailed only once the company has failed on every run
+# for this long, and its recovery only if its failure was emailed. Career
+# sites block the scraper for an hour here and there (Workday's 429s from
+# 2026-11-16 hit a different mix of companies almost every hourly run), and
+# a failed run never closes jobs, so short failures cost nothing worth an
+# email. The dashboard's Health page still shows every current failure.
+SCRAPER_ALERT_AFTER_HOURS = 12
+
 # The tech scraper runs once a day, on the first cron run at or after this
 # hour. cron starts it hourly, so a day the Mac sleeps through this hour is
 # caught up when it wakes instead of being skipped.

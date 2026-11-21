@@ -1,6 +1,14 @@
+from datetime import datetime, timedelta
+
 from jobfinder import config, emailer, storage
 from jobfinder.models import Job
 from jobfinder.runner import RunResult
+
+T0 = datetime(2026, 11, 20, 8, 0, 0)
+
+
+def at(hours):
+    return T0 + timedelta(hours=hours)
 
 NEW = {"APC": [Job("APC", "QC Analyst", "https://approcess.com/jobs/1",
                    "https://approcess.com/careers", "2026-08-01")]}
@@ -40,6 +48,7 @@ def test_error_html_omits_recovered_section_when_none():
 
 def test_send_run_notifications_logs_emails(tmp_path, monkeypatch):
     conn = storage.connect(tmp_path / "t.db")
+    monkeypatch.setattr(config, "SCRAPER_ALERT_AFTER_HOURS", 0)  # alert on the first failure
     sent = []
     monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
     result = RunResult(run_id=1, new_jobs=NEW, failures={"Amgen": "boom"})
@@ -67,12 +76,12 @@ def test_send_run_notifications_skips_error_email_on_repeat_failure(tmp_path, mo
     monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
 
     result = RunResult(run_id=1, failures={"Johnson & Johnson": "403 Client Error: Forbidden"})
-    emailer.send_run_notifications(conn, result)
-    emailer.send_run_notifications(conn, result)
-    emailer.send_run_notifications(conn, result)
+    emailer.send_run_notifications(conn, result, at(0))
+    emailer.send_run_notifications(conn, result, at(12))
+    emailer.send_run_notifications(conn, result, at(13))
 
     error_emails = [s for s in sent if s == "Job Scraper Error Notification"]
-    assert len(error_emails) == 1  # only the first failure sent an email
+    assert len(error_emails) == 1  # only crossing the alert window sent an email
 
 
 def test_send_run_notifications_sends_email_on_recovery(tmp_path, monkeypatch):
@@ -80,10 +89,10 @@ def test_send_run_notifications_sends_email_on_recovery(tmp_path, monkeypatch):
     sent = []
     monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append((subject, html)))
 
-    emailer.send_run_notifications(
-        conn, RunResult(run_id=1, failures={"Johnson & Johnson": "403 error"}),
-    )
-    emailer.send_run_notifications(conn, RunResult(run_id=2))  # no failures this run -> recovered
+    failing = RunResult(run_id=1, failures={"Johnson & Johnson": "403 error"})
+    emailer.send_run_notifications(conn, failing, at(0))
+    emailer.send_run_notifications(conn, failing, at(12))
+    emailer.send_run_notifications(conn, RunResult(run_id=3), at(13))  # no failures -> recovered
 
     error_emails = [h for s, h in sent if s == "Job Scraper Error Notification"]
     assert len(error_emails) == 2  # one for the failure, one for the recovery
@@ -104,9 +113,12 @@ def test_send_tech_digest_skips_error_email_on_repeat_failure(tmp_path, monkeypa
     sent = []
     monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
 
+    # The tech run is daily: a second failed day crosses the alert window.
     result = RunResult(run_id=1, failures={"Google": "timeout"})
-    emailer.send_tech_digest(conn, result)
-    emailer.send_tech_digest(conn, result)
+    emailer.send_tech_digest(conn, result, at(0))
+    assert "Tech Job Scraper Error Notification" not in sent
+    emailer.send_tech_digest(conn, result, at(24))
+    emailer.send_tech_digest(conn, result, at(48))
 
     error_emails = [s for s in sent if s == "Tech Job Scraper Error Notification"]
     assert len(error_emails) == 1
@@ -114,6 +126,7 @@ def test_send_tech_digest_skips_error_email_on_repeat_failure(tmp_path, monkeypa
 
 def test_send_run_notifications_and_tech_digest_track_failures_independently(tmp_path, monkeypatch):
     conn = storage.connect(tmp_path / "t.db")
+    monkeypatch.setattr(config, "SCRAPER_ALERT_AFTER_HOURS", 0)  # alert on the first failure
     sent = []
     monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
 
@@ -190,3 +203,32 @@ def test_insights_alerts_are_tracked_apart_from_scrapers(tmp_path, monkeypatch):
     emailer.send_insights_status(conn, "402 credit balance too low")
     assert storage.get_failing_companies(conn, "insights") == {"Claude API": "402 credit balance too low"}
     assert storage.get_failing_companies(conn, "tech") == {}
+
+
+def test_flapping_failures_send_no_error_email(tmp_path, monkeypatch):
+    # Replays 2026-11-19/20 in production: Workday's 429s made a different
+    # mix of companies fail on almost every hourly run, and each change in
+    # the mix used to send an error email -- 20 a day.
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(subject))
+    mixes = [{"Pfizer", "Gilead"}, {"Regeneron"}, set(), {"Viatris", "Pfizer"}, {"Gilead", "Regeneron"}]
+    for hour in range(48):
+        failures = {company: "too many 429 error responses" for company in mixes[hour % len(mixes)]}
+        emailer.send_run_notifications(conn, RunResult(run_id=hour, failures=failures), at(hour))
+    assert sent == []
+
+
+def test_error_email_lists_only_companies_failing_for_the_whole_window(tmp_path, monkeypatch):
+    conn = storage.connect(tmp_path / "t.db")
+    sent = []
+    monkeypatch.setattr(emailer, "send_email", lambda subject, html, recipients: sent.append(html))
+    emailer.send_run_notifications(conn, RunResult(run_id=1, failures={"ICON": "HTTP 500"}), at(0))
+    emailer.send_run_notifications(conn, RunResult(
+        run_id=2, failures={"ICON": "HTTP 500", "Gilead": "too many 429 error responses"},
+    ), at(12))
+    assert len(sent) == 1
+    assert "ICON" in sent[0] and "HTTP 500" in sent[0]
+    assert "Gilead" not in sent[0]   # failing for minutes, not hours: not reported yet
+    assert "12 hours" in sent[0]     # the email says why it only lists some failures
+
