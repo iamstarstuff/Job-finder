@@ -15,6 +15,9 @@ BACKFILL_STATE_PATH = BASE_DIR / "backfill_batch.json"
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
+# Seconds to wait on Gmail before giving up on an email. With no timeout a
+# stalled connection hangs the run (and its cron process) forever.
+SMTP_TIMEOUT = 60
 SMTP_USERNAME = "barvepratik96@gmail.com"
 FROM_EMAIL = SMTP_USERNAME
 ALERT_RECIPIENTS = ["vaidehipatil2011@gmail.com"]

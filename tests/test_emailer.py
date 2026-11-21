@@ -232,3 +232,29 @@ def test_error_email_lists_only_companies_failing_for_the_whole_window(tmp_path,
     assert "Gilead" not in sent[0]   # failing for minutes, not hours: not reported yet
     assert "12 hours" in sent[0]     # the email says why it only lists some failures
 
+
+def test_send_email_gives_smtp_a_timeout(monkeypatch):
+    # Without one, a stalled Gmail connection left two hourly runs hanging
+    # for weeks on the old Mac (started 2026-10-08 and 2026-11-07).
+    seen = {}
+
+    class FakeSMTP:
+        def __init__(self, host, port, **kwargs):
+            seen.update(kwargs)
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def login(self, *args):
+            pass
+
+        def sendmail(self, *args):
+            pass
+
+    monkeypatch.setattr(emailer.smtplib, "SMTP_SSL", FakeSMTP)
+    monkeypatch.setattr(config, "get_smtp_password", lambda: "test-password")
+    emailer.send_email("Subject", "<p>hi</p>", ["someone@example.com"])
+    assert seen.get("timeout") == config.SMTP_TIMEOUT

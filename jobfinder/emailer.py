@@ -119,7 +119,7 @@ def send_email(subject: str, html: str, recipients: List[str]) -> None:
     msg["To"] = ", ".join(recipients)
     msg["Subject"] = subject
     msg.attach(MIMEText(html, "html"))
-    with smtplib.SMTP_SSL(config.SMTP_SERVER, config.SMTP_PORT) as server:
+    with smtplib.SMTP_SSL(config.SMTP_SERVER, config.SMTP_PORT, timeout=config.SMTP_TIMEOUT) as server:
         server.login(config.SMTP_USERNAME, config.get_smtp_password())
         server.sendmail(config.FROM_EMAIL, recipients, msg.as_string())
     log.info("Email sent: %s -> %s", subject, recipients)
